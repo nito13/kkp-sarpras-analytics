@@ -20,6 +20,7 @@ import {
 import { AUTH_USERS, authenticateUser } from '../data/authUsers';
 import { apiLogin } from '../services/api';
 import { useTheme } from '../context/ThemeContext';
+import logoKkp from '../assets/logo-kkp.svg';
 
 export default function LoginScreen({ onLogin }) {
   const { isDark, toggleTheme } = useTheme();
@@ -121,7 +122,7 @@ export default function LoginScreen({ onLogin }) {
             {/* KKP Logo Container */}
             <div className="w-20 h-20 mx-auto rounded-2xl bg-white p-2 shadow-xl shadow-cyan-500/20 border-2 border-cyan-400/60 flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
               <img 
-                src="/logo-kkp.svg" 
+                src={logoKkp} 
                 alt="Logo Kementerian Kelautan dan Perikanan" 
                 className="w-full h-full object-contain"
               />

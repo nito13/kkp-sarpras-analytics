@@ -1,5 +1,10 @@
 DirectoryIndex index.php index.html
 
+<IfModule mod_mime.c>
+    AddType image/svg+xml .svg .svgz
+    AddEncoding gzip .svgz
+</IfModule>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
@@ -10,6 +15,11 @@ DirectoryIndex index.php index.html
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
+
+    # Cek apakah file ada di folder dist/ (misal logo-kkp.svg, favicon.svg, dsb.)
+    RewriteCond %{DOCUMENT_ROOT}/kkp-sarpras-analytics/dist/$1 -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/dist/$1 -f
+    RewriteRule ^(.*)$ dist/$1 [L]
 
     # SPA Fallback ke index.php
     RewriteRule ^.*$ index.php [L]

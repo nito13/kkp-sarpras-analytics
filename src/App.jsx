@@ -15,6 +15,7 @@ import { SATDIK_LIST, SARPRAS_CATEGORIES } from './data/kkpData';
 import { getFullSarprasData, calculateSarprasKPIs } from './data/sarprasGenerator';
 import { Shield } from 'lucide-react';
 import { apiCheckHealth, apiFetchAssets, apiCreateAsset, apiUpdateAsset } from './services/api';
+import logoKkp from './assets/logo-kkp.svg';
 
 const STORAGE_KEY = 'kkp_sarpras_database_v2';
 const AUTH_STORAGE_KEY = 'kkp_auth_session_v2';
@@ -336,7 +337,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-full bg-white p-1 border border-cyan-500/40 flex items-center justify-center flex-shrink-0 shadow-md">
-              <img src="/logo-kkp.svg" alt="Logo KKP" className="w-full h-full object-contain" />
+              <img src={logoKkp} alt="Logo KKP" className="w-full h-full object-contain" />
             </div>
             <div>
               <p className="font-bold text-slate-200">

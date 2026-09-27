@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { formatRupiah } from '../data/sarprasGenerator';
 import { useTheme } from '../context/ThemeContext';
+import logoKkp from '../assets/logo-kkp.svg';
 
 export default function Navbar({
   activeTab,
@@ -60,7 +61,7 @@ export default function Navbar({
           <div className="flex items-center space-x-2.5 sm:space-x-3 w-full sm:w-auto justify-between sm:justify-start">
             <div className="flex items-center space-x-2.5">
               <div className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/95 p-1 border border-cyan-400/60 shadow-sm flex-shrink-0">
-                <img src="/logo-kkp.svg" alt="Logo KKP" className="w-full h-full object-contain" />
+                <img src={logoKkp} alt="Logo KKP" className="w-full h-full object-contain" />
               </div>
               <div>
                 <span className="font-bold text-white tracking-wide uppercase text-[10px] sm:text-xs block leading-tight">
@@ -123,7 +124,7 @@ export default function Navbar({
           {/* Logo & Platform Name */}
           <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('dashboard')}>
             <div className="w-12 h-12 rounded-xl bg-white p-1 flex items-center justify-center shadow-lg shadow-cyan-500/20 border border-cyan-400/50 hover:scale-105 transition-transform flex-shrink-0">
-              <img src="/logo-kkp.svg" alt="Logo Resmi Kementerian Kelautan dan Perikanan" className="w-full h-full object-contain" />
+              <img src={logoKkp} alt="Logo Resmi Kementerian Kelautan dan Perikanan" className="w-full h-full object-contain" />
             </div>
             <div>
               <div className="flex items-center gap-2">

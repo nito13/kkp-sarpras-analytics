@@ -21,6 +21,7 @@ import { Doughnut, Bar, Radar, Line } from 'react-chartjs-2';
 import '../utils/chartSetup';
 import { formatRupiah } from '../data/sarprasGenerator';
 import { NATIONAL_SARPRAS_TARGETS, SARPRAS_CATEGORIES } from '../data/kkpData';
+import logoKkp from '../assets/logo-kkp.svg';
 
 export default function ExecutiveDashboard({
   kpis,
@@ -278,12 +279,12 @@ export default function ExecutiveDashboard({
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-800/90 via-slate-800/70 to-slate-900/90 p-5 rounded-2xl border border-slate-700/80 shadow-lg relative overflow-hidden">
         {/* Subtle background watermark */}
         <div className="absolute right-0 top-0 bottom-0 opacity-5 pointer-events-none flex items-center pr-6">
-          <img src="/logo-kkp.svg" alt="KKP Watermark" className="w-56 h-56 object-contain" />
+          <img src={logoKkp} alt="KKP Watermark" className="w-56 h-56 object-contain" />
         </div>
 
         <div className="flex items-center space-x-4 relative z-10">
           <div className="w-14 h-14 rounded-2xl bg-white p-1.5 shadow-md border border-cyan-500/30 flex items-center justify-center flex-shrink-0">
-            <img src="/logo-kkp.svg" alt="Logo KKP" className="w-full h-full object-contain" />
+            <img src={logoKkp} alt="Logo KKP" className="w-full h-full object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-2">
