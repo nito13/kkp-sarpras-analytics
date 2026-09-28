@@ -44,7 +44,7 @@ if ($method === 'POST') {
     $stmt = $pdo->prepare("
         SELECT * FROM users 
         WHERE LOWER(email) = :email 
-           OR REPLACE(nip, ' ', '') = :nip
+           OR (nip != '-' AND nip != '' AND REPLACE(nip, ' ', '') = :nip)
         LIMIT 1
     ");
     $stmt->execute([':email' => $cleanId, ':nip' => $cleanNip]);

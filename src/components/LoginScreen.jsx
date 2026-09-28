@@ -161,7 +161,7 @@ export default function LoginScreen({ onLogin }) {
                 <input
                   type="text"
                   required
-                  placeholder="admin.bppsdm@kkp.go.id / 19730412..."
+                  placeholder="admin.pusdik@kkp.go.id / 19760814..."
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
@@ -245,12 +245,14 @@ export default function LoginScreen({ onLogin }) {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-              {AUTH_USERS.map((user) => (
+              {AUTH_USERS.map((user, idx) => (
                 <button
                   key={user.id}
                   type="button"
                   onClick={() => handleQuickDemoLogin(user)}
-                  className="bg-slate-950/70 hover:bg-slate-800 p-2.5 rounded-xl border border-slate-800 hover:border-cyan-500/50 text-left transition-all group flex items-center justify-between"
+                  className={`bg-slate-950/70 hover:bg-slate-800 p-2.5 rounded-xl border border-slate-800 hover:border-cyan-500/50 text-left transition-all group flex items-center justify-between ${
+                    AUTH_USERS.length % 2 !== 0 && idx === AUTH_USERS.length - 1 ? 'sm:col-span-2' : ''
+                  }`}
                 >
                   <div className="truncate mr-2">
                     <span className="font-bold text-white block text-[11px] group-hover:text-cyan-300 truncate">

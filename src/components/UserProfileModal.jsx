@@ -49,7 +49,9 @@ export default function UserProfileModal({
               <h3 className="text-base sm:text-lg font-bold text-white mt-1 leading-snug">
                 {user.name}
               </h3>
-              <p className="text-xs text-slate-400 font-mono">NIP. {user.nip}</p>
+              {user.nip && user.nip !== '-' && (
+                <p className="text-xs text-slate-400 font-mono">NIP. {user.nip}</p>
+              )}
             </div>
           </div>
         </div>

@@ -344,7 +344,7 @@ export default function App() {
                 SIM-SARPRAS KKP — Sistem Informasi & Analitik Sarana Prasarana Satdik
               </p>
               <p className="text-[11px] text-slate-400">
-                Badan Penyuluhan dan Pengembangan Sumber Daya Manusia Kelautan dan Perikanan (BPPSDM KP)
+                Pusat Pendidikan Kelautan dan Perikanan (Pusdik KP) — BPPSDM KP
               </p>
             </div>
           </div>
