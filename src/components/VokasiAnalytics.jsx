@@ -112,9 +112,9 @@ export default function VokasiAnalytics({
   return (
     <div className="space-y-6">
       {/* Top Banner Header */}
-      <div className="bg-slate-800/90 rounded-2xl p-5 border border-slate-700/70 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-700/70 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
               Evaluasi Standar Mutu Pendidikan Vokasi
             </span>
@@ -129,102 +129,117 @@ export default function VokasiAnalytics({
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-xs bg-slate-900/80 p-2 rounded-xl border border-slate-700">
+        <div className="flex items-center gap-2 text-xs bg-slate-900/80 p-2.5 rounded-xl border border-slate-700 self-start md:self-auto">
           <Award className="w-4 h-4 text-emerald-400" />
           <span className="text-slate-300">
-            Kepatuhan Standar Nasional: <strong className="text-emerald-400">91.4%</strong>
+            Kepatuhan Standar Nasional: <strong className="text-emerald-400 font-bold">91.4%</strong>
           </span>
         </div>
       </div>
 
       {/* Head-to-Head Campus Comparison Tool */}
-      <div className="bg-slate-800/90 rounded-2xl p-5 border border-slate-700/70 shadow-lg">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-700/60">
+      <div className="bg-slate-800/90 rounded-2xl p-3.5 sm:p-5 border border-slate-700/70 shadow-md space-y-4 overflow-hidden">
+        {/* Header & Campus Selectors */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 sm:pb-4 border-b border-slate-700/60">
           <div>
             <div className="flex items-center gap-2">
-              <Scale className="w-4 h-4 text-cyan-400" />
-              <h3 className="text-base font-bold text-white tracking-tight">
+              <Scale className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+              <h3 className="text-sm sm:text-base font-bold text-white tracking-tight">
                 Komparasi Sarpras Antar Kampus (Head-to-Head)
               </h3>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">
               Pilih dua satuan pendidikan untuk membandingkan kapasitas fasilitas dan indeks kelaikannya berdampingan.
             </p>
           </div>
 
-          {/* Campus Selectors */}
-          <div className="flex items-center gap-2">
-            <select
-              value={campus1Id}
-              onChange={(e) => setCampus1Id(e.target.value)}
-              className="bg-slate-900 text-cyan-300 font-semibold border border-cyan-800 text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-cyan-500"
-            >
-              {SATDIK_LIST.map(s => (
-                <option key={s.id} value={s.id}>{s.shortName}</option>
-              ))}
-            </select>
+          {/* Campus Selectors - Fluid, Auto-wrapped & Responsive */}
+          <div className="flex items-center gap-1.5 sm:gap-2 w-full lg:w-auto bg-slate-950/60 p-2 sm:p-2.5 rounded-xl border border-slate-800">
+            <div className="flex-1 min-w-0">
+              <span className="text-[9px] font-bold text-cyan-400 uppercase tracking-wider block mb-0.5 truncate">
+                Kampus 1 (Cyan)
+              </span>
+              <select
+                value={campus1Id}
+                onChange={(e) => setCampus1Id(e.target.value)}
+                className="w-full min-w-0 truncate bg-slate-900 text-cyan-300 font-semibold border border-cyan-800/80 text-[11px] sm:text-xs rounded-lg px-2 sm:px-3 py-1.5 focus:outline-none focus:border-cyan-500 shadow-sm"
+              >
+                {SATDIK_LIST.map(s => (
+                  <option key={s.id} value={s.id} className="bg-slate-900 text-slate-100">{s.shortName}</option>
+                ))}
+              </select>
+            </div>
 
-            <span className="text-xs text-slate-400 font-bold px-1">VS</span>
+            <div className="flex items-center justify-center pt-3 sm:pt-3.5 flex-shrink-0 px-1">
+              <span className="text-[10px] sm:text-xs font-black px-1.5 py-0.5 rounded bg-slate-900 text-slate-300 border border-slate-700 shadow-sm">
+                VS
+              </span>
+            </div>
 
-            <select
-              value={campus2Id}
-              onChange={(e) => setCampus2Id(e.target.value)}
-              className="bg-slate-900 text-amber-300 font-semibold border border-amber-800 text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-amber-500"
-            >
-              {SATDIK_LIST.map(s => (
-                <option key={s.id} value={s.id}>{s.shortName}</option>
-              ))}
-            </select>
+            <div className="flex-1 min-w-0">
+              <span className="text-[9px] font-bold text-amber-400 uppercase tracking-wider block mb-0.5 truncate">
+                Kampus 2 (Amber)
+              </span>
+              <select
+                value={campus2Id}
+                onChange={(e) => setCampus2Id(e.target.value)}
+                className="w-full min-w-0 truncate bg-slate-900 text-amber-300 font-semibold border border-amber-800/80 text-[11px] sm:text-xs rounded-lg px-2 sm:px-3 py-1.5 focus:outline-none focus:border-amber-500 shadow-sm"
+              >
+                {SATDIK_LIST.map(s => (
+                  <option key={s.id} value={s.id} className="bg-slate-900 text-slate-100">{s.shortName}</option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
         {/* Side-by-Side Comparison Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 pt-1 sm:pt-2">
           {/* Campus 1 Card */}
-          <div className="bg-slate-900/80 p-5 rounded-2xl border border-cyan-500/30 space-y-4">
-            <div className="flex items-start justify-between">
-              <div>
+          <div className="bg-slate-900/80 p-3.5 sm:p-5 rounded-2xl border border-cyan-500/30 space-y-3 sm:space-y-4 overflow-hidden">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0 flex-1">
                 <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
                   {campus1.jenjang}
                 </span>
-                <h4 className="text-base font-bold text-white mt-1">{campus1.name}</h4>
-                <p className="text-xs text-slate-400">{campus1.kota}, {campus1.provinsi}</p>
+                <h4 className="text-sm sm:text-base font-bold text-white mt-1 break-words leading-tight">{campus1.name}</h4>
+                <p className="text-[11px] sm:text-xs text-slate-400 truncate mt-0.5">{campus1.kota}, {campus1.provinsi}</p>
               </div>
-              <div className="text-right">
-                <span className="text-2xl font-black text-cyan-400">{Math.round(metrics1.avgScore)}%</span>
-                <span className="text-[10px] text-slate-400 block">Indeks Kelaikan</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700">
-                <span className="text-slate-400 text-[10px] block">Taruna</span>
-                <span className="font-bold text-white">{campus1.tarunaCount.toLocaleString()}</span>
-              </div>
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700">
-                <span className="text-slate-400 text-[10px] block">Luas Lahan</span>
-                <span className="font-bold text-white">{campus1.luasLahanHa} Ha</span>
-              </div>
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700">
-                <span className="text-slate-400 text-[10px] block">Total Sarpras</span>
-                <span className="font-bold text-white">{metrics1.count} Unit</span>
-              </div>
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700">
-                <span className="text-slate-400 text-[10px] block">Kondisi Baik</span>
-                <span className="font-bold text-emerald-400">{metrics1.baik} Unit</span>
+              <div className="text-right flex-shrink-0">
+                <span className="text-xl sm:text-2xl font-black text-cyan-400">{Math.round(metrics1.avgScore)}%</span>
+                <span className="text-[9px] sm:text-[10px] text-slate-400 block whitespace-nowrap">Indeks Kelaikan</span>
               </div>
             </div>
 
-            <div className="space-y-2 pt-2 border-t border-slate-800 text-xs">
-              <div className="flex justify-between">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 text-center text-xs">
+              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
+                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Taruna</span>
+                <span className="font-bold text-white text-xs sm:text-sm truncate block">{campus1.tarunaCount.toLocaleString()}</span>
+              </div>
+              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
+                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Luas Lahan</span>
+                <span className="font-bold text-white text-xs sm:text-sm truncate block">{campus1.luasLahanHa} Ha</span>
+              </div>
+              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
+                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Total Sarpras</span>
+                <span className="font-bold text-white text-xs sm:text-sm truncate block">{metrics1.count} Unit</span>
+              </div>
+              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
+                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Kondisi Baik</span>
+                <span className="font-bold text-emerald-400 text-xs sm:text-sm truncate block">{metrics1.baik} Unit</span>
+              </div>
+            </div>
+
+            <div className="space-y-1.5 sm:space-y-2 pt-2 border-t border-slate-800 text-[11px] sm:text-xs">
+              <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-0.5 xs:gap-2">
                 <span className="text-slate-400">Total Valuasi BMN:</span>
-                <span className="font-bold text-emerald-400">{formatRupiah(metrics1.valuation)}</span>
+                <span className="font-bold text-emerald-400 break-words">{formatRupiah(metrics1.valuation)}</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-0.5 xs:gap-2">
                 <span className="text-slate-400">Kebutuhan Perbaikan:</span>
-                <span className="font-bold text-amber-400">{formatRupiah(metrics1.totalRepairNeeded)}</span>
+                <span className="font-bold text-amber-400 break-words">{formatRupiah(metrics1.totalRepairNeeded)}</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-slate-400">Akreditasi Satdik:</span>
                 <span className="font-bold text-white">{campus1.akreditasi}</span>
               </div>
@@ -232,60 +247,132 @@ export default function VokasiAnalytics({
           </div>
 
           {/* Campus 2 Card */}
-          <div className="bg-slate-900/80 p-5 rounded-2xl border border-amber-500/30 space-y-4">
-            <div className="flex items-start justify-between">
-              <div>
+          <div className="bg-slate-900/80 p-3.5 sm:p-5 rounded-2xl border border-amber-500/30 space-y-3 sm:space-y-4 overflow-hidden">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0 flex-1">
                 <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-500/20 text-amber-300 border border-amber-500/30">
                   {campus2.jenjang}
                 </span>
-                <h4 className="text-base font-bold text-white mt-1">{campus2.name}</h4>
-                <p className="text-xs text-slate-400">{campus2.kota}, {campus2.provinsi}</p>
+                <h4 className="text-sm sm:text-base font-bold text-white mt-1 break-words leading-tight">{campus2.name}</h4>
+                <p className="text-[11px] sm:text-xs text-slate-400 truncate mt-0.5">{campus2.kota}, {campus2.provinsi}</p>
               </div>
-              <div className="text-right">
-                <span className="text-2xl font-black text-amber-400">{Math.round(metrics2.avgScore)}%</span>
-                <span className="text-[10px] text-slate-400 block">Indeks Kelaikan</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700">
-                <span className="text-slate-400 text-[10px] block">Taruna</span>
-                <span className="font-bold text-white">{campus2.tarunaCount.toLocaleString()}</span>
-              </div>
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700">
-                <span className="text-slate-400 text-[10px] block">Luas Lahan</span>
-                <span className="font-bold text-white">{campus2.luasLahanHa} Ha</span>
-              </div>
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700">
-                <span className="text-slate-400 text-[10px] block">Total Sarpras</span>
-                <span className="font-bold text-white">{metrics2.count} Unit</span>
-              </div>
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700">
-                <span className="text-slate-400 text-[10px] block">Kondisi Baik</span>
-                <span className="font-bold text-emerald-400">{metrics2.baik} Unit</span>
+              <div className="text-right flex-shrink-0">
+                <span className="text-xl sm:text-2xl font-black text-amber-400">{Math.round(metrics2.avgScore)}%</span>
+                <span className="text-[9px] sm:text-[10px] text-slate-400 block whitespace-nowrap">Indeks Kelaikan</span>
               </div>
             </div>
 
-            <div className="space-y-2 pt-2 border-t border-slate-800 text-xs">
-              <div className="flex justify-between">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 text-center text-xs">
+              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
+                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Taruna</span>
+                <span className="font-bold text-white text-xs sm:text-sm truncate block">{campus2.tarunaCount.toLocaleString()}</span>
+              </div>
+              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
+                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Luas Lahan</span>
+                <span className="font-bold text-white text-xs sm:text-sm truncate block">{campus2.luasLahanHa} Ha</span>
+              </div>
+              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
+                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Total Sarpras</span>
+                <span className="font-bold text-white text-xs sm:text-sm truncate block">{metrics2.count} Unit</span>
+              </div>
+              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
+                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Kondisi Baik</span>
+                <span className="font-bold text-emerald-400 text-xs sm:text-sm truncate block">{metrics2.baik} Unit</span>
+              </div>
+            </div>
+
+            <div className="space-y-1.5 sm:space-y-2 pt-2 border-t border-slate-800 text-[11px] sm:text-xs">
+              <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-0.5 xs:gap-2">
                 <span className="text-slate-400">Total Valuasi BMN:</span>
-                <span className="font-bold text-emerald-400">{formatRupiah(metrics2.valuation)}</span>
+                <span className="font-bold text-emerald-400 break-words">{formatRupiah(metrics2.valuation)}</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-0.5 xs:gap-2">
                 <span className="text-slate-400">Kebutuhan Perbaikan:</span>
-                <span className="font-bold text-amber-400">{formatRupiah(metrics2.totalRepairNeeded)}</span>
+                <span className="font-bold text-amber-400 break-words">{formatRupiah(metrics2.totalRepairNeeded)}</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-slate-400">Akreditasi Satdik:</span>
                 <span className="font-bold text-white">{campus2.akreditasi}</span>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Matriks Perbandingan Langsung (Head-to-Head Matrix) */}
+        <div className="pt-2">
+          <div className="flex items-center gap-1.5 mb-2">
+            <BarChart2 className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+            <h4 className="text-xs font-bold text-slate-200">
+              Matriks Perbandingan Berdampingan
+            </h4>
+          </div>
+
+          <div className="overflow-x-auto rounded-xl border border-slate-700/80 bg-slate-900/60 shadow-xs scrollbar-thin">
+            <table className="w-full text-left text-[11px] sm:text-xs min-w-[320px]">
+              <thead>
+                <tr className="bg-slate-950/80 border-b border-slate-800 text-slate-300">
+                  <th className="py-2.5 px-3 font-semibold">Parameter Komparasi</th>
+                  <th className="py-2.5 px-3 font-bold text-cyan-400 truncate max-w-[120px] sm:max-w-none">
+                    {campus1.shortName}
+                  </th>
+                  <th className="py-2.5 px-3 font-bold text-amber-400 truncate max-w-[120px] sm:max-w-none">
+                    {campus2.shortName}
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60">
+                <tr className="hover:bg-slate-800/40 transition-colors">
+                  <td className="py-2 px-3 text-slate-400 font-medium">Indeks Kelaikan</td>
+                  <td className="py-2 px-3 font-black text-cyan-400">{Math.round(metrics1.avgScore)}%</td>
+                  <td className="py-2 px-3 font-black text-amber-400">{Math.round(metrics2.avgScore)}%</td>
+                </tr>
+                <tr className="hover:bg-slate-800/40 transition-colors">
+                  <td className="py-2 px-3 text-slate-400 font-medium">Taruna Aktif</td>
+                  <td className="py-2 px-3 font-semibold text-white">{campus1.tarunaCount.toLocaleString()} org</td>
+                  <td className="py-2 px-3 font-semibold text-white">{campus2.tarunaCount.toLocaleString()} org</td>
+                </tr>
+                <tr className="hover:bg-slate-800/40 transition-colors">
+                  <td className="py-2 px-3 text-slate-400 font-medium">Luas Wilayah</td>
+                  <td className="py-2 px-3 font-semibold text-white">{campus1.luasLahanHa} Ha</td>
+                  <td className="py-2 px-3 font-semibold text-white">{campus2.luasLahanHa} Ha</td>
+                </tr>
+                <tr className="hover:bg-slate-800/40 transition-colors">
+                  <td className="py-2 px-3 text-slate-400 font-medium">Total Unit Sarpras</td>
+                  <td className="py-2 px-3 font-semibold text-white">{metrics1.count} Unit</td>
+                  <td className="py-2 px-3 font-semibold text-white">{metrics2.count} Unit</td>
+                </tr>
+                <tr className="hover:bg-slate-800/40 transition-colors">
+                  <td className="py-2 px-3 text-slate-400 font-medium">Kondisi Prima (Baik)</td>
+                  <td className="py-2 px-3 font-bold text-emerald-400">{metrics1.baik} Unit</td>
+                  <td className="py-2 px-3 font-bold text-emerald-400">{metrics2.baik} Unit</td>
+                </tr>
+                <tr className="hover:bg-slate-800/40 transition-colors">
+                  <td className="py-2 px-3 text-slate-400 font-medium">Perlu Perbaikan Segera</td>
+                  <td className="py-2 px-3 font-bold text-rose-400">
+                    {metrics1.rusakSedang + metrics1.rusakBerat} Unit
+                  </td>
+                  <td className="py-2 px-3 font-bold text-rose-400">
+                    {metrics2.rusakSedang + metrics2.rusakBerat} Unit
+                  </td>
+                </tr>
+                <tr className="hover:bg-slate-800/40 transition-colors">
+                  <td className="py-2 px-3 text-slate-400 font-medium">Total Valuasi BMN</td>
+                  <td className="py-2 px-3 font-bold text-emerald-400">{formatRupiah(metrics1.valuation)}</td>
+                  <td className="py-2 px-3 font-bold text-emerald-400">{formatRupiah(metrics2.valuation)}</td>
+                </tr>
+                <tr className="hover:bg-slate-800/40 transition-colors">
+                  <td className="py-2 px-3 text-slate-400 font-medium">Akreditasi Satdik</td>
+                  <td className="py-2 px-3 font-bold text-white">{campus1.akreditasi}</td>
+                  <td className="py-2 px-3 font-bold text-white">{campus2.akreditasi}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       {/* Compliance Standard Checklist */}
-      <div className="bg-slate-800/90 rounded-2xl p-5 border border-slate-700/70 shadow-lg space-y-4">
+      <div className="bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-700/70 shadow-md space-y-4">
         <div>
           <h3 className="text-base font-bold text-white tracking-tight flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-emerald-400" />
@@ -316,12 +403,12 @@ export default function VokasiAnalytics({
                 <p className="text-[11px] text-slate-400 mt-1">{item.description}</p>
               </div>
 
-              <div className="mt-3 pt-2.5 border-t border-slate-800 text-[11px] space-y-1">
+              <div className="mt-3 pt-2.5 border-t border-slate-800 text-[11px] space-y-1.5">
                 <div className="flex justify-between text-slate-400">
                   <span>Target Regulasi:</span>
-                  <span className="text-slate-200 font-medium">{item.target}</span>
+                  <span className="text-slate-200 font-semibold">{item.target}</span>
                 </div>
-                <div className="text-slate-400 italic text-[10px] bg-slate-950/60 p-1.5 rounded border border-slate-800">
+                <div className="text-slate-400 italic text-[10px] bg-slate-950/60 p-2 rounded-lg border border-slate-800">
                   {item.notes}
                 </div>
               </div>
@@ -331,7 +418,7 @@ export default function VokasiAnalytics({
       </div>
 
       {/* Rasio Asrama per Taruna (Boarding Readiness) */}
-      <div className="bg-slate-800/90 rounded-2xl p-5 border border-slate-700/70 shadow-lg space-y-3">
+      <div className="bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-700/70 shadow-md space-y-3">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-base font-bold text-white tracking-tight flex items-center gap-2">
@@ -369,8 +456,8 @@ export default function VokasiAnalytics({
               </div>
 
               <div className="flex justify-between text-[11px] text-slate-400">
-                <span>Ranjang: {b.totalBeds} Unit</span>
-                <span>Taruna: {b.tarunaCount} Orang</span>
+                <span>Ranjang: <strong className="text-slate-300">{b.totalBeds} Unit</strong></span>
+                <span>Taruna: <strong className="text-slate-300">{b.tarunaCount} Orang</strong></span>
               </div>
             </div>
           ))}

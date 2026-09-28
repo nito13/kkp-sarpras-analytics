@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   Anchor, 
   BarChart3, 
@@ -16,7 +17,12 @@ import {
   User,
   LogOut,
   Sun,
-  Moon
+  Moon,
+  Smartphone,
+  X,
+  Copy,
+  Check,
+  Wifi
 } from 'lucide-react';
 import { formatRupiah } from '../data/sarprasGenerator';
 import { useTheme } from '../context/ThemeContext';
@@ -38,6 +44,13 @@ export default function Navbar({
   dbStatus
 }) {
   const { isDark, toggleTheme } = useTheme();
+  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const networkIp = '10.110.147.6';
+  const mobileAccessUrl = typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+    ? `${window.location.protocol}//${window.location.hostname}:${window.location.port || '5173'}`
+    : `http://${networkIp}:5173`;
 
   const navItems = [
     { id: 'dashboard', label: 'Ringkasan Eksekutif', icon: BarChart3 },
@@ -56,83 +69,21 @@ export default function Navbar({
 
   return (
     <header className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 shadow-xl transition-colors duration-200">
-      {/* Top Banner: Official KKP Branding & System Title */}
-      <div className="top-branding-banner bg-gradient-to-r from-blue-950 via-slate-900 to-cyan-950 px-3 sm:px-6 py-1.5 sm:py-2 border-b border-cyan-900/30">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3 text-xs">
-          <div className="flex items-center space-x-2.5 sm:space-x-3 w-full sm:w-auto justify-between sm:justify-start">
-            <div className="flex items-center space-x-2.5">
-              <div className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/95 p-1 border border-cyan-400/60 shadow-sm flex-shrink-0">
-                <img src={logoKkp} alt="Logo KKP" className="w-full h-full object-contain" />
-              </div>
-              <div>
-                <span className="font-bold text-white tracking-wide uppercase text-[10px] sm:text-xs block leading-tight">
-                  Kementerian Kelautan dan Perikanan
-                </span>
-                <p className="text-slate-400 text-[9px] sm:text-[10px] truncate max-w-[240px] sm:max-w-none">
-                  Pusat Pendidikan Kelautan dan Perikanan
-                </p>
-              </div>
-            </div>
-
-            {/* Mobile Database Pill Badge */}
-            <div className="sm:hidden">
-              {dbStatus?.connected ? (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 font-semibold text-[10px]">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  MySQL Aktif
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-300 font-medium text-[10px]">
-                  Lokal
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-center flex-wrap gap-2 text-[11px]">
-            {dbStatus?.connected ? (
-              <span 
-                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 font-medium shadow-sm"
-                title={`MySQL Laragon Terhubung (localhost:3306 - ${dbStatus.info?.database || 'kkp_sarpras_db'})`}
-              >
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                MySQL Laragon (Aktif)
-              </span>
-            ) : (
-              <span 
-                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-300 font-medium"
-                title="Laragon belum terhubung, menggunakan data lokal"
-              >
-                <span className="w-2 h-2 rounded-full bg-amber-400"></span>
-                Mode Offline / Lokal
-              </span>
-            )}
-            <span className="text-slate-400 hidden lg:inline">|</span>
-            <span className="text-slate-300 hidden lg:inline">
-              18 Satuan Pendidikan (11 Poltek & 7 SUPM)
-            </span>
-            <span className="text-slate-400 hidden lg:inline">|</span>
-            <span className="text-cyan-300 font-semibold hidden sm:inline">
-              Valuasi: {formatRupiah(totalValuation)}
-            </span>
-          </div>
-        </div>
-      </div>
 
       {/* Main Navigation Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-16">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6">
+        <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo & Platform Name */}
-          <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('dashboard')}>
-            <div className="w-12 h-12 rounded-xl bg-white p-1 flex items-center justify-center shadow-lg shadow-cyan-500/20 border border-cyan-400/50 hover:scale-105 transition-transform flex-shrink-0">
+          <div className="flex items-center space-x-2 sm:space-x-3 cursor-pointer min-w-0" onClick={() => setActiveTab('dashboard')}>
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-white p-1 flex items-center justify-center shadow-lg shadow-cyan-500/20 border border-cyan-400/50 hover:scale-105 transition-transform flex-shrink-0">
               <img src={logoKkp} alt="Logo Resmi Kementerian Kelautan dan Perikanan" className="w-full h-full object-contain" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-base sm:text-lg font-bold text-white tracking-tight leading-tight">
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <h1 className="text-sm sm:text-lg font-bold text-white tracking-tight leading-tight truncate">
                   SIM-SARPRAS <span className="text-cyan-400 font-extrabold">KKP</span>
                 </h1>
-                <span className="px-1.5 py-0.5 text-[9px] uppercase tracking-wider font-semibold bg-cyan-950 text-cyan-300 border border-cyan-700/50 rounded">
+                <span className="hidden sm:inline-block px-1.5 py-0.5 text-[9px] uppercase tracking-wider font-semibold bg-cyan-950 text-cyan-300 border border-cyan-700/50 rounded">
                   v2.6 Analytics
                 </span>
               </div>
@@ -142,41 +93,51 @@ export default function Navbar({
             </div>
           </div>
 
-          {/* Quick Actions (Add Asset, Export, Print, User Profile) */}
-          <div className="flex items-center space-x-2">
+          {/* Quick Actions (Add Asset, Export, Print, User Profile, Logout) */}
+          <div className="flex items-center space-x-1.5 sm:space-x-2">
             {currentUser?.permissions?.includes('edit_all') || currentUser?.permissions?.includes('edit_own') ? (
               <button
                 onClick={onOpenAddModal}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs shadow-md shadow-cyan-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs shadow-md shadow-cyan-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
                 title="Input data aset sarana prasarana baru"
               >
                 <PlusCircle className="w-4 h-4" />
-                <span className="hidden sm:inline">Tambah Sarpras</span>
+                <span>Tambah Sarpras</span>
               </button>
             ) : null}
 
             <button
               onClick={onExportExcel || onExportCSV}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-200 border border-emerald-700/60 text-xs font-semibold shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-200 border border-emerald-700/60 text-xs font-semibold shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
               title="Ekspor data inventaris sarpras ke Microsoft Excel (.xls) dengan tabel berformat resmi & rapi"
             >
               <Download className="w-4 h-4 text-emerald-400" />
-              <span className="hidden md:inline">Ekspor Excel</span>
+              <span>Ekspor Excel</span>
             </button>
 
             <button
               onClick={onPrint}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs transition-colors"
+              className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs transition-colors"
               title="Cetak ringkasan laporan sarpras"
             >
               <Printer className="w-4 h-4 text-slate-300" />
-              <span className="hidden md:inline">Cetak</span>
+              <span>Cetak</span>
+            </button>
+
+            {/* Tombol Akses di Handphone (QR Code & IP) - Khusus Desktop */}
+            <button
+              onClick={() => setIsQrModalOpen(true)}
+              className="hidden md:flex p-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-cyan-300 border border-slate-700 hover:border-cyan-500/50 transition-all hover:scale-105 active:scale-95 items-center justify-center shadow-sm"
+              title="Buka SIM-SARPRAS di Handphone / Tablet (Scan QR)"
+              aria-label="Akses di HP"
+            >
+              <Smartphone className="w-4 h-4 text-cyan-400" />
             </button>
 
             {/* Switch Tema Terang / Gelap */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all hover:scale-105 active:scale-95 flex items-center justify-center shadow-sm"
+              className="p-1.5 sm:p-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all hover:scale-105 active:scale-95 flex items-center justify-center shadow-sm flex-shrink-0"
               title={isDark ? "Beralih ke Mode Terang (Light Mode)" : "Beralih ke Mode Gelap (Dark Mode)"}
               aria-label="Toggle Theme Mode"
             >
@@ -188,10 +149,10 @@ export default function Navbar({
             </button>
 
             {/* Authenticated User Capsule */}
-            <div className="flex items-center space-x-1.5 pl-2 border-l border-slate-700">
+            <div className="flex items-center space-x-1 sm:space-x-1.5 pl-1 sm:pl-2 border-l border-slate-700/80">
               <button
                 onClick={onOpenProfile}
-                className="flex items-center gap-2 p-1 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-left transition-colors"
+                className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-left transition-colors flex-shrink-0"
                 title="Klik untuk melihat profil & hak akses akun"
               >
                 <div className="w-7 h-7 rounded-lg bg-cyan-600/30 border border-cyan-400/50 flex items-center justify-center text-cyan-300 font-bold text-xs">
@@ -207,19 +168,22 @@ export default function Navbar({
                 </div>
               </button>
 
+              {/* Tombol Logout - Tampil Jelas & Menonjol di Layar HP maupun Desktop */}
               <button
                 onClick={onLogout}
-                className="p-1.5 rounded-xl bg-slate-800/90 hover:bg-rose-900/40 text-slate-400 hover:text-rose-400 border border-slate-700 hover:border-rose-500/40 transition-colors"
+                className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-600 text-rose-600 dark:text-rose-300 hover:text-white dark:hover:text-white border border-rose-300 dark:border-rose-500/40 hover:border-rose-600 text-xs font-bold transition-all shadow-sm flex-shrink-0 active:scale-95 group"
                 title="Keluar dari sesi SIM-SARPRAS"
+                aria-label="Logout"
               >
-                <LogOut className="w-4 h-4" />
+                <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-500 dark:text-rose-400 group-hover:text-white transition-colors" />
+                <span className="text-[11px] sm:text-xs font-bold tracking-tight">Keluar</span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* Navigation Tabs Bar */}
-        <div className="flex items-center space-x-1 overflow-x-auto pb-1.5 scrollbar-thin scrollbar-thumb-slate-700">
+        {/* Navigation Tabs Bar - Khusus Tampil di Desktop (Di HP dihilangkan karena memakai bar navigasi bawah MobileBottomNav) */}
+        <div className="hidden md:flex items-center space-x-1 overflow-x-auto pb-1.5 scrollbar-thin scrollbar-thumb-slate-700">
           {navItems.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -256,6 +220,90 @@ export default function Navbar({
           })}
         </div>
       </div>
+
+      {/* Modal Akses HP / QR Code (Mounted to document.body via Portal to guarantee perfect center positioning) */}
+      {isQrModalOpen && typeof document !== 'undefined' && createPortal(
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn"
+          onClick={() => setIsQrModalOpen(false)}
+        >
+          <div 
+            className="bg-slate-900 border border-slate-700/80 rounded-3xl w-full max-w-sm max-h-[90vh] overflow-y-auto flex flex-col shadow-2xl p-6 text-center m-auto transition-all"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                  <Smartphone className="w-4 h-4" />
+                </div>
+                <div className="text-left">
+                  <h3 className="text-sm font-bold text-white leading-tight">
+                    Buka di Handphone
+                  </h3>
+                  <span className="text-[10px] text-cyan-400 font-medium">Akses Jaringan Wi-Fi Lokal</span>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsQrModalOpen(false)}
+                className="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="py-4 space-y-4">
+              <div className="w-48 h-48 mx-auto bg-white p-3 rounded-2xl shadow-xl border border-slate-600 flex items-center justify-center">
+                <img 
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(mobileAccessUrl)}`}
+                  alt="QR Code Akses HP" 
+                  className="w-full h-full object-contain"
+                />
+              </div>
+
+              <div>
+                <p className="text-xs text-slate-300 font-medium">
+                  Arahkan kamera HP ke QR Code di atas, atau buka browser dan ketik alamat:
+                </p>
+                <div className="mt-2 flex items-center justify-between bg-slate-950 p-2.5 rounded-xl border border-slate-700/80">
+                  <span className="font-mono text-xs text-cyan-300 font-bold select-all truncate mr-2">
+                    {mobileAccessUrl}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(mobileAccessUrl);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }}
+                    className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors flex-shrink-0"
+                  >
+                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copied ? 'Tersalin' : 'Salin'}</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="text-[11px] text-slate-400 bg-slate-800/60 p-3 rounded-xl border border-slate-700/60 text-left space-y-1">
+                <p className="font-semibold text-slate-200 flex items-center gap-1.5">
+                  <Wifi className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Petunjuk Mudah:</span>
+                </p>
+                <p>1. Sambungkan HP ke jaringan Wi-Fi yang sama dengan PC/Laptop.</p>
+                <p>2. Scan QR Code atau ketik alamat IP di atas pada browser HP.</p>
+                <p>3. Navigasi bawah (*Mobile Bottom Nav*) otomatis aktif untuk layar HP.</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setIsQrModalOpen(false)}
+              className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-colors border border-slate-700"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
     </header>
   );
 }
