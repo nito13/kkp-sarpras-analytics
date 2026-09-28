@@ -5,7 +5,6 @@ import GeospatialMap from './components/GeospatialMap';
 import AssetExplorer from './components/AssetExplorer';
 import VokasiAnalytics from './components/VokasiAnalytics';
 import EarlyWarningMaintenance from './components/EarlyWarningMaintenance';
-import BudgetSimulator from './components/BudgetSimulator';
 import AddAssetModal from './components/AddAssetModal';
 import LoginScreen from './components/LoginScreen';
 import UserProfileModal from './components/UserProfileModal';
@@ -216,11 +215,6 @@ export default function App() {
     });
   };
 
-  // Print summary handler
-  const handlePrint = () => {
-    window.print();
-  };
-
   // If user is not authenticated, show the official government Login Portal
   if (!currentUser) {
     return <LoginScreen onLogin={handleLogin} />;
@@ -238,7 +232,6 @@ export default function App() {
         onOpenAddModal={() => setIsAddModalOpen(true)}
         onExportExcel={handleExportExcel}
         onExportCSV={handleExportExcel}
-        onPrint={handlePrint}
         currentUser={currentUser}
         onOpenProfile={() => setIsProfileModalOpen(true)}
         onLogout={handleLogout}
@@ -308,15 +301,6 @@ export default function App() {
           <EarlyWarningMaintenance
             urgentAssets={kpis.urgentAssets}
             onResolveAsset={handleUpdateAsset}
-            onNavigateToSimulator={() => setActiveTab('simulator')}
-          />
-        )}
-
-        {activeTab === 'simulator' && (
-          <BudgetSimulator
-            assets={assets}
-            onApplySimulatedAssets={(updated) => setAssets(updated)}
-            currentUser={currentUser}
           />
         )}
       </main>

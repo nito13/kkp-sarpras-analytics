@@ -9,7 +9,6 @@ import {
   Ship, 
   Building2, 
   Anchor, 
-  ChevronRight, 
   Check, 
   DollarSign,
   AlertCircle
@@ -18,8 +17,7 @@ import { formatRupiah } from '../data/sarprasGenerator';
 
 export default function EarlyWarningMaintenance({
   urgentAssets,
-  onResolveAsset,
-  onNavigateToSimulator
+  onResolveAsset
 }) {
   const [resolvedIds, setResolvedIds] = useState(new Set());
   const [filterType, setFilterType] = useState('ALL'); // 'ALL' | 'Rusak Berat' | 'Kadaluarsa'
@@ -146,14 +144,6 @@ export default function EarlyWarningMaintenance({
             Sertifikat Mati ({urgentAssets.filter(a => a.certificationStatus === 'Kadaluarsa').length})
           </button>
         </div>
-
-        <button
-          onClick={onNavigateToSimulator}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold transition-colors shadow-md shadow-cyan-900/40"
-        >
-          <span>Simulasikan Alokasi Anggaran APBN</span>
-          <ChevronRight className="w-3.5 h-3.5" />
-        </button>
       </div>
 
       {/* Critical Asset Cards Grid */}

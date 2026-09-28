@@ -6,10 +6,8 @@ import {
   MapPin, 
   Layers, 
   AlertTriangle, 
-  Calculator, 
   PlusCircle, 
   Download, 
-  Printer, 
   Ship, 
   Sparkles,
   School,
@@ -37,7 +35,6 @@ export default function Navbar({
   onOpenAddModal,
   onExportCSV,
   onExportExcel,
-  onPrint,
   currentUser,
   onOpenProfile,
   onLogout,
@@ -64,7 +61,6 @@ export default function Navbar({
       badge: criticalCount > 0 ? criticalCount : null,
       badgeColor: 'bg-rose-500 text-white animate-pulse'
     },
-    { id: 'simulator', label: 'Simulasi Anggaran APBN', icon: Calculator, isNew: true },
   ];
 
   return (
@@ -75,7 +71,9 @@ export default function Navbar({
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo & Platform Name */}
           <div className="flex items-center space-x-2 sm:space-x-3 cursor-pointer min-w-0" onClick={() => setActiveTab('dashboard')}>
-            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-white p-1 flex items-center justify-center shadow-lg shadow-cyan-500/20 border border-cyan-400/50 hover:scale-105 transition-transform flex-shrink-0">
+            <div className={`header-logo-container w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-white p-1 flex items-center justify-center shadow-lg hover:scale-105 transition-transform flex-shrink-0 border ${
+              isDark ? 'border-cyan-400/50 shadow-cyan-500/20' : 'border-black shadow-slate-400/20'
+            }`}>
               <img src={logoKkp} alt="Logo Resmi Kementerian Kelautan dan Perikanan" className="w-full h-full object-contain" />
             </div>
             <div className="min-w-0">
@@ -113,15 +111,6 @@ export default function Navbar({
             >
               <Download className="w-4 h-4 text-emerald-400" />
               <span>Ekspor Excel</span>
-            </button>
-
-            <button
-              onClick={onPrint}
-              className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs transition-colors"
-              title="Cetak ringkasan laporan sarpras"
-            >
-              <Printer className="w-4 h-4 text-slate-300" />
-              <span>Cetak</span>
             </button>
 
             {/* Tombol Akses di Handphone (QR Code & IP) - Khusus Desktop */}

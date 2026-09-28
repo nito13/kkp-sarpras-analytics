@@ -6,7 +6,6 @@ import {
   Layers, 
   School, 
   AlertTriangle, 
-  Calculator,
   PlusCircle
 } from 'lucide-react';
 
@@ -28,7 +27,6 @@ export default function MobileBottomNav({
       icon: AlertTriangle,
       badge: criticalCount > 0 ? criticalCount : null 
     },
-    { id: 'simulator', label: 'Simulasi', icon: Calculator },
   ];
 
   return (
