@@ -4,7 +4,6 @@ import {
   Navigation, 
   School, 
   Building2, 
-  Users, 
   Coins, 
   CheckCircle2, 
   AlertTriangle, 
@@ -659,13 +658,13 @@ export default function GeospatialMap({
             <div className="grid grid-cols-2 gap-2 my-3 text-xs">
               <div className="bg-slate-900/70 p-2.5 rounded-xl border border-slate-800">
                 <div className="flex items-center gap-1.5 text-slate-400">
-                  <Users className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Jumlah Taruna</span>
+                  <School className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Program Studi</span>
                 </div>
                 <div className="text-base font-bold text-white mt-1">
-                  {selectedSatdik.tarunaCount.toLocaleString()} <span className="text-[10px] text-slate-400 font-normal">Taruna</span>
+                  {selectedSatdik.prodi?.length || 0} <span className="text-[10px] text-slate-400 font-normal">Program Kejuruan</span>
                 </div>
-                <div className="text-[10px] text-slate-400">{selectedSatdik.dosenCount} Dosen/Instruktur</div>
+                <div className="text-[10px] text-slate-400">Berdiri Tahun {selectedSatdik.establishedYear}</div>
               </div>
 
               <div className="bg-slate-900/70 p-2.5 rounded-xl border border-slate-800">

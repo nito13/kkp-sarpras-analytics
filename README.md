@@ -48,18 +48,18 @@ Aplikasi dilengkapi dengan portal otentikasi resmi berstandar kedinasan KKP deng
 ## 🚀 Fitur Utama Sistem
 
 ### 1. 📊 Executive KPI Dashboard
-- **Metrik Utama Real-Time**: Total Aset BMN, Nilai Valuasi Aset BMN (Rupiah), Indeks Kelaikan Sarpras Nasional (IKSP), Jumlah Sarpras Kritis/Rusak Berat, Total Taruna Terfasilitasi, dan Estimasi Kebutuhan Biaya Rehabilitasi.
+- **Metrik Utama Real-Time**: Total Aset BMN, Nilai Valuasi Aset BMN (Rupiah), Indeks Kelaikan Sarpras Nasional (IKSP), Jumlah Sarpras Kondisi Baik, Jumlah Sarpras Kritis/Rusak Berat, dan Estimasi Kebutuhan Biaya Rehabilitasi.
 - **Visualisasi Chart.js Interaktif**:
-  - *Donut Chart*: Komposisi kondisi fisik (Baik, Rusak Ringan, Rusak Sedang, Rusak Berat).
+  - *Donut Chart*: Komposisi kondisi fisik (Baik, Rusak Ringan, Rusak Berat).
   - *Horizontal Bar Chart*: Peringkat kelaikan sarpras per satuan pendidikan (Politeknik vs SUPM).
   - *Radar Chart*: Kematangan sarpras per kategori bidang vokasi dibandingkan standar minimal KKP.
-  - *Line & Area Chart*: Tren utilisasi dan jam praktik taruna dari tahun 2023 hingga 2026.
+  - *Line & Area Chart*: Tren utilisasi dan jam praktik operasional sarpras dari tahun 2023 hingga 2026.
 - **Early Warning Highlight Banner**: Peringatan darurat untuk fasilitas yang mengalami kerusakan mesin utama atau sertifikat BKI mati.
 
 ### 2. 🗺️ Peta Persebaran Geospasial Nusantara
 - Peta vektor interaktif kepulauan Indonesia (Sumatera, Jawa, Kalimantan, Sulawesi, Bali-Nusa Tenggara, Maluku, Papua) dengan proyeksi koordinat akurat seluruh 18 kampus.
 - Pin lokasi interaktif dengan *pulsating radar glow* dan kode warna indikator (*Emerald* $\ge 85\%$, *Sky* $75-84\%$, *Rose* $<75\%$).
-- **Inspector Kampus**: Mengklik pin kampus menampilkan profil lengkap, jumlah taruna/dosen, luas lahan/bangunan, total aset BMN, rincian kondisi sarpras, dan tombol pintas ke katalog inventaris.
+- **Inspector Kampus**: Mengklik pin kampus menampilkan profil lengkap, program studi/kejuruan, luas lahan/bangunan, total aset BMN, rincian kondisi sarpras, dan tombol pintas ke katalog inventaris.
 
 ### 3. 📦 Inventaris & Katalog Aset BMN
 - **Pencarian Cerdas & Filter Multidimensi**: Pencarian teks bebas (nama aset, kode BMN, spesifikasi mesin), filter Kategori Sarpras, filter Satdik, filter Kondisi Fisik, filter Status Sertifikasi, dan filter Urgensi Pemeliharaan.
@@ -71,11 +71,11 @@ Aplikasi dilengkapi dengan portal otentikasi resmi berstandar kedinasan KKP deng
   - Fitur simulasi pembaruan kondisi: Pengguna dapat mengubah status (misal dari Rusak Berat menjadi Baik) dan mencatat log tindakan pemeliharaan yang langsung tersimpan di *Local Storage*.
 
 ### 4. 🎓 Standar Kelaikan & Benchmarking Vokasi
-- **Rasio Sarpras per Taruna**:
-  - *Rasio Tempat Tidur Asrama (Bed Ratio)*: Evaluasi target 100% *Boarding School* taruna KKP.
-  - *Rasio Kapal Latih & Jam Berlayar*: Target minimal 60 jam praktik berlayar per semester.
-- **Matriks Kepatuhan Standar Vokasi**: Evaluasi kepatuhan terhadap 6 regulasi krusial BPPSDM KP / Kemendikbudristek / IMO STCW.
-- **Head-to-Head Campus Comparison**: Komparasi berdampingan antara dua kampus terpilih untuk membandingkan kapasitas sarpras, nilai BMN, dan skor kelaikan.
+- **Kapasitas & Fasilitas Fisik**:
+  - *Kapasitas Daya Tampung Asrama*: Evaluasi ketersediaan ranjang tempat tidur dan indeks kelaikan fasilitas asrama penunjang kampus.
+  - *Kelaikan Armada Kapal Latih*: Kesiapan sertifikasi IMO STCW dan operasional berlayar.
+- **Matriks Kepatuhan Standar Vokasi**: Evaluasi kepatuhan terhadap regulasi krusial BPPSDM KP / Kemendikbudristek / IMO STCW.
+- **Head-to-Head Campus Comparison**: Komparasi berdampingan antara dua kampus terpilih untuk membandingkan kapasitas sarpras, luas bangunan & lahan, nilai BMN, dan skor kelaikan.
 
 ### 5. ⚠️ Early Warning System & Pemeliharaan Kritis
 - Daftar merah aset darurat yang membutuhkan penanganan segera (*Critical Immediate Attention*).

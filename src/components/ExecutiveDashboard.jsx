@@ -48,7 +48,6 @@ export default function ExecutiveDashboard({
     avgConditionScore,
     avgUtilization,
     totalEstimatedRepairCost,
-    totalTaruna,
     conditionCounts,
     conditionPercentages,
     categoryBreakdown,
@@ -241,7 +240,7 @@ export default function ExecutiveDashboard({
         pointBackgroundColor: '#0284c7',
       },
       {
-        label: 'Rata-rata Jam Praktik Taruna/Bulan',
+        label: 'Rata-rata Jam Praktik Operasional/Bulan',
         data: [52, 55, 58, 62, 64, 66],
         borderColor: '#9333ea',
         backgroundColor: 'transparent',
@@ -312,7 +311,7 @@ export default function ExecutiveDashboard({
               Dasbor Analitik Sarana & Prasarana Vokasi KKP
             </h2>
             <p className="text-slate-400 text-xs sm:text-sm mt-0.5 max-w-2xl">
-              Monitoring kondisi fisik, kelaikan operasi armada kapal latih, tambak super intensif, UPI, laboratorium, dan asrama taruna pada 18 Satuan Pendidikan Kelautan dan Perikanan se-Indonesia.
+              Monitoring kondisi fisik, kelaikan operasi armada kapal latih, tambak super intensif, UPI, laboratorium, dan asrama pada 18 Satuan Pendidikan Kelautan dan Perikanan se-Indonesia.
             </p>
           </div>
         </div>
@@ -604,7 +603,7 @@ export default function ExecutiveDashboard({
         <div className="lg:col-span-6 bg-slate-800/90 rounded-2xl p-5 border border-slate-700/70 shadow-lg">
           <div className="flex items-center justify-between mb-1">
             <h3 className="text-base font-bold text-white tracking-tight">
-              Tren Utilisasi & Jam Praktik Taruna (2023 - 2026)
+              Tren Utilisasi & Jam Praktik Sarpras (2023 - 2026)
             </h3>
             <span className="text-xs px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-medium">
               Efektivitas Pembelajaran

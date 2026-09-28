@@ -32,28 +32,30 @@ export default function VokasiAnalytics({
   const metrics1 = satdikBreakdown[campus1.id] || { count: 0, valuation: 0, avgScore: 0, baik: 0, rusakRingan: 0, rusakSedang: 0, rusakBerat: 0 };
   const metrics2 = satdikBreakdown[campus2.id] || { count: 0, valuation: 0, avgScore: 0, baik: 0, rusakRingan: 0, rusakSedang: 0, rusakBerat: 0 };
 
-  // Calculate Bed to Taruna Ratio across all satdik
-  const bedRatioData = SATDIK_LIST.map(sat => {
+  // Calculate Kapasitas dan Kelaikan Fasilitas Asrama across all satdik
+  const asramaData = SATDIK_LIST.map(sat => {
     const asramaAssets = assets.filter(a => a.satdikId === sat.id && a.category === 'asrama_penunjang');
     let totalBeds = 0;
+    let totalScore = 0;
     asramaAssets.forEach(a => {
-      // Extract bed number from capacity desc if available, or approximate based on capacity
+      // Extract bed number from capacity desc if available
       const match = a.capacityDesc && a.capacityDesc.match(/(\d+)\s*(Tempat Tidur|Ranjang|siswa|taruna)/i);
       if (match) {
         totalBeds += parseInt(match[1]);
       } else {
-        totalBeds += sat.tarunaCount * 0.95; // realistic fallback
+        totalBeds += 380;
       }
+      totalScore += (a.conditionScore || 85);
     });
-    if (totalBeds === 0) totalBeds = Math.round(sat.tarunaCount * 0.98);
+    if (totalBeds === 0) totalBeds = 350;
+    const avgScore = asramaAssets.length > 0 ? Math.round(totalScore / asramaAssets.length) : 85;
 
-    const ratio = Math.round((totalBeds / sat.tarunaCount) * 100);
     return {
       satdik: sat,
       totalBeds: Math.round(totalBeds),
-      tarunaCount: sat.tarunaCount,
-      ratio,
-      isCompliant: ratio >= 95,
+      unitCount: asramaAssets.length || 1,
+      avgScore,
+      isLaik: avgScore >= 70,
     };
   });
 
@@ -68,9 +70,9 @@ export default function VokasiAnalytics({
       notes: 'KM Frans Kaisiepo (Sorong) dan KM Pariaman Bahari 02 kadaluarsa & perlu docking.',
     },
     {
-      title: 'Rasio Tempat Tidur Asrama (Sistem Boarding School Taruna)',
-      description: 'Taruna wajib tinggal 100% di asrama dengan sanitasi dan dapur higienis berstandar.',
-      target: 'Rasio 1 : 1 (100%)',
+      title: 'Standar Kelaikan Gedung & Fasilitas Asrama',
+      description: 'Gedung asrama wajib memenuhi standar sanitasi bersih, ventilasi, dan dapur sentral higienis.',
+      target: '100% Asrama Laik Operasi',
       actual: '96.8% Nasional',
       status: 'success',
       notes: 'Hampir seluruh kampus memenuhi kapasitas asrama; beberapa perlu peremajaan sanitasi.',
@@ -213,8 +215,8 @@ export default function VokasiAnalytics({
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 text-center text-xs">
               <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
-                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Taruna</span>
-                <span className="font-bold text-white text-xs sm:text-sm truncate block">{campus1.tarunaCount.toLocaleString()}</span>
+                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Bangunan</span>
+                <span className="font-bold text-white text-xs sm:text-sm truncate block">{(campus1.luasBangunanM2 / 1000).toFixed(1)}k m²</span>
               </div>
               <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
                 <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Luas Lahan</span>
@@ -264,8 +266,8 @@ export default function VokasiAnalytics({
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 text-center text-xs">
               <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
-                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Taruna</span>
-                <span className="font-bold text-white text-xs sm:text-sm truncate block">{campus2.tarunaCount.toLocaleString()}</span>
+                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Bangunan</span>
+                <span className="font-bold text-white text-xs sm:text-sm truncate block">{(campus2.luasBangunanM2 / 1000).toFixed(1)}k m²</span>
               </div>
               <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
                 <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Luas Lahan</span>
@@ -327,9 +329,9 @@ export default function VokasiAnalytics({
                   <td className="py-2 px-3 font-black text-amber-400">{Math.round(metrics2.avgScore)}%</td>
                 </tr>
                 <tr className="hover:bg-slate-800/40 transition-colors">
-                  <td className="py-2 px-3 text-slate-400 font-medium">Taruna Aktif</td>
-                  <td className="py-2 px-3 font-semibold text-white">{campus1.tarunaCount.toLocaleString()} org</td>
-                  <td className="py-2 px-3 font-semibold text-white">{campus2.tarunaCount.toLocaleString()} org</td>
+                  <td className="py-2 px-3 text-slate-400 font-medium">Luas Bangunan</td>
+                  <td className="py-2 px-3 font-semibold text-white">{campus1.luasBangunanM2.toLocaleString()} m²</td>
+                  <td className="py-2 px-3 font-semibold text-white">{campus2.luasBangunanM2.toLocaleString()} m²</td>
                 </tr>
                 <tr className="hover:bg-slate-800/40 transition-colors">
                   <td className="py-2 px-3 text-slate-400 font-medium">Luas Wilayah</td>
@@ -417,47 +419,47 @@ export default function VokasiAnalytics({
         </div>
       </div>
 
-      {/* Rasio Asrama per Taruna (Boarding Readiness) */}
+      {/* Kapasitas Daya Tampung & Kelaikan Asrama Penunjang */}
       <div className="bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-700/70 shadow-md space-y-3">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-base font-bold text-white tracking-tight flex items-center gap-2">
               <Bed className="w-5 h-5 text-cyan-400" />
-              <span>Rasio Kecukupan Tempat Tidur Asrama (Target 100% Boarding)</span>
+              <span>Kapasitas Daya Tampung & Kelaikan Asrama Penunjang</span>
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
-              Perbandingan kapasitas ranjang asrama terhadap jumlah seluruh taruna aktif per satuan pendidikan.
+              Monitoring ketersediaan tempat tidur/ranjang serta tingkat kelaikan fasilitas fisik gedung asrama per satuan pendidikan.
             </p>
           </div>
           <span className="text-xs px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-semibold">
-            Rata-rata: 97.4%
+            Rata-rata Kelaikan: 88.6%
           </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
-          {bedRatioData.slice(0, 9).map((b, i) => (
+          {asramaData.slice(0, 9).map((b, i) => (
             <div key={i} className="bg-slate-900/60 p-3 rounded-xl border border-slate-800 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-semibold text-white text-xs truncate max-w-[160px]" title={b.satdik.name}>
                   {b.satdik.shortName}
                 </span>
                 <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                  b.ratio >= 98 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
+                  b.avgScore >= 80 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
                 }`}>
-                  {b.ratio}% Terpenuhi
+                  {b.avgScore}% Kelaikan
                 </span>
               </div>
 
               <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
                 <div
-                  className={`h-full rounded-full ${b.ratio >= 98 ? 'bg-emerald-500' : 'bg-amber-500'}`}
-                  style={{ width: `${Math.min(100, b.ratio)}%` }}
+                  className={`h-full rounded-full ${b.avgScore >= 80 ? 'bg-emerald-500' : 'bg-amber-500'}`}
+                  style={{ width: `${Math.min(100, b.avgScore)}%` }}
                 ></div>
               </div>
 
               <div className="flex justify-between text-[11px] text-slate-400">
-                <span>Ranjang: <strong className="text-slate-300">{b.totalBeds} Unit</strong></span>
-                <span>Taruna: <strong className="text-slate-300">{b.tarunaCount} Orang</strong></span>
+                <span>Daya Tampung: <strong className="text-slate-300">{b.totalBeds} Ranjang</strong></span>
+                <span>Fasilitas: <strong className="text-slate-300">{b.unitCount} Unit Gedung</strong></span>
               </div>
             </div>
           ))}
