@@ -21,6 +21,7 @@ import { Doughnut, Bar, Radar, Line } from 'react-chartjs-2';
 import '../utils/chartSetup';
 import { formatRupiah } from '../data/sarprasGenerator';
 import { NATIONAL_SARPRAS_TARGETS, SARPRAS_CATEGORIES } from '../data/kkpData';
+import { useTheme } from '../context/ThemeContext';
 import logoKkp from '../assets/logo-kkp.svg';
 
 export default function ExecutiveDashboard({
@@ -29,9 +30,16 @@ export default function ExecutiveDashboard({
   onFilterCategory,
   onSelectSatdik
 }) {
+  const { isDark } = useTheme();
   const [jenjangFilter, setJenjangFilter] = useState('ALL'); // 'ALL' | 'Politeknik' | 'SUPM'
 
   if (!kpis) return null;
+
+  // Dynamic theme colors for Chart.js based on Light / Dark Mode
+  const textColor = isDark ? '#cbd5e1' : '#090d16'; // Deep bold black in light mode
+  const textMuted = isDark ? '#94a3b8' : '#1e293b'; // Slate 800 in light mode
+  const textBold = isDark ? '#e2e8f0' : '#000000';  // True pure black for titles
+  const gridColor = isDark ? 'rgba(51, 65, 85, 0.4)' : '#cbd5e1';
 
   // Extract condition counts and percentages
   const {
@@ -58,10 +66,14 @@ export default function ExecutiveDashboard({
           conditionCounts['Rusak Ringan'],
           conditionCounts['Rusak Berat'],
         ],
-        backgroundColor: [
+        backgroundColor: isDark ? [
           'rgba(16, 185, 129, 0.85)', // Emerald
           'rgba(14, 165, 233, 0.85)', // Sky
           'rgba(244, 63, 94, 0.85)',   // Rose
+        ] : [
+          '#10b981', // Solid Emerald
+          '#0ea5e9', // Solid Sky
+          '#f43f5e', // Solid Rose
         ],
         borderColor: [
           '#10b981',
@@ -81,8 +93,8 @@ export default function ExecutiveDashboard({
       legend: {
         position: 'bottom',
         labels: {
-          color: '#cbd5e1',
-          font: { size: 11, family: 'Inter, system-ui' },
+          color: textColor,
+          font: { size: 11, family: 'Inter, system-ui', weight: '600' },
           boxWidth: 12,
           padding: 12,
         },
@@ -115,9 +127,12 @@ export default function ExecutiveDashboard({
       {
         label: 'Indeks Kelaikan Sarpras (%)',
         data: satdikEntries.slice(0, 8).map(s => Math.round(s.avgScore)),
-        backgroundColor: satdikEntries.slice(0, 8).map(s => 
-          s.avgScore >= 85 ? 'rgba(16, 185, 129, 0.75)' : s.avgScore >= 75 ? 'rgba(14, 165, 233, 0.75)' : 'rgba(245, 158, 11, 0.75)'
-        ),
+        backgroundColor: satdikEntries.slice(0, 8).map(s => {
+          if (!isDark) {
+            return s.avgScore >= 85 ? '#10b981' : s.avgScore >= 75 ? '#0ea5e9' : '#f59e0b';
+          }
+          return s.avgScore >= 85 ? 'rgba(16, 185, 129, 0.75)' : s.avgScore >= 75 ? 'rgba(14, 165, 233, 0.75)' : 'rgba(245, 158, 11, 0.75)';
+        }),
         borderColor: satdikEntries.slice(0, 8).map(s => 
           s.avgScore >= 85 ? '#10b981' : s.avgScore >= 75 ? '#0ea5e9' : '#f59e0b'
         ),
@@ -143,12 +158,12 @@ export default function ExecutiveDashboard({
       x: {
         min: 0,
         max: 100,
-        grid: { color: 'rgba(51, 65, 85, 0.5)' },
-        ticks: { color: '#94a3b8', callback: (v) => `${v}%` },
+        grid: { color: gridColor },
+        ticks: { color: textMuted, callback: (v) => `${v}%` },
       },
       y: {
         grid: { display: false },
-        ticks: { color: '#e2e8f0', font: { size: 11, weight: '500' } },
+        ticks: { color: textBold, font: { size: 11, weight: '600' } },
       },
     },
   };
@@ -190,17 +205,17 @@ export default function ExecutiveDashboard({
     plugins: {
       legend: {
         position: 'bottom',
-        labels: { color: '#cbd5e1', font: { size: 10 } },
+        labels: { color: textColor, font: { size: 10, weight: '600' } },
       },
     },
     scales: {
       r: {
-        angleLines: { color: 'rgba(51, 65, 85, 0.6)' },
-        grid: { color: 'rgba(51, 65, 85, 0.6)' },
-        pointLabels: { color: '#94a3b8', font: { size: 10 } },
+        angleLines: { color: gridColor },
+        grid: { color: gridColor },
+        pointLabels: { color: textColor, font: { size: 10, weight: '600' } },
         ticks: {
           backdropColor: 'transparent',
-          color: '#64748b',
+          color: textMuted,
           stepSize: 20,
           showLabelBackdrop: false,
         },
@@ -217,8 +232,8 @@ export default function ExecutiveDashboard({
       {
         label: 'Tingkat Utilisasi Sarpras (%)',
         data: [74, 76, 79, 81, 83, Math.round(avgUtilization)],
-        borderColor: '#38bdf8',
-        backgroundColor: 'rgba(56, 189, 248, 0.1)',
+        borderColor: '#0284c7',
+        backgroundColor: 'rgba(2, 132, 199, 0.1)',
         fill: true,
         tension: 0.35,
         borderWidth: 2.5,
@@ -228,13 +243,13 @@ export default function ExecutiveDashboard({
       {
         label: 'Rata-rata Jam Praktik Taruna/Bulan',
         data: [52, 55, 58, 62, 64, 66],
-        borderColor: '#a855f7',
+        borderColor: '#9333ea',
         backgroundColor: 'transparent',
         borderDash: [4, 4],
         tension: 0.35,
         borderWidth: 2,
         pointRadius: 3,
-        pointBackgroundColor: '#a855f7',
+        pointBackgroundColor: '#9333ea',
         yAxisID: 'y1',
       },
     ],
@@ -246,26 +261,26 @@ export default function ExecutiveDashboard({
     plugins: {
       legend: {
         position: 'bottom',
-        labels: { color: '#cbd5e1', font: { size: 10 } },
+        labels: { color: textColor, font: { size: 10, weight: '600' } },
       },
     },
     scales: {
       x: {
-        grid: { color: 'rgba(51, 65, 85, 0.4)' },
-        ticks: { color: '#94a3b8', font: { size: 10 } },
+        grid: { color: gridColor },
+        ticks: { color: textMuted, font: { size: 10 } },
       },
       y: {
         min: 50,
         max: 100,
-        grid: { color: 'rgba(51, 65, 85, 0.4)' },
-        ticks: { color: '#38bdf8', callback: (v) => `${v}%`, font: { size: 10 } },
+        grid: { color: gridColor },
+        ticks: { color: '#0284c7', callback: (v) => `${v}%`, font: { size: 10, weight: '600' } },
       },
       y1: {
         position: 'right',
         min: 30,
         max: 90,
         grid: { display: false },
-        ticks: { color: '#c084fc', callback: (v) => `${v} Jam`, font: { size: 10 } },
+        ticks: { color: '#9333ea', callback: (v) => `${v} Jam`, font: { size: 10, weight: '600' } },
       },
     },
   };

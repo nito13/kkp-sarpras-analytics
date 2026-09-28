@@ -15,6 +15,7 @@ import { SATDIK_LIST, SARPRAS_CATEGORIES } from './data/kkpData';
 import { getFullSarprasData, calculateSarprasKPIs } from './data/sarprasGenerator';
 import { Shield } from 'lucide-react';
 import { apiCheckHealth, apiFetchAssets, apiCreateAsset, apiUpdateAsset } from './services/api';
+import { exportAssetsToExcel } from './utils/excelExport';
 import logoKkp from './assets/logo-kkp.svg';
 
 const STORAGE_KEY = 'kkp_sarpras_database_v2';
@@ -132,32 +133,43 @@ export default function App() {
     return calculateSarprasKPIs(assets, SATDIK_LIST);
   }, [assets]);
 
-  // Update asset condition handler
-  const handleUpdateAssetCondition = async (assetId, newCondition, notes) => {
-    const scoreMap = { 'Baik': 92, 'Rusak Ringan': 75, 'Rusak Berat': 25 };
-    const urgencyMap = {
-      'Baik': 'Normal',
-      'Rusak Ringan': 'Normal',
-      'Rusak Berat': 'Kritis / Segera'
-    };
+  // Update asset handler (supports full update payload or legacy condition/notes)
+  const handleUpdateAsset = async (assetId, payloadOrCondition, notes) => {
+    let updatePayload = {};
 
-    const target = assets.find(a => a.id === assetId);
-    const newCertStatus = (newCondition === 'Baik' && target?.certificationStatus === 'Kadaluarsa') 
-      ? 'Tersertifikasi Aktif' 
-      : target?.certificationStatus;
-    const nowIso = new Date().toISOString().slice(0, 10);
+    if (typeof payloadOrCondition === 'object' && payloadOrCondition !== null) {
+      updatePayload = { ...payloadOrCondition };
+    } else {
+      const newCondition = payloadOrCondition;
+      const scoreMap = { 'Baik': 92, 'Rusak Ringan': 75, 'Rusak Berat': 25 };
+      const urgencyMap = {
+        'Baik': 'Normal',
+        'Rusak Ringan': 'Normal',
+        'Rusak Berat': 'Kritis / Segera'
+      };
+
+      const target = assets.find(a => a.id === assetId);
+      const newCertStatus = (newCondition === 'Baik' && target?.certificationStatus === 'Kadaluarsa') 
+        ? 'Tersertifikasi Aktif' 
+        : target?.certificationStatus;
+      const nowIso = new Date().toISOString().slice(0, 10);
+
+      updatePayload = {
+        condition: newCondition,
+        conditionScore: scoreMap[newCondition] || target?.conditionScore || 80,
+        maintenanceUrgency: urgencyMap[newCondition] || target?.maintenanceUrgency || 'Normal',
+        issuesSummary: notes !== undefined ? notes : target?.issuesSummary,
+        lastMaintenanceDate: nowIso,
+        certificationStatus: newCertStatus,
+      };
+    }
 
     // Optimistic UI update
     setAssets(prev => prev.map(a => {
       if (a.id === assetId) {
         return {
           ...a,
-          condition: newCondition,
-          conditionScore: scoreMap[newCondition] || a.conditionScore,
-          maintenanceUrgency: urgencyMap[newCondition] || a.maintenanceUrgency,
-          issuesSummary: notes || a.issuesSummary,
-          lastMaintenanceDate: nowIso,
-          certificationStatus: newCertStatus,
+          ...updatePayload,
         };
       }
       return a;
@@ -165,14 +177,7 @@ export default function App() {
 
     // Sinkronisasi ke MySQL Laragon
     if (dbStatus.connected) {
-      await apiUpdateAsset(assetId, {
-        condition: newCondition,
-        conditionScore: scoreMap[newCondition] || 80,
-        maintenanceUrgency: urgencyMap[newCondition] || 'Normal',
-        issuesSummary: notes,
-        lastMaintenanceDate: nowIso,
-        certificationStatus: newCertStatus,
-      });
+      await apiUpdateAsset(assetId, updatePayload);
     }
   };
 
@@ -199,21 +204,16 @@ export default function App() {
     setActiveTab('explorer');
   };
 
-  // Export CSV handler
-  const handleExportCSV = () => {
-    const csvHeader = 'ID,Kode BMN,Nama Sarpras,Satuan Pendidikan,Kategori,Sub-Kategori,Kondisi,Skor Kelaikan (%),Utilisasi (%),Valuasi BMN (Rp),Tahun Perolehan,Status Sertifikasi,Kebutuhan Biaya Perbaikan (Rp),Catatan Teknis\n';
-    const csvRows = assets.map(a => 
-      `"${a.id}","${a.bmnCode}","${a.name.replace(/"/g, '""')}","${a.satdikName}","${a.category}","${a.subcategory || ''}","${a.condition}","${a.conditionScore}","${a.utilizationRate}","${a.valuation}","${a.acquisitionYear}","${a.certificationStatus}","${a.estimatedRepairCost || 0}","${(a.issuesSummary || '').replace(/"/g, '""')}"`
-    ).join('\n');
-
-    const blob = new Blob([csvHeader + csvRows], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `SIM_SARPRAS_KKP_Aset_${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  // Export Excel handler dengan format tabel rapi, kop KKP, dan formula
+  const handleExportExcel = () => {
+    exportAssetsToExcel(assets, {
+      currentUser,
+      filterSatdikName: currentUser?.accessibleSatdik === 'ALL' 
+        ? 'Seluruh Satuan Pendidikan (18 Kampus Vokasi KKP)' 
+        : (currentUser?.satdikName || 'Kampus Khusus'),
+      filterCategoryName: 'Semua Kategori Bidang',
+      filenamePrefix: 'SIM_SARPRAS_KKP_Inventaris_Lengkap'
+    });
   };
 
   // Print summary handler
@@ -236,7 +236,8 @@ export default function App() {
         totalValuation={kpis?.totalValuation || 0}
         criticalCount={kpis?.urgentAssets?.length || 0}
         onOpenAddModal={() => setIsAddModalOpen(true)}
-        onExportCSV={handleExportCSV}
+        onExportExcel={handleExportExcel}
+        onExportCSV={handleExportExcel}
         onPrint={handlePrint}
         currentUser={currentUser}
         onOpenProfile={() => setIsProfileModalOpen(true)}
@@ -290,7 +291,9 @@ export default function App() {
             assets={assets}
             initialSatdikFilter={explorerSatdikFilter}
             initialCategoryFilter={explorerCategoryFilter}
-            onUpdateAssetCondition={handleUpdateAssetCondition}
+            onUpdateAsset={handleUpdateAsset}
+            onUpdateAssetCondition={handleUpdateAsset}
+            currentUser={currentUser}
           />
         )}
 
@@ -304,7 +307,7 @@ export default function App() {
         {activeTab === 'maintenance' && (
           <EarlyWarningMaintenance
             urgentAssets={kpis.urgentAssets}
-            onResolveAsset={handleUpdateAssetCondition}
+            onResolveAsset={handleUpdateAsset}
             onNavigateToSimulator={() => setActiveTab('simulator')}
           />
         )}
@@ -313,6 +316,7 @@ export default function App() {
           <BudgetSimulator
             assets={assets}
             onApplySimulatedAssets={(updated) => setAssets(updated)}
+            currentUser={currentUser}
           />
         )}
       </main>

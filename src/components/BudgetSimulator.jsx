@@ -16,10 +16,12 @@ import {
 } from 'lucide-react';
 import { formatRupiah, simulateBudgetImpact } from '../data/sarprasGenerator';
 import { NATIONAL_SARPRAS_TARGETS } from '../data/kkpData';
+import { exportRKAToExcel } from '../utils/excelExport';
 
 export default function BudgetSimulator({
   assets,
-  onApplySimulatedAssets
+  onApplySimulatedAssets,
+  currentUser
 }) {
   // Default budget allocation: Rp 15 Miliar (15.000.000.000)
   const [allocatedBudget, setAllocatedBudget] = useState(15000000000);
@@ -62,19 +64,10 @@ export default function BudgetSimulator({
   };
 
   const handleDownloadRKA = () => {
-    const csvHeader = 'ID,Kode BMN,Nama Sarpras,Satuan Pendidikan,Kategori,Kondisi Awal,Biaya Perbaikan Disetujui (Rp),Status Pendanaan\n';
-    const csvRows = simulation.fundedAssets.map(a => 
-      `"${a.id}","${a.bmnCode}","${a.name}","${a.satdikName}","${a.subcategory || a.category}","${a.condition}","${a.fundedAmount}","DISETUJUI DIBIAYAI"`
-    ).join('\n');
-
-    const blob = new Blob([csvHeader + csvRows], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `RKA_Prioritas_Sarpras_KKP_${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    exportRKAToExcel(simulation, {
+      currentUser,
+      filenamePrefix: 'RKA_Prioritas_Sarpras_Pusdik_KP'
+    });
   };
 
   return (
@@ -100,10 +93,11 @@ export default function BudgetSimulator({
         <div className="flex items-center gap-2 self-start md:self-center">
           <button
             onClick={handleDownloadRKA}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-900/80 hover:bg-indigo-800 text-indigo-200 border border-indigo-500/50 text-xs font-semibold shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+            title="Ekspor tabel format rekomendasi RKA ke Microsoft Excel (.xls)"
           >
             <Download className="w-4 h-4 text-indigo-400" />
-            <span>Unduh Format RKA (CSV)</span>
+            <span>Unduh RKA (Excel Rapi)</span>
           </button>
         </div>
       </div>

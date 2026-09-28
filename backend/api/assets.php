@@ -168,16 +168,26 @@ switch ($method) {
 
         $allowedKeys = [
             'name' => 'name',
+            'bmnCode' => 'bmn_code',
+            'satdikId' => 'satdik_id',
+            'satdikName' => 'satdik_name',
+            'category' => 'category',
+            'subcategory' => 'subcategory',
             'condition' => 'condition',
             'conditionScore' => 'condition_score',
-            'maintenanceUrgency' => 'maintenance_urgency',
-            'issuesSummary' => 'issues_summary',
-            'lastMaintenanceDate' => 'last_maintenance_date',
-            'nextMaintenanceDate' => 'next_maintenance_date',
-            'certificationStatus' => 'certification_status',
-            'estimatedRepairCost' => 'estimated_repair_cost',
+            'acquisitionYear' => 'acquisition_year',
             'valuation' => 'valuation',
             'utilizationRate' => 'utilization_rate',
+            'capacityDesc' => 'capacity_desc',
+            'specs' => 'specs',
+            'certificationStatus' => 'certification_status',
+            'certificationAuthority' => 'certification_authority',
+            'certExpiryDate' => 'cert_expiry_date',
+            'lastMaintenanceDate' => 'last_maintenance_date',
+            'nextMaintenanceDate' => 'next_maintenance_date',
+            'maintenanceUrgency' => 'maintenance_urgency',
+            'estimatedRepairCost' => 'estimated_repair_cost',
+            'issuesSummary' => 'issues_summary',
         ];
 
         foreach ($allowedKeys as $jsonKey => $dbCol) {

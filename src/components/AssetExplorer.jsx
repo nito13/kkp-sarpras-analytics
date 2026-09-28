@@ -19,17 +19,21 @@ import {
   ChevronLeft,
   ChevronRight,
   ShieldAlert,
-  Coins
+  Coins,
+  Download
 } from 'lucide-react';
 import { SATDIK_LIST, SARPRAS_CATEGORIES } from '../data/kkpData';
 import { formatRupiah } from '../data/sarprasGenerator';
+import { exportAssetsToExcel } from '../utils/excelExport';
 import AssetDetailModal from './AssetDetailModal';
 
 export default function AssetExplorer({
   assets,
   initialSatdikFilter = 'ALL',
   initialCategoryFilter = 'ALL',
-  onUpdateAssetCondition
+  onUpdateAsset,
+  onUpdateAssetCondition,
+  currentUser
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSatdik, setSelectedSatdik] = useState(initialSatdikFilter);
@@ -47,9 +51,14 @@ export default function AssetExplorer({
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // Selected asset for modal
-  const [modalAsset, setModalAsset] = useState(null);
+  // Selected asset for modal (tracked reactively)
+  const [selectedAsset, setSelectedAsset] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const activeModalAsset = useMemo(() => {
+    if (!selectedAsset) return null;
+    return assets.find(a => a.id === selectedAsset.id) || selectedAsset;
+  }, [assets, selectedAsset]);
 
   // Sync if props change
   React.useEffect(() => {
@@ -117,8 +126,20 @@ export default function AssetExplorer({
     setCurrentPage(1);
   };
 
+  const handleExportFilteredExcel = () => {
+    const satdikObj = SATDIK_LIST.find(s => s.id === selectedSatdik);
+    const catObj = SARPRAS_CATEGORIES.find(c => c.id === selectedCategory);
+
+    exportAssetsToExcel(filteredAssets, {
+      currentUser,
+      filterSatdikName: selectedSatdik === 'ALL' ? 'Semua Satdik (18 Kampus)' : (satdikObj?.name || selectedSatdik),
+      filterCategoryName: selectedCategory === 'ALL' ? 'Semua Kategori' : (catObj?.name || selectedCategory),
+      filenamePrefix: `SIM_SARPRAS_KKP_${selectedSatdik !== 'ALL' ? selectedSatdik : 'Inventaris'}`
+    });
+  };
+
   const openDetail = (asset) => {
-    setModalAsset(asset);
+    setSelectedAsset(asset);
     setIsModalOpen(true);
   };
 
@@ -291,8 +312,19 @@ export default function AssetExplorer({
             </button>
           </div>
 
-          <div className="text-slate-400 text-xs">
-            Menampilkan <span className="font-bold text-white">{filteredAssets.length}</span> dari {assets.length} Aset
+          <div className="flex items-center gap-3">
+            <span className="text-slate-400 text-xs hidden sm:inline">
+              Menampilkan <span className="font-bold text-white">{filteredAssets.length}</span> dari {assets.length} Aset
+            </span>
+
+            <button
+              onClick={handleExportFilteredExcel}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 text-emerald-200 border border-emerald-700/60 text-xs font-semibold shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
+              title="Ekspor tabel aset yang tersaring saat ini ke Microsoft Excel (.xls) dengan format resmi & rapi"
+            >
+              <Download className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Ekspor Excel ({filteredAssets.length})</span>
+            </button>
           </div>
         </div>
       </div>
@@ -588,10 +620,15 @@ export default function AssetExplorer({
 
       {/* Modal Inspector for details */}
       <AssetDetailModal
-        asset={modalAsset}
+        asset={activeModalAsset}
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onUpdateCondition={onUpdateAssetCondition}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedAsset(null);
+        }}
+        onUpdateAsset={onUpdateAsset || onUpdateAssetCondition}
+        onUpdateCondition={onUpdateAsset || onUpdateAssetCondition}
+        currentUser={currentUser}
       />
     </div>
   );

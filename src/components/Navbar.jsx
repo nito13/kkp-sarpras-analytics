@@ -30,6 +30,7 @@ export default function Navbar({
   criticalCount,
   onOpenAddModal,
   onExportCSV,
+  onExportExcel,
   onPrint,
   currentUser,
   onOpenProfile,
@@ -155,12 +156,12 @@ export default function Navbar({
             ) : null}
 
             <button
-              onClick={onExportCSV}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs transition-colors"
-              title="Export data sarana ke file format CSV"
+              onClick={onExportExcel || onExportCSV}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-200 border border-emerald-700/60 text-xs font-semibold shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
+              title="Ekspor data inventaris sarpras ke Microsoft Excel (.xls) dengan tabel berformat resmi & rapi"
             >
-              <Download className="w-4 h-4 text-cyan-400" />
-              <span className="hidden md:inline">Unduh CSV</span>
+              <Download className="w-4 h-4 text-emerald-400" />
+              <span className="hidden md:inline">Ekspor Excel</span>
             </button>
 
             <button
