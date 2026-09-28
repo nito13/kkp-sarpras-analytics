@@ -68,7 +68,7 @@ export default function Navbar({
                   Kementerian Kelautan dan Perikanan
                 </span>
                 <p className="text-slate-400 text-[9px] sm:text-[10px] truncate max-w-[240px] sm:max-w-none">
-                  Badan Penyuluhan & Pengembangan SDM KP
+                  Pusat Pendidikan Kelautan dan Perikanan
                 </p>
               </div>
             </div>
