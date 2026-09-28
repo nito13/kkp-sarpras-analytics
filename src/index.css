@@ -526,6 +526,9 @@ html.light .min-h-screen.bg-gradient-to-br button[type="button"].bg-slate-950\/7
   background-color: #f1f5f9 !important;
   border-color: #0284c7 !important;
 }
+html.light .login-logo-container {
+  border-color: #000000 !important;
+}
 
 /* Light Mode scrollbars */
 html.light ::-webkit-scrollbar-track {

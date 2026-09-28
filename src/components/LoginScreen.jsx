@@ -43,13 +43,11 @@ export default function LoginScreen({ onLogin }) {
         return;
       }
 
-      // Jika offline, coba autentikasi lokal
-      if (res.isOffline) {
-        const localUser = authenticateUser(identifier, password);
-        if (localUser) {
-          onLogin(localUser, rememberMe);
-          return;
-        }
+      // Coba autentikasi lokal akun demo (jika backend offline atau belum tersinkron)
+      const localUser = authenticateUser(identifier, password);
+      if (localUser) {
+        onLogin(localUser, rememberMe);
+        return;
       }
 
       setErrorMessage(res.message || 'Email/NIP atau kata sandi tidak cocok. Silakan periksa kembali kredensial Anda.');
@@ -120,7 +118,9 @@ export default function LoginScreen({ onLogin }) {
           {/* Official Emblem & Titles */}
           <div className="text-center space-y-3 pb-6 border-b border-slate-800">
             {/* KKP Logo Container */}
-            <div className="w-20 h-20 mx-auto rounded-2xl bg-white p-2 shadow-xl shadow-cyan-500/20 border-2 border-cyan-400/60 flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
+            <div className={`login-logo-container w-20 h-20 mx-auto rounded-2xl bg-white p-2 shadow-xl flex items-center justify-center transform hover:scale-105 transition-transform duration-300 border-2 ${
+              isDark ? 'border-cyan-400/60 shadow-cyan-500/20' : 'border-black shadow-slate-400/20'
+            }`}>
               <img 
                 src={logoKkp} 
                 alt="Logo Kementerian Kelautan dan Perikanan" 
@@ -161,7 +161,7 @@ export default function LoginScreen({ onLogin }) {
                 <input
                   type="text"
                   required
-                  placeholder="admin.pusdik@kkp.go.id / 19760814..."
+                  placeholder="admin.pusdik@kkp.go.id"
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
@@ -239,9 +239,9 @@ export default function LoginScreen({ onLogin }) {
             <div className="flex items-center justify-between mb-2.5">
               <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Pilihan Masuk Cepat (Akun Penguji)</span>
+                <span>Pilihan Masuk Cepat (Akun Dinas)</span>
               </span>
-              <span className="text-[10px] text-slate-500">Klik 1-kali untuk masuk</span>
+              <span className="text-[10px] text-slate-500">Klik 1-kali untuk masuk langsung</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
@@ -264,6 +264,12 @@ export default function LoginScreen({ onLogin }) {
                     <span className="text-[9px] text-slate-500 block truncate">
                       {user.email}
                     </span>
+                    <div className="flex items-center gap-1.5 mt-1">
+                      <span className="text-[9px] text-slate-400">Sandi:</span>
+                      <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-800/50">
+                        {user.password}
+                      </span>
+                    </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-cyan-400 flex-shrink-0 transition-colors" />
                 </button>
