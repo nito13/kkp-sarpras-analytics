@@ -246,7 +246,6 @@ export default function ExecutiveDashboard({
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-center">
                 National Sarpras Overview
               </span>
-              <span className="text-slate-400 text-xs text-center">• Semester Ganjil TA 2026/2027</span>
             </div>
             <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white tracking-tight mt-1.5 sm:mt-1 text-center sm:text-left">
               Dasbor Analitik Sarana & Prasarana Vokasi KKP
