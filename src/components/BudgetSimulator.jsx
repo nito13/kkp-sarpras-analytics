@@ -86,7 +86,7 @@ export default function BudgetSimulator({
             <span>Simulator Alokasi Anggaran Rehabilitasi Sarpras</span>
           </h2>
           <p className="text-slate-300 text-xs sm:text-sm mt-0.5 max-w-3xl">
-            Simulasikan dampak alokasi belanja modal (CAPEX/OPEX) APBN terhadap peningkatan Indeks Kelaikan Sarpras Nasional dan penuntasan fasilitas rusak berat.
+            Simulasikan dampak alokasi belanja modal (CAPEX/OPEX) APBN terhadap peningkatan Indeks Kelayakan Sarpras Nasional dan penuntasan fasilitas rusak berat.
           </p>
         </div>
 
@@ -169,10 +169,10 @@ export default function BudgetSimulator({
 
       {/* Real-Time Simulation Impact Cards (Before vs After) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Indeks Kelaikan Sarpras Impact */}
+        {/* Indeks Kelayakan Sarpras Impact */}
         <div className="bg-slate-800/90 rounded-2xl p-4 border border-slate-700/70 shadow-md">
           <div className="flex items-center justify-between text-slate-400 text-xs">
-            <span>Indeks Kelaikan (IKSP)</span>
+            <span>Indeks Kelayakan (IKSP)</span>
             <TrendingUp className="w-4 h-4 text-emerald-400" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
@@ -273,7 +273,7 @@ export default function BudgetSimulator({
                 <th className="p-3">Satuan Pendidikan</th>
                 <th className="p-3">Kondisi Awal</th>
                 <th className="p-3">Alokasi Anggaran (Rp)</th>
-                <th className="p-3">Status Kelaikan Baru</th>
+                <th className="p-3">Status Kelayakan Baru</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800">

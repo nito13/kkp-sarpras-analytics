@@ -713,10 +713,10 @@ export default function AssetDetailModal({
                       ></textarea>
                     </div>
 
-                    {/* Status Sertifikasi Kelaikan */}
+                    {/* Status Sertifikasi Kelayakan */}
                     <div>
                       <label className="text-xs font-semibold text-slate-300 block mb-1.5">
-                        Status Sertifikasi Kelaikan
+                        Status Sertifikasi Kelayakan
                       </label>
                       <select
                         value={formData.certificationStatus}
@@ -858,12 +858,12 @@ export default function AssetDetailModal({
                 </div>
               </div>
 
-              {/* Kelaikan & Sertifikasi Info */}
+              {/* Kelayakan & Sertifikasi Info */}
               <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700/60 space-y-2">
                 <div className="flex items-center justify-between text-xs font-bold text-slate-200">
                   <div className="flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    <span>Status Kelaikan & Legalitas Sertifikasi</span>
+                    <span>Status Kelayakan & Legalitas Sertifikasi</span>
                   </div>
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                     asset.certificationStatus === 'Tersertifikasi Aktif' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' :

@@ -32,7 +32,7 @@ export default function VokasiAnalytics({
   const metrics1 = satdikBreakdown[campus1.id] || { count: 0, valuation: 0, avgScore: 0, baik: 0, rusakRingan: 0, rusakSedang: 0, rusakBerat: 0 };
   const metrics2 = satdikBreakdown[campus2.id] || { count: 0, valuation: 0, avgScore: 0, baik: 0, rusakRingan: 0, rusakSedang: 0, rusakBerat: 0 };
 
-  // Calculate Kapasitas dan Kelaikan Fasilitas Asrama across all satdik
+  // Calculate Kapasitas dan Kelayakan Fasilitas Asrama across all satdik
   const asramaData = SATDIK_LIST.map(sat => {
     const asramaAssets = assets.filter(a => a.satdikId === sat.id && a.category === 'asrama_penunjang');
     let totalBeds = 0;
@@ -62,7 +62,7 @@ export default function VokasiAnalytics({
   // Standar Vokasi KKP Compliance Checklist
   const complianceChecklist = [
     {
-      title: 'Sertifikasi Kelaikan Kapal Latih (IMO STCW & BKI)',
+      title: 'Sertifikasi Kelayakan Kapal Latih (IMO STCW & BKI)',
       description: 'Seluruh kapal latih wajib memiliki sertifikat kelas BKI dan sertifikat keselamatan kapal KSOP.',
       target: '100% Kapal Latih Aktif',
       actual: '83.3% Memenuhi',
@@ -70,7 +70,7 @@ export default function VokasiAnalytics({
       notes: 'KM Frans Kaisiepo (Sorong) dan KM Pariaman Bahari 02 kadaluarsa & perlu docking.',
     },
     {
-      title: 'Standar Kelaikan Gedung & Fasilitas Asrama',
+      title: 'Standar Kelayakan Gedung & Fasilitas Asrama',
       description: 'Gedung asrama wajib memenuhi standar sanitasi bersih, ventilasi, dan dapur sentral higienis.',
       target: '100% Asrama Laik Operasi',
       actual: '96.8% Nasional',
@@ -124,7 +124,7 @@ export default function VokasiAnalytics({
           </div>
           <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight mt-1 flex items-center gap-2">
             <School className="w-5 h-5 text-cyan-400" />
-            <span>Standar Kelaikan & Benchmarking Vokasi KKP</span>
+            <span>Standar Kelayakan & Benchmarking Vokasi KKP</span>
           </h2>
           <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
             Analisis kecukupan rasio tempat tidur asrama, jam layar kapal latih, sertifikasi mutu, serta komparasi sarpras antar kampus.
@@ -151,7 +151,7 @@ export default function VokasiAnalytics({
               </h3>
             </div>
             <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">
-              Pilih dua satuan pendidikan untuk membandingkan kapasitas fasilitas dan indeks kelaikannya berdampingan.
+              Pilih dua satuan pendidikan untuk membandingkan kapasitas fasilitas dan indeks kelayakannya berdampingan.
             </p>
           </div>
 
@@ -209,7 +209,7 @@ export default function VokasiAnalytics({
               </div>
               <div className="text-right flex-shrink-0">
                 <span className="text-xl sm:text-2xl font-black text-cyan-400">{Math.round(metrics1.avgScore)}%</span>
-                <span className="text-[9px] sm:text-[10px] text-slate-400 block whitespace-nowrap">Indeks Kelaikan</span>
+                <span className="text-[9px] sm:text-[10px] text-slate-400 block whitespace-nowrap">Indeks Kelayakan</span>
               </div>
             </div>
 
@@ -260,7 +260,7 @@ export default function VokasiAnalytics({
               </div>
               <div className="text-right flex-shrink-0">
                 <span className="text-xl sm:text-2xl font-black text-amber-400">{Math.round(metrics2.avgScore)}%</span>
-                <span className="text-[9px] sm:text-[10px] text-slate-400 block whitespace-nowrap">Indeks Kelaikan</span>
+                <span className="text-[9px] sm:text-[10px] text-slate-400 block whitespace-nowrap">Indeks Kelayakan</span>
               </div>
             </div>
 
@@ -324,7 +324,7 @@ export default function VokasiAnalytics({
               </thead>
               <tbody className="divide-y divide-slate-800/60">
                 <tr className="hover:bg-slate-800/40 transition-colors">
-                  <td className="py-2 px-3 text-slate-400 font-medium">Indeks Kelaikan</td>
+                  <td className="py-2 px-3 text-slate-400 font-medium">Indeks Kelayakan</td>
                   <td className="py-2 px-3 font-black text-cyan-400">{Math.round(metrics1.avgScore)}%</td>
                   <td className="py-2 px-3 font-black text-amber-400">{Math.round(metrics2.avgScore)}%</td>
                 </tr>
@@ -419,20 +419,20 @@ export default function VokasiAnalytics({
         </div>
       </div>
 
-      {/* Kapasitas Daya Tampung & Kelaikan Asrama Penunjang */}
+      {/* Kapasitas Daya Tampung & Kelayakan Asrama Penunjang */}
       <div className="bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-700/70 shadow-md space-y-3">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-base font-bold text-white tracking-tight flex items-center gap-2">
               <Bed className="w-5 h-5 text-cyan-400" />
-              <span>Kapasitas Daya Tampung & Kelaikan Asrama Penunjang</span>
+              <span>Kapasitas Daya Tampung & Kelayakan Asrama Penunjang</span>
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
-              Monitoring ketersediaan tempat tidur/ranjang serta tingkat kelaikan fasilitas fisik gedung asrama per satuan pendidikan.
+              Monitoring ketersediaan tempat tidur/ranjang serta tingkat kelayakan fasilitas fisik gedung asrama per satuan pendidikan.
             </p>
           </div>
           <span className="text-xs px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-semibold">
-            Rata-rata Kelaikan: 88.6%
+            Rata-rata Kelayakan: 88.6%
           </span>
         </div>
 
@@ -446,7 +446,7 @@ export default function VokasiAnalytics({
                 <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                   b.avgScore >= 80 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
                 }`}>
-                  {b.avgScore}% Kelaikan
+                  {b.avgScore}% Kelayakan
                 </span>
               </div>
 

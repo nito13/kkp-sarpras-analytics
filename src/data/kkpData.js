@@ -1577,7 +1577,8 @@ export const INITIAL_SARPRAS_DATA = [
 
 // Standar Kebutuhan Sarpras Vokasi KKP & Target Kinerja Nasional
 export const NATIONAL_SARPRAS_TARGETS = {
-  targetIndeksKelaikan: 85.0, // Target persentase kelayakan minimal nasional (%)
+  targetIndeksKelayakan: 85.0, // Target persentase kelayakan minimal nasional (%)
+  targetIndeksKelaikan: 85.0, // Backward compatibility
   maxPersentaseRusakBerat: 5.0, // Maksimal persentase sarpras rusak berat (%)
   rasioBedTarunaTarget: 1.0, // 1 tempat tidur per taruna
   jamPraktikKapalLatihTarget: 60, // Minimal jam praktik berlayar per taruna per semester

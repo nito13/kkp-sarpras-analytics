@@ -16,7 +16,7 @@ import { getFullSarprasData, calculateSarprasKPIs } from './data/sarprasGenerato
 import { Shield } from 'lucide-react';
 import { apiCheckHealth, apiFetchAssets, apiCreateAsset, apiUpdateAsset } from './services/api';
 import { exportAssetsToExcel } from './utils/excelExport';
-import logoKkp from './assets/logo-kkp.svg';
+import logoKkp from './assets/logo-kkp.png';
 
 const STORAGE_KEY = 'kkp_sarpras_database_v2';
 const AUTH_STORAGE_KEY = 'kkp_auth_session_v2';

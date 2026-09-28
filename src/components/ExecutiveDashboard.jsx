@@ -17,12 +17,12 @@ import {
   ChevronRight,
   Filter
 } from 'lucide-react';
-import { Doughnut, Bar, Radar, Line } from 'react-chartjs-2';
+import { Doughnut, Bar, Radar } from 'react-chartjs-2';
 import '../utils/chartSetup';
 import { formatRupiah } from '../data/sarprasGenerator';
 import { NATIONAL_SARPRAS_TARGETS, SARPRAS_CATEGORIES } from '../data/kkpData';
 import { useTheme } from '../context/ThemeContext';
-import logoKkp from '../assets/logo-kkp.svg';
+import logoKkp from '../assets/logo-kkp.png';
 
 export default function ExecutiveDashboard({
   kpis,
@@ -111,7 +111,7 @@ export default function ExecutiveDashboard({
     cutout: '68%',
   };
 
-  // Bar Chart: 8 Satuan Pendidikan dengan Skor Kelaikan Tertinggi / Pembanding
+  // Bar Chart: 8 Satuan Pendidikan dengan Skor Kelayakan Tertinggi / Pembanding
   const satdikEntries = Object.values(satdikBreakdown)
     .filter(s => {
       if (jenjangFilter === 'Politeknik') return s.satdik.type === 'Politeknik' || s.satdik.type === 'Akademi';
@@ -124,7 +124,7 @@ export default function ExecutiveDashboard({
     labels: satdikEntries.slice(0, 8).map(s => s.satdik.shortName),
     datasets: [
       {
-        label: 'Indeks Kelaikan Sarpras (%)',
+        label: 'Indeks Kelayakan Sarpras (%)',
         data: satdikEntries.slice(0, 8).map(s => Math.round(s.avgScore)),
         backgroundColor: satdikEntries.slice(0, 8).map(s => {
           if (!isDark) {
@@ -149,7 +149,7 @@ export default function ExecutiveDashboard({
       legend: { display: false },
       tooltip: {
         callbacks: {
-          label: (ctx) => ` Indeks Kelaikan: ${ctx.raw}%`,
+          label: (ctx) => ` Indeks Kelayakan: ${ctx.raw}%`,
         },
       },
     },
@@ -188,7 +188,7 @@ export default function ExecutiveDashboard({
       },
       {
         label: 'Target Standar Vokasi KKP (%)',
-        data: categoryKeys.map(() => NATIONAL_SARPRAS_TARGETS.targetIndeksKelaikan),
+        data: categoryKeys.map(() => NATIONAL_SARPRAS_TARGETS.targetIndeksKelayakan),
         backgroundColor: 'rgba(16, 185, 129, 0.08)',
         borderColor: 'rgba(16, 185, 129, 0.6)',
         borderDash: [5, 5],
@@ -224,100 +224,41 @@ export default function ExecutiveDashboard({
     },
   };
 
-  // Line Chart: Tren Jam Praktik & Utilisasi Sarpras 6 Semester Terakhir
-  const lineData = {
-    labels: ['2023 Genap', '2024 Ganjil', '2024 Genap', '2025 Ganjil', '2025 Genap', '2026 Ganjil (Berjalan)'],
-    datasets: [
-      {
-        label: 'Tingkat Utilisasi Sarpras (%)',
-        data: [74, 76, 79, 81, 83, Math.round(avgUtilization)],
-        borderColor: '#0284c7',
-        backgroundColor: 'rgba(2, 132, 199, 0.1)',
-        fill: true,
-        tension: 0.35,
-        borderWidth: 2.5,
-        pointRadius: 4,
-        pointBackgroundColor: '#0284c7',
-      },
-      {
-        label: 'Rata-rata Jam Praktik Operasional/Bulan',
-        data: [52, 55, 58, 62, 64, 66],
-        borderColor: '#9333ea',
-        backgroundColor: 'transparent',
-        borderDash: [4, 4],
-        tension: 0.35,
-        borderWidth: 2,
-        pointRadius: 3,
-        pointBackgroundColor: '#9333ea',
-        yAxisID: 'y1',
-      },
-    ],
-  };
-
-  const lineOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom',
-        labels: { color: textColor, font: { size: 10, weight: '600' } },
-      },
-    },
-    scales: {
-      x: {
-        grid: { color: gridColor },
-        ticks: { color: textMuted, font: { size: 10 } },
-      },
-      y: {
-        min: 50,
-        max: 100,
-        grid: { color: gridColor },
-        ticks: { color: '#0284c7', callback: (v) => `${v}%`, font: { size: 10, weight: '600' } },
-      },
-      y1: {
-        position: 'right',
-        min: 30,
-        max: 90,
-        grid: { display: false },
-        ticks: { color: '#9333ea', callback: (v) => `${v} Jam`, font: { size: 10, weight: '600' } },
-      },
-    },
-  };
 
   // Determine readiness status badge
-  const isTargetAchieved = avgConditionScore >= NATIONAL_SARPRAS_TARGETS.targetIndeksKelaikan;
+  const isTargetAchieved = avgConditionScore >= NATIONAL_SARPRAS_TARGETS.targetIndeksKelayakan;
 
   return (
     <div className="space-y-6">
       {/* Welcome & Context Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-800/90 via-slate-800/70 to-slate-900/90 p-5 rounded-2xl border border-slate-700/80 shadow-lg relative overflow-hidden">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-800/90 via-slate-800/70 to-slate-900/90 p-4 sm:p-5 rounded-2xl border border-slate-700/80 shadow-lg relative overflow-hidden">
         {/* Subtle background watermark */}
         <div className="absolute right-0 top-0 bottom-0 opacity-5 pointer-events-none flex items-center pr-6">
           <img src={logoKkp} alt="KKP Watermark" className="w-56 h-56 object-contain" />
         </div>
 
-        <div className="flex items-center space-x-4 relative z-10">
-          <div className="w-14 h-14 rounded-2xl bg-white p-1.5 shadow-md border border-cyan-500/30 flex items-center justify-center flex-shrink-0">
+        <div className="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-3.5 sm:gap-4 relative z-10 w-full sm:w-auto">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white p-1.5 shadow-md border border-cyan-500/30 flex items-center justify-center flex-shrink-0">
             <img src={logoKkp} alt="Logo KKP" className="w-full h-full object-contain" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+          <div className="flex flex-col items-center sm:items-start w-full sm:w-auto">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 sm:gap-2">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-center">
                 National Sarpras Overview
               </span>
-              <span className="text-slate-400 text-xs">• Semester Ganjil TA 2026/2027</span>
+              <span className="text-slate-400 text-xs text-center">• Semester Ganjil TA 2026/2027</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight mt-1">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white tracking-tight mt-1.5 sm:mt-1 text-center sm:text-left">
               Dasbor Analitik Sarana & Prasarana Vokasi KKP
             </h2>
-            <p className="text-slate-400 text-xs sm:text-sm mt-0.5 max-w-2xl">
-              Monitoring kondisi fisik, kelaikan operasi armada kapal latih, tambak super intensif, UPI, laboratorium, dan asrama pada 18 Satuan Pendidikan Kelautan dan Perikanan se-Indonesia.
+            <p className="text-slate-400 text-xs sm:text-sm mt-1 sm:mt-0.5 max-w-2xl text-center sm:text-left">
+              Monitoring kondisi fisik, kelayakan operasi armada kapal latih, tambak super intensif, UPI, laboratorium, dan asrama pada 18 Satuan Pendidikan Kelautan dan Perikanan se-Indonesia.
             </p>
           </div>
         </div>
 
         {/* Filter Jenjang Pills */}
-        <div className="flex items-center gap-1.5 bg-slate-900/90 p-1.5 rounded-xl border border-slate-700/60 self-start md:self-center">
+        <div className="flex items-center justify-center gap-1.5 bg-slate-900/90 p-1.5 rounded-xl border border-slate-700/60 self-center md:self-center overflow-x-auto max-w-full">
           <Filter className="w-3.5 h-3.5 text-slate-400 ml-2" />
           <button
             onClick={() => setJenjangFilter('ALL')}
@@ -419,10 +360,10 @@ export default function ExecutiveDashboard({
           </div>
         </div>
 
-        {/* Indeks Kelaikan Sarpras */}
+        {/* Indeks Kelayakan Sarpras */}
         <div className="bg-slate-800/90 rounded-2xl p-4 border border-slate-700/70 hover:border-blue-500/50 transition-all shadow-md group">
           <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-medium uppercase tracking-wider">Indeks Kelaikan (IKSP)</span>
+            <span className="text-xs font-medium uppercase tracking-wider">Indeks Kelayakan (IKSP)</span>
             <div className={`w-8 h-8 rounded-lg ${isTargetAchieved ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'} flex items-center justify-center group-hover:scale-110 transition-transform`}>
               <CheckCircle2 className="w-4 h-4" />
             </div>
@@ -432,7 +373,7 @@ export default function ExecutiveDashboard({
               <span className={`text-2xl font-black ${isTargetAchieved ? 'text-emerald-400' : 'text-amber-400'}`}>
                 {avgConditionScore}%
               </span>
-              <span className="text-[11px] text-slate-400">Target: {NATIONAL_SARPRAS_TARGETS.targetIndeksKelaikan}%</span>
+              <span className="text-[11px] text-slate-400">Target: {NATIONAL_SARPRAS_TARGETS.targetIndeksKelayakan}%</span>
             </div>
             <div className="text-[11px] text-slate-400 mt-0.5">
               {isTargetAchieved ? '✓ Memenuhi standar target' : '⚠ Di bawah target nasional'}
@@ -535,12 +476,12 @@ export default function ExecutiveDashboard({
           </div>
         </div>
 
-        {/* Right: Bar Chart - Kelaikan Sarpras per Satdik */}
+        {/* Right: Bar Chart - Kelayakan Sarpras per Satdik */}
         <div className="lg:col-span-7 bg-slate-800/90 rounded-2xl p-5 border border-slate-700/70 shadow-lg flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-1">
               <h3 className="text-base font-bold text-white tracking-tight">
-                Peringkat Kelaikan Sarpras Satuan Pendidikan
+                Peringkat Kelayakan Sarpras Satuan Pendidikan
               </h3>
               <button
                 onClick={() => onNavigateTab('vokasi')}
@@ -581,9 +522,9 @@ export default function ExecutiveDashboard({
         </div>
       </div>
 
-      {/* Secondary Analytics Row: Radar Kategori & Tren Utilisasi */}
+      {/* Secondary Analytics Row: Radar Kategori & Status Kelayakan */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left: Radar Chart - Kelaikan per Bidang Vokasi */}
+        {/* Left: Radar Chart - Kelayakan per Bidang Vokasi */}
         <div className="lg:col-span-6 bg-slate-800/90 rounded-2xl p-5 border border-slate-700/70 shadow-lg">
           <div className="flex items-center justify-between mb-1">
             <h3 className="text-base font-bold text-white tracking-tight">
@@ -592,28 +533,61 @@ export default function ExecutiveDashboard({
             <span className="text-xs text-slate-400 font-mono">Benchmark KKP</span>
           </div>
           <p className="text-xs text-slate-400 mb-3">
-            Perbandingan tingkat kelaikan aktual vs target standar minimal vokasi.
+            Perbandingan tingkat kelayakan aktual vs target standar minimal vokasi.
           </p>
           <div className="h-72">
             <Radar data={radarData} options={radarOptions} />
           </div>
         </div>
 
-        {/* Right: Line Chart - Tren Jam Praktik & Utilisasi */}
-        <div className="lg:col-span-6 bg-slate-800/90 rounded-2xl p-5 border border-slate-700/70 shadow-lg">
-          <div className="flex items-center justify-between mb-1">
-            <h3 className="text-base font-bold text-white tracking-tight">
-              Tren Utilisasi & Jam Praktik Sarpras (2023 - 2026)
-            </h3>
-            <span className="text-xs px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-medium">
-              Efektivitas Pembelajaran
-            </span>
+        {/* Right: Breakdown Kelayakan per Bidang Vokasi */}
+        <div className="lg:col-span-6 bg-slate-800/90 rounded-2xl p-5 border border-slate-700/70 shadow-lg flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <h3 className="text-base font-bold text-white tracking-tight">
+                Status Kelayakan per Bidang Vokasi
+              </h3>
+              <span className="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
+                Target: {NATIONAL_SARPRAS_TARGETS.targetIndeksKelayakan}%
+              </span>
+            </div>
+            <p className="text-xs text-slate-400 mb-4">
+              Capaian indeks kelayakan operasional fisik dibandingkan target standar nasional KKP.
+            </p>
           </div>
-          <p className="text-xs text-slate-400 mb-3">
-            Peningkatan pemanfaatan fasilitas workshop, kapal latih, dan tambak per semester.
-          </p>
-          <div className="h-72">
-            <Line data={lineData} options={lineOptions} />
+
+          <div className="space-y-3">
+            {SARPRAS_CATEGORIES.map((cat) => {
+              const data = categoryBreakdown[cat.id] || { count: 0, avgScore: 0 };
+              const score = Math.round(data.avgScore);
+              const isTargetMet = score >= NATIONAL_SARPRAS_TARGETS.targetIndeksKelayakan;
+
+              return (
+                <div key={cat.id} className="space-y-1">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-300 font-medium truncate max-w-[200px] sm:max-w-none">{cat.name}</span>
+                    <div className="flex items-center gap-2">
+                      <span className={`font-bold ${isTargetMet ? 'text-emerald-400' : 'text-amber-400'}`}>
+                        {score}%
+                      </span>
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded font-semibold ${
+                        isTargetMet ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
+                      }`}>
+                        {isTargetMet ? 'Memenuhi' : 'Perlu Atensi'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        isTargetMet ? 'bg-emerald-500' : 'bg-amber-500'
+                      }`}
+                      style={{ width: `${Math.min(100, score)}%` }}
+                    ></div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -677,7 +651,7 @@ export default function ExecutiveDashboard({
                 </div>
 
                 <div className="mt-3 pt-2.5 border-t border-slate-700/60 flex items-center justify-between text-[11px]">
-                  <span className="text-slate-400">Kelaikan:</span>
+                  <span className="text-slate-400">Kelayakan:</span>
                   <span className="font-bold text-white" style={{ color: cat.color }}>
                     {Math.round(data.avgScore)}%
                   </span>

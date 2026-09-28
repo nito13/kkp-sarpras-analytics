@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import { formatRupiah } from '../data/sarprasGenerator';
 import { useTheme } from '../context/ThemeContext';
-import logoKkp from '../assets/logo-kkp.svg';
+import logoKkp from '../assets/logo-kkp.png';
 
 export default function Navbar({
   activeTab,
@@ -56,7 +56,7 @@ export default function Navbar({
     { id: 'dashboard', label: 'Ringkasan Eksekutif', icon: BarChart3 },
     { id: 'map', label: 'Peta Sebaran Geospasial', icon: MapPin },
     { id: 'explorer', label: 'Inventaris & Katalog BMN', icon: Layers },
-    { id: 'vokasi', label: 'Standar & Kelaikan Vokasi', icon: School },
+    { id: 'vokasi', label: 'Standar & Kelayakan Vokasi', icon: School },
     { 
       id: 'maintenance', 
       label: 'Early Warning & Perbaikan', 

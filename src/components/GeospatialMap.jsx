@@ -258,7 +258,7 @@ export default function GeospatialMap({
             <span>Peta Persebaran Sarpras Satuan Pendidikan KKP</span>
           </h2>
           <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
-            Sebaran kampus Politeknik, Akademi, dan SUPM beserta indeks kelaikan sarpras maritim di setiap zona wilayah maritim.
+            Sebaran kampus Politeknik, Akademi, dan SUPM beserta indeks kelayakan sarpras maritim di setiap zona wilayah maritim.
           </p>
         </div>
 
@@ -324,7 +324,7 @@ export default function GeospatialMap({
             <div className="flex items-center gap-3 text-xs flex-wrap">
               <span className="flex items-center gap-1.5 text-slate-300">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Kelaikan &gt;85%</span>
+                <span>Kelayakan &gt;85%</span>
               </span>
               <span className="flex items-center gap-1.5 text-slate-300">
                 <span className="w-2.5 h-2.5 rounded-full bg-sky-500"></span>
@@ -567,7 +567,7 @@ export default function GeospatialMap({
                         fontWeight="600"
                         className="select-none font-sans"
                       >
-                        {hItem.shortName} • {hScore}% Kelaikan
+                        {hItem.shortName} • {hScore}% Kelayakan
                       </text>
                     </g>
                   );
@@ -691,7 +691,7 @@ export default function GeospatialMap({
               {/* Progress bar of condition score */}
               <div className="space-y-1 mb-3">
                 <div className="flex justify-between text-xs">
-                  <span className="text-slate-400">Indeks Kelaikan Kampus</span>
+                  <span className="text-slate-400">Indeks Kelayakan Kampus</span>
                   <span className="font-bold text-white">{Math.round(selectedMetrics.avgScore)}%</span>
                 </div>
                 <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">

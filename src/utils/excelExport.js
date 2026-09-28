@@ -117,7 +117,7 @@ export function exportAssetsToExcel(assets, options = {}) {
     alignment: { horizontal: 'center', vertical: 'center' },
     border: borderThin
   };
-  ws['A6'] = createCell('DAFTAR INVENTARISASI & KELAIKAN SARANA PRASARANA (BMN) SATUAN PENDIDIKAN VOKASI KP', titleStyle);
+  ws['A6'] = createCell('DAFTAR INVENTARISASI & KELAYAKAN SARANA PRASARANA (BMN) SATUAN PENDIDIKAN VOKASI KP', titleStyle);
 
   const metaLabelStyle = {
     font: { name: 'Calibri', sz: 10, bold: true, color: { rgb: '475569' } },
@@ -175,7 +175,7 @@ export function exportAssetsToExcel(assets, options = {}) {
     'Kategori Bidang',
     'Sub-Kategori',
     'Kondisi Fisik',
-    'Skor Kelaikan',
+    'Skor Kelayakan',
     'Tingkat Utilisasi',
     'Valuasi BMN (Rp)',
     'Tahun',

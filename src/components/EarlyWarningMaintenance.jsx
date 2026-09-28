@@ -239,7 +239,7 @@ export default function EarlyWarningMaintenance({
             <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
             <h3 className="text-base font-bold text-white">Seluruh Sarpras Kritis Telah Tertangani!</h3>
             <p className="text-xs text-slate-300 max-w-md mx-auto">
-              Tidak ada aset berstatus Rusak Berat atau sertifikat mati yang belum tertangani. Kelaikan operasional vokasi berjalan optimal.
+              Tidak ada aset berstatus Rusak Berat atau sertifikat mati yang belum tertangani. Kelayakan operasional vokasi berjalan optimal.
             </p>
           </div>
         )}

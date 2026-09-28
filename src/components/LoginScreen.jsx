@@ -20,7 +20,7 @@ import {
 import { AUTH_USERS, authenticateUser } from '../data/authUsers';
 import { apiLogin } from '../services/api';
 import { useTheme } from '../context/ThemeContext';
-import logoKkp from '../assets/logo-kkp.svg';
+import logoKkp from '../assets/logo-kkp.png';
 
 export default function LoginScreen({ onLogin }) {
   const { isDark, toggleTheme } = useTheme();

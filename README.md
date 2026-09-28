@@ -41,19 +41,18 @@ Aplikasi dilengkapi dengan portal otentikasi resmi berstandar kedinasan KKP deng
 | 1 | **Super Admin BPPSDM KP** | `admin.bppsdm@kkp.go.id` | `admin` | Akses penuh 18 Satdik, approval APBN, input/edit seluruh aset |
 | 2 | **Operator BMN Poltek AUP** | `operator.aup@kkp.go.id` | `aup` | Terfokus pada Politeknik AUP Jakarta, input & pemeliharaan aset |
 | 3 | **Operator BMN SUPM Tegal** | `operator.tegal@kkp.go.id` | `tegal` | Terfokus pada SUPM Tegal, pembaruan fasilitas kapal latih & tambak |
-| 4 | **Auditor Itjen KKP** | `auditor.itjen@kkp.go.id` | `itjen` | Mode audit & evaluasi standar kelaikan, ekspor laporan |
+| 4 | **Auditor Itjen KKP** | `auditor.itjen@kkp.go.id` | `itjen` | Mode audit & evaluasi standar kelayakan, ekspor laporan |
 
 ---
 
 ## 🚀 Fitur Utama Sistem
 
 ### 1. 📊 Executive KPI Dashboard
-- **Metrik Utama Real-Time**: Total Aset BMN, Nilai Valuasi Aset BMN (Rupiah), Indeks Kelaikan Sarpras Nasional (IKSP), Jumlah Sarpras Kondisi Baik, Jumlah Sarpras Kritis/Rusak Berat, dan Estimasi Kebutuhan Biaya Rehabilitasi.
+- **Metrik Utama Real-Time**: Total Aset BMN, Nilai Valuasi Aset BMN (Rupiah), Indeks Kelayakan Sarpras Nasional (IKSP), Jumlah Sarpras Kondisi Baik, Jumlah Sarpras Kritis/Rusak Berat, dan Estimasi Kebutuhan Biaya Rehabilitasi.
 - **Visualisasi Chart.js Interaktif**:
   - *Donut Chart*: Komposisi kondisi fisik (Baik, Rusak Ringan, Rusak Berat).
-  - *Horizontal Bar Chart*: Peringkat kelaikan sarpras per satuan pendidikan (Politeknik vs SUPM).
-  - *Radar Chart*: Kematangan sarpras per kategori bidang vokasi dibandingkan standar minimal KKP.
-  - *Line & Area Chart*: Tren utilisasi dan jam praktik operasional sarpras dari tahun 2023 hingga 2026.
+  - *Horizontal Bar Chart*: Peringkat kelayakan sarpras per satuan pendidikan (Politeknik vs SUPM).
+  - *Radar & Status Progress*: Kematangan dan kepatuhan sarpras per kategori bidang vokasi dibandingkan standar minimal KKP.
 - **Early Warning Highlight Banner**: Peringatan darurat untuk fasilitas yang mengalami kerusakan mesin utama atau sertifikat BKI mati.
 
 ### 2. 🗺️ Peta Persebaran Geospasial Nusantara
@@ -70,12 +69,12 @@ Aplikasi dilengkapi dengan portal otentikasi resmi berstandar kedinasan KKP deng
   - Menampilkan spesifikasi mesin lengkap, legalitas sertifikasi (BKI, Hubla, SKP, HACCP, CPIB, CBIB), riwayat servis.
   - Fitur simulasi pembaruan kondisi: Pengguna dapat mengubah status (misal dari Rusak Berat menjadi Baik) dan mencatat log tindakan pemeliharaan yang langsung tersimpan di *Local Storage*.
 
-### 4. 🎓 Standar Kelaikan & Benchmarking Vokasi
+### 4. 🎓 Standar Kelayakan & Benchmarking Vokasi
 - **Kapasitas & Fasilitas Fisik**:
-  - *Kapasitas Daya Tampung Asrama*: Evaluasi ketersediaan ranjang tempat tidur dan indeks kelaikan fasilitas asrama penunjang kampus.
-  - *Kelaikan Armada Kapal Latih*: Kesiapan sertifikasi IMO STCW dan operasional berlayar.
+  - *Kapasitas Daya Tampung Asrama*: Evaluasi ketersediaan ranjang tempat tidur dan indeks kelayakan fasilitas asrama penunjang kampus.
+  - *Kelayakan Armada Kapal Latih*: Kesiapan sertifikasi IMO STCW dan operasional berlayar.
 - **Matriks Kepatuhan Standar Vokasi**: Evaluasi kepatuhan terhadap regulasi krusial BPPSDM KP / Kemendikbudristek / IMO STCW.
-- **Head-to-Head Campus Comparison**: Komparasi berdampingan antara dua kampus terpilih untuk membandingkan kapasitas sarpras, luas bangunan & lahan, nilai BMN, dan skor kelaikan.
+- **Head-to-Head Campus Comparison**: Komparasi berdampingan antara dua kampus terpilih untuk membandingkan kapasitas sarpras, luas bangunan & lahan, nilai BMN, dan skor kelayakan.
 
 ### 5. ⚠️ Early Warning System & Pemeliharaan Kritis
 - Daftar merah aset darurat yang membutuhkan penanganan segera (*Critical Immediate Attention*).
@@ -84,7 +83,7 @@ Aplikasi dilengkapi dengan portal otentikasi resmi berstandar kedinasan KKP deng
 
 ### 6. 💡 Simulator Alokasi Anggaran APBN / BOPTN
 - *Interactive Budget Slider*: Pengguna dapat mengatur alokasi anggaran pemeliharaan dari Rp 1 Miliar hingga Rp 50 Miliar.
-- *Real-time Impact Calculation*: Menghitung proyeksi kenaikan Indeks Kelaikan Sarpras Nasional, jumlah unit rusak berat yang berhasil diselamatkan, dan efisiensi sisa pagu.
+- *Real-time Impact Calculation*: Menghitung proyeksi kenaikan Indeks Kelayakan Sarpras Nasional, jumlah unit rusak berat yang berhasil diselamatkan, dan efisiensi sisa pagu.
 - *Daftar Prioritas Usulan RKA*: Menampilkan urutan sarpras yang direkomendasikan untuk didanai berdasarkan *Return on Education (ROE)*.
 - Tombol **"Terapkan Hasil Simulasi Ini"** yang langsung memutakhirkan kondisi database secara live.
 
