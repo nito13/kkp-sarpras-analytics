@@ -212,22 +212,14 @@ export default function VokasiAnalytics({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 text-center text-xs">
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
-                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Bangunan</span>
-                <span className="font-bold text-white text-xs sm:text-sm truncate block">{(campus1.luasBangunanM2 / 1000).toFixed(1)}k m²</span>
+            <div className="grid grid-cols-2 gap-2 text-center text-xs">
+              <div className="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/80 min-w-0">
+                <span className="text-slate-400 text-[10px] sm:text-[11px] block truncate">Total Sarpras</span>
+                <span className="font-bold text-white text-xs sm:text-sm truncate block mt-0.5">{metrics1.count} Unit</span>
               </div>
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
-                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Luas Lahan</span>
-                <span className="font-bold text-white text-xs sm:text-sm truncate block">{campus1.luasLahanHa} Ha</span>
-              </div>
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
-                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Total Sarpras</span>
-                <span className="font-bold text-white text-xs sm:text-sm truncate block">{metrics1.count} Unit</span>
-              </div>
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
-                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Kondisi Baik</span>
-                <span className="font-bold text-emerald-400 text-xs sm:text-sm truncate block">{metrics1.baik} Unit</span>
+              <div className="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/80 min-w-0">
+                <span className="text-slate-400 text-[10px] sm:text-[11px] block truncate">Kondisi Baik</span>
+                <span className="font-bold text-emerald-400 text-xs sm:text-sm truncate block mt-0.5">{metrics1.baik} Unit</span>
               </div>
             </div>
 
@@ -255,22 +247,14 @@ export default function VokasiAnalytics({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 text-center text-xs">
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
-                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Bangunan</span>
-                <span className="font-bold text-white text-xs sm:text-sm truncate block">{(campus2.luasBangunanM2 / 1000).toFixed(1)}k m²</span>
+            <div className="grid grid-cols-2 gap-2 text-center text-xs">
+              <div className="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/80 min-w-0">
+                <span className="text-slate-400 text-[10px] sm:text-[11px] block truncate">Total Sarpras</span>
+                <span className="font-bold text-white text-xs sm:text-sm truncate block mt-0.5">{metrics2.count} Unit</span>
               </div>
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
-                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Luas Lahan</span>
-                <span className="font-bold text-white text-xs sm:text-sm truncate block">{campus2.luasLahanHa} Ha</span>
-              </div>
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
-                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Total Sarpras</span>
-                <span className="font-bold text-white text-xs sm:text-sm truncate block">{metrics2.count} Unit</span>
-              </div>
-              <div className="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 min-w-0">
-                <span className="text-slate-400 text-[9px] sm:text-[10px] block truncate">Kondisi Baik</span>
-                <span className="font-bold text-emerald-400 text-xs sm:text-sm truncate block">{metrics2.baik} Unit</span>
+              <div className="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/80 min-w-0">
+                <span className="text-slate-400 text-[10px] sm:text-[11px] block truncate">Kondisi Baik</span>
+                <span className="font-bold text-emerald-400 text-xs sm:text-sm truncate block mt-0.5">{metrics2.baik} Unit</span>
               </div>
             </div>
 
@@ -310,16 +294,6 @@ export default function VokasiAnalytics({
                   <td className="py-2 px-3 text-slate-400 font-medium">Indeks Kelayakan</td>
                   <td className="py-2 px-3 font-black text-cyan-400">{Math.round(metrics1.avgScore)}%</td>
                   <td className="py-2 px-3 font-black text-amber-400">{Math.round(metrics2.avgScore)}%</td>
-                </tr>
-                <tr className="hover:bg-slate-800/40 transition-colors">
-                  <td className="py-2 px-3 text-slate-400 font-medium">Luas Bangunan</td>
-                  <td className="py-2 px-3 font-semibold text-white">{campus1.luasBangunanM2.toLocaleString()} m²</td>
-                  <td className="py-2 px-3 font-semibold text-white">{campus2.luasBangunanM2.toLocaleString()} m²</td>
-                </tr>
-                <tr className="hover:bg-slate-800/40 transition-colors">
-                  <td className="py-2 px-3 text-slate-400 font-medium">Luas Wilayah</td>
-                  <td className="py-2 px-3 font-semibold text-white">{campus1.luasLahanHa} Ha</td>
-                  <td className="py-2 px-3 font-semibold text-white">{campus2.luasLahanHa} Ha</td>
                 </tr>
                 <tr className="hover:bg-slate-800/40 transition-colors">
                   <td className="py-2 px-3 text-slate-400 font-medium">Total Unit Sarpras</td>

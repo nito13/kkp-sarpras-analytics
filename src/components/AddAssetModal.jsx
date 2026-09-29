@@ -26,7 +26,6 @@ export default function AddAssetModal({
     subcategory: '',
     condition: 'Baik',
     acquisitionYear: 2024,
-    valuation: 1500000000,
     utilizationRate: 85,
     capacityDesc: '',
     specs: '',
@@ -63,7 +62,6 @@ export default function AddAssetModal({
 
     const newAsset = {
       id: `SAR-USR-${Date.now().toString().slice(-4)}`,
-      bmnCode: `BMN-3.05.99.01.${Math.floor(1000 + Math.random() * 9000)}-${new Date().getFullYear()}`,
       satdikName: selectedSatdik ? selectedSatdik.name : 'Satdik KKP',
       conditionScore: scoreMap[formData.condition] || 85,
       maintenanceUrgency: urgencyMap[formData.condition] || 'Normal',

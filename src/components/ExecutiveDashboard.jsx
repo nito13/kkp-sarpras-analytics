@@ -163,9 +163,26 @@ export default function ExecutiveDashboard({
     },
   };
 
+  // Multi-line helper to prevent radar labels clipping on mobile screens
+  const formatRadarLabel = (name) => {
+    const manualWrap = {
+      'Penangkapan Ikan dan Permesinan Kapal': ['Penangkapan Ikan', '& Permesinan Kapal'],
+      'Budidaya Perikanan': ['Budidaya', 'Perikanan'],
+      'Pengolahan Hasil Perikanan': ['Pengolahan Hasil', 'Perikanan'],
+      'Agribisnis Pengolahan dan Penyuluhan': ['Agribisnis Pengolahan', '& Penyuluhan'],
+      'Konservasi dan Pariwisata': ['Konservasi &', 'Pariwisata'],
+      'Administrasi & Umum': ['Administrasi', '& Umum'],
+    };
+    if (manualWrap[name]) return manualWrap[name];
+    if (name.length <= 14) return name;
+    const words = name.split(' ');
+    const mid = Math.ceil(words.length / 2);
+    return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
+  };
+
   // Radar Chart: Kematangan per Bidang Sarpras
   const categoryKeys = Object.keys(categoryBreakdown);
-  const radarLabels = categoryKeys.map(k => categoryBreakdown[k].name);
+  const radarLabels = categoryKeys.map(k => formatRadarLabel(categoryBreakdown[k].name));
   const radarScores = categoryKeys.map(k => Math.round(categoryBreakdown[k].avgScore || 0));
 
   const radarData = {
@@ -197,17 +214,47 @@ export default function ExecutiveDashboard({
   const radarOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    layout: {
+      padding: {
+        top: 6,
+        bottom: 6,
+        left: 10,
+        right: 10,
+      },
+    },
     plugins: {
       legend: {
         position: 'bottom',
-        labels: { color: textColor, font: { size: 10, weight: '600' } },
+        labels: {
+          color: textColor,
+          font: { size: 10, weight: '600' },
+          boxWidth: 12,
+          padding: 10,
+        },
+      },
+      tooltip: {
+        callbacks: {
+          title: (tooltipItems) => {
+            if (!tooltipItems.length) return '';
+            const item = tooltipItems[0];
+            const rawLabel = item.label;
+            return Array.isArray(rawLabel) ? rawLabel.join(' ') : (rawLabel || '');
+          },
+        },
       },
     },
     scales: {
       r: {
         angleLines: { color: gridColor },
         grid: { color: gridColor },
-        pointLabels: { color: textColor, font: { size: 10, weight: '600' } },
+        pointLabels: {
+          color: textColor,
+          font: {
+            size: typeof window !== 'undefined' && window.innerWidth < 640 ? 9 : 10,
+            weight: '600',
+          },
+          padding: 4,
+        },
         ticks: {
           backdropColor: 'transparent',
           color: textMuted,
@@ -482,9 +529,9 @@ export default function ExecutiveDashboard({
       </div>
 
       {/* Secondary Analytics Row: Radar Bidang & Status Kelayakan */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Left: Radar Chart - Kelayakan per Bidang Vokasi */}
-        <div className="lg:col-span-6 bg-slate-800/90 rounded-2xl p-5 border border-slate-700/70 shadow-lg">
+        <div className="lg:col-span-6 bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-700/70 shadow-lg">
           <div className="flex items-center justify-between mb-1">
             <h3 className="text-base font-bold text-white tracking-tight">
               Radar Kematangan Sarpras per Bidang Vokasi
@@ -494,14 +541,14 @@ export default function ExecutiveDashboard({
           <p className="text-xs text-slate-400 mb-3">
             Perbandingan tingkat kelayakan aktual vs target standar minimal vokasi.
           </p>
-          <div className="h-72">
+          <div className="h-72 sm:h-80">
             <Radar data={radarData} options={radarOptions} />
           </div>
         </div>
 
         {/* Right: Breakdown Kelayakan per Bidang Vokasi */}
-        <div className="lg:col-span-6 bg-slate-800/90 rounded-2xl p-5 border border-slate-700/70 shadow-lg flex flex-col justify-between">
-          <div>
+        <div className="lg:col-span-6 bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-700/70 shadow-lg flex flex-col">
+          <div className="mb-3">
             <div className="flex items-center justify-between mb-1">
               <h3 className="text-base font-bold text-white tracking-tight">
                 Status Kelayakan per Bidang Vokasi
@@ -510,26 +557,32 @@ export default function ExecutiveDashboard({
                 Target: {NATIONAL_SARPRAS_TARGETS.targetIndeksKelayakan}%
               </span>
             </div>
-            <p className="text-xs text-slate-400 mb-4">
+            <p className="text-xs text-slate-400">
               Capaian indeks kelayakan operasional fisik dibandingkan target standar nasional KKP.
             </p>
           </div>
 
-          <div className="space-y-3">
+          <div className="flex-1 flex flex-col justify-between py-1">
             {SARPRAS_CATEGORIES.map((cat) => {
               const data = categoryBreakdown[cat.id] || { count: 0, avgScore: 0 };
               const score = Math.round(data.avgScore);
               const isTargetMet = score >= NATIONAL_SARPRAS_TARGETS.targetIndeksKelayakan;
 
               return (
-                <div key={cat.id} className="space-y-1">
+                <div key={cat.id} className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-300 font-medium truncate max-w-[200px] sm:max-w-none">{cat.name}</span>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 min-w-0 pr-2">
+                      <span 
+                        className="w-2 h-2 rounded-full flex-shrink-0" 
+                        style={{ backgroundColor: cat.color }}
+                      ></span>
+                      <span className="text-slate-300 font-medium truncate">{cat.name}</span>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
                       <span className={`font-bold ${isTargetMet ? 'text-emerald-400' : 'text-amber-400'}`}>
                         {score}%
                       </span>
-                      <span className={`text-[10px] px-1.5 py-0.2 rounded font-semibold ${
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-semibold ${
                         isTargetMet ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
                       }`}>
                         {isTargetMet ? 'Memenuhi' : 'Perlu Atensi'}

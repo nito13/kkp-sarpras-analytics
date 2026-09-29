@@ -653,27 +653,21 @@ export default function GeospatialMap({
             </div>
 
             {/* Campus Profile Stats */}
-            <div className="grid grid-cols-2 gap-2 my-3 text-xs">
-              <div className="bg-slate-900/70 p-2.5 rounded-xl border border-slate-800">
-                <div className="flex items-center gap-1.5 text-slate-400">
-                  <School className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Program Studi</span>
+            <div className="my-3 text-xs">
+              <div className="bg-slate-900/70 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-1.5 text-slate-400">
+                    <School className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Program Studi</span>
+                  </div>
+                  <div className="text-base font-bold text-white mt-0.5">
+                    {selectedSatdik.prodi?.length || 0} <span className="text-[10px] text-slate-400 font-normal">Program Kejuruan</span>
+                  </div>
                 </div>
-                <div className="text-base font-bold text-white mt-1">
-                  {selectedSatdik.prodi?.length || 0} <span className="text-[10px] text-slate-400 font-normal">Program Kejuruan</span>
+                <div className="text-right">
+                  <span className="text-[10px] text-slate-400 block">Tahun Berdiri</span>
+                  <span className="text-xs font-bold text-slate-200">{selectedSatdik.establishedYear}</span>
                 </div>
-                <div className="text-[10px] text-slate-400">Berdiri Tahun {selectedSatdik.establishedYear}</div>
-              </div>
-
-              <div className="bg-slate-900/70 p-2.5 rounded-xl border border-slate-800">
-                <div className="flex items-center gap-1.5 text-slate-400">
-                  <Building2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Luas Kampus</span>
-                </div>
-                <div className="text-base font-bold text-white mt-1">
-                  {selectedSatdik.luasLahanHa} <span className="text-[10px] text-slate-400 font-normal">Hektar</span>
-                </div>
-                <div className="text-[10px] text-slate-400">{selectedSatdik.luasBangunanM2.toLocaleString()} m² Bangunan</div>
               </div>
             </div>
 

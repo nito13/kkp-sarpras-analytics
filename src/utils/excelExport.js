@@ -76,8 +76,6 @@ export function exportAssetsToExcel(assets, options = {}) {
   const wb = XLSX.utils.book_new();
   const ws = {};
 
-  const totalValuation = assets.reduce((acc, a) => acc + (Number(a.valuation) || 0), 0);
-  const totalRepairCost = assets.reduce((acc, a) => acc + (Number(a.estimatedRepairCost) || 0), 0);
   const countBaik = assets.filter(a => a.condition === 'Baik').length;
   const countRusakRingan = assets.filter(a => a.condition === 'Rusak Ringan').length;
   const countRusakBerat = assets.filter(a => a.condition === 'Rusak Berat').length;
@@ -144,26 +142,26 @@ export function exportAssetsToExcel(assets, options = {}) {
   // Baris 7: Cakupan & Total Aset
   ws['A7'] = createCell('Cakupan Wilayah / Satdik:', metaLabelStyle);
   ws['C7'] = createCell(filterSatdikName, metaValStyle);
-  ws['H7'] = createCell('Total Sarpras Terdata:', metaLabelStyle);
-  ws['J7'] = createCell(`${assets.length} Unit Sarpras`, metaValBold);
+  ws['G7'] = createCell('Total Sarpras Terdata:', metaLabelStyle);
+  ws['I7'] = createCell(`${assets.length} Unit Sarpras`, metaValBold);
 
   // Baris 8: Bidang & Urgensi Perbaikan
   ws['A8'] = createCell('Filter Bidang:', metaLabelStyle);
   ws['C8'] = createCell(filterCategoryName, metaValStyle);
-  ws['H8'] = createCell('Prioritas Perbaikan:', metaLabelStyle);
-  ws['J8'] = createCell(`${countUrgent} Unit Mendesak`, metaValRed);
+  ws['G8'] = createCell('Prioritas Perbaikan:', metaLabelStyle);
+  ws['I8'] = createCell(`${countUrgent} Unit Mendesak`, metaValRed);
 
   // Baris 9: Tanggal & Kondisi
   ws['A9'] = createCell('Waktu Ekspor Dokumen:', metaLabelStyle);
   ws['C9'] = createCell(printedAt, metaValStyle);
-  ws['H9'] = createCell('Rincian Kondisi Fisik:', metaLabelStyle);
-  ws['J9'] = createCell(`Baik: ${countBaik} | Rusak Ringan: ${countRusakRingan} | Rusak Berat: ${countRusakBerat}`, metaValBold);
+  ws['G9'] = createCell('Rincian Kondisi Fisik:', metaLabelStyle);
+  ws['I9'] = createCell(`Baik: ${countBaik} | Rusak Ringan: ${countRusakRingan} | Rusak Berat: ${countRusakBerat}`, metaValBold);
 
-  // Baris 10: Petugas & Kebutuhan Biaya
+  // Baris 10: Petugas & Status
   ws['A10'] = createCell('Petugas Administrator:', metaLabelStyle);
   ws['C10'] = createCell(`${userName} (${userRole})`, metaValBold);
-  ws['H10'] = createCell('Estimasi Kebutuhan Biaya:', metaLabelStyle);
-  ws['J10'] = createCell(`Rp ${formatNumber(totalRepairCost)}`, metaValRed);
+  ws['G10'] = createCell('Status Inventarisasi:', metaLabelStyle);
+  ws['I10'] = createCell('Lengkap & Tervalidasi', metaValGreen);
 
   // 3. HEADER TABEL UTAMA (Baris 12)
   const headerTitles = [
@@ -178,7 +176,6 @@ export function exportAssetsToExcel(assets, options = {}) {
     'Tingkat Utilisasi',
     'Tahun Perolehan',
     'Urgensi Pemeliharaan',
-    'Estimasi Biaya Perbaikan (Rp)',
     'Catatan Teknis / Permasalahan'
   ];
 
@@ -261,7 +258,6 @@ export function exportAssetsToExcel(assets, options = {}) {
       createCell(Number(a.utilizationRate) || 0, percentStyle, 'n'),
       createCell(Number(a.acquisitionYear) || '-', centerStyle),
       createCell(a.maintenanceUrgency || 'Normal', urgencyStyle),
-      createCell(Number(a.estimatedRepairCost) || 0, currencyStyle, 'n'),
       createCell(a.issuesSummary || a.specs || '-', leftStyle)
     ];
 
@@ -277,23 +273,14 @@ export function exportAssetsToExcel(assets, options = {}) {
   const totalRowStyle = {
     font: { name: 'Calibri', sz: 10, bold: true, color: { rgb: '0F172A' } },
     fill: { fgColor: { rgb: 'E2E8F0' } },
-    alignment: { horizontal: 'right', vertical: 'center' },
+    alignment: { horizontal: 'center', vertical: 'center' },
     border: borderDoubleBottom
   };
-  const totalRepairStyle = {
-    font: { name: 'Calibri', sz: 11, bold: true, color: { rgb: '991B1B' } },
-    fill: { fgColor: { rgb: 'E2E8F0' } },
-    alignment: { horizontal: 'right', vertical: 'center' },
-    border: borderDoubleBottom,
-    numFmt: '#,##0'
-  };
 
-  ws[XLSX.utils.encode_cell({ r: currentRow, c: 0 })] = createCell(`TOTAL KESELURUHAN (${assets.length} UNIT SARPRAS):`, totalRowStyle);
-  for (let c = 1; c <= 10; c++) {
+  ws[XLSX.utils.encode_cell({ r: currentRow, c: 0 })] = createCell(`TOTAL KESELURUHAN: ${assets.length} UNIT SARANA DAN PRASARANA`, totalRowStyle);
+  for (let c = 1; c <= 11; c++) {
     ws[XLSX.utils.encode_cell({ r: currentRow, c })] = createCell('', totalRowStyle);
   }
-  ws[XLSX.utils.encode_cell({ r: currentRow, c: 11 })] = createCell(totalRepairCost, totalRepairStyle, 'n');
-  ws[XLSX.utils.encode_cell({ r: currentRow, c: 12 })] = createCell('', totalRowStyle);
 
   // 6. LEMBAR PENGESAHAN DOKUMEN (Sign-off)
   const signRow = currentRow + 3;
@@ -315,30 +302,30 @@ export function exportAssetsToExcel(assets, options = {}) {
 
   // 7. CELL MERGES
   ws['!merges'] = [
-    { s: { r: 0, c: 0 }, e: { r: 0, c: 12 } }, // Kop Kemen
-    { s: { r: 1, c: 0 }, e: { r: 1, c: 12 } }, // Kop Badan
-    { s: { r: 2, c: 0 }, e: { r: 2, c: 12 } }, // Kop Pusat
-    { s: { r: 3, c: 0 }, e: { r: 3, c: 12 } }, // Kop App
-    { s: { r: 5, c: 0 }, e: { r: 5, c: 12 } }, // Title
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 11 } }, // Kop Kemen
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 11 } }, // Kop Badan
+    { s: { r: 2, c: 0 }, e: { r: 2, c: 11 } }, // Kop Pusat
+    { s: { r: 3, c: 0 }, e: { r: 3, c: 11 } }, // Kop App
+    { s: { r: 5, c: 0 }, e: { r: 5, c: 11 } }, // Title
     // Metadata Merges
     { s: { r: 6, c: 0 }, e: { r: 6, c: 1 } },
-    { s: { r: 6, c: 2 }, e: { r: 6, c: 6 } },
-    { s: { r: 6, c: 7 }, e: { r: 6, c: 8 } },
-    { s: { r: 6, c: 9 }, e: { r: 6, c: 12 } },
+    { s: { r: 6, c: 2 }, e: { r: 6, c: 5 } },
+    { s: { r: 6, c: 6 }, e: { r: 6, c: 7 } },
+    { s: { r: 6, c: 8 }, e: { r: 6, c: 11 } },
     { s: { r: 7, c: 0 }, e: { r: 7, c: 1 } },
-    { s: { r: 7, c: 2 }, e: { r: 7, c: 6 } },
-    { s: { r: 7, c: 7 }, e: { r: 7, c: 8 } },
-    { s: { r: 7, c: 9 }, e: { r: 7, c: 12 } },
+    { s: { r: 7, c: 2 }, e: { r: 7, c: 5 } },
+    { s: { r: 7, c: 6 }, e: { r: 7, c: 7 } },
+    { s: { r: 7, c: 8 }, e: { r: 7, c: 11 } },
     { s: { r: 8, c: 0 }, e: { r: 8, c: 1 } },
-    { s: { r: 8, c: 2 }, e: { r: 8, c: 6 } },
-    { s: { r: 8, c: 7 }, e: { r: 8, c: 8 } },
-    { s: { r: 8, c: 9 }, e: { r: 8, c: 12 } },
+    { s: { r: 8, c: 2 }, e: { r: 8, c: 5 } },
+    { s: { r: 8, c: 6 }, e: { r: 8, c: 7 } },
+    { s: { r: 8, c: 8 }, e: { r: 8, c: 11 } },
     { s: { r: 9, c: 0 }, e: { r: 9, c: 1 } },
-    { s: { r: 9, c: 2 }, e: { r: 9, c: 6 } },
-    { s: { r: 9, c: 7 }, e: { r: 9, c: 8 } },
-    { s: { r: 9, c: 9 }, e: { r: 9, c: 12 } },
+    { s: { r: 9, c: 2 }, e: { r: 9, c: 5 } },
+    { s: { r: 9, c: 6 }, e: { r: 9, c: 7 } },
+    { s: { r: 9, c: 8 }, e: { r: 9, c: 11 } },
     // Total Row Label Merge
-    { s: { r: currentRow, c: 0 }, e: { r: currentRow, c: 10 } },
+    { s: { r: currentRow, c: 0 }, e: { r: currentRow, c: 11 } },
     // Signoff Merges
     { s: { r: signRow, c: 1 }, e: { r: signRow, c: 3 } },
     { s: { r: signRow + 1, c: 1 }, e: { r: signRow + 1, c: 3 } },
@@ -352,27 +339,26 @@ export function exportAssetsToExcel(assets, options = {}) {
     { s: { r: signRow + 7, c: 7 }, e: { r: signRow + 7, c: 10 } },
   ];
 
-  // 8. LEBAR KOLOM (Auto Widths)
+  // 8. LEBAR KOLOM (Auto Widths - 12 Kolom)
   ws['!cols'] = [
-    { wch: 6 },  // No
-    { wch: 14 }, // ID Sistem
-    { wch: 38 }, // Nama Sarpras
-    { wch: 30 }, // Satdik
-    { wch: 20 }, // Bidang
-    { wch: 20 }, // Sub-bidang
-    { wch: 15 }, // Kondisi Fisik
-    { wch: 13 }, // Skor
-    { wch: 14 }, // Utilisasi
-    { wch: 15 }, // Tahun Perolehan
-    { wch: 20 }, // Urgensi
-    { wch: 24 }, // Estimasi Biaya
-    { wch: 40 }  // Catatan
+    { wch: 6 },  // 0: No
+    { wch: 14 }, // 1: ID Sistem
+    { wch: 38 }, // 2: Nama Sarpras
+    { wch: 30 }, // 3: Satdik
+    { wch: 22 }, // 4: Bidang
+    { wch: 22 }, // 5: Sub-bidang
+    { wch: 16 }, // 6: Kondisi Fisik
+    { wch: 14 }, // 7: Skor Kelayakan
+    { wch: 14 }, // 8: Utilisasi
+    { wch: 16 }, // 9: Tahun Perolehan
+    { wch: 22 }, // 10: Urgensi
+    { wch: 42 }  // 11: Catatan
   ];
 
   // Set range
   ws['!ref'] = XLSX.utils.encode_range({
     s: { r: 0, c: 0 },
-    e: { r: signRow + 8, c: 12 }
+    e: { r: signRow + 8, c: 11 }
   });
 
   XLSX.utils.book_append_sheet(wb, ws, 'Inventaris Sarpras');
@@ -442,7 +428,7 @@ export function exportRKAToExcel(simulation, options = {}) {
   // Table Headers
   const rkaHeaders = [
     'No.',
-    'Kode BMN / ID',
+    'ID Aset',
     'Nama Sarana & Prasarana',
     'Satuan Pendidikan (Kampus)',
     'Bidang Sarpras',
@@ -477,7 +463,7 @@ export function exportRKAToExcel(simulation, options = {}) {
 
     const cells = [
       createCell(idx + 1, centerStyle),
-      createCell(a.bmnCode || a.id, centerStyle, 's'),
+      createCell(a.id, centerStyle, 's'),
       createCell(a.name, leftBold),
       createCell(a.satdikName || '-', left),
       createCell(a.subcategory || a.category || '-', left),

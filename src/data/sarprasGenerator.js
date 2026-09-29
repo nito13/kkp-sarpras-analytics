@@ -431,7 +431,6 @@ export function getFullSarprasData() {
     const satdik = SATDIK_LIST.find(s => s.id === item.satdikId);
     assets.push({
       id: `SAR-ADD-${String(idx + 1).padStart(3, '0')}`,
-      bmnCode: `BMN-3.05.09.01.${String(idx + 1).padStart(3, '0')}-00${idx + 10}`,
       satdikName: satdik ? satdik.name : 'Satdik KKP',
       ...item
     });

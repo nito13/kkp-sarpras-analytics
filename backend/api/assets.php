@@ -1,6 +1,6 @@
 <?php
 // backend/api/assets.php
-// REST API CRUD Sarpras BMN SARPRAS KKP
+// REST API CRUD Sarpras KKP
 
 require_once __DIR__ . '/../config/database.php';
 
@@ -13,7 +13,6 @@ $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 function formatAssetOutput($row) {
     return [
         'id' => $row['id'],
-        'bmnCode' => $row['bmn_code'] ?? '',
         'name' => $row['name'],
         'satdikId' => $row['satdik_id'],
         'satdikName' => $row['satdik_name'],
@@ -22,7 +21,6 @@ function formatAssetOutput($row) {
         'condition' => $row['condition'],
         'conditionScore' => (int)($row['condition_score'] ?? 80),
         'acquisitionYear' => (int)($row['acquisition_year'] ?? date('Y')),
-        'valuation' => (float)($row['valuation'] ?? 0),
         'utilizationRate' => (int)($row['utilization_rate'] ?? 0),
         'capacityDesc' => $row['capacity_desc'] ?? '',
         'specs' => $row['specs'] ?? '',
@@ -89,18 +87,17 @@ switch ($method) {
 
         // Generate ID jika belum ada
         $id = !empty($input['id']) ? $input['id'] : 'SAR-' . strtoupper(substr($input['satdikId'], 0, 8)) . '-' . rand(100, 999);
-        $bmnCode = !empty($input['bmnCode']) ? $input['bmnCode'] : 'BMN-' . date('Y') . '-' . rand(1000, 9999);
 
         $stmt = $pdo->prepare("
             INSERT INTO assets (
-                id, bmn_code, name, satdik_id, satdik_name, category, subcategory,
-                `condition`, condition_score, acquisition_year, valuation, utilization_rate,
+                id, name, satdik_id, satdik_name, category, subcategory,
+                `condition`, condition_score, acquisition_year, utilization_rate,
                 capacity_desc, specs, certification_status, certification_authority,
                 cert_expiry_date, last_maintenance_date, next_maintenance_date,
                 maintenance_urgency, estimated_repair_cost, issues_summary
             ) VALUES (
-                :id, :bmn_code, :name, :satdik_id, :satdik_name, :category, :subcategory,
-                :condition, :condition_score, :acquisition_year, :valuation, :utilization_rate,
+                :id, :name, :satdik_id, :satdik_name, :category, :subcategory,
+                :condition, :condition_score, :acquisition_year, :utilization_rate,
                 :capacity_desc, :specs, :certification_status, :certification_authority,
                 :cert_expiry_date, :last_maintenance_date, :next_maintenance_date,
                 :maintenance_urgency, :estimated_repair_cost, :issues_summary
@@ -109,7 +106,6 @@ switch ($method) {
 
         $stmt->execute([
             ':id' => $id,
-            ':bmn_code' => $bmnCode,
             ':name' => $input['name'],
             ':satdik_id' => $input['satdikId'],
             ':satdik_name' => $input['satdikName'] ?? '',
@@ -118,7 +114,6 @@ switch ($method) {
             ':condition' => $input['condition'] ?? 'Baik',
             ':condition_score' => $input['conditionScore'] ?? 90,
             ':acquisition_year' => $input['acquisitionYear'] ?? (int)date('Y'),
-            ':valuation' => $input['valuation'] ?? 0,
             ':utilization_rate' => $input['utilizationRate'] ?? 80,
             ':capacity_desc' => $input['capacityDesc'] ?? '',
             ':specs' => $input['specs'] ?? '',
@@ -168,7 +163,6 @@ switch ($method) {
 
         $allowedKeys = [
             'name' => 'name',
-            'bmnCode' => 'bmn_code',
             'satdikId' => 'satdik_id',
             'satdikName' => 'satdik_name',
             'category' => 'category',
@@ -176,7 +170,6 @@ switch ($method) {
             'condition' => 'condition',
             'conditionScore' => 'condition_score',
             'acquisitionYear' => 'acquisition_year',
-            'valuation' => 'valuation',
             'utilizationRate' => 'utilization_rate',
             'capacityDesc' => 'capacity_desc',
             'specs' => 'specs',

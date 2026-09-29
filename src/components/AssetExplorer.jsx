@@ -73,7 +73,6 @@ export default function AssetExplorer({
     return assets.filter(item => {
       const matchSearch = searchQuery === '' ||
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (item.bmnCode && item.bmnCode.toLowerCase().includes(searchQuery.toLowerCase())) ||
         item.satdikName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (item.specs && item.specs.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -87,7 +86,7 @@ export default function AssetExplorer({
       let valA = a[sortField];
       let valB = b[sortField];
 
-      if (sortField === 'valuation' || sortField === 'conditionScore' || sortField === 'utilizationRate' || sortField === 'acquisitionYear') {
+      if (sortField === 'conditionScore' || sortField === 'utilizationRate' || sortField === 'acquisitionYear') {
         valA = Number(valA) || 0;
         valB = Number(valB) || 0;
       } else if (typeof valA === 'string') {
@@ -385,7 +384,7 @@ export default function AssetExplorer({
                         className="hover:bg-slate-700/40 transition-colors cursor-pointer"
                         onClick={() => openDetail(asset)}
                       >
-                        {/* Name & BMN Code */}
+                        {/* Name & Info */}
                         <td className="p-3.5">
                           <div className="flex items-center space-x-3">
                             <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center flex-shrink-0">

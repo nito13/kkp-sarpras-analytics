@@ -60,7 +60,6 @@ CREATE TABLE IF NOT EXISTS `assets` (
     `condition` VARCHAR(50) NOT NULL,
     `condition_score` INT DEFAULT 80,
     `acquisition_year` INT NULL,
-    `valuation` BIGINT NOT NULL DEFAULT 0,
     `utilization_rate` INT DEFAULT 0,
     `capacity_desc` TEXT NULL,
     `specs` TEXT NULL,

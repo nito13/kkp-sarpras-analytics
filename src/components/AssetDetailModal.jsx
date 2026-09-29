@@ -47,7 +47,6 @@ export default function AssetDetailModal({
   // Full Edit Form State
   const [formData, setFormData] = useState({
     name: '',
-    bmnCode: '',
     satdikId: '',
     satdikName: '',
     category: 'penangkapan_mesin',
@@ -55,7 +54,6 @@ export default function AssetDetailModal({
     condition: 'Baik',
     conditionScore: 85,
     acquisitionYear: 2020,
-    valuation: 0,
     utilizationRate: 80,
     capacityDesc: '',
     specs: '',
@@ -78,7 +76,6 @@ export default function AssetDetailModal({
     if (asset) {
       setFormData({
         name: asset.name || '',
-        bmnCode: asset.bmnCode || '',
         satdikId: asset.satdikId || (SATDIK_LIST[0]?.id || ''),
         satdikName: asset.satdikName || (SATDIK_LIST[0]?.name || ''),
         category: asset.category || (SARPRAS_CATEGORIES[0]?.id || 'penangkapan_mesin'),
@@ -86,7 +83,6 @@ export default function AssetDetailModal({
         condition: asset.condition || 'Baik',
         conditionScore: asset.conditionScore !== undefined ? asset.conditionScore : 85,
         acquisitionYear: asset.acquisitionYear || 2020,
-        valuation: asset.valuation || 0,
         utilizationRate: asset.utilizationRate !== undefined ? asset.utilizationRate : 80,
         capacityDesc: asset.capacityDesc || '',
         specs: asset.specs || '',
@@ -173,7 +169,6 @@ export default function AssetDetailModal({
 
     const payload = {
       name: formData.name.trim(),
-      bmnCode: (formData.bmnCode || asset.bmnCode || '').trim(),
       satdikId: formData.satdikId,
       satdikName: formData.satdikName,
       category: formData.category,
@@ -181,7 +176,6 @@ export default function AssetDetailModal({
       condition: formData.condition,
       conditionScore: Math.min(100, Math.max(0, Number(formData.conditionScore) || 0)),
       acquisitionYear: Number(formData.acquisitionYear) || 2020,
-      valuation: Number(formData.valuation) || 0,
       utilizationRate: Math.min(100, Math.max(0, Number(formData.utilizationRate) || 0)),
       capacityDesc: formData.capacityDesc.trim(),
       specs: formData.specs.trim(),

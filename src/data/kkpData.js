@@ -421,7 +421,7 @@ export const SATDIK_LIST = [
 export const SARPRAS_CATEGORIES = [
   {
     id: 'penangkapan_mesin',
-    name: 'Bidang Penangkapan Ikan dan Permesinan Kapal',
+    name: 'Penangkapan Ikan dan Permesinan Kapal',
     iconName: 'Ship',
     color: '#0284c7', // Sky Blue
     bgLight: 'bg-sky-500/10',
@@ -431,7 +431,7 @@ export const SARPRAS_CATEGORIES = [
   },
   {
     id: 'budidaya_perikanan',
-    name: 'Bidang Budidaya Perikanan',
+    name: 'Budidaya Perikanan',
     iconName: 'Fish',
     color: '#10b981', // Emerald
     bgLight: 'bg-emerald-500/10',
@@ -441,7 +441,7 @@ export const SARPRAS_CATEGORIES = [
   },
   {
     id: 'pengolahan_hasil',
-    name: 'Bidang Pengolahan Hasil Perikanan',
+    name: 'Pengolahan Hasil Perikanan',
     iconName: 'Boxes',
     color: '#f59e0b', // Amber
     bgLight: 'bg-amber-500/10',
@@ -451,7 +451,7 @@ export const SARPRAS_CATEGORIES = [
   },
   {
     id: 'agribisnis_penyuluhan',
-    name: 'Bidang Agribisnis Pengolahan dan Penyuluhan',
+    name: 'Agribisnis Pengolahan dan Penyuluhan',
     iconName: 'Factory',
     color: '#ec4899', // Pink
     bgLight: 'bg-pink-500/10',
@@ -461,7 +461,7 @@ export const SARPRAS_CATEGORIES = [
   },
   {
     id: 'konservasi_pariwisata',
-    name: 'Bidang Konservasi dan Pariwisata',
+    name: 'Konservasi dan Pariwisata',
     iconName: 'Compass',
     color: '#06b6d4', // Cyan
     bgLight: 'bg-cyan-500/10',
@@ -471,7 +471,7 @@ export const SARPRAS_CATEGORIES = [
   },
   {
     id: 'administrasi_umum',
-    name: 'Bidang Administrasi & Umum',
+    name: 'Administrasi & Umum',
     iconName: 'Briefcase',
     color: '#6366f1', // Indigo
     bgLight: 'bg-indigo-500/10',
@@ -485,7 +485,6 @@ export const INITIAL_SARPRAS_DATA = [
   // Politeknik AUP Jakarta
   {
     id: 'SAR-AUP-001',
-    bmnCode: 'BMN-3.05.01.04.001-0001',
     name: 'Kapal Latih KM. Madidihang 03',
     satdikId: 'poltek-aup',
     satdikName: 'Politeknik Ahli Usaha Perikanan Jakarta',
@@ -509,7 +508,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-AUP-002',
-    bmnCode: 'BMN-3.05.01.04.002-0045',
     name: 'Full Mission Ship Bridge Simulator System',
     satdikId: 'poltek-aup',
     satdikName: 'Politeknik Ahli Usaha Perikanan Jakarta',
@@ -533,7 +531,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-AUP-003',
-    bmnCode: 'BMN-3.05.02.01.003-0102',
     name: 'Hatchery Modern Udang Vaname & Windu (Kampus Serang)',
     satdikId: 'poltek-aup',
     satdikName: 'Politeknik Ahli Usaha Perikanan Jakarta',
@@ -557,7 +554,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-AUP-004',
-    bmnCode: 'BMN-3.05.03.01.004-0023',
     name: 'Unit Pengolahan Ikan (UPI) Modern Latih & Cold Storage',
     satdikId: 'poltek-aup',
     satdikName: 'Politeknik Ahli Usaha Perikanan Jakarta',
@@ -581,7 +577,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-AUP-005',
-    bmnCode: 'BMN-3.05.06.01.005-0011',
     name: 'Gedung Asrama Korps Taruna Bima-Yudistira (Putra)',
     satdikId: 'poltek-aup',
     satdikName: 'Politeknik Ahli Usaha Perikanan Jakarta',
@@ -605,7 +600,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-AUP-006',
-    bmnCode: 'BMN-3.05.05.01.006-0008',
     name: 'Teaching Factory (TEFA) Pengalengan & Produk Nilai Tambah',
     satdikId: 'poltek-aup',
     satdikName: 'Politeknik Ahli Usaha Perikanan Jakarta',
@@ -629,7 +623,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-AUP-007',
-    bmnCode: 'BMN-3.01.01.01.001-0020',
     name: 'Gedung Rektorat & Layanan Administrasi Terpadu',
     satdikId: 'poltek-aup',
     satdikName: 'Politeknik Ahli Usaha Perikanan Jakarta',
@@ -655,7 +648,6 @@ export const INITIAL_SARPRAS_DATA = [
   // Politeknik KP Sidoarjo
   {
     id: 'SAR-SDJ-001',
-    bmnCode: 'BMN-3.05.02.01.010-0014',
     name: 'Tambak Pendidikan Intensif Budidaya Udang & Bandeng',
     satdikId: 'poltek-kp-sidoarjo',
     satdikName: 'Politeknik Kelautan dan Perikanan Sidoarjo',
@@ -679,7 +671,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-SDJ-002',
-    bmnCode: 'BMN-3.05.03.01.010-0033',
     name: 'Teaching Factory Bandeng Cabut Duri & Fish Jelly (Surimi)',
     satdikId: 'poltek-kp-sidoarjo',
     satdikName: 'Politeknik Kelautan dan Perikanan Sidoarjo',
@@ -703,7 +694,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-SDJ-003',
-    bmnCode: 'BMN-3.05.02.04.010-0089',
     name: 'Laboratorium Terpadu Hama Penyakit Ikan & Lingkungan',
     satdikId: 'poltek-kp-sidoarjo',
     satdikName: 'Politeknik Kelautan dan Perikanan Sidoarjo',
@@ -727,7 +717,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-SDJ-004',
-    bmnCode: 'BMN-3.05.06.01.010-0005',
     name: 'Asrama Taruna Dewaruci & Menza Graha Bahari',
     satdikId: 'poltek-kp-sidoarjo',
     satdikName: 'Politeknik Kelautan dan Perikanan Sidoarjo',
@@ -753,7 +742,6 @@ export const INITIAL_SARPRAS_DATA = [
   // Politeknik KP Bitung
   {
     id: 'SAR-BTG-001',
-    bmnCode: 'BMN-3.05.01.04.015-0002',
     name: 'Kapal Latih KM. Airaha 02',
     satdikId: 'poltek-kp-bitung',
     satdikName: 'Politeknik Kelautan dan Perikanan Bitung',
@@ -777,7 +765,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-BTG-002',
-    bmnCode: 'BMN-3.05.01.04.015-0021',
     name: 'Engine Room Simulator & Marine Workshop Bengkel Las',
     satdikId: 'poltek-kp-bitung',
     satdikName: 'Politeknik Kelautan dan Perikanan Bitung',
@@ -801,7 +788,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-BTG-003',
-    bmnCode: 'BMN-3.05.03.01.015-0044',
     name: 'Unit Pengolahan Ikan Tuna Loin & Cold Storage 50 Ton',
     satdikId: 'poltek-kp-bitung',
     satdikName: 'Politeknik Kelautan dan Perikanan Bitung',
@@ -827,7 +813,6 @@ export const INITIAL_SARPRAS_DATA = [
   // Politeknik KP Sorong
   {
     id: 'SAR-SRG-001',
-    bmnCode: 'BMN-3.05.01.04.020-0001',
     name: 'Kapal Latih KM. Frans Kaisiepo',
     satdikId: 'poltek-kp-sorong',
     satdikName: 'Politeknik Kelautan dan Perikanan Sorong',
@@ -851,7 +836,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-SRG-002',
-    bmnCode: 'BMN-3.05.02.01.020-0018',
     name: 'Hatchery Ikan Kerapu & Teripang Pasir Saonek Raja Ampat',
     satdikId: 'poltek-kp-sorong',
     satdikName: 'Politeknik Kelautan dan Perikanan Sorong',
@@ -875,7 +859,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-SRG-003',
-    bmnCode: 'BMN-3.05.04.01.020-0035',
     name: 'Dive Center & Kompresor Breathing Air Scuba Latih',
     satdikId: 'poltek-kp-sorong',
     satdikName: 'Politeknik Kelautan dan Perikanan Sorong',
@@ -901,7 +884,6 @@ export const INITIAL_SARPRAS_DATA = [
   // Politeknik KP Karawang
   {
     id: 'SAR-KRW-001',
-    bmnCode: 'BMN-3.05.02.01.025-0012',
     name: 'Klaster Tambak Udang Super Intensif Millennial Shrimp Farm',
     satdikId: 'poltek-kp-karawang',
     satdikName: 'Politeknik Kelautan dan Perikanan Karawang',
@@ -925,7 +907,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-KRW-002',
-    bmnCode: 'BMN-3.05.01.04.025-0030',
     name: 'Laboratorium Dinamika Rancang Bangun Perahu & Fiber',
     satdikId: 'poltek-kp-karawang',
     satdikName: 'Politeknik Kelautan dan Perikanan Karawang',
@@ -951,7 +932,6 @@ export const INITIAL_SARPRAS_DATA = [
   // Politeknik KP Bone
   {
     id: 'SAR-BNE-001',
-    bmnCode: 'BMN-3.05.01.04.030-0005',
     name: 'Kapal Latih KM. Bone Raya 01',
     satdikId: 'poltek-kp-bone',
     satdikName: 'Politeknik Kelautan dan Perikanan Bone',
@@ -975,7 +955,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-BNE-002',
-    bmnCode: 'BMN-3.05.02.01.030-0022',
     name: 'Hatchery Ikan Nila Salin & Kepiting Bakau Mangrove',
     satdikId: 'poltek-kp-bone',
     satdikName: 'Politeknik Kelautan dan Perikanan Bone',
@@ -1001,7 +980,6 @@ export const INITIAL_SARPRAS_DATA = [
   // Politeknik KP Kupang
   {
     id: 'SAR-KPG-001',
-    bmnCode: 'BMN-3.05.02.01.035-0015',
     name: 'Balai Praktik Budidaya Rumput Laut & Kerapu Semau',
     satdikId: 'poltek-kp-kupang',
     satdikName: 'Politeknik Kelautan dan Perikanan Kupang',
@@ -1025,7 +1003,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-KPG-002',
-    bmnCode: 'BMN-3.05.06.01.035-0008',
     name: 'Asrama Taruna Sasando & Dapur Umum Bahari',
     satdikId: 'poltek-kp-kupang',
     satdikName: 'Politeknik Kelautan dan Perikanan Kupang',
@@ -1051,7 +1028,6 @@ export const INITIAL_SARPRAS_DATA = [
   // Politeknik KP Dumai
   {
     id: 'SAR-DMI-001',
-    bmnCode: 'BMN-3.05.01.04.040-0010',
     name: 'Laboratorium Simulator Kenavigasian & ECDIS Selat Malaka',
     satdikId: 'poltek-kp-dumai',
     satdikName: 'Politeknik Kelautan dan Perikanan Dumai',
@@ -1075,7 +1051,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-DMI-002',
-    bmnCode: 'BMN-3.05.03.01.040-0025',
     name: 'Unit Pengolahan Ikan Terubuk & Patin Asap Tradisional-Modern',
     satdikId: 'poltek-kp-dumai',
     satdikName: 'Politeknik Kelautan dan Perikanan Dumai',
@@ -1101,7 +1076,6 @@ export const INITIAL_SARPRAS_DATA = [
   // Politeknik KP Pangandaran
   {
     id: 'SAR-PNG-001',
-    bmnCode: 'BMN-3.05.02.01.045-0011',
     name: 'Hatchery Lobster & Rajungan Pantai Pasir Putih',
     satdikId: 'poltek-kp-pangandaran',
     satdikName: 'Politeknik Kelautan dan Perikanan Pangandaran',
@@ -1125,7 +1099,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-PNG-002',
-    bmnCode: 'BMN-3.05.04.01.045-0030',
     name: 'Dermaga Latih & Bengkel Mesin Tempel Nelayan',
     satdikId: 'poltek-kp-pangandaran',
     satdikName: 'Politeknik Kelautan dan Perikanan Pangandaran',
@@ -1151,7 +1124,6 @@ export const INITIAL_SARPRAS_DATA = [
   // Politeknik KP Jembrana
   {
     id: 'SAR-JMB-001',
-    bmnCode: 'BMN-3.05.03.01.050-0012',
     name: 'Unit Pengolahan Ikan Lemuru & Lab Pengalengan Sarden Pengambengan',
     satdikId: 'poltek-kp-jembrana',
     satdikName: 'Politeknik Kelautan dan Perikanan Jembrana',
@@ -1177,7 +1149,6 @@ export const INITIAL_SARPRAS_DATA = [
   // Akademi Komunitas KP Wakatobi
   {
     id: 'SAR-WKT-001',
-    bmnCode: 'BMN-3.05.04.01.055-0005',
     name: 'Pusat Praktik Konservasi Terumbu Karang & Ekowisata Bahari Wangi-Wangi',
     satdikId: 'akkp-wakatobi',
     satdikName: 'Akademi Komunitas KP Wakatobi',
@@ -1203,7 +1174,6 @@ export const INITIAL_SARPRAS_DATA = [
   // SUPM Ladong (Aceh)
   {
     id: 'SAR-LDG-001',
-    bmnCode: 'BMN-3.05.01.04.060-0002',
     name: 'Kapal Latih KM. Ladong Bahari 01',
     satdikId: 'supm-ladong',
     satdikName: 'SUPM Ladong Aceh',
@@ -1227,7 +1197,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-LDG-002',
-    bmnCode: 'BMN-3.05.06.01.060-0010',
     name: 'Asrama Taruna Teuku Umar & Ruang Makan Menza',
     satdikId: 'supm-ladong',
     satdikName: 'SUPM Ladong Aceh',
@@ -1253,7 +1222,6 @@ export const INITIAL_SARPRAS_DATA = [
   // SUPM Pariaman (Sumbar)
   {
     id: 'SAR-PRM-001',
-    bmnCode: 'BMN-3.05.01.04.065-0004',
     name: 'Kapal Latih KM. Pariaman Bahari 02',
     satdikId: 'supm-pariaman',
     satdikName: 'SUPM Pariaman',
@@ -1277,7 +1245,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-PRM-002',
-    bmnCode: 'BMN-3.05.03.01.065-0020',
     name: 'Laboratorium Pengolahan Hasil Laut & TEFA Dendeng Tuna & Randang Belut',
     satdikId: 'supm-pariaman',
     satdikName: 'SUPM Pariaman',
@@ -1303,7 +1270,6 @@ export const INITIAL_SARPRAS_DATA = [
   // SUPM Kotaagung (Lampung)
   {
     id: 'SAR-KTG-001',
-    bmnCode: 'BMN-3.05.02.01.070-0015',
     name: 'Tambak Pembesaran Udang Vaname Way Gelang',
     satdikId: 'supm-kotaagung',
     satdikName: 'SUPM Kotaagung Lampung',
@@ -1327,7 +1293,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-KTG-002',
-    bmnCode: 'BMN-3.05.01.04.070-0008',
     name: 'Bengkel Mesin Perkapalan & Bubut SUPM Kotaagung',
     satdikId: 'supm-kotaagung',
     satdikName: 'SUPM Kotaagung Lampung',
@@ -1353,7 +1318,6 @@ export const INITIAL_SARPRAS_DATA = [
   // SUPM Tegal (Jawa Tengah)
   {
     id: 'SAR-TGL-001',
-    bmnCode: 'BMN-3.05.01.04.075-0001',
     name: 'Kapal Latih KM. Bahari Mandiri 01',
     satdikId: 'supm-tegal',
     satdikName: 'SUPM Tegal',
@@ -1377,7 +1341,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-TGL-002',
-    bmnCode: 'BMN-3.05.04.01.075-0014',
     name: 'Gedung Workshop Alat Tangkap & Kolam Uji Dinamika Jaring',
     satdikId: 'supm-tegal',
     satdikName: 'SUPM Tegal',
@@ -1401,7 +1364,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-TGL-003',
-    bmnCode: 'BMN-3.05.03.01.075-0028',
     name: 'Unit Pengolahan Ikan & Cold Storage 15 Ton Martoloyo',
     satdikId: 'supm-tegal',
     satdikName: 'SUPM Tegal',
@@ -1427,7 +1389,6 @@ export const INITIAL_SARPRAS_DATA = [
   // SUPM Pontianak (Kalbar)
   {
     id: 'SAR-PTK-001',
-    bmnCode: 'BMN-3.05.02.01.080-0012',
     name: 'Balai Budidaya Ikan Air Tawar & Hatchery Jelawat Sungai Raya',
     satdikId: 'supm-pontianak',
     satdikName: 'SUPM Pontianak',
@@ -1451,7 +1412,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-PTK-002',
-    bmnCode: 'BMN-3.05.01.04.080-0003',
     name: 'Kapal Latih KM. Kapuas Bahari 01',
     satdikId: 'supm-pontianak',
     satdikName: 'SUPM Pontianak',
@@ -1477,7 +1437,6 @@ export const INITIAL_SARPRAS_DATA = [
   // SUPM Bone (Sulsel)
   {
     id: 'SAR-SBN-001',
-    bmnCode: 'BMN-3.05.02.01.085-0014',
     name: 'Tambak Percontohan Udang Windu & Bandeng Bajoe',
     satdikId: 'supm-bone',
     satdikName: 'SUPM Bone',
@@ -1501,7 +1460,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-SBN-002',
-    bmnCode: 'BMN-3.05.06.01.085-0006',
     name: 'Gedung Asrama Siswa Taruna Arung Palakka',
     satdikId: 'supm-bone',
     satdikName: 'SUPM Bone',
@@ -1527,7 +1485,6 @@ export const INITIAL_SARPRAS_DATA = [
   // SUPM Waiheru Ambon (Maluku)
   {
     id: 'SAR-WHR-001',
-    bmnCode: 'BMN-3.05.01.04.090-0001',
     name: 'Kapal Latih KM. Siwalima 01',
     satdikId: 'supm-waiheru',
     satdikName: 'SUPM Waiheru Ambon',
@@ -1551,7 +1508,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-WHR-002',
-    bmnCode: 'BMN-3.05.03.01.090-0019',
     name: 'Teaching Factory Pengasapan Ikan Cakalang Fufu & Abon Ikan Laut Banda',
     satdikId: 'supm-waiheru',
     satdikName: 'SUPM Waiheru Ambon',
@@ -1575,7 +1531,6 @@ export const INITIAL_SARPRAS_DATA = [
   },
   {
     id: 'SAR-WHR-003',
-    bmnCode: 'BMN-3.05.02.01.090-0032',
     name: 'Keramba Jaring Apung Teluk Baguala Ambon',
     satdikId: 'supm-waiheru',
     satdikName: 'SUPM Waiheru Ambon',

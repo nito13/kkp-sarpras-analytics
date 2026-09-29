@@ -118,23 +118,23 @@ try {
     echo "  -> Berhasil menyimpan $userCount data Akun Pengguna.\n";
 
     // 6. Masukkan Assets Sarpras
-    echo "[5/5] Mengisi inventaris aset Sarpras BMN...\n";
+    echo "[5/5] Mengisi inventaris aset Sarpras...\n";
     $stmtAsset = $pdo->prepare("
         INSERT INTO `assets` (
-            id, bmn_code, name, satdik_id, satdik_name, category, subcategory,
-            `condition`, condition_score, acquisition_year, valuation, utilization_rate,
+            id, name, satdik_id, satdik_name, category, subcategory,
+            `condition`, condition_score, acquisition_year, utilization_rate,
             capacity_desc, specs, certification_status, certification_authority,
             cert_expiry_date, last_maintenance_date, next_maintenance_date,
             maintenance_urgency, estimated_repair_cost, issues_summary
         ) VALUES (
-            :id, :bmn_code, :name, :satdik_id, :satdik_name, :category, :subcategory,
-            :condition, :condition_score, :acquisition_year, :valuation, :utilization_rate,
+            :id, :name, :satdik_id, :satdik_name, :category, :subcategory,
+            :condition, :condition_score, :acquisition_year, :utilization_rate,
             :capacity_desc, :specs, :certification_status, :certification_authority,
             :cert_expiry_date, :last_maintenance_date, :next_maintenance_date,
             :maintenance_urgency, :estimated_repair_cost, :issues_summary
         ) ON DUPLICATE KEY UPDATE
             name = VALUES(name), `condition` = VALUES(`condition`), 
-            condition_score = VALUES(condition_score), valuation = VALUES(valuation),
+            condition_score = VALUES(condition_score),
             maintenance_urgency = VALUES(maintenance_urgency), issues_summary = VALUES(issues_summary);
     ");
 
@@ -142,7 +142,6 @@ try {
     foreach ($data['assets'] as $a) {
         $stmtAsset->execute([
             ':id' => $a['id'],
-            ':bmn_code' => $a['bmnCode'] ?? null,
             ':name' => $a['name'],
             ':satdik_id' => $a['satdikId'],
             ':satdik_name' => $a['satdikName'],
@@ -151,7 +150,6 @@ try {
             ':condition' => $a['condition'],
             ':condition_score' => $a['conditionScore'] ?? 80,
             ':acquisition_year' => $a['acquisitionYear'] ?? null,
-            ':valuation' => $a['valuation'] ?? 0,
             ':utilization_rate' => $a['utilizationRate'] ?? 0,
             ':capacity_desc' => $a['capacityDesc'] ?? null,
             ':specs' => $a['specs'] ?? null,
@@ -166,7 +164,7 @@ try {
         ]);
         $assetCount++;
     }
-    echo "  -> Berhasil menyimpan $assetCount data Aset BMN.\n";
+    echo "  -> Berhasil menyimpan $assetCount data Aset Sarpras.\n";
 
     echo "\n=== SEEDING BERHASIL! DATABASE KKP_SARPRAS_DB SIAP DIGUNAKAN ===\n";
 
