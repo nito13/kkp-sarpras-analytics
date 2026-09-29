@@ -1,8 +1,20 @@
 import { SATDIK_LIST, SARPRAS_CATEGORIES, INITIAL_SARPRAS_DATA } from './kkpData.js';
 
 // Generates a comprehensive dataset of 100+ assets ensuring all 18 Satdik have rich, realistic sarpras
+
+export function normalizeCategory(cat) {
+  if (!cat) return 'penangkapan_mesin';
+  if (cat === 'maritim_kapal' || cat === 'alat_tangkap') return 'penangkapan_mesin';
+  if (cat === 'akuakultur') return 'budidaya_perikanan';
+  if (cat === 'pengolahan_upi') return 'pengolahan_hasil';
+  if (cat === 'tefa') return 'agribisnis_penyuluhan';
+  if (cat === 'administrasi_umum') return 'administrasi_umum';
+  if (cat === 'asrama_penunjang') return 'konservasi_pariwisata';
+  return cat;
+}
+
 export function getFullSarprasData() {
-  const assets = [...INITIAL_SARPRAS_DATA];
+  const assets = [...INITIAL_SARPRAS_DATA].map(a => ({ ...a, category: normalizeCategory(a.category) }));
 
   // Helper to check existing count per satdik
   const countPerSatdik = {};
@@ -14,7 +26,7 @@ export function getFullSarprasData() {
   const additionalTemplates = [
     {
       satdikId: 'poltek-kp-dumai',
-      category: 'maritim_kapal',
+      category: 'penangkapan_mesin',
       subcategory: 'Bengkel Permesinan Kapal',
       name: 'Bengkel Bubut & Fabrikasi Mesin Kapal Dumai',
       specs: '5 Unit Mesin Bubut Metal 3-Phase, 4 Unit Mesin Las SMAW & GTAW Argon, Crane Gantry 5 Ton',
@@ -35,7 +47,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-dumai',
-      category: 'asrama_penunjang',
+      category: 'konservasi_pariwisata',
       subcategory: 'Asrama Taruna',
       name: 'Gedung Asrama Lancang Kuning Taruna Dumai',
       specs: 'Gedung 3 Lantai, 80 Kamar, Sistem Filter Air Payau Menjadi Tawar (SWRO 20 m³/hari)',
@@ -55,8 +67,29 @@ export function getFullSarprasData() {
       issuesSummary: 'Unit SWRO (Sea Water Reverse Osmosis) berfungsi prima memasok kebutuhan air bersih asrama.',
     },
     {
+      satdikId: 'poltek-kp-dumai',
+      category: 'administrasi_umum',
+      subcategory: 'Gedung Kantor & Administrasi',
+      name: 'Gedung Administrasi & Pusat Layanan Akademik Dumai',
+      specs: 'Gedung 2 Lantai, Ruang Tata Usaha, Ruang Dosen & Rapat Senat, Jaringan LAN Fiber Optic 1 Gbps',
+      condition: 'Baik',
+      conditionScore: 90,
+      acquisitionYear: 2019,
+      valuation: 6500000000,
+      utilizationRate: 91,
+      capacityDesc: 'Kapasitas 60 Staf & Dosen',
+      certificationStatus: 'Tidak Wajib',
+      certificationAuthority: 'Dinas Tata Ruang Kota Dumai',
+      certExpiryDate: '2031-12-31',
+      lastMaintenanceDate: '2025-11-10',
+      nextMaintenanceDate: '2026-05-10',
+      maintenanceUrgency: 'Normal',
+      estimatedRepairCost: 45000000,
+      issuesSummary: 'Kondisi operasional kantor dan layanan administrasi akademik lancar.',
+    },
+    {
       satdikId: 'poltek-kp-karawang',
-      category: 'pengolahan_upi',
+      category: 'pengolahan_hasil',
       subcategory: 'UPI & Laboratorium Pengujian',
       name: 'Unit Pengolahan Ikan Latih & Laboratorium Mutu Mikrobiologi',
       specs: 'Cleanroom Class 10.000, Mesin Vakum Thermoforming, Biosafety Cabinet Level 2, Autoclave Vertikal',
@@ -77,7 +110,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-karawang',
-      category: 'asrama_penunjang',
+      category: 'konservasi_pariwisata',
       subcategory: 'Asrama Taruna',
       name: 'Asrama Taruna Tarumanegara & Menza Bahari',
       specs: 'Gedung 3 Lantai, Kapasitas 480 Tempat Tidur, Menza Berkapasitas 500 Taruna, Lapangan Apel',
@@ -98,7 +131,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-bone',
-      category: 'pengolahan_upi',
+      category: 'pengolahan_hasil',
       subcategory: 'UPI & Cold Chain',
       name: 'Mini Plant Pengolahan Rumput Laut & Cold Storage 20 Ton Bone',
       specs: 'Ekstraktor Alkali Panas untuk ATC (Alkali Treated Cottonii), Mesin Pemotong Chip Rumput Laut, Cold Storage -20°C',
@@ -120,7 +153,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-bone',
-      category: 'asrama_penunjang',
+      category: 'konservasi_pariwisata',
       subcategory: 'Asrama Taruna',
       name: 'Gedung Asrama Taruna Mappanyukki',
       specs: 'Gedung 3 Lantai, Kapasitas 520 Taruna, Dapur Gas Sentral, Sistem Penampungan Air Hujan',
@@ -141,7 +174,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-kupang',
-      category: 'maritim_kapal',
+      category: 'penangkapan_mesin',
       subcategory: 'Kapal Latih Vokasi',
       name: 'Kapal Latih KM. Flobamora 01',
       specs: 'LOA: 28.0 m, 120 GT, Mesin Yanmar 600 HP, Pancing Rawai Tuna (Longline), Sonar Furuno',
@@ -162,7 +195,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-kupang',
-      category: 'pengolahan_upi',
+      category: 'pengolahan_hasil',
       subcategory: 'UPI & TEFA',
       name: "Teaching Factory Se'i Ikan & Abon Cakalang Timor",
       specs: 'Smoker Cabinet Digital 6 Rak Stainless Steel, Vacuum Packaging Machine, Cold Room 10 Ton',
@@ -183,7 +216,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-pangandaran',
-      category: 'asrama_penunjang',
+      category: 'konservasi_pariwisata',
       subcategory: 'Asrama Taruna',
       name: 'Asrama Taruna & Taruni Nyi Roro Kidul Pangandaran',
       specs: 'Gedung 2 Lantai Tahan Gempa & Tsunami-Ready, 60 Kamar, Ruang Komputer Multimedia',
@@ -204,7 +237,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-jembrana',
-      category: 'maritim_kapal',
+      category: 'penangkapan_mesin',
       subcategory: 'Kapal Latih & Kenavigasian',
       name: 'Kapal Latih KM. Bali Bahari 01 & Simulator Navigasi',
       specs: '90 GT, Mesin Mitsubishi 450 HP, Purse Seine Mini, Simulator JRC Selat Bali',
@@ -225,7 +258,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-jembrana',
-      category: 'asrama_penunjang',
+      category: 'konservasi_pariwisata',
       subcategory: 'Asrama Taruna',
       name: 'Asrama Taruna Tirta Gangga Jembrana',
       specs: 'Gedung 3 Lantai Arsitektur Bali-Modern, 72 Kamar, Ruang Menza Kapasitas 450 Taruna',
@@ -246,7 +279,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'akkp-wakatobi',
-      category: 'asrama_penunjang',
+      category: 'agribisnis_penyuluhan',
       subcategory: 'Asrama Taruna',
       name: 'Asrama Taruna Bajo Wangi-Wangi',
       specs: 'Gedung 2 Lantai Konsep Tropis Bahari, Kapasitas 220 Siswa, Menza Bersama',
@@ -267,7 +300,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'akkp-wakatobi',
-      category: 'akuakultur',
+      category: 'budidaya_perikanan',
       subcategory: 'Budidaya Teripang & Abalone',
       name: 'Unit Budidaya Teripang Pasir & Abalone Tropis Wakatobi',
       specs: '10 Bak Fiberglass Sirkulasi Air Laut Terbuka, Substrat Pasir Putih Terfilter, Pompa Solar Cell 3 kWp',
@@ -288,7 +321,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'supm-ladong',
-      category: 'pengolahan_upi',
+      category: 'pengolahan_hasil',
       subcategory: 'UPI & TEFA',
       name: 'TEFA Keumamah (Ikan Kayu Tradisional Aceh) & Cold Room',
       specs: 'Ruang Pengasapan Stainless Steel Higienis, Mesin Vacuum Packaging, Cold Room 5 Ton',
@@ -309,7 +342,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'supm-pariaman',
-      category: 'asrama_penunjang',
+      category: 'agribisnis_penyuluhan',
       subcategory: 'Asrama Taruna',
       name: 'Asrama Siswa Taruna Imam Bonjol Pariaman',
       specs: 'Gedung 2 Lantai, 48 Kamar Siswa, Ruang Makan Menza Bersama, Lapangan Futsal',
@@ -330,7 +363,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'supm-kotaagung',
-      category: 'asrama_penunjang',
+      category: 'agribisnis_penyuluhan',
       subcategory: 'Asrama Taruna',
       name: 'Asrama Siswa Taruna Raden Intan & Menza Way Gelang',
       specs: 'Gedung 2 Lantai, Kapasitas 360 Siswa, Dapur Sentral, Lapangan Upacara Taruna',
@@ -351,7 +384,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'supm-tegal',
-      category: 'asrama_penunjang',
+      category: 'agribisnis_penyuluhan',
       subcategory: 'Asrama Taruna',
       name: 'Gedung Asrama Siswa Taruna Bahari Kalinyamat',
       specs: 'Gedung 3 Lantai, Kapasitas 450 Siswa, Menza Kapasitas 500 Taruna, Klinik Kesehatan Bahari',
@@ -372,7 +405,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'supm-pontianak',
-      category: 'asrama_penunjang',
+      category: 'agribisnis_penyuluhan',
       subcategory: 'Asrama Taruna',
       name: 'Asrama Taruna Khatulistiwa & Balai Pertemuan',
       specs: 'Gedung 2 Lantai Konstruksi Beton Tiang Pancang Rawa, 45 Kamar Siswa, Menza Sungai Raya',

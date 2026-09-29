@@ -1,6 +1,6 @@
 <?php
 // backend/api/auth.php
-// REST API Otentikasi Pengguna SIM-SARPRAS KKP
+// REST API Otentikasi Pengguna SARPRAS KKP
 
 require_once __DIR__ . '/../config/database.php';
 

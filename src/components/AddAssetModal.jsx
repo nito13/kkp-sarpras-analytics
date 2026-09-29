@@ -90,7 +90,7 @@ export default function AddAssetModal({
             </div>
             <div>
               <h3 className="text-base sm:text-lg font-bold text-white">
-                Tambah Data Sarana Prasarana (BMN)
+                Tambah Data Sarana Prasarana
               </h3>
               <p className="text-xs text-slate-400">
                 Pencatatan aset baru pada Satuan Pendidikan Kementerian Kelautan dan Perikanan
@@ -129,7 +129,7 @@ export default function AddAssetModal({
             />
           </div>
 
-          {/* Row 2: Satdik & Kategori */}
+          {/* Row 2: Satdik & Bidang */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-slate-300 font-semibold block mb-1">Satuan Pendidikan (Satdik)</label>
@@ -146,7 +146,7 @@ export default function AddAssetModal({
             </div>
 
             <div>
-              <label className="text-slate-300 font-semibold block mb-1">Kategori Sarpras Vokasi</label>
+              <label className="text-slate-300 font-semibold block mb-1">Bidang Sarpras Vokasi</label>
               <select
                 name="category"
                 value={formData.category}
@@ -160,10 +160,10 @@ export default function AddAssetModal({
             </div>
           </div>
 
-          {/* Row 3: Subkategori & Kondisi */}
+          {/* Row 3: Sub-Bidang & Kondisi */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-slate-300 font-semibold block mb-1">Sub-Kategori / Tipe</label>
+              <label className="text-slate-300 font-semibold block mb-1">Sub-Bidang / Tipe</label>
               <input
                 type="text"
                 name="subcategory"
@@ -182,28 +182,15 @@ export default function AddAssetModal({
                 onChange={handleChange}
                 className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
               >
-                <option value="Baik">Baik (Laik Penuh)</option>
+                <option value="Baik">Baik (Layak Penuh)</option>
                 <option value="Rusak Ringan">Rusak Ringan</option>
                 <option value="Rusak Berat">Rusak Berat (Kritis)</option>
               </select>
             </div>
           </div>
 
-          {/* Row 4: Valuasi & Utilisasi */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label className="text-slate-300 font-semibold block mb-1">Nilai Valuasi BMN (Rp)</label>
-              <input
-                type="number"
-                name="valuation"
-                min="0"
-                step="50000000"
-                value={formData.valuation}
-                onChange={handleChange}
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
-              />
-            </div>
-
+          {/* Row 4: Utilisasi & Tahun Perolehan */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-slate-300 font-semibold block mb-1">Tingkat Utilisasi (%)</label>
               <input
@@ -254,37 +241,6 @@ export default function AddAssetModal({
               placeholder="Detail mesin utama, dimensi, daya listrik, tipe peralatan, dll."
               className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
             ></textarea>
-          </div>
-
-          {/* Status Sertifikasi & Estimasi Servis */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="text-slate-300 font-semibold block mb-1">Status Sertifikasi</label>
-              <select
-                name="certificationStatus"
-                value={formData.certificationStatus}
-                onChange={handleChange}
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
-              >
-                <option value="Tersertifikasi Aktif">Tersertifikasi Aktif</option>
-                <option value="Perlu Pembaruan">Perlu Pembaruan</option>
-                <option value="Kadaluarsa">Kadaluarsa</option>
-                <option value="Tidak Wajib">Tidak Wajib</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="text-slate-300 font-semibold block mb-1">Estimasi Kebutuhan Biaya Servis (Rp)</label>
-              <input
-                type="number"
-                name="estimatedRepairCost"
-                min="0"
-                step="10000000"
-                value={formData.estimatedRepairCost}
-                onChange={handleChange}
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
-              />
-            </div>
           </div>
 
           {/* Notes */}

@@ -1,6 +1,6 @@
 <?php
 // backend/config/database.php
-// Konfigurasi Database MySQL Laragon untuk SIM-SARPRAS KKP
+// Konfigurasi Database MySQL Laragon untuk SARPRAS KKP
 
 // Header CORS agar dapat diakses dari Frontend React (port 5173 atau port lainnya)
 if (php_sapi_name() !== 'cli') {

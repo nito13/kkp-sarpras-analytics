@@ -4,7 +4,6 @@ import {
   BarChart3, 
   MapPin, 
   Layers, 
-  School, 
   AlertTriangle, 
   PlusCircle
 } from 'lucide-react';
@@ -20,7 +19,6 @@ export default function MobileBottomNav({
     { id: 'dashboard', label: 'Ringkasan', icon: BarChart3 },
     { id: 'map', label: 'Peta', icon: MapPin },
     { id: 'explorer', label: 'Katalog', icon: Layers },
-    { id: 'vokasi', label: 'Standar', icon: School },
     { 
       id: 'maintenance', 
       label: 'Perbaikan', 

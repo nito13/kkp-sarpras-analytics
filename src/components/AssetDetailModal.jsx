@@ -6,7 +6,7 @@ import {
   ShieldCheck, 
   AlertTriangle, 
   Wrench, 
-  Coins, 
+  Activity, 
   FileText, 
   CheckCircle2, 
   Ship, 
@@ -27,7 +27,6 @@ import {
   RotateCcw
 } from 'lucide-react';
 import { SATDIK_LIST, SARPRAS_CATEGORIES } from '../data/kkpData';
-import { formatRupiah } from '../data/sarprasGenerator';
 
 export default function AssetDetailModal({
   asset,
@@ -51,7 +50,7 @@ export default function AssetDetailModal({
     bmnCode: '',
     satdikId: '',
     satdikName: '',
-    category: 'maritim_kapal',
+    category: 'penangkapan_mesin',
     subcategory: '',
     condition: 'Baik',
     conditionScore: 85,
@@ -82,7 +81,7 @@ export default function AssetDetailModal({
         bmnCode: asset.bmnCode || '',
         satdikId: asset.satdikId || (SATDIK_LIST[0]?.id || ''),
         satdikName: asset.satdikName || (SATDIK_LIST[0]?.name || ''),
-        category: asset.category || (SARPRAS_CATEGORIES[0]?.id || 'maritim_kapal'),
+        category: asset.category || (SARPRAS_CATEGORIES[0]?.id || 'penangkapan_mesin'),
         subcategory: asset.subcategory || '',
         condition: asset.condition || 'Baik',
         conditionScore: asset.conditionScore !== undefined ? asset.conditionScore : 85,
@@ -171,15 +170,10 @@ export default function AssetDetailModal({
       setActiveTab('identitas');
       return;
     }
-    if (!formData.bmnCode.trim()) {
-      setErrorMsg('Kode BMN tidak boleh kosong.');
-      setActiveTab('identitas');
-      return;
-    }
 
     const payload = {
       name: formData.name.trim(),
-      bmnCode: formData.bmnCode.trim(),
+      bmnCode: (formData.bmnCode || asset.bmnCode || '').trim(),
       satdikId: formData.satdikId,
       satdikName: formData.satdikName,
       category: formData.category,
@@ -262,7 +256,7 @@ export default function AssetDetailModal({
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-mono text-[11px] text-cyan-400 font-semibold px-2 py-0.5 bg-cyan-950/80 rounded border border-cyan-800">
-                  {isFullEditMode ? (formData.bmnCode || 'Kode BMN') : asset.bmnCode}
+                  {asset.id}
                 </span>
                 
                 <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
@@ -362,7 +356,7 @@ export default function AssetDetailModal({
                       </span>
                     </h4>
                     <p className="text-[11px] text-cyan-200/90">
-                      Anda berwenang mengedit seluruh master atribut BMN: nama, satdik, valuasi, utilisasi, spesifikasi, dan jadwal pemeliharaan.
+                      Anda berwenang mengedit seluruh master atribut sarana prasarana: nama, satdik, utilisasi, spesifikasi, dan jadwal pemeliharaan.
                     </p>
                   </div>
                 </div>
@@ -381,9 +375,9 @@ export default function AssetDetailModal({
               <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-slate-800 scrollbar-none">
                 {[
                   { id: 'identitas', label: '1. Identitas & Satdik', icon: FileText },
-                  { id: 'valuasi', label: '2. Valuasi & Utilisasi', icon: Coins },
+                  { id: 'valuasi', label: '2. Utilisasi & Perolehan', icon: Activity },
                   { id: 'kondisi', label: '3. Kondisi Fisik', icon: Wrench },
-                  { id: 'spesifikasi', label: '4. Spesifikasi & Sertifikasi', icon: ShieldCheck },
+                  { id: 'spesifikasi', label: '4. Spesifikasi Teknis', icon: Sliders },
                   { id: 'catatan', label: '5. Catatan Teknis', icon: AlertTriangle },
                 ].map(tab => {
                   const TabIcon = tab.icon;
@@ -413,7 +407,7 @@ export default function AssetDetailModal({
                     {/* Nama Sarpras */}
                     <div className="sm:col-span-2">
                       <label className="text-xs font-semibold text-slate-300 block mb-1.5">
-                        Nama Sarana / Prasarana BMN <span className="text-rose-400">*</span>
+                        Nama Sarana / Prasarana <span className="text-rose-400">*</span>
                       </label>
                       <input
                         type="text"
@@ -421,20 +415,6 @@ export default function AssetDetailModal({
                         onChange={(e) => handleInputChange('name', e.target.value)}
                         placeholder="Contoh: Kapal Latih KM. Madidihang 03"
                         className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-medium"
-                      />
-                    </div>
-
-                    {/* Kode BMN */}
-                    <div>
-                      <label className="text-xs font-semibold text-slate-300 block mb-1.5">
-                        Kode Register BMN <span className="text-rose-400">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.bmnCode}
-                        onChange={(e) => handleInputChange('bmnCode', e.target.value)}
-                        placeholder="BMN-3.05.01.04.001-0001"
-                        className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-cyan-300 font-mono focus:outline-none focus:border-cyan-500"
                       />
                     </div>
 
@@ -456,10 +436,10 @@ export default function AssetDetailModal({
                       </select>
                     </div>
 
-                    {/* Kategori Bidang */}
+                    {/* Bidang Sarpras */}
                     <div>
                       <label className="text-xs font-semibold text-slate-300 block mb-1.5">
-                        Kategori Bidang Sarpras <span className="text-rose-400">*</span>
+                        Bidang Sarpras <span className="text-rose-400">*</span>
                       </label>
                       <select
                         value={formData.category}
@@ -474,10 +454,10 @@ export default function AssetDetailModal({
                       </select>
                     </div>
 
-                    {/* Sub-Kategori */}
+                    {/* Sub-Bidang */}
                     <div>
                       <label className="text-xs font-semibold text-slate-300 block mb-1.5">
-                        Sub-Kategori Spesifik
+                        Sub-Bidang Spesifik
                       </label>
                       <input
                         type="text"
@@ -495,31 +475,8 @@ export default function AssetDetailModal({
               {activeTab === 'valuasi' && (
                 <div className="bg-slate-800/60 p-4 sm:p-5 rounded-xl border border-slate-700/60 space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {/* Nilai Valuasi BMN */}
-                    <div className="sm:col-span-2">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <label className="text-xs font-semibold text-slate-300">
-                          Nilai Valuasi BMN (Rupiah) <span className="text-rose-400">*</span>
-                        </label>
-                        <span className="text-xs font-mono font-bold text-emerald-400">
-                          {formatRupiah(formData.valuation)}
-                        </span>
-                      </div>
-                      <input
-                        type="number"
-                        min="0"
-                        step="1000000"
-                        value={formData.valuation}
-                        onChange={(e) => handleInputChange('valuation', e.target.value)}
-                        className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-emerald-400 font-mono font-bold focus:outline-none focus:border-cyan-500"
-                      />
-                      <p className="text-[11px] text-slate-400 mt-1">
-                        Sesuai nilai perolehan wajar / audit Simak BMN KKP.
-                      </p>
-                    </div>
-
                     {/* Tahun Perolehan */}
-                    <div>
+                    <div className="sm:col-span-3">
                       <label className="text-xs font-semibold text-slate-300 block mb-1.5">
                         Tahun Perolehan <span className="text-rose-400">*</span>
                       </label>
@@ -632,26 +589,6 @@ export default function AssetDetailModal({
                       </select>
                     </div>
 
-                    {/* Estimasi Biaya Perbaikan */}
-                    <div className="sm:col-span-2">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <label className="text-xs font-semibold text-slate-300">
-                          Estimasi Biaya Perbaikan / Docking (Rp)
-                        </label>
-                        <span className="text-xs font-mono font-bold text-amber-400">
-                          {formatRupiah(formData.estimatedRepairCost)}
-                        </span>
-                      </div>
-                      <input
-                        type="number"
-                        min="0"
-                        step="1000000"
-                        value={formData.estimatedRepairCost}
-                        onChange={(e) => handleInputChange('estimatedRepairCost', e.target.value)}
-                        className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-amber-300 font-mono focus:outline-none focus:border-cyan-500"
-                      />
-                    </div>
-
                     {/* Tanggal Pemeliharaan Terakhir */}
                     <div>
                       <label className="text-xs font-semibold text-slate-300 block mb-1.5">
@@ -712,50 +649,6 @@ export default function AssetDetailModal({
                         className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-slate-200 font-mono leading-relaxed focus:outline-none focus:border-cyan-500"
                       ></textarea>
                     </div>
-
-                    {/* Status Sertifikasi Kelayakan */}
-                    <div>
-                      <label className="text-xs font-semibold text-slate-300 block mb-1.5">
-                        Status Sertifikasi Kelayakan
-                      </label>
-                      <select
-                        value={formData.certificationStatus}
-                        onChange={(e) => handleInputChange('certificationStatus', e.target.value)}
-                        className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
-                      >
-                        <option value="Tersertifikasi Aktif">Tersertifikasi Aktif</option>
-                        <option value="Perlu Pembaruan">Perlu Pembaruan</option>
-                        <option value="Kadaluarsa">Kadaluarsa</option>
-                        <option value="Tidak Ada / Belum Terdata">Tidak Ada / Belum Terdata</option>
-                      </select>
-                    </div>
-
-                    {/* Lembaga Penerbit Sertifikasi */}
-                    <div>
-                      <label className="text-xs font-semibold text-slate-300 block mb-1.5">
-                        Lembaga Pemberi Sertifikat
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.certificationAuthority}
-                        onChange={(e) => handleInputChange('certificationAuthority', e.target.value)}
-                        placeholder="BKI, Ditjen Hubla, KKP, Sucofindo, dll."
-                        className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
-                      />
-                    </div>
-
-                    {/* Masa Berlaku Sertifikat */}
-                    <div>
-                      <label className="text-xs font-semibold text-slate-300 block mb-1.5">
-                        Masa Berlaku Sertifikat (Exp. Date)
-                      </label>
-                      <input
-                        type="date"
-                        value={formData.certExpiryDate || ''}
-                        onChange={(e) => handleInputChange('certExpiryDate', e.target.value)}
-                        className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
-                      />
-                    </div>
                   </div>
                 </div>
               )}
@@ -793,7 +686,7 @@ export default function AssetDetailModal({
                     className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-cyan-900/40 transition-all active:scale-95 border border-cyan-400/40"
                   >
                     <Save className="w-4 h-4" />
-                    <span>Simpan Seluruh Data BMN</span>
+                    <span>Simpan Seluruh Data Sarpras</span>
                   </button>
                 </div>
               </div>
@@ -804,18 +697,11 @@ export default function AssetDetailModal({
             /* ============================================================== */
             <div className="space-y-5 animate-fadeIn">
               {/* Quick Metrics Bar */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                 <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700/60">
                   <span className="text-slate-400 block text-[11px]">Satuan Pendidikan</span>
                   <span className="font-semibold text-white mt-0.5 block truncate" title={asset.satdikName}>
                     {asset.satdikName}
-                  </span>
-                </div>
-
-                <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700/60">
-                  <span className="text-slate-400 block text-[11px]">Nilai Valuasi BMN</span>
-                  <span className="font-bold text-emerald-400 mt-0.5 block truncate">
-                    {formatRupiah(asset.valuation)}
                   </span>
                 </div>
 
@@ -842,53 +728,24 @@ export default function AssetDetailModal({
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
                   <div>
-                    <span className="text-slate-400 text-[11px] block">Kapasitas Operasional:</span>
-                    <p className="text-slate-200 font-medium mt-0.5">{asset.capacityDesc || '-'}</p>
+                    <span className="text-slate-400 text-[11px] block">Bidang Sarpras:</span>
+                    <p className="text-slate-200 font-medium mt-0.5 truncate" title={SARPRAS_CATEGORIES.find(c => c.id === asset.category)?.name || asset.category}>
+                      {SARPRAS_CATEGORIES.find(c => c.id === asset.category)?.name || asset.category || '-'}
+                    </p>
                   </div>
                   <div>
-                    <span className="text-slate-400 text-[11px] block">Sub-Kategori:</span>
+                    <span className="text-slate-400 text-[11px] block">Sub-Bidang:</span>
                     <p className="text-slate-200 font-medium mt-0.5">{asset.subcategory || '-'}</p>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <span className="text-slate-400 text-[11px] block">Kapasitas Operasional:</span>
+                    <p className="text-slate-200 font-medium mt-0.5">{asset.capacityDesc || '-'}</p>
                   </div>
                   <div className="sm:col-span-2">
                     <span className="text-slate-400 text-[11px] block">Detail Mesin / Konfigurasi:</span>
                     <p className="text-slate-200 font-mono text-[11px] bg-slate-900/80 p-2.5 rounded-lg border border-slate-800 mt-1 leading-relaxed">
                       {asset.specs || '-'}
                     </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Kelayakan & Sertifikasi Info */}
-              <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700/60 space-y-2">
-                <div className="flex items-center justify-between text-xs font-bold text-slate-200">
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    <span>Status Kelayakan & Legalitas Sertifikasi</span>
-                  </div>
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                    asset.certificationStatus === 'Tersertifikasi Aktif' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' :
-                    asset.certificationStatus === 'Perlu Pembaruan' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40' :
-                    'bg-rose-500/20 text-rose-400 border border-rose-500/40'
-                  }`}>
-                    {asset.certificationStatus || 'Belum Terdata'}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">
-                  <div>
-                    <span className="text-slate-400 text-[11px] block">Lembaga Pemberi Sertifikat:</span>
-                    <span className="text-slate-200 font-medium">{asset.certificationAuthority || '-'}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 text-[11px] block">Masa Berlaku Sertifikat:</span>
-                    <span className="text-slate-200 font-medium">{asset.certExpiryDate || '-'}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 text-[11px] block">Jadwal Pemeliharaan Berikutnya:</span>
-                    <span className="text-slate-200 font-medium flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>{asset.nextMaintenanceDate || '-'}</span>
-                    </span>
                   </div>
                 </div>
               </div>
@@ -900,9 +757,12 @@ export default function AssetDetailModal({
                     <Wrench className="w-4 h-4 text-amber-400" />
                     <span>Analisis Kondisi & Catatan Pemeliharaan</span>
                   </div>
-                  <span className="text-xs text-amber-400 font-mono">
-                    Estimasi Biaya: {formatRupiah(asset.estimatedRepairCost)}
-                  </span>
+                  {asset.nextMaintenanceDate && (
+                    <span className="text-[11px] text-slate-400 font-medium flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Jadwal Berikutnya: {asset.nextMaintenanceDate}</span>
+                    </span>
+                  )}
                 </div>
 
                 {/* Quick Edit Form for Operator / Fast Condition Edit */}
@@ -980,7 +840,7 @@ export default function AssetDetailModal({
                         {canEditFull ? (
                           <span className="text-[11px] text-cyan-400 flex items-center gap-1">
                             <Sparkles className="w-3.5 h-3.5" />
-                            <span>Akun Anda memiliki kendali penuh atas master BMN ini.</span>
+                            <span>Akun Anda memiliki kendali penuh atas master data sarpras ini.</span>
                           </span>
                         ) : canEditOwn && isOwnCampus ? (
                           <span className="text-[11px] text-amber-300 flex items-center gap-1">

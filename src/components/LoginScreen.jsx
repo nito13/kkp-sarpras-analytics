@@ -4,7 +4,6 @@ import {
   Mail, 
   Eye, 
   EyeOff, 
-  ShieldCheck, 
   Building2, 
   CheckCircle2, 
   AlertCircle, 
@@ -89,26 +88,17 @@ export default function LoginScreen({ onLogin }) {
       <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-cyan-600/10 blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-blue-600/10 blur-[120px] pointer-events-none"></div>
 
-      {/* Top Ministry Banner */}
-      <div className="max-w-4xl mx-auto w-full flex items-center justify-between text-xs py-2 text-slate-400 relative z-10">
-        <div className="flex items-center space-x-2">
-          <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          <span className="font-semibold text-slate-300">Portal Keamanan SSO KKP Terpadu</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="hidden sm:inline font-mono text-[11px] text-cyan-400">
-            SIM-SARPRAS v2.6 • 2026/2027
-          </span>
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center justify-center"
-            title={isDark ? "Beralih ke Mode Terang (Light Mode)" : "Beralih ke Mode Gelap (Dark Mode)"}
-            aria-label="Toggle Theme"
-          >
-            {isDark ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-sky-400" />}
-          </button>
-        </div>
+      {/* Top Bar (Theme Toggle) */}
+      <div className="max-w-4xl mx-auto w-full flex items-center justify-end text-xs py-2 text-slate-400 relative z-10">
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center justify-center"
+          title={isDark ? "Beralih ke Mode Terang (Light Mode)" : "Beralih ke Mode Gelap (Dark Mode)"}
+          aria-label="Toggle Theme"
+        >
+          {isDark ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-sky-400" />}
+        </button>
       </div>
 
       {/* Center Auth Card */}
@@ -133,7 +123,7 @@ export default function LoginScreen({ onLogin }) {
                 Kementerian Kelautan dan Perikanan Republik Indonesia
               </span>
               <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight mt-1">
-                SIM-SARPRAS <span className="text-cyan-400">KKP</span>
+                SARPRAS <span className="text-cyan-400">KKP</span>
               </h1>
               <p className="text-xs text-slate-400 mt-1 max-w-md mx-auto">
                 Sistem Informasi & Analitik Sarana Prasarana Satuan Pendidikan Vokasi Kelautan dan Perikanan (BPPSDM KP)
@@ -228,7 +218,7 @@ export default function LoginScreen({ onLogin }) {
               ) : (
                 <>
                   <KeyRound className="w-4 h-4" />
-                  <span>Masuk ke Sistem SIM-SARPRAS</span>
+                  <span>Masuk ke Sistem SARPRAS</span>
                 </>
               )}
             </button>
@@ -280,13 +270,6 @@ export default function LoginScreen({ onLogin }) {
         </div>
       </div>
 
-      {/* Official Government Footer on Login Screen */}
-      <div className="max-w-4xl mx-auto w-full text-center text-[11px] text-slate-500 py-3 relative z-10 border-t border-slate-800/60">
-        <p>© 2026 Kementerian Kelautan dan Perikanan Republik Indonesia • Hak Cipta Dilindungi Undang-Undang</p>
-        <p className="text-[10px] text-slate-600 mt-0.5">
-          Gedung Mina Bahari III, Jl. Medan Merdeka Timur No. 16, Jakarta Pusat 10110
-        </p>
-      </div>
     </div>
   );
 }

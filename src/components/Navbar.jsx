@@ -10,7 +10,6 @@ import {
   Download, 
   Ship, 
   Sparkles,
-  School,
   Activity,
   User,
   LogOut,
@@ -22,7 +21,6 @@ import {
   Check,
   Wifi
 } from 'lucide-react';
-import { formatRupiah } from '../data/sarprasGenerator';
 import { useTheme } from '../context/ThemeContext';
 import logoKkp from '../assets/logo-kkp.png';
 
@@ -30,7 +28,6 @@ export default function Navbar({
   activeTab,
   setActiveTab,
   totalAssets,
-  totalValuation,
   criticalCount,
   onOpenAddModal,
   onExportCSV,
@@ -43,17 +40,20 @@ export default function Navbar({
   const { isDark, toggleTheme } = useTheme();
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [selectedIp, setSelectedIp] = useState('10.110.147.40');
+  const availableNetworks = [
+    { name: 'Wi-Fi', ip: '10.110.147.40' },
+    { name: 'Hotspot / LAN', ip: '192.168.137.1' },
+  ];
 
-  const networkIp = '10.110.147.6';
   const mobileAccessUrl = typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
     ? `${window.location.protocol}//${window.location.hostname}:${window.location.port || '5173'}`
-    : `http://${networkIp}:5173`;
+    : `http://${selectedIp}:5173`;
 
   const navItems = [
     { id: 'dashboard', label: 'Ringkasan Eksekutif', icon: BarChart3 },
     { id: 'map', label: 'Peta Sebaran Geospasial', icon: MapPin },
-    { id: 'explorer', label: 'Inventaris & Katalog BMN', icon: Layers },
-    { id: 'vokasi', label: 'Standar & Kelayakan Vokasi', icon: School },
+    { id: 'explorer', label: 'Inventaris & Katalog Sarpras', icon: Layers },
     { 
       id: 'maintenance', 
       label: 'Early Warning & Perbaikan', 
@@ -79,11 +79,8 @@ export default function Navbar({
             <div className="min-w-0">
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <h1 className="text-sm sm:text-lg font-bold text-white tracking-tight leading-tight truncate">
-                  SIM-SARPRAS <span className="text-cyan-400 font-extrabold">KKP</span>
+                  SARPRAS <span className="text-cyan-400 font-extrabold">KKP</span>
                 </h1>
-                <span className="hidden sm:inline-block px-1.5 py-0.5 text-[9px] uppercase tracking-wider font-semibold bg-cyan-950 text-cyan-300 border border-cyan-700/50 rounded">
-                  v2.6 Analytics
-                </span>
               </div>
               <p className="text-[11px] text-slate-400 hidden sm:block">
                 Dashboard Analitik Sarana & Prasarana Vokasi Kelautan & Perikanan
@@ -117,7 +114,7 @@ export default function Navbar({
             <button
               onClick={() => setIsQrModalOpen(true)}
               className="hidden md:flex p-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-cyan-300 border border-slate-700 hover:border-cyan-500/50 transition-all hover:scale-105 active:scale-95 items-center justify-center shadow-sm"
-              title="Buka SIM-SARPRAS di Handphone / Tablet (Scan QR)"
+              title="Buka SARPRAS di Handphone / Tablet (Scan QR)"
               aria-label="Akses di HP"
             >
               <Smartphone className="w-4 h-4 text-cyan-400" />
@@ -161,7 +158,7 @@ export default function Navbar({
               <button
                 onClick={onLogout}
                 className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-600 text-rose-600 dark:text-rose-300 hover:text-white dark:hover:text-white border border-rose-300 dark:border-rose-500/40 hover:border-rose-600 text-xs font-bold transition-all shadow-sm flex-shrink-0 active:scale-95 group"
-                title="Keluar dari sesi SIM-SARPRAS"
+                title="Keluar dari sesi SARPRAS"
                 aria-label="Logout"
               >
                 <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-500 dark:text-rose-400 group-hover:text-white transition-colors" />
@@ -192,12 +189,6 @@ export default function Navbar({
                 {tab.badge && (
                   <span className={`px-1.5 py-0.2 text-[10px] font-bold rounded-full ${tab.badgeColor}`}>
                     {tab.badge}
-                  </span>
-                )}
-
-                {tab.isNew && !isActive && (
-                  <span className="px-1.5 py-0.2 text-[9px] font-extrabold uppercase rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                    Simulator
                   </span>
                 )}
 
@@ -240,7 +231,29 @@ export default function Navbar({
               </button>
             </div>
 
-            <div className="py-4 space-y-4">
+            <div className="py-4 space-y-3">
+              {/* Pilihan Interface Jaringan Server */}
+              <div className="flex items-center justify-center gap-1.5 p-1 bg-slate-950/70 rounded-xl border border-slate-800">
+                {availableNetworks.map((net) => {
+                  const isCurrent = selectedIp === net.ip;
+                  return (
+                    <button
+                      key={net.ip}
+                      type="button"
+                      onClick={() => setSelectedIp(net.ip)}
+                      className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all ${
+                        isCurrent
+                          ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-900/40'
+                          : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
+                      }`}
+                    >
+                      <span>{net.name}</span>
+                      <span className="block text-[10px] font-mono opacity-80">{net.ip}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
               <div className="w-48 h-48 mx-auto bg-white p-3 rounded-2xl shadow-xl border border-slate-600 flex items-center justify-center">
                 <img 
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(mobileAccessUrl)}`}

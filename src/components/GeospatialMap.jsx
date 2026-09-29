@@ -4,7 +4,6 @@ import {
   Navigation, 
   School, 
   Building2, 
-  Coins, 
   CheckCircle2, 
   AlertTriangle, 
   ExternalLink, 
@@ -19,7 +18,6 @@ import {
   Locate
 } from 'lucide-react';
 import { SATDIK_LIST } from '../data/kkpData';
-import { formatRupiah } from '../data/sarprasGenerator';
 
 export default function GeospatialMap({
   satdikBreakdown,
@@ -717,18 +715,6 @@ export default function GeospatialMap({
                 <div className="bg-slate-800/80 p-1.5 rounded-lg border border-slate-700">
                   <span className="text-slate-400 block">R. Berat</span>
                   <span className="font-bold text-rose-400 text-xs">{selectedMetrics.rusakBerat}</span>
-                </div>
-              </div>
-
-              {/* Valuasi & Kebutuhan Biaya */}
-              <div className="mt-3 pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                <div>
-                  <span className="text-slate-400 text-[10px] block">Total Valuasi BMN</span>
-                  <span className="font-bold text-emerald-400">{formatRupiah(selectedMetrics.valuation)}</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-slate-400 text-[10px] block">Kebutuhan Servis</span>
-                  <span className="font-bold text-amber-400">{formatRupiah(selectedMetrics.totalRepairNeeded)}</span>
                 </div>
               </div>
             </div>

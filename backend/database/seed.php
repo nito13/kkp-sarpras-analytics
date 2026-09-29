@@ -1,10 +1,10 @@
 <?php
 // backend/database/seed.php
-// Skrip Inisialisasi dan Seeder Database MySQL Laragon untuk SIM-SARPRAS KKP
+// Skrip Inisialisasi dan Seeder Database MySQL Laragon untuk SARPRAS KKP
 
 require_once __DIR__ . '/../config/database.php';
 
-echo "=== MEMULAI SETUP DATABASE SIM-SARPRAS KKP (LARAGON) ===\n\n";
+echo "=== MEMULAI SETUP DATABASE SARPRAS KKP (LARAGON) ===\n\n";
 
 try {
     // 1. Konek ke MySQL tanpa pilih database dulu untuk memastikan database kkp_sarpras_db dibuat

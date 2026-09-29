@@ -10,17 +10,15 @@ import {
   Building2, 
   Anchor, 
   Check, 
-  DollarSign,
   AlertCircle
 } from 'lucide-react';
-import { formatRupiah } from '../data/sarprasGenerator';
 
 export default function EarlyWarningMaintenance({
   urgentAssets,
   onResolveAsset
 }) {
   const [resolvedIds, setResolvedIds] = useState(new Set());
-  const [filterType, setFilterType] = useState('ALL'); // 'ALL' | 'Rusak Berat' | 'Kadaluarsa'
+  const [filterType, setFilterType] = useState('ALL'); // 'ALL' | 'Rusak Berat' | 'Rusak Ringan'
 
   const handleQuickResolve = (assetId) => {
     setResolvedIds(prev => new Set([...prev, assetId]));
@@ -32,11 +30,9 @@ export default function EarlyWarningMaintenance({
   const filteredUrgent = urgentAssets.filter(asset => {
     if (resolvedIds.has(asset.id)) return false;
     if (filterType === 'Rusak Berat') return asset.condition === 'Rusak Berat';
-    if (filterType === 'Kadaluarsa') return asset.certificationStatus === 'Kadaluarsa';
+    if (filterType === 'Rusak Ringan') return asset.condition === 'Rusak Ringan';
     return true;
   });
-
-  const totalUrgentCost = filteredUrgent.reduce((sum, a) => sum + (a.estimatedRepairCost || 0), 0);
 
   // Scheduled Docking & Maintenance Timeline
   const maintenanceSchedule = [
@@ -44,7 +40,6 @@ export default function EarlyWarningMaintenance({
       date: 'Oktober 2026',
       title: 'Jadwal Dry-Docking KM. Madidihang 03 (Poltek AUP)',
       facility: 'Galangan Kapal Jakarta Port',
-      budget: 'Rp 450.000.000',
       status: 'Terjadwal',
       type: 'Docking Kapal',
     },
@@ -52,15 +47,13 @@ export default function EarlyWarningMaintenance({
       date: 'November 2026',
       title: 'Overhaul Total & Penggantian Turbocharger KM. Frans Kaisiepo (Sorong)',
       facility: 'Dok & Galangan Kapal Sorong',
-      budget: 'Rp 1.450.000.000',
-      status: 'Mendesak (Pending Anggaran)',
+      status: 'Mendesak (Prioritas Tinggi)',
       type: 'Overhaul Darurat',
     },
     {
       date: 'November 2026',
-      title: 'Audit & Sertifikasi Kalibrasi Alat Lab Lingkungan (Poltek KP Sidoarjo)',
+      title: 'Audit & Kalibrasi Alat Lab Lingkungan (Poltek KP Sidoarjo)',
       facility: 'Komite Akreditasi Nasional (KAN)',
-      budget: 'Rp 60.000.000',
       status: 'Persiapan Berkas',
       type: 'Kalibrasi ISO',
     },
@@ -68,7 +61,6 @@ export default function EarlyWarningMaintenance({
       date: 'Desember 2026',
       title: 'Penggantian Evaporator & Kompresor Cold Storage 30 Ton (Poltek AUP)',
       facility: 'Teknisi Khusus Bitzer Refrigeration',
-      budget: 'Rp 680.000.000',
       status: 'Verifikasi Teknis',
       type: 'Refrigerasi',
     },
@@ -76,7 +68,6 @@ export default function EarlyWarningMaintenance({
       date: 'Januari 2027',
       title: 'Perbaikan Dermaga Apung & Gangway Pasir Putih (Poltek KP Pangandaran)',
       facility: 'Kontraktor Maritim Jabar',
-      budget: 'Rp 520.000.000',
       status: 'Usulan Prioritas',
       type: 'Dermaga Latih',
     },
@@ -109,8 +100,8 @@ export default function EarlyWarningMaintenance({
             <span className="text-lg font-black text-rose-400">{filteredUrgent.length} Fasilitas</span>
           </div>
           <div className="border-l border-slate-800 pl-4">
-            <span className="text-slate-400 text-[10px] block">Total Kebutuhan Darurat:</span>
-            <span className="text-base font-bold text-amber-400">{formatRupiah(totalUrgentCost)}</span>
+            <span className="text-slate-400 text-[10px] block">Prioritas Penanganan:</span>
+            <span className="text-sm font-bold text-amber-400">Segera / Mendesak</span>
           </div>
         </div>
       </div>
@@ -136,12 +127,12 @@ export default function EarlyWarningMaintenance({
             Rusak Berat ({urgentAssets.filter(a => a.condition === 'Rusak Berat').length})
           </button>
           <button
-            onClick={() => setFilterType('Kadaluarsa')}
+            onClick={() => setFilterType('Rusak Ringan')}
             className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
-              filterType === 'Kadaluarsa' ? 'bg-rose-600 text-white' : 'bg-slate-900 text-slate-400 hover:text-white'
+              filterType === 'Rusak Ringan' ? 'bg-amber-600 text-white' : 'bg-slate-900 text-slate-400 hover:text-white'
             }`}
           >
-            Sertifikat Mati ({urgentAssets.filter(a => a.certificationStatus === 'Kadaluarsa').length})
+            Rusak Ringan ({urgentAssets.filter(a => a.condition === 'Rusak Ringan').length})
           </button>
         </div>
       </div>
@@ -161,7 +152,6 @@ export default function EarlyWarningMaintenance({
                     <AlertTriangle className="w-5 h-5 animate-pulse" />
                   </div>
                   <div>
-                    <span className="font-mono text-[10px] text-slate-400 font-semibold">{asset.bmnCode}</span>
                     <h3 className="text-base font-bold text-white leading-tight">{asset.name}</h3>
                   </div>
                 </div>
@@ -190,18 +180,16 @@ export default function EarlyWarningMaintenance({
               {/* Status and Specs */}
               <div className="grid grid-cols-2 gap-2 mt-3 text-[11px]">
                 <div className="bg-slate-900/60 p-2 rounded-lg border border-slate-800">
-                  <span className="text-slate-400 block text-[10px]">Status Sertifikasi:</span>
-                  <span className={`font-semibold ${
-                    asset.certificationStatus === 'Kadaluarsa' ? 'text-rose-400' : 'text-amber-400'
-                  }`}>
-                    {asset.certificationStatus}
+                  <span className="text-slate-400 block text-[10px]">Tahun Perolehan:</span>
+                  <span className="font-semibold text-slate-200">
+                    {asset.acquisitionYear || '-'}
                   </span>
                 </div>
 
                 <div className="bg-slate-900/60 p-2 rounded-lg border border-slate-800">
-                  <span className="text-slate-400 block text-[10px]">Estimasi Biaya Perbaikan:</span>
+                  <span className="text-slate-400 block text-[10px]">Tingkat Urgensi:</span>
                   <span className="font-bold text-amber-400 font-mono">
-                    {formatRupiah(asset.estimatedRepairCost)}
+                    {asset.maintenanceUrgency || 'Segera'}
                   </span>
                 </div>
               </div>
@@ -274,11 +262,7 @@ export default function EarlyWarningMaintenance({
                 </div>
               </div>
 
-              <div className="flex items-center justify-between sm:justify-end gap-4 text-xs">
-                <div className="text-left sm:text-right">
-                  <span className="text-[10px] text-slate-400 block">Kebutuhan Anggaran</span>
-                  <span className="font-bold text-amber-400 font-mono">{item.budget}</span>
-                </div>
+              <div className="flex items-center justify-between sm:justify-end gap-3 text-xs">
                 <span className={`px-2.5 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap ${
                   item.status.includes('Mendesak')
                     ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'

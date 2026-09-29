@@ -3,7 +3,6 @@ import Navbar from './components/Navbar';
 import ExecutiveDashboard from './components/ExecutiveDashboard';
 import GeospatialMap from './components/GeospatialMap';
 import AssetExplorer from './components/AssetExplorer';
-import VokasiAnalytics from './components/VokasiAnalytics';
 import EarlyWarningMaintenance from './components/EarlyWarningMaintenance';
 import AddAssetModal from './components/AddAssetModal';
 import LoginScreen from './components/LoginScreen';
@@ -12,10 +11,8 @@ import MobileBottomNav from './components/MobileBottomNav';
 
 import { SATDIK_LIST, SARPRAS_CATEGORIES } from './data/kkpData';
 import { getFullSarprasData, calculateSarprasKPIs } from './data/sarprasGenerator';
-import { Shield } from 'lucide-react';
 import { apiCheckHealth, apiFetchAssets, apiCreateAsset, apiUpdateAsset } from './services/api';
 import { exportAssetsToExcel } from './utils/excelExport';
-import logoKkp from './assets/logo-kkp.png';
 
 const STORAGE_KEY = 'kkp_sarpras_database_v2';
 const AUTH_STORAGE_KEY = 'kkp_auth_session_v2';
@@ -210,8 +207,8 @@ export default function App() {
       filterSatdikName: currentUser?.accessibleSatdik === 'ALL' 
         ? 'Seluruh Satuan Pendidikan (18 Kampus Vokasi KKP)' 
         : (currentUser?.satdikName || 'Kampus Khusus'),
-      filterCategoryName: 'Semua Kategori Bidang',
-      filenamePrefix: 'SIM_SARPRAS_KKP_Inventaris_Lengkap'
+      filterCategoryName: 'Semua Bidang Sarpras',
+      filenamePrefix: 'SARPRAS_KKP_Inventaris_Lengkap'
     });
   };
 
@@ -227,7 +224,6 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         totalAssets={kpis?.totalAssets || 0}
-        totalValuation={kpis?.totalValuation || 0}
         criticalCount={kpis?.urgentAssets?.length || 0}
         onOpenAddModal={() => setIsAddModalOpen(true)}
         onExportExcel={handleExportExcel}
@@ -290,13 +286,6 @@ export default function App() {
           />
         )}
 
-        {activeTab === 'vokasi' && (
-          <VokasiAnalytics
-            satdikBreakdown={kpis.satdikBreakdown}
-            assets={assets}
-          />
-        )}
-
         {activeTab === 'maintenance' && (
           <EarlyWarningMaintenance
             urgentAssets={kpis.urgentAssets}
@@ -320,35 +309,6 @@ export default function App() {
         onLogout={handleLogout}
       />
 
-      {/* Official Government Footer */}
-      <footer className="bg-slate-950 border-t border-slate-800 py-6 px-4 sm:px-6 text-xs text-slate-400 mt-12 print:hidden">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full bg-white p-1 border border-cyan-500/40 flex items-center justify-center flex-shrink-0 shadow-md">
-              <img src={logoKkp} alt="Logo KKP" className="w-full h-full object-contain" />
-            </div>
-            <div>
-              <p className="font-bold text-slate-200">
-                SIM-SARPRAS KKP — Sistem Informasi & Analitik Sarana Prasarana Satdik
-              </p>
-              <p className="text-[11px] text-slate-400">
-                Pusat Pendidikan Kelautan dan Perikanan (Pusdik KP) — BPPSDM KP
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-6 text-[11px]">
-            <span className="flex items-center gap-1.5 text-slate-400">
-              <Shield className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Standar BMN Kementerian Keuangan</span>
-            </span>
-            <span className="text-slate-400 hidden sm:inline">|</span>
-            <span className="text-slate-400">
-              Gedung Mina Bahari III, Jl. Medan Merdeka Timur No. 16, Jakarta Pusat
-            </span>
-          </div>
-        </div>
-      </footer>
 
       {/* Mobile Bottom Navigation Bar (Muncul Khusus di Handphone/Layar Kecil) */}
       <MobileBottomNav

@@ -1,4 +1,4 @@
-// Daftar Akun & Hak Akses Pengguna SIM-SARPRAS KKP
+// Daftar Akun & Hak Akses Pengguna SARPRAS KKP
 // Kementerian Kelautan dan Perikanan Republik Indonesia
 
 export const AUTH_USERS = [

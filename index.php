@@ -1,6 +1,6 @@
 <?php
 // C:\laragon\www\kkp-sarpras-analytics\index.php
-// Gateway / Frontend Loader untuk SIM-SARPRAS KKP di Laragon Apache
+// Gateway / Frontend Loader untuk SARPRAS KKP di Laragon Apache
 
 $distIndex = __DIR__ . '/dist/index.html';
 
@@ -22,4 +22,4 @@ if (file_exists($distIndex)) {
     exit;
 }
 
-echo "<h1>SIM-SARPRAS KKP</h1><p>Silakan jalankan <code>npm.cmd run build</code> terlebih dahulu.</p>";
+echo "<h1>SARPRAS KKP</h1><p>Silakan jalankan <code>npm.cmd run build</code> terlebih dahulu.</p>";

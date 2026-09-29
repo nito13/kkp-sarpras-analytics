@@ -64,8 +64,8 @@ export function exportAssetsToExcel(assets, options = {}) {
   const {
     currentUser = null,
     filterSatdikName = 'Seluruh Satuan Pendidikan (18 Kampus Vokasi KKP)',
-    filterCategoryName = 'Semua Kategori Bidang',
-    filenamePrefix = 'SIM_SARPRAS_KKP_Inventaris_Aset'
+    filterCategoryName = 'Semua Bidang Sarpras',
+    filenamePrefix = 'SARPRAS_KKP_Inventaris_Aset'
   } = options;
 
   if (!Array.isArray(assets) || assets.length === 0) {
@@ -85,7 +85,7 @@ export function exportAssetsToExcel(assets, options = {}) {
 
   const printedAt = getFormattedDateTime();
   const userName = currentUser?.name || 'Admin Sarpras Pusdik KP';
-  const userRole = currentUser?.roleLabel || 'Pengelola SIM-SARPRAS KKP';
+  const userRole = currentUser?.roleLabel || 'Pengelola SARPRAS KKP';
 
   // 1. KOP SURAT RESMI KKP
   const kopStyleKemen = {
@@ -108,7 +108,7 @@ export function exportAssetsToExcel(assets, options = {}) {
   ws['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', kopStyleKemen);
   ws['A2'] = createCell('BADAN PENYULUHAN DAN PENGEMBANGAN SDM KELAUTAN DAN PERIKANAN (BPPSDM KP)', kopStyleBadan);
   ws['A3'] = createCell('PUSAT PENDIDIKAN KELAUTAN DAN PERIKANAN (PUSDIK KP)', kopStylePusat);
-  ws['A4'] = createCell('Sistem Informasi & Analitik Sarana Prasarana Pendidikan Vokasi KP (SIM-SARPRAS)', kopStyleApp);
+  ws['A4'] = createCell('Sistem Informasi & Analitik Sarana Prasarana Pendidikan Vokasi KP (SARPRAS)', kopStyleApp);
 
   // 2. JUDUL DOKUMEN & METADATA
   const titleStyle = {
@@ -117,7 +117,7 @@ export function exportAssetsToExcel(assets, options = {}) {
     alignment: { horizontal: 'center', vertical: 'center' },
     border: borderThin
   };
-  ws['A6'] = createCell('DAFTAR INVENTARISASI & KELAYAKAN SARANA PRASARANA (BMN) SATUAN PENDIDIKAN VOKASI KP', titleStyle);
+  ws['A6'] = createCell('DAFTAR INVENTARISASI & KELAYAKAN SARANA DAN PRASARANA SATUAN PENDIDIKAN VOKASI KP', titleStyle);
 
   const metaLabelStyle = {
     font: { name: 'Calibri', sz: 10, bold: true, color: { rgb: '475569' } },
@@ -144,42 +144,39 @@ export function exportAssetsToExcel(assets, options = {}) {
   // Baris 7: Cakupan & Total Aset
   ws['A7'] = createCell('Cakupan Wilayah / Satdik:', metaLabelStyle);
   ws['C7'] = createCell(filterSatdikName, metaValStyle);
-  ws['I7'] = createCell('Total Aset Terdata:', metaLabelStyle);
-  ws['L7'] = createCell(`${assets.length} Sarpras / BMN`, metaValBold);
+  ws['H7'] = createCell('Total Sarpras Terdata:', metaLabelStyle);
+  ws['J7'] = createCell(`${assets.length} Unit Sarpras`, metaValBold);
 
-  // Baris 8: Kategori & Total Valuasi
-  ws['A8'] = createCell('Filter Kategori:', metaLabelStyle);
+  // Baris 8: Bidang & Urgensi Perbaikan
+  ws['A8'] = createCell('Filter Bidang:', metaLabelStyle);
   ws['C8'] = createCell(filterCategoryName, metaValStyle);
-  ws['I8'] = createCell('Total Valuasi BMN:', metaLabelStyle);
-  ws['L8'] = createCell(`Rp ${formatNumber(totalValuation)}`, metaValGreen);
+  ws['H8'] = createCell('Prioritas Perbaikan:', metaLabelStyle);
+  ws['J8'] = createCell(`${countUrgent} Unit Mendesak`, metaValRed);
 
   // Baris 9: Tanggal & Kondisi
   ws['A9'] = createCell('Waktu Ekspor Dokumen:', metaLabelStyle);
   ws['C9'] = createCell(printedAt, metaValStyle);
-  ws['I9'] = createCell('Rincian Kondisi Fisik:', metaLabelStyle);
-  ws['L9'] = createCell(`Baik: ${countBaik} | Rusak Ringan: ${countRusakRingan} | Rusak Berat: ${countRusakBerat} (Kritis: ${countUrgent})`, metaValBold);
+  ws['H9'] = createCell('Rincian Kondisi Fisik:', metaLabelStyle);
+  ws['J9'] = createCell(`Baik: ${countBaik} | Rusak Ringan: ${countRusakRingan} | Rusak Berat: ${countRusakBerat}`, metaValBold);
 
   // Baris 10: Petugas & Kebutuhan Biaya
   ws['A10'] = createCell('Petugas Administrator:', metaLabelStyle);
   ws['C10'] = createCell(`${userName} (${userRole})`, metaValBold);
-  ws['I10'] = createCell('Estimasi Kebutuhan Perbaikan:', metaLabelStyle);
-  ws['L10'] = createCell(`Rp ${formatNumber(totalRepairCost)}`, metaValRed);
+  ws['H10'] = createCell('Estimasi Kebutuhan Biaya:', metaLabelStyle);
+  ws['J10'] = createCell(`Rp ${formatNumber(totalRepairCost)}`, metaValRed);
 
   // 3. HEADER TABEL UTAMA (Baris 12)
   const headerTitles = [
     'No.',
-    'Kode BMN',
     'ID Sistem',
     'Nama Sarana & Prasarana',
     'Satuan Pendidikan (Kampus)',
-    'Kategori Bidang',
-    'Sub-Kategori',
+    'Bidang Sarpras',
+    'Sub-Bidang',
     'Kondisi Fisik',
     'Skor Kelayakan',
     'Tingkat Utilisasi',
-    'Valuasi BMN (Rp)',
-    'Tahun',
-    'Status Sertifikasi',
+    'Tahun Perolehan',
     'Urgensi Pemeliharaan',
     'Estimasi Biaya Perbaikan (Rp)',
     'Catatan Teknis / Permasalahan'
@@ -254,7 +251,6 @@ export function exportAssetsToExcel(assets, options = {}) {
 
     const rowData = [
       createCell(index + 1, centerStyle),
-      createCell(a.bmnCode || '-', centerStyle, 's'),
       createCell(a.id || '-', centerStyle, 's'),
       createCell(a.name || '-', leftBold),
       createCell(a.satdikName || '-', leftStyle),
@@ -263,9 +259,7 @@ export function exportAssetsToExcel(assets, options = {}) {
       createCell(a.condition || '-', conditionStyle),
       createCell(Number(a.conditionScore) || 0, percentStyle, 'n'),
       createCell(Number(a.utilizationRate) || 0, percentStyle, 'n'),
-      createCell(Number(a.valuation) || 0, currencyStyle, 'n'),
       createCell(Number(a.acquisitionYear) || '-', centerStyle),
-      createCell(a.certificationStatus || 'Tidak Ada', centerStyle),
       createCell(a.maintenanceUrgency || 'Normal', urgencyStyle),
       createCell(Number(a.estimatedRepairCost) || 0, currencyStyle, 'n'),
       createCell(a.issuesSummary || a.specs || '-', leftStyle)
@@ -286,13 +280,6 @@ export function exportAssetsToExcel(assets, options = {}) {
     alignment: { horizontal: 'right', vertical: 'center' },
     border: borderDoubleBottom
   };
-  const totalValuationStyle = {
-    font: { name: 'Calibri', sz: 11, bold: true, color: { rgb: '0B3D60' } },
-    fill: { fgColor: { rgb: 'E2E8F0' } },
-    alignment: { horizontal: 'right', vertical: 'center' },
-    border: borderDoubleBottom,
-    numFmt: '#,##0'
-  };
   const totalRepairStyle = {
     font: { name: 'Calibri', sz: 11, bold: true, color: { rgb: '991B1B' } },
     fill: { fgColor: { rgb: 'E2E8F0' } },
@@ -300,23 +287,13 @@ export function exportAssetsToExcel(assets, options = {}) {
     border: borderDoubleBottom,
     numFmt: '#,##0'
   };
-  const totalCenterStyle = {
-    font: { name: 'Calibri', sz: 10, bold: true, color: { rgb: '475569' } },
-    fill: { fgColor: { rgb: 'E2E8F0' } },
-    alignment: { horizontal: 'center', vertical: 'center' },
-    border: borderDoubleBottom
-  };
 
-  ws[XLSX.utils.encode_cell({ r: currentRow, c: 0 })] = createCell(`TOTAL KESELURUHAN (${assets.length} ASET BMN):`, totalRowStyle);
-  for (let c = 1; c <= 9; c++) {
+  ws[XLSX.utils.encode_cell({ r: currentRow, c: 0 })] = createCell(`TOTAL KESELURUHAN (${assets.length} UNIT SARPRAS):`, totalRowStyle);
+  for (let c = 1; c <= 10; c++) {
     ws[XLSX.utils.encode_cell({ r: currentRow, c })] = createCell('', totalRowStyle);
   }
-  ws[XLSX.utils.encode_cell({ r: currentRow, c: 10 })] = createCell(totalValuation, totalValuationStyle, 'n');
-  ws[XLSX.utils.encode_cell({ r: currentRow, c: 11 })] = createCell('-', totalCenterStyle);
-  ws[XLSX.utils.encode_cell({ r: currentRow, c: 12 })] = createCell('-', totalCenterStyle);
-  ws[XLSX.utils.encode_cell({ r: currentRow, c: 13 })] = createCell('-', totalCenterStyle);
-  ws[XLSX.utils.encode_cell({ r: currentRow, c: 14 })] = createCell(totalRepairCost, totalRepairStyle, 'n');
-  ws[XLSX.utils.encode_cell({ r: currentRow, c: 15 })] = createCell('', totalRowStyle);
+  ws[XLSX.utils.encode_cell({ r: currentRow, c: 11 })] = createCell(totalRepairCost, totalRepairStyle, 'n');
+  ws[XLSX.utils.encode_cell({ r: currentRow, c: 12 })] = createCell('', totalRowStyle);
 
   // 6. LEMBAR PENGESAHAN DOKUMEN (Sign-off)
   const signRow = currentRow + 3;
@@ -324,81 +301,78 @@ export function exportAssetsToExcel(assets, options = {}) {
   const signTitleStyle = { font: { name: 'Calibri', sz: 10, bold: true, color: { rgb: '0F172A' } }, alignment: { horizontal: 'center' } };
   const signNameStyle = { font: { name: 'Calibri', sz: 10, bold: true, color: { rgb: '003366' }, underline: true }, alignment: { horizontal: 'center' } };
 
-  ws[XLSX.utils.encode_cell({ r: signRow, c: 3 })] = createCell('Mengetahui,', signLabelStyle);
-  ws[XLSX.utils.encode_cell({ r: signRow + 1, c: 3 })] = createCell('Koordinator Sarana & Prasarana', signTitleStyle);
-  ws[XLSX.utils.encode_cell({ r: signRow + 2, c: 3 })] = createCell('Pusat Pendidikan Kelautan dan Perikanan', signLabelStyle);
-  ws[XLSX.utils.encode_cell({ r: signRow + 6, c: 3 })] = createCell('( Admin Sarpras Pusdik KP )', signNameStyle);
-  ws[XLSX.utils.encode_cell({ r: signRow + 7, c: 3 })] = createCell('Pusdik KP — BPPSDM Kelautan dan Perikanan', signLabelStyle);
+  ws[XLSX.utils.encode_cell({ r: signRow, c: 2 })] = createCell('Mengetahui,', signLabelStyle);
+  ws[XLSX.utils.encode_cell({ r: signRow + 1, c: 2 })] = createCell('Koordinator Sarana & Prasarana', signTitleStyle);
+  ws[XLSX.utils.encode_cell({ r: signRow + 2, c: 2 })] = createCell('Pusat Pendidikan Kelautan dan Perikanan', signLabelStyle);
+  ws[XLSX.utils.encode_cell({ r: signRow + 6, c: 2 })] = createCell('( Admin Sarpras Pusdik KP )', signNameStyle);
+  ws[XLSX.utils.encode_cell({ r: signRow + 7, c: 2 })] = createCell('Pusdik KP — BPPSDM Kelautan dan Perikanan', signLabelStyle);
 
-  ws[XLSX.utils.encode_cell({ r: signRow, c: 11 })] = createCell('Dicetak melalui SIM-SARPRAS KKP,', signLabelStyle);
-  ws[XLSX.utils.encode_cell({ r: signRow + 1, c: 11 })] = createCell('Petugas Operator Sistem:', signTitleStyle);
-  ws[XLSX.utils.encode_cell({ r: signRow + 2, c: 11 })] = createCell(`Pada: ${printedAt}`, signLabelStyle);
-  ws[XLSX.utils.encode_cell({ r: signRow + 6, c: 11 })] = createCell(`( ${userName} )`, signNameStyle);
-  ws[XLSX.utils.encode_cell({ r: signRow + 7, c: 11 })] = createCell(userRole, signLabelStyle);
+  ws[XLSX.utils.encode_cell({ r: signRow, c: 8 })] = createCell('Dicetak melalui SARPRAS KKP,', signLabelStyle);
+  ws[XLSX.utils.encode_cell({ r: signRow + 1, c: 8 })] = createCell('Petugas Operator Sistem:', signTitleStyle);
+  ws[XLSX.utils.encode_cell({ r: signRow + 2, c: 8 })] = createCell(`Pada: ${printedAt}`, signLabelStyle);
+  ws[XLSX.utils.encode_cell({ r: signRow + 6, c: 8 })] = createCell(`( ${userName} )`, signNameStyle);
+  ws[XLSX.utils.encode_cell({ r: signRow + 7, c: 8 })] = createCell(userRole, signLabelStyle);
 
   // 7. CELL MERGES
   ws['!merges'] = [
-    { s: { r: 0, c: 0 }, e: { r: 0, c: 15 } }, // Kop Kemen
-    { s: { r: 1, c: 0 }, e: { r: 1, c: 15 } }, // Kop Badan
-    { s: { r: 2, c: 0 }, e: { r: 2, c: 15 } }, // Kop Pusat
-    { s: { r: 3, c: 0 }, e: { r: 3, c: 15 } }, // Kop App
-    { s: { r: 5, c: 0 }, e: { r: 5, c: 15 } }, // Title
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 12 } }, // Kop Kemen
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 12 } }, // Kop Badan
+    { s: { r: 2, c: 0 }, e: { r: 2, c: 12 } }, // Kop Pusat
+    { s: { r: 3, c: 0 }, e: { r: 3, c: 12 } }, // Kop App
+    { s: { r: 5, c: 0 }, e: { r: 5, c: 12 } }, // Title
     // Metadata Merges
     { s: { r: 6, c: 0 }, e: { r: 6, c: 1 } },
-    { s: { r: 6, c: 2 }, e: { r: 6, c: 7 } },
-    { s: { r: 6, c: 8 }, e: { r: 6, c: 10 } },
-    { s: { r: 6, c: 11 }, e: { r: 6, c: 15 } },
+    { s: { r: 6, c: 2 }, e: { r: 6, c: 6 } },
+    { s: { r: 6, c: 7 }, e: { r: 6, c: 8 } },
+    { s: { r: 6, c: 9 }, e: { r: 6, c: 12 } },
     { s: { r: 7, c: 0 }, e: { r: 7, c: 1 } },
-    { s: { r: 7, c: 2 }, e: { r: 7, c: 7 } },
-    { s: { r: 7, c: 8 }, e: { r: 7, c: 10 } },
-    { s: { r: 7, c: 11 }, e: { r: 7, c: 15 } },
+    { s: { r: 7, c: 2 }, e: { r: 7, c: 6 } },
+    { s: { r: 7, c: 7 }, e: { r: 7, c: 8 } },
+    { s: { r: 7, c: 9 }, e: { r: 7, c: 12 } },
     { s: { r: 8, c: 0 }, e: { r: 8, c: 1 } },
-    { s: { r: 8, c: 2 }, e: { r: 8, c: 7 } },
-    { s: { r: 8, c: 8 }, e: { r: 8, c: 10 } },
-    { s: { r: 8, c: 11 }, e: { r: 8, c: 15 } },
+    { s: { r: 8, c: 2 }, e: { r: 8, c: 6 } },
+    { s: { r: 8, c: 7 }, e: { r: 8, c: 8 } },
+    { s: { r: 8, c: 9 }, e: { r: 8, c: 12 } },
     { s: { r: 9, c: 0 }, e: { r: 9, c: 1 } },
-    { s: { r: 9, c: 2 }, e: { r: 9, c: 7 } },
-    { s: { r: 9, c: 8 }, e: { r: 9, c: 10 } },
-    { s: { r: 9, c: 11 }, e: { r: 9, c: 15 } },
+    { s: { r: 9, c: 2 }, e: { r: 9, c: 6 } },
+    { s: { r: 9, c: 7 }, e: { r: 9, c: 8 } },
+    { s: { r: 9, c: 9 }, e: { r: 9, c: 12 } },
     // Total Row Label Merge
-    { s: { r: currentRow, c: 0 }, e: { r: currentRow, c: 9 } },
+    { s: { r: currentRow, c: 0 }, e: { r: currentRow, c: 10 } },
     // Signoff Merges
-    { s: { r: signRow, c: 2 }, e: { r: signRow, c: 4 } },
-    { s: { r: signRow + 1, c: 2 }, e: { r: signRow + 1, c: 4 } },
-    { s: { r: signRow + 2, c: 2 }, e: { r: signRow + 2, c: 4 } },
-    { s: { r: signRow + 6, c: 2 }, e: { r: signRow + 6, c: 4 } },
-    { s: { r: signRow + 7, c: 2 }, e: { r: signRow + 7, c: 4 } },
-    { s: { r: signRow, c: 10 }, e: { r: signRow, c: 12 } },
-    { s: { r: signRow + 1, c: 10 }, e: { r: signRow + 1, c: 12 } },
-    { s: { r: signRow + 2, c: 10 }, e: { r: signRow + 2, c: 12 } },
-    { s: { r: signRow + 6, c: 10 }, e: { r: signRow + 6, c: 12 } },
-    { s: { r: signRow + 7, c: 10 }, e: { r: signRow + 7, c: 12 } },
+    { s: { r: signRow, c: 1 }, e: { r: signRow, c: 3 } },
+    { s: { r: signRow + 1, c: 1 }, e: { r: signRow + 1, c: 3 } },
+    { s: { r: signRow + 2, c: 1 }, e: { r: signRow + 2, c: 3 } },
+    { s: { r: signRow + 6, c: 1 }, e: { r: signRow + 6, c: 3 } },
+    { s: { r: signRow + 7, c: 1 }, e: { r: signRow + 7, c: 3 } },
+    { s: { r: signRow, c: 7 }, e: { r: signRow, c: 10 } },
+    { s: { r: signRow + 1, c: 7 }, e: { r: signRow + 1, c: 10 } },
+    { s: { r: signRow + 2, c: 7 }, e: { r: signRow + 2, c: 10 } },
+    { s: { r: signRow + 6, c: 7 }, e: { r: signRow + 6, c: 10 } },
+    { s: { r: signRow + 7, c: 7 }, e: { r: signRow + 7, c: 10 } },
   ];
 
   // 8. LEBAR KOLOM (Auto Widths)
   ws['!cols'] = [
     { wch: 6 },  // No
-    { wch: 18 }, // Kode BMN
-    { wch: 12 }, // ID Sistem
-    { wch: 36 }, // Nama Sarpras
+    { wch: 14 }, // ID Sistem
+    { wch: 38 }, // Nama Sarpras
     { wch: 30 }, // Satdik
-    { wch: 18 }, // Kategori
-    { wch: 18 }, // Sub-kategori
+    { wch: 20 }, // Bidang
+    { wch: 20 }, // Sub-bidang
     { wch: 15 }, // Kondisi Fisik
     { wch: 13 }, // Skor
     { wch: 14 }, // Utilisasi
-    { wch: 22 }, // Valuasi
-    { wch: 10 }, // Tahun
-    { wch: 20 }, // Sertifikasi
-    { wch: 18 }, // Urgensi
-    { wch: 22 }, // Estimasi Biaya
-    { wch: 38 }  // Catatan
+    { wch: 15 }, // Tahun Perolehan
+    { wch: 20 }, // Urgensi
+    { wch: 24 }, // Estimasi Biaya
+    { wch: 40 }  // Catatan
   ];
 
   // Set range
   ws['!ref'] = XLSX.utils.encode_range({
     s: { r: 0, c: 0 },
-    e: { r: signRow + 8, c: 15 }
+    e: { r: signRow + 8, c: 12 }
   });
 
   XLSX.utils.book_append_sheet(wb, ws, 'Inventaris Sarpras');
@@ -471,7 +445,7 @@ export function exportRKAToExcel(simulation, options = {}) {
     'Kode BMN / ID',
     'Nama Sarana & Prasarana',
     'Satuan Pendidikan (Kampus)',
-    'Kategori Bidang',
+    'Bidang Sarpras',
     'Kondisi Awal',
     'Alokasi Biaya Disetujui (Rp)',
     'Status Rekomendasi RKA'

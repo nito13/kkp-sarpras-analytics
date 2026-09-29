@@ -17,7 +17,6 @@ import {
   X
 } from 'lucide-react';
 import { SATDIK_LIST, NATIONAL_SARPRAS_TARGETS } from '../data/kkpData';
-import { formatRupiah } from '../data/sarprasGenerator';
 
 export default function VokasiAnalytics({
   satdikBreakdown,
@@ -55,7 +54,7 @@ export default function VokasiAnalytics({
       totalBeds: Math.round(totalBeds),
       unitCount: asramaAssets.length || 1,
       avgScore,
-      isLaik: avgScore >= 70,
+      isLayak: avgScore >= 70,
     };
   });
 
@@ -72,7 +71,7 @@ export default function VokasiAnalytics({
     {
       title: 'Standar Kelayakan Gedung & Fasilitas Asrama',
       description: 'Gedung asrama wajib memenuhi standar sanitasi bersih, ventilasi, dan dapur sentral higienis.',
-      target: '100% Asrama Laik Operasi',
+      target: '100% Asrama Layak Operasi',
       actual: '96.8% Nasional',
       status: 'success',
       notes: 'Hampir seluruh kampus memenuhi kapasitas asrama; beberapa perlu peremajaan sanitasi.',
@@ -233,14 +232,6 @@ export default function VokasiAnalytics({
             </div>
 
             <div className="space-y-1.5 sm:space-y-2 pt-2 border-t border-slate-800 text-[11px] sm:text-xs">
-              <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-0.5 xs:gap-2">
-                <span className="text-slate-400">Total Valuasi BMN:</span>
-                <span className="font-bold text-emerald-400 break-words">{formatRupiah(metrics1.valuation)}</span>
-              </div>
-              <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-0.5 xs:gap-2">
-                <span className="text-slate-400">Kebutuhan Perbaikan:</span>
-                <span className="font-bold text-amber-400 break-words">{formatRupiah(metrics1.totalRepairNeeded)}</span>
-              </div>
               <div className="flex items-center justify-between gap-2">
                 <span className="text-slate-400">Akreditasi Satdik:</span>
                 <span className="font-bold text-white">{campus1.akreditasi}</span>
@@ -284,14 +275,6 @@ export default function VokasiAnalytics({
             </div>
 
             <div className="space-y-1.5 sm:space-y-2 pt-2 border-t border-slate-800 text-[11px] sm:text-xs">
-              <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-0.5 xs:gap-2">
-                <span className="text-slate-400">Total Valuasi BMN:</span>
-                <span className="font-bold text-emerald-400 break-words">{formatRupiah(metrics2.valuation)}</span>
-              </div>
-              <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-0.5 xs:gap-2">
-                <span className="text-slate-400">Kebutuhan Perbaikan:</span>
-                <span className="font-bold text-amber-400 break-words">{formatRupiah(metrics2.totalRepairNeeded)}</span>
-              </div>
               <div className="flex items-center justify-between gap-2">
                 <span className="text-slate-400">Akreditasi Satdik:</span>
                 <span className="font-bold text-white">{campus2.akreditasi}</span>
@@ -356,11 +339,6 @@ export default function VokasiAnalytics({
                   <td className="py-2 px-3 font-bold text-rose-400">
                     {metrics2.rusakSedang + metrics2.rusakBerat} Unit
                   </td>
-                </tr>
-                <tr className="hover:bg-slate-800/40 transition-colors">
-                  <td className="py-2 px-3 text-slate-400 font-medium">Total Valuasi BMN</td>
-                  <td className="py-2 px-3 font-bold text-emerald-400">{formatRupiah(metrics1.valuation)}</td>
-                  <td className="py-2 px-3 font-bold text-emerald-400">{formatRupiah(metrics2.valuation)}</td>
                 </tr>
                 <tr className="hover:bg-slate-800/40 transition-colors">
                   <td className="py-2 px-3 text-slate-400 font-medium">Akreditasi Satdik</td>

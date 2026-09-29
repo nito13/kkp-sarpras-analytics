@@ -1,11 +1,11 @@
 <?php
 // backend/index.php
-// Index Gateway SIM-SARPRAS KKP API
+// Index Gateway SARPRAS KKP API
 
 require_once __DIR__ . '/config/database.php';
 
 jsonResponse([
-    'title' => 'SIM-SARPRAS KKP Backend API',
+    'title' => 'SARPRAS KKP Backend API',
     'version' => '1.0.0',
     'status' => 'online',
     'environment' => 'Laragon MySQL',

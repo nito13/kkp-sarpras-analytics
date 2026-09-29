@@ -9,6 +9,8 @@ import {
   Boxes, 
   Anchor, 
   Factory, 
+  Briefcase,
+  Compass,
   CheckCircle2, 
   AlertTriangle, 
   ArrowUpDown, 
@@ -19,11 +21,9 @@ import {
   ChevronLeft,
   ChevronRight,
   ShieldAlert,
-  Coins,
   Download
 } from 'lucide-react';
 import { SATDIK_LIST, SARPRAS_CATEGORIES } from '../data/kkpData';
-import { formatRupiah } from '../data/sarprasGenerator';
 import { exportAssetsToExcel } from '../utils/excelExport';
 import AssetDetailModal from './AssetDetailModal';
 
@@ -39,7 +39,6 @@ export default function AssetExplorer({
   const [selectedSatdik, setSelectedSatdik] = useState(initialSatdikFilter);
   const [selectedCategory, setSelectedCategory] = useState(initialCategoryFilter);
   const [selectedCondition, setSelectedCondition] = useState('ALL');
-  const [selectedCertification, setSelectedCertification] = useState('ALL');
   const [selectedUrgency, setSelectedUrgency] = useState('ALL');
   const [viewMode, setViewMode] = useState('table'); // 'table' | 'grid'
   
@@ -74,17 +73,16 @@ export default function AssetExplorer({
     return assets.filter(item => {
       const matchSearch = searchQuery === '' ||
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.bmnCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (item.bmnCode && item.bmnCode.toLowerCase().includes(searchQuery.toLowerCase())) ||
         item.satdikName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (item.specs && item.specs.toLowerCase().includes(searchQuery.toLowerCase()));
 
       const matchSatdik = selectedSatdik === 'ALL' || item.satdikId === selectedSatdik;
       const matchCat = selectedCategory === 'ALL' || item.category === selectedCategory;
       const matchCond = selectedCondition === 'ALL' || item.condition === selectedCondition;
-      const matchCert = selectedCertification === 'ALL' || item.certificationStatus === selectedCertification;
       const matchUrg = selectedUrgency === 'ALL' || item.maintenanceUrgency === selectedUrgency;
 
-      return matchSearch && matchSatdik && matchCat && matchCond && matchCert && matchUrg;
+      return matchSearch && matchSatdik && matchCat && matchCond && matchUrg;
     }).sort((a, b) => {
       let valA = a[sortField];
       let valB = b[sortField];
@@ -101,7 +99,7 @@ export default function AssetExplorer({
       if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
       return 0;
     });
-  }, [assets, searchQuery, selectedSatdik, selectedCategory, selectedCondition, selectedCertification, selectedUrgency, sortField, sortDirection]);
+  }, [assets, searchQuery, selectedSatdik, selectedCategory, selectedCondition, selectedUrgency, sortField, sortDirection]);
 
   // Pagination calculation
   const totalPages = Math.ceil(filteredAssets.length / itemsPerPage) || 1;
@@ -121,7 +119,6 @@ export default function AssetExplorer({
     setSelectedSatdik('ALL');
     setSelectedCategory('ALL');
     setSelectedCondition('ALL');
-    setSelectedCertification('ALL');
     setSelectedUrgency('ALL');
     setCurrentPage(1);
   };
@@ -133,8 +130,8 @@ export default function AssetExplorer({
     exportAssetsToExcel(filteredAssets, {
       currentUser,
       filterSatdikName: selectedSatdik === 'ALL' ? 'Semua Satdik (18 Kampus)' : (satdikObj?.name || selectedSatdik),
-      filterCategoryName: selectedCategory === 'ALL' ? 'Semua Kategori' : (catObj?.name || selectedCategory),
-      filenamePrefix: `SIM_SARPRAS_KKP_${selectedSatdik !== 'ALL' ? selectedSatdik : 'Inventaris'}`
+      filterCategoryName: selectedCategory === 'ALL' ? 'Semua Bidang' : (catObj?.name || selectedCategory),
+      filenamePrefix: `SARPRAS_KKP_${selectedSatdik !== 'ALL' ? selectedSatdik : 'Inventaris'}`
     });
   };
 
@@ -145,11 +142,17 @@ export default function AssetExplorer({
 
   const getCategoryIcon = (category) => {
     switch(category) {
+      case 'penangkapan_mesin': return Ship;
+      case 'budidaya_perikanan': return Fish;
+      case 'pengolahan_hasil': return Boxes;
+      case 'agribisnis_penyuluhan': return Factory;
+      case 'konservasi_pariwisata': return Compass;
       case 'maritim_kapal': return Ship;
       case 'akuakultur': return Fish;
       case 'pengolahan_upi': return Boxes;
-      case 'alat_tangkap': return Anchor;
+      case 'alat_tangkap': return Ship;
       case 'tefa': return Factory;
+      case 'administrasi_umum': return Briefcase;
       default: return Building2;
     }
   };
@@ -161,9 +164,9 @@ export default function AssetExplorer({
         <div>
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-              Katalog Aset Barang Milik Negara (BMN)
+              Katalog Inventaris Sarana & Prasarana
             </span>
-            <span className="text-slate-400 text-xs">• Database SIM-SARPRAS KKP</span>
+            <span className="text-slate-400 text-xs">• Database SARPRAS KKP</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight mt-1 flex items-center gap-2">
             <Layers className="w-5 h-5 text-cyan-400" />
@@ -217,7 +220,7 @@ export default function AssetExplorer({
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Cari nama sarpras, kode BMN, atau spesifikasi..."
+              placeholder="Cari nama sarpras atau spesifikasi..."
               value={searchQuery}
               onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
               className="w-full pl-9 pr-4 py-2 bg-slate-900 text-slate-100 placeholder-slate-400 text-xs rounded-xl border border-slate-700 focus:outline-none focus:border-cyan-500"
@@ -238,14 +241,14 @@ export default function AssetExplorer({
             </select>
           </div>
 
-          {/* Kategori Sarpras */}
+          {/* Bidang Sarpras */}
           <div className="lg:col-span-3">
             <select
               value={selectedCategory}
               onChange={(e) => { setSelectedCategory(e.target.value); setCurrentPage(1); }}
               className="w-full py-2 px-3 bg-slate-900 text-slate-200 text-xs rounded-xl border border-slate-700 focus:outline-none focus:border-cyan-500 truncate"
             >
-              <option value="ALL">Semua Kategori Bidang</option>
+              <option value="ALL">Semua Bidang Sarpras</option>
               {SARPRAS_CATEGORIES.map(c => (
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}
@@ -260,7 +263,7 @@ export default function AssetExplorer({
               className="w-full py-2 px-3 bg-slate-900 text-slate-200 text-xs rounded-xl border border-slate-700 focus:outline-none focus:border-cyan-500"
             >
               <option value="ALL">Semua Kondisi</option>
-              <option value="Baik">Baik (Laik Penuh)</option>
+              <option value="Baik">Baik (Layak Penuh)</option>
               <option value="Rusak Ringan">Rusak Ringan</option>
               <option value="Rusak Berat">Rusak Berat (Kritis)</option>
             </select>
@@ -287,28 +290,16 @@ export default function AssetExplorer({
               ⚠ Urgensi Kritis ({assets.filter(a => a.maintenanceUrgency === 'Kritis / Segera').length})
             </button>
 
-            {/* Expired Certification Filter */}
+            {/* Penangkapan & Permesinan Only */}
             <button
-              onClick={() => { setSelectedCertification(selectedCertification === 'Kadaluarsa' ? 'ALL' : 'Kadaluarsa'); setCurrentPage(1); }}
+              onClick={() => { setSelectedCategory(selectedCategory === 'penangkapan_mesin' ? 'ALL' : 'penangkapan_mesin'); setCurrentPage(1); }}
               className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-colors ${
-                selectedCertification === 'Kadaluarsa'
-                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/50'
-                  : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:text-slate-200'
-              }`}
-            >
-              📜 Sertifikat Kadaluarsa ({assets.filter(a => a.certificationStatus === 'Kadaluarsa').length})
-            </button>
-
-            {/* Kapal Latih Only */}
-            <button
-              onClick={() => { setSelectedCategory(selectedCategory === 'maritim_kapal' ? 'ALL' : 'maritim_kapal'); setCurrentPage(1); }}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-colors ${
-                selectedCategory === 'maritim_kapal'
+                selectedCategory === 'penangkapan_mesin'
                   ? 'bg-sky-500/20 text-sky-300 border-sky-500/50'
                   : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:text-slate-200'
               }`}
             >
-              ⚓ Kapal Latih ({assets.filter(a => a.category === 'maritim_kapal').length})
+              ⚓ Penangkapan & Permesinan ({assets.filter(a => a.category === 'penangkapan_mesin').length})
             </button>
           </div>
 
@@ -341,7 +332,7 @@ export default function AssetExplorer({
                     className="p-3.5 cursor-pointer hover:text-cyan-400 transition-colors"
                   >
                     <div className="flex items-center gap-1.5">
-                      <span>Nama Sarpras & Kode BMN</span>
+                      <span>Nama Sarana & Prasarana</span>
                       <ArrowUpDown className="w-3.5 h-3.5 opacity-60" />
                     </div>
                   </th>
@@ -359,7 +350,7 @@ export default function AssetExplorer({
                     className="p-3.5 cursor-pointer hover:text-cyan-400 transition-colors"
                   >
                     <div className="flex items-center gap-1.5">
-                      <span>Kategori</span>
+                      <span>Bidang</span>
                       <ArrowUpDown className="w-3.5 h-3.5 opacity-60" />
                     </div>
                   </th>
@@ -378,15 +369,6 @@ export default function AssetExplorer({
                   >
                     <div className="flex items-center gap-1.5">
                       <span>Utilisasi</span>
-                      <ArrowUpDown className="w-3.5 h-3.5 opacity-60" />
-                    </div>
-                  </th>
-                  <th 
-                    onClick={() => handleSort('valuation')} 
-                    className="p-3.5 cursor-pointer hover:text-cyan-400 transition-colors"
-                  >
-                    <div className="flex items-center gap-1.5">
-                      <span>Valuasi BMN</span>
                       <ArrowUpDown className="w-3.5 h-3.5 opacity-60" />
                     </div>
                   </th>
@@ -412,9 +394,6 @@ export default function AssetExplorer({
                             <div className="max-w-[260px] truncate">
                               <span className="font-bold text-white block truncate" title={asset.name}>
                                 {asset.name}
-                              </span>
-                              <span className="font-mono text-[10px] text-slate-400">
-                                {asset.bmnCode}
                               </span>
                             </div>
                           </div>
@@ -474,18 +453,6 @@ export default function AssetExplorer({
                           </div>
                         </td>
 
-                        {/* Valuation */}
-                        <td className="p-3.5">
-                          <span className="font-bold text-emerald-400 block">
-                            {formatRupiah(asset.valuation)}
-                          </span>
-                          {asset.estimatedRepairCost > 0 && (
-                            <span className="text-[10px] text-amber-400 block">
-                              Servis: {formatRupiah(asset.estimatedRepairCost)}
-                            </span>
-                          )}
-                        </td>
-
                         {/* Action */}
                         <td className="p-3.5 text-right" onClick={(e) => e.stopPropagation()}>
                           <button
@@ -529,9 +496,6 @@ export default function AssetExplorer({
                         <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
                           <CategoryIcon className="w-4 h-4" />
                         </div>
-                        <span className="font-mono text-[10px] text-slate-400">
-                          {asset.bmnCode}
-                        </span>
                       </div>
 
                       <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
@@ -557,8 +521,8 @@ export default function AssetExplorer({
 
                   <div className="mt-4 pt-3 border-t border-slate-700/60 flex items-center justify-between text-xs">
                     <div>
-                      <span className="text-[10px] text-slate-400 block">Valuasi BMN</span>
-                      <span className="font-bold text-emerald-400">{formatRupiah(asset.valuation)}</span>
+                      <span className="text-[10px] text-slate-400 block">Tahun Perolehan</span>
+                      <span className="font-bold text-slate-200">{asset.acquisitionYear}</span>
                     </div>
 
                     <div className="text-right">

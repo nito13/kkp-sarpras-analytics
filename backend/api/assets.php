@@ -1,6 +1,6 @@
 <?php
 // backend/api/assets.php
-// REST API CRUD Sarpras BMN SIM-SARPRAS KKP
+// REST API CRUD Sarpras BMN SARPRAS KKP
 
 require_once __DIR__ . '/../config/database.php';
 

@@ -1,4 +1,4 @@
--- Skema Database SIM-SARPRAS KKP untuk MySQL Laragon
+-- Skema Database SARPRAS KKP untuk MySQL Laragon
 CREATE DATABASE IF NOT EXISTS `kkp_sarpras_db` 
 CHARACTER SET utf8mb4 
 COLLATE utf8mb4_unicode_ci;
@@ -49,10 +49,9 @@ CREATE TABLE IF NOT EXISTS `users` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 3. Tabel Aset Sarana & Prasarana (BMN)
+-- 3. Tabel Aset Sarana & Prasarana
 CREATE TABLE IF NOT EXISTS `assets` (
     `id` VARCHAR(50) NOT NULL PRIMARY KEY,
-    `bmn_code` VARCHAR(100) NULL,
     `name` VARCHAR(255) NOT NULL,
     `satdik_id` VARCHAR(50) NOT NULL,
     `satdik_name` VARCHAR(255) NOT NULL,

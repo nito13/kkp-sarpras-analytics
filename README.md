@@ -1,4 +1,4 @@
-# SIM-SARPRAS KKP — Sistem Informasi & Analitik Sarana Prasarana Satdik Kelautan dan Perikanan
+# SARPRAS KKP — Sistem Informasi & Analitik Sarana Prasarana Satdik Kelautan dan Perikanan
 
 Aplikasi web analitik data modern dan interaktif yang dirancang khusus untuk memonitor, menganalisis, dan mensimulasikan data **Sarana dan Prasarana (Sarpras)** pada seluruh **Satuan Pendidikan di lingkungan Kementerian Kelautan dan Perikanan (KKP)** — di bawah naungan **Badan Penyuluhan dan Pengembangan Sumber Daya Manusia Kelautan dan Perikanan (BPPSDM KP)**.
 

@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { 
   Building2, 
-  Coins, 
   CheckCircle2, 
   AlertTriangle, 
   Users, 
-  Wrench, 
   ArrowUpRight, 
   TrendingUp, 
   Ship, 
@@ -13,13 +11,13 @@ import {
   Boxes, 
   Compass, 
   Factory, 
+  Briefcase,
   ShieldAlert,
   ChevronRight,
   Filter
 } from 'lucide-react';
 import { Doughnut, Bar, Radar } from 'react-chartjs-2';
 import '../utils/chartSetup';
-import { formatRupiah } from '../data/sarprasGenerator';
 import { NATIONAL_SARPRAS_TARGETS, SARPRAS_CATEGORIES } from '../data/kkpData';
 import { useTheme } from '../context/ThemeContext';
 import logoKkp from '../assets/logo-kkp.png';
@@ -44,10 +42,8 @@ export default function ExecutiveDashboard({
   // Extract condition counts and percentages
   const {
     totalAssets,
-    totalValuation,
     avgConditionScore,
     avgUtilization,
-    totalEstimatedRepairCost,
     conditionCounts,
     conditionPercentages,
     categoryBreakdown,
@@ -57,7 +53,7 @@ export default function ExecutiveDashboard({
 
   // Donut Chart: Komposisi Kondisi Sarpras (Standar BMN Kemenkeu: Baik, Rusak Ringan, Rusak Berat)
   const donutData = {
-    labels: ['Baik (Laik Operasi Penuh)', 'Rusak Ringan (Operasi Terbatas)', 'Rusak Berat (Tidak Laik / Stop)'],
+    labels: ['Baik (Layak Operasi Penuh)', 'Rusak Ringan (Operasi Terbatas)', 'Rusak Berat (Tidak Layak / Stop)'],
     datasets: [
       {
         data: [
@@ -167,7 +163,7 @@ export default function ExecutiveDashboard({
     },
   };
 
-  // Radar Chart: Kematangan per Kategori Sarpras
+  // Radar Chart: Kematangan per Bidang Sarpras
   const categoryKeys = Object.keys(categoryBreakdown);
   const radarLabels = categoryKeys.map(k => categoryBreakdown[k].name);
   const radarScores = categoryKeys.map(k => Math.round(categoryBreakdown[k].avgScore || 0));
@@ -323,12 +319,12 @@ export default function ExecutiveDashboard({
         </div>
       )}
 
-      {/* Key Metric Cards Grid (6 KPI Metrics) */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-2.5 sm:gap-4">
+      {/* Key Metric Cards Grid (4 Kondisi & Inventaris Sarpras Metrics) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
         {/* Total Assets */}
         <div className="bg-slate-800/90 rounded-2xl p-4 border border-slate-700/70 hover:border-cyan-500/50 transition-all shadow-md group">
           <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-medium uppercase tracking-wider">Total Sarpras BMN</span>
+            <span className="text-xs font-medium uppercase tracking-wider">Total Sarpras</span>
             <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform">
               <Building2 className="w-4 h-4" />
             </div>
@@ -336,25 +332,7 @@ export default function ExecutiveDashboard({
           <div className="mt-3">
             <div className="text-2xl font-black text-white">{totalAssets}</div>
             <div className="text-[11px] text-cyan-400/90 mt-0.5 flex items-center gap-1">
-              <span>Unit terdata di SIM-BMN</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Total Valuation */}
-        <div className="bg-slate-800/90 rounded-2xl p-4 border border-slate-700/70 hover:border-emerald-500/50 transition-all shadow-md group">
-          <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-medium uppercase tracking-wider">Nilai Valuasi BMN</span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Coins className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-3">
-            <div className="text-xl font-black text-emerald-400 truncate" title={formatRupiah(totalValuation)}>
-              {formatRupiah(totalValuation)}
-            </div>
-            <div className="text-[11px] text-slate-400 mt-0.5">
-              Aset negara tercatat
+              <span>Unit terdata aktif</span>
             </div>
           </div>
         </div>
@@ -393,7 +371,7 @@ export default function ExecutiveDashboard({
               {conditionCounts['Baik']} <span className="text-xs font-normal text-slate-400">({conditionPercentages.baik}%)</span>
             </div>
             <div className="text-[11px] text-slate-400 mt-0.5">
-              Laik fungsi operasional
+              Layak fungsi operasional
             </div>
           </div>
         </div>
@@ -411,25 +389,7 @@ export default function ExecutiveDashboard({
               {conditionCounts['Rusak Berat']} <span className="text-xs font-normal text-slate-400">Unit ({conditionPercentages.rusakBerat}%)</span>
             </div>
             <div className="text-[11px] text-rose-400 mt-0.5 font-medium">
-              Tidak laik / stop operasi
-            </div>
-          </div>
-        </div>
-
-        {/* Kebutuhan Anggaran Perbaikan */}
-        <div className="bg-slate-800/90 rounded-2xl p-4 border border-slate-700/70 hover:border-amber-500/50 transition-all shadow-md group">
-          <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-medium uppercase tracking-wider">Kebutuhan Anggaran</span>
-            <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
-              <Wrench className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-3">
-            <div className="text-xl font-black text-amber-400 truncate" title={formatRupiah(totalEstimatedRepairCost)}>
-              {formatRupiah(totalEstimatedRepairCost)}
-            </div>
-            <div className="text-[11px] text-slate-400 mt-0.5">
-              Estimasi rehab & docking
+              Tidak layak / stop operasi
             </div>
           </div>
         </div>
@@ -461,7 +421,7 @@ export default function ExecutiveDashboard({
 
           <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-700/60 text-xs">
             <div className="bg-slate-900/60 p-2 sm:p-2.5 rounded-xl border border-slate-800 text-center sm:text-left">
-              <span className="text-slate-400 text-[10px] sm:text-[11px] block truncate">Baik (Laik)</span>
+              <span className="text-slate-400 text-[10px] sm:text-[11px] block truncate">Baik (Layak)</span>
               <span className="text-emerald-400 font-bold text-xs sm:text-sm block mt-0.5">{conditionCounts['Baik']} <span className="text-[10px] font-normal text-slate-400">({conditionPercentages.baik}%)</span></span>
             </div>
             <div className="bg-slate-900/60 p-2 sm:p-2.5 rounded-xl border border-slate-800 text-center sm:text-left">
@@ -483,7 +443,7 @@ export default function ExecutiveDashboard({
                 Peringkat Kelayakan Sarpras Satuan Pendidikan
               </h3>
               <button
-                onClick={() => onNavigateTab('vokasi')}
+                onClick={() => onNavigateTab('map')}
                 className="text-xs text-cyan-400 hover:text-cyan-300 font-medium inline-flex items-center gap-1"
               >
                 <span>Lihat Seluruh Kampus</span>
@@ -521,7 +481,7 @@ export default function ExecutiveDashboard({
         </div>
       </div>
 
-      {/* Secondary Analytics Row: Radar Kategori & Status Kelayakan */}
+      {/* Secondary Analytics Row: Radar Bidang & Status Kelayakan */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left: Radar Chart - Kelayakan per Bidang Vokasi */}
         <div className="lg:col-span-6 bg-slate-800/90 rounded-2xl p-5 border border-slate-700/70 shadow-lg">
@@ -596,10 +556,10 @@ export default function ExecutiveDashboard({
         <div className="flex items-center justify-between mb-3">
           <div>
             <h3 className="text-base font-bold text-white">
-              Katalog Kategori Sarana & Prasarana Vokasi
+              Katalog Bidang Sarana & Prasarana Vokasi
             </h3>
             <p className="text-xs text-slate-400">
-              Klik kategori untuk melihat rincian inventaris dan spesifikasi sarpras.
+              Klik bidang untuk melihat rincian inventaris dan spesifikasi sarpras.
             </p>
           </div>
           <button
@@ -613,12 +573,13 @@ export default function ExecutiveDashboard({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
           {SARPRAS_CATEGORIES.map((cat) => {
-            const data = categoryBreakdown[cat.id] || { count: 0, valuation: 0, avgScore: 0 };
+            const data = categoryBreakdown[cat.id] || { count: 0, avgScore: 0 };
             const IconComponent = cat.iconName === 'Ship' ? Ship :
               cat.iconName === 'Fish' ? Fish :
               cat.iconName === 'Boxes' ? Boxes :
-              cat.iconName === 'Anchor' ? Compass :
-              cat.iconName === 'Factory' ? Factory : Building2;
+              cat.iconName === 'Compass' ? Compass :
+              cat.iconName === 'Factory' ? Factory :
+              cat.iconName === 'Briefcase' ? Briefcase : Building2;
 
             return (
               <div
