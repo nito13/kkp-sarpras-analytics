@@ -169,7 +169,8 @@ export default function ExecutiveDashboard({
       'Penangkapan Ikan dan Permesinan Kapal': ['Penangkapan Ikan', '& Permesinan Kapal'],
       'Budidaya Perikanan': ['Budidaya', 'Perikanan'],
       'Pengolahan Hasil Perikanan': ['Pengolahan Hasil', 'Perikanan'],
-      'Agribisnis Pengolahan dan Penyuluhan': ['Agribisnis Pengolahan', '& Penyuluhan'],
+      'Agribisnis, Pengolahan dan Penyuluhan': ['Agribisnis, Pengolahan', '& Penyuluhan'],
+      'Agribisnis Pengolahan dan Penyuluhan': ['Agribisnis, Pengolahan', '& Penyuluhan'],
       'Konservasi dan Pariwisata': ['Konservasi &', 'Pariwisata'],
       'Administrasi & Umum': ['Administrasi', '& Umum'],
     };

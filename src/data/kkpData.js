@@ -451,7 +451,7 @@ export const SARPRAS_CATEGORIES = [
   },
   {
     id: 'agribisnis_penyuluhan',
-    name: 'Agribisnis Pengolahan dan Penyuluhan',
+    name: 'Agribisnis, Pengolahan dan Penyuluhan',
     iconName: 'Factory',
     color: '#ec4899', // Pink
     bgLight: 'bg-pink-500/10',
