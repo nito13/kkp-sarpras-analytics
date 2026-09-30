@@ -466,9 +466,6 @@ export default function GeospatialMap({
               Sistem Informasi Geospasial
             </span>
             <span className="text-slate-400 text-xs">• 18 Satdik Sabang s/d Merauke</span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-              Peta Asli Terhubung
-            </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight mt-1 flex items-center gap-2">
             <Navigation className="w-5 h-5 text-cyan-400" />
