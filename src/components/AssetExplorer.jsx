@@ -356,7 +356,7 @@ export default function AssetExplorer({
               title="Filter Kondisi Fisik"
             >
               <option value="ALL">Semua Kondisi</option>
-              <option value="Baik">Baik (Layak Penuh)</option>
+              <option value="Baik">Baik (Layak)</option>
               <option value="Rusak Ringan">Rusak Ringan</option>
               <option value="Rusak Berat">Rusak Berat (Kritis)</option>
             </select>

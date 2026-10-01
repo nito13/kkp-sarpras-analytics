@@ -266,7 +266,7 @@ export default function AddAssetModal({
                 onChange={handleChange}
                 className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
               >
-                <option value="Baik">Baik (Layak Penuh)</option>
+                <option value="Baik">Baik (Layak)</option>
                 <option value="Rusak Ringan">Rusak Ringan</option>
                 <option value="Rusak Berat">Rusak Berat (Kritis)</option>
               </select>
