@@ -10,7 +10,7 @@ import UserProfileModal from './components/UserProfileModal';
 import MobileBottomNav from './components/MobileBottomNav';
 
 import { SATDIK_LIST, SARPRAS_CATEGORIES } from './data/kkpData';
-import { getFullSarprasData, calculateSarprasKPIs } from './data/sarprasGenerator';
+import { getFullSarprasData, calculateSarprasKPIs, normalizeCategory } from './data/sarprasGenerator';
 import { apiCheckHealth, apiFetchAssets, apiCreateAsset, apiUpdateAsset } from './services/api';
 import { exportAssetsToExcel } from './utils/excelExport';
 
@@ -40,7 +40,9 @@ export default function App() {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map(a => ({ ...a, category: normalizeCategory(a.category, a) }));
+        }
       }
     } catch (e) {
       console.warn('Failed to load local storage, using initial dataset', e);
@@ -71,9 +73,10 @@ export default function App() {
           setDbStatus({ connected: true, loading: false, info: health.info });
           const res = await apiFetchAssets();
           if (isMounted && res.success && res.data.length > 0) {
-            setAssets(res.data);
+            const normalized = res.data.map(a => ({ ...a, category: normalizeCategory(a.category, a) }));
+            setAssets(normalized);
             try {
-              localStorage.setItem(STORAGE_KEY, JSON.stringify(res.data));
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
             } catch {}
           }
         } else {

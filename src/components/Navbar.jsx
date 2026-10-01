@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { createPortal } from 'react-dom';
+import React from 'react';
 import { 
   Anchor, 
   BarChart3, 
@@ -14,12 +13,7 @@ import {
   User,
   LogOut,
   Sun,
-  Moon,
-  Smartphone,
-  X,
-  Copy,
-  Check,
-  Wifi
+  Moon
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import logoKkp from '../assets/logo-kkp.png';
@@ -38,17 +32,6 @@ export default function Navbar({
   dbStatus
 }) {
   const { isDark, toggleTheme } = useTheme();
-  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [selectedIp, setSelectedIp] = useState('10.110.147.40');
-  const availableNetworks = [
-    { name: 'Wi-Fi', ip: '10.110.147.40' },
-    { name: 'Hotspot / LAN', ip: '192.168.137.1' },
-  ];
-
-  const mobileAccessUrl = typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
-    ? `${window.location.protocol}//${window.location.hostname}:${window.location.port || '5173'}`
-    : `http://${selectedIp}:5173`;
 
   const navItems = [
     { id: 'dashboard', label: 'Ringkasan Eksekutif', icon: BarChart3 },
@@ -110,15 +93,7 @@ export default function Navbar({
               <span>Ekspor Excel</span>
             </button>
 
-            {/* Tombol Akses di Handphone (QR Code & IP) - Khusus Desktop */}
-            <button
-              onClick={() => setIsQrModalOpen(true)}
-              className="hidden md:flex p-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-cyan-300 border border-slate-700 hover:border-cyan-500/50 transition-all hover:scale-105 active:scale-95 items-center justify-center shadow-sm"
-              title="Buka SARPRAS di Handphone / Tablet (Scan QR)"
-              aria-label="Akses di HP"
-            >
-              <Smartphone className="w-4 h-4 text-cyan-400" />
-            </button>
+
 
             {/* Switch Tema Terang / Gelap */}
             <button
@@ -200,112 +175,6 @@ export default function Navbar({
           })}
         </div>
       </div>
-
-      {/* Modal Akses HP / QR Code (Mounted to document.body via Portal to guarantee perfect center positioning) */}
-      {isQrModalOpen && typeof document !== 'undefined' && createPortal(
-        <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn"
-          onClick={() => setIsQrModalOpen(false)}
-        >
-          <div 
-            className="bg-slate-900 border border-slate-700/80 rounded-3xl w-full max-w-sm max-h-[90vh] overflow-y-auto flex flex-col shadow-2xl p-6 text-center m-auto transition-all"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-                  <Smartphone className="w-4 h-4" />
-                </div>
-                <div className="text-left">
-                  <h3 className="text-sm font-bold text-white leading-tight">
-                    Buka di Handphone
-                  </h3>
-                  <span className="text-[10px] text-cyan-400 font-medium">Akses Jaringan Wi-Fi Lokal</span>
-                </div>
-              </div>
-              <button
-                onClick={() => setIsQrModalOpen(false)}
-                className="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="py-4 space-y-3">
-              {/* Pilihan Interface Jaringan Server */}
-              <div className="flex items-center justify-center gap-1.5 p-1 bg-slate-950/70 rounded-xl border border-slate-800">
-                {availableNetworks.map((net) => {
-                  const isCurrent = selectedIp === net.ip;
-                  return (
-                    <button
-                      key={net.ip}
-                      type="button"
-                      onClick={() => setSelectedIp(net.ip)}
-                      className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all ${
-                        isCurrent
-                          ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-900/40'
-                          : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
-                      }`}
-                    >
-                      <span>{net.name}</span>
-                      <span className="block text-[10px] font-mono opacity-80">{net.ip}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="w-48 h-48 mx-auto bg-white p-3 rounded-2xl shadow-xl border border-slate-600 flex items-center justify-center">
-                <img 
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(mobileAccessUrl)}`}
-                  alt="QR Code Akses HP" 
-                  className="w-full h-full object-contain"
-                />
-              </div>
-
-              <div>
-                <p className="text-xs text-slate-300 font-medium">
-                  Arahkan kamera HP ke QR Code di atas, atau buka browser dan ketik alamat:
-                </p>
-                <div className="mt-2 flex items-center justify-between bg-slate-950 p-2.5 rounded-xl border border-slate-700/80">
-                  <span className="font-mono text-xs text-cyan-300 font-bold select-all truncate mr-2">
-                    {mobileAccessUrl}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      navigator.clipboard.writeText(mobileAccessUrl);
-                      setCopied(true);
-                      setTimeout(() => setCopied(false), 2000);
-                    }}
-                    className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors flex-shrink-0"
-                  >
-                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copied ? 'Tersalin' : 'Salin'}</span>
-                  </button>
-                </div>
-              </div>
-
-              <div className="text-[11px] text-slate-400 bg-slate-800/60 p-3 rounded-xl border border-slate-700/60 text-left space-y-1">
-                <p className="font-semibold text-slate-200 flex items-center gap-1.5">
-                  <Wifi className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Petunjuk Mudah:</span>
-                </p>
-                <p>1. Sambungkan HP ke jaringan Wi-Fi yang sama dengan PC/Laptop.</p>
-                <p>2. Scan QR Code atau ketik alamat IP di atas pada browser HP.</p>
-                <p>3. Navigasi bawah (*Mobile Bottom Nav*) otomatis aktif untuk layar HP.</p>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setIsQrModalOpen(false)}
-              className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-colors border border-slate-700"
-            >
-              Tutup
-            </button>
-          </div>
-        </div>,
-        document.body
-      )}
     </header>
   );
 }

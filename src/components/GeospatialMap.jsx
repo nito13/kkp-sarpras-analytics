@@ -15,7 +15,8 @@ import {
   Locate,
   Globe,
   Map as MapIcon,
-  Satellite
+  Satellite,
+  GraduationCap
 } from 'lucide-react';
 import { SATDIK_LIST } from '../data/kkpData';
 
@@ -796,7 +797,7 @@ export default function GeospatialMap({
             </div>
 
             {/* Statistik Profil Kampus */}
-            <div className="my-2.5 text-xs">
+            <div className="my-2.5 text-xs space-y-2">
               <div className="bg-slate-900/70 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-1.5 text-slate-400">
@@ -812,6 +813,29 @@ export default function GeospatialMap({
                   <span className="text-xs font-bold text-slate-200">{selectedSatdik.establishedYear}</span>
                 </div>
               </div>
+
+              {/* Tag Program Studi Terdaftar */}
+              {selectedSatdik.prodi && selectedSatdik.prodi.length > 0 && (
+                <div className="bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80">
+                  <div className="text-[11px] font-semibold text-slate-300 mb-1.5 flex items-center justify-between">
+                    <span className="flex items-center gap-1">
+                      <GraduationCap className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Program Kejuruan / Studi:</span>
+                    </span>
+                    <span className="text-[10px] text-cyan-400 font-mono">({selectedSatdik.prodi.length} prodi)</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {selectedSatdik.prodi.map((prodiName, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2 py-0.5 text-[10px] rounded-md bg-cyan-950/70 text-cyan-300 border border-cyan-800/50 font-medium"
+                      >
+                        {prodiName}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Kotak Ringkasan Metrik Sarpras */}
@@ -870,7 +894,7 @@ export default function GeospatialMap({
                     >
                       <div className="truncate mr-2">
                         <span className="font-medium text-white block truncate">{asset.name}</span>
-                        <span className="text-[10px] text-slate-400">{asset.subcategory}</span>
+                        <span className="text-[10px] text-cyan-300 font-medium">{asset.prodi || 'Fasilitas Umum'}</span>
                       </div>
                       <span className={`px-2 py-0.5 rounded text-[10px] font-bold whitespace-nowrap ${
                         asset.condition === 'Baik' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :

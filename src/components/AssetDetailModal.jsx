@@ -12,21 +12,56 @@ import {
   Ship, 
   Fish, 
   Boxes, 
-  Anchor, 
-  Factory, 
-  Layers, 
+  Users,
+  Compass,
+  Briefcase,
+  TrendingUp,
   Save, 
   Clock, 
-  Check, 
   Info,
   Edit3,
   Sliders,
   Eye,
   AlertCircle,
   Sparkles,
-  RotateCcw
+  RotateCcw,
+  GraduationCap
 } from 'lucide-react';
-import { SATDIK_LIST, SARPRAS_CATEGORIES } from '../data/kkpData';
+import { SATDIK_LIST, SARPRAS_CATEGORIES, PRODI_LIST, getCategoryForProdi, getProdisForCategory } from '../data/kkpData';
+
+// Helper icon category
+const getCategoryIcon = (category) => {
+  switch(category) {
+    case 'penangkapan_ikan':
+    case 'penangkapan_mesin':
+    case 'maritim_kapal':
+    case 'alat_tangkap':
+      return Ship;
+    case 'permesinan_mekanisasi':
+      return Wrench;
+    case 'budidaya_perikanan':
+    case 'akuakultur':
+      return Fish;
+    case 'pengolahan_hasil':
+    case 'pengolahan_upi':
+      return Boxes;
+    case 'agribisnis_perikanan':
+    case 'agribisnis_penyuluhan':
+    case 'tefa':
+      return TrendingUp;
+    case 'kelautan_konservasi':
+    case 'konservasi_pariwisata':
+      return Compass;
+    case 'sosial_pemberdayaan':
+    case 'asrama_penunjang':
+      return Users;
+    case 'administrasi_umum':
+    case 'administasi_umum':
+      return Briefcase;
+    default:
+      return Building2;
+  }
+};
 
 export default function AssetDetailModal({
   asset,
@@ -49,8 +84,8 @@ export default function AssetDetailModal({
     name: '',
     satdikId: '',
     satdikName: '',
-    category: 'penangkapan_mesin',
-    subcategory: '',
+    prodi: '',
+    category: 'penangkapan_ikan',
     condition: 'Baik',
     conditionScore: 85,
     acquisitionYear: 2020,
@@ -78,8 +113,8 @@ export default function AssetDetailModal({
         name: asset.name || '',
         satdikId: asset.satdikId || (SATDIK_LIST[0]?.id || ''),
         satdikName: asset.satdikName || (SATDIK_LIST[0]?.name || ''),
-        category: asset.category || (SARPRAS_CATEGORIES[0]?.id || 'penangkapan_mesin'),
-        subcategory: asset.subcategory || '',
+        prodi: asset.prodi || (SATDIK_LIST[0]?.prodi?.[0] || 'Semua Program Studi (Umum)'),
+        category: asset.category || (SARPRAS_CATEGORIES[0]?.id || 'penangkapan_ikan'),
         condition: asset.condition || 'Baik',
         conditionScore: asset.conditionScore !== undefined ? asset.conditionScore : 85,
         acquisitionYear: asset.acquisitionYear || 2020,
@@ -132,13 +167,46 @@ export default function AssetDetailModal({
     }));
   };
 
-  // Handler for Satuan Pendidikan change (auto-sync satdikName)
+  // Handler for Satuan Pendidikan change (auto-sync satdikName, prodi, and category)
   const handleSatdikChange = (newSatdikId) => {
     const selected = SATDIK_LIST.find(s => s.id === newSatdikId);
+    const newProdi = selected?.prodi?.[0] || 'Semua Program Studi (Umum)';
+    const matchedCat = getCategoryForProdi(newProdi);
     setFormData(prev => ({
       ...prev,
       satdikId: newSatdikId,
       satdikName: selected ? selected.name : prev.satdikName,
+      prodi: newProdi,
+      ...(matchedCat ? { category: matchedCat } : {})
+    }));
+  };
+
+  // Handler for Prodi change (auto-sync category)
+  const handleProdiChange = (newProdi) => {
+    const matchedCat = getCategoryForProdi(newProdi);
+    setFormData(prev => ({
+      ...prev,
+      prodi: newProdi,
+      ...(matchedCat ? { category: matchedCat } : {})
+    }));
+  };
+
+  // Handler for Category change (auto-align prodi)
+  const handleCategoryChange = (newCategory) => {
+    const catProdis = getProdisForCategory(newCategory);
+    let nextProdi = formData.prodi;
+    if (catProdis.length > 0 && !catProdis.includes(formData.prodi)) {
+      const currentCampus = SATDIK_LIST.find(s => s.id === formData.satdikId);
+      const campusProdis = currentCampus?.prodi || [];
+      const campusMatch = campusProdis.find(p => catProdis.includes(p));
+      nextProdi = campusMatch || catProdis[0];
+    } else if (catProdis.length === 0) {
+      nextProdi = 'Semua Program Studi (Umum)';
+    }
+    setFormData(prev => ({
+      ...prev,
+      category: newCategory,
+      prodi: nextProdi
     }));
   };
 
@@ -171,8 +239,8 @@ export default function AssetDetailModal({
       name: formData.name.trim(),
       satdikId: formData.satdikId,
       satdikName: formData.satdikName,
+      prodi: (formData.prodi || '').trim() || 'Semua Program Studi (Umum)',
       category: formData.category,
-      subcategory: formData.subcategory.trim(),
       condition: formData.condition,
       conditionScore: Math.min(100, Math.max(0, Number(formData.conditionScore) || 0)),
       acquisitionYear: Number(formData.acquisitionYear) || 2020,
@@ -218,17 +286,7 @@ export default function AssetDetailModal({
     }, 3000);
   };
 
-  // Helper icon category
-  const getCategoryIcon = (category) => {
-    switch(category) {
-      case 'maritim_kapal': return Ship;
-      case 'akuakultur': return Fish;
-      case 'pengolahan_upi': return Boxes;
-      case 'alat_tangkap': return Anchor;
-      case 'tefa': return Factory;
-      default: return Building2;
-    }
-  };
+
 
   const CategoryIcon = getCategoryIcon(isFullEditMode ? formData.category : asset.category);
 
@@ -430,36 +488,79 @@ export default function AssetDetailModal({
                       </select>
                     </div>
 
-                    {/* Bidang Sarpras */}
+                    {/* Program Studi */}
                     <div>
-                      <label className="text-xs font-semibold text-slate-300 block mb-1.5">
-                        Bidang Sarpras <span className="text-rose-400">*</span>
+                      <label className="text-xs font-semibold text-slate-300 block mb-1.5 flex items-center justify-between">
+                        <span>Program Studi</span>
+                        <span className="text-[10px] text-cyan-400 font-normal">
+                          ({(SATDIK_LIST.find(s => s.id === formData.satdikId)?.prodi || []).length} prodi kampus)
+                        </span>
                       </label>
                       <select
+                        value={formData.prodi}
+                        onChange={(e) => handleProdiChange(e.target.value)}
+                        className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 truncate"
+                      >
+                        <option value="Semua Program Studi (Umum)">Semua Program Studi (Umum / Fasilitas Bersama)</option>
+                        {(() => {
+                          const currentCampus = SATDIK_LIST.find(s => s.id === formData.satdikId);
+                          const prodis = currentCampus?.prodi || [];
+                          return (
+                            <>
+                              {prodis.length > 0 && (
+                                <optgroup label={`Program Studi ${currentCampus.shortName}`}>
+                                  {prodis.map(p => {
+                                    const catId = getCategoryForProdi(p);
+                                    const catName = SARPRAS_CATEGORIES.find(c => c.id === catId)?.name;
+                                    return (
+                                      <option key={p} value={p}>
+                                        {p} {catName ? `(${catName})` : ''}
+                                      </option>
+                                    );
+                                  })}
+                                </optgroup>
+                              )}
+                              <optgroup label="Daftar 25 Program Studi Nasional">
+                                {PRODI_LIST.filter(p => !prodis.includes(p)).map(p => {
+                                  const catId = getCategoryForProdi(p);
+                                  const catName = SARPRAS_CATEGORIES.find(c => c.id === catId)?.name;
+                                  return (
+                                    <option key={p} value={p}>
+                                      {p} {catName ? `(${catName})` : ''}
+                                    </option>
+                                  );
+                                })}
+                              </optgroup>
+                            </>
+                          );
+                        })()}
+                      </select>
+                    </div>
+
+                    {/* Bidang Sarpras */}
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="text-xs font-semibold text-slate-300 block">
+                          Bidang Sarpras <span className="text-rose-400">*</span>
+                        </label>
+                        {formData.prodi && formData.prodi !== 'Semua Program Studi (Umum)' && (
+                          <span className="text-[10px] text-cyan-400 bg-cyan-950/70 border border-cyan-800/50 px-2 py-0.5 rounded-full flex items-center gap-1 font-medium">
+                            <GraduationCap className="w-3 h-3 text-cyan-400" />
+                            <span>Sesuai Prodi: {formData.prodi}</span>
+                          </span>
+                        )}
+                      </div>
+                      <select
                         value={formData.category}
-                        onChange={(e) => handleInputChange('category', e.target.value)}
+                        onChange={(e) => handleCategoryChange(e.target.value)}
                         className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
                       >
                         {SARPRAS_CATEGORIES.map(c => (
                           <option key={c.id} value={c.id}>
-                            {c.name}
+                            {c.name} {c.prodis?.length > 0 ? `(${c.prodis.length} Prodi Terkait)` : ''}
                           </option>
                         ))}
                       </select>
-                    </div>
-
-                    {/* Sub-Bidang */}
-                    <div>
-                      <label className="text-xs font-semibold text-slate-300 block mb-1.5">
-                        Sub-Bidang Spesifik
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.subcategory}
-                        onChange={(e) => handleInputChange('subcategory', e.target.value)}
-                        placeholder="Contoh: Simulator Kenavigasian / Hatchery / Cold Storage"
-                        className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
-                      />
                     </div>
                   </div>
                 </div>
@@ -728,8 +829,11 @@ export default function AssetDetailModal({
                     </p>
                   </div>
                   <div>
-                    <span className="text-slate-400 text-[11px] block">Sub-Bidang:</span>
-                    <p className="text-slate-200 font-medium mt-0.5">{asset.subcategory || '-'}</p>
+                    <span className="text-slate-400 text-[11px] block">Program Studi:</span>
+                    <p className="text-cyan-300 font-medium mt-0.5 flex items-center gap-1.5 truncate" title={asset.prodi || 'Semua Program Studi (Umum)'}>
+                      <GraduationCap className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
+                      <span className="truncate font-semibold">{asset.prodi || 'Semua Program Studi (Umum)'}</span>
+                    </p>
                   </div>
                   <div className="sm:col-span-2">
                     <span className="text-slate-400 text-[11px] block">Kapasitas Operasional:</span>

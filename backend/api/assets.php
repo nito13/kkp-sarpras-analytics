@@ -16,6 +16,7 @@ function formatAssetOutput($row) {
         'name' => $row['name'],
         'satdikId' => $row['satdik_id'],
         'satdikName' => $row['satdik_name'],
+        'prodi' => $row['prodi'] ?? '',
         'category' => $row['category'],
         'subcategory' => $row['subcategory'] ?? '',
         'condition' => $row['condition'],
@@ -90,13 +91,13 @@ switch ($method) {
 
         $stmt = $pdo->prepare("
             INSERT INTO assets (
-                id, name, satdik_id, satdik_name, category, subcategory,
+                id, name, satdik_id, satdik_name, prodi, category, subcategory,
                 `condition`, condition_score, acquisition_year, utilization_rate,
                 capacity_desc, specs, certification_status, certification_authority,
                 cert_expiry_date, last_maintenance_date, next_maintenance_date,
                 maintenance_urgency, estimated_repair_cost, issues_summary
             ) VALUES (
-                :id, :name, :satdik_id, :satdik_name, :category, :subcategory,
+                :id, :name, :satdik_id, :satdik_name, :prodi, :category, :subcategory,
                 :condition, :condition_score, :acquisition_year, :utilization_rate,
                 :capacity_desc, :specs, :certification_status, :certification_authority,
                 :cert_expiry_date, :last_maintenance_date, :next_maintenance_date,
@@ -109,6 +110,7 @@ switch ($method) {
             ':name' => $input['name'],
             ':satdik_id' => $input['satdikId'],
             ':satdik_name' => $input['satdikName'] ?? '',
+            ':prodi' => $input['prodi'] ?? 'Semua Program Studi (Umum)',
             ':category' => $input['category'] ?? 'sarana_pendidikan',
             ':subcategory' => $input['subcategory'] ?? '',
             ':condition' => $input['condition'] ?? 'Baik',
@@ -165,6 +167,7 @@ switch ($method) {
             'name' => 'name',
             'satdikId' => 'satdik_id',
             'satdikName' => 'satdik_name',
+            'prodi' => 'prodi',
             'category' => 'category',
             'subcategory' => 'subcategory',
             'condition' => 'condition',

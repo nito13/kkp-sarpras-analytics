@@ -1,6 +1,34 @@
 // Dataset Satuan Pendidikan Kementerian Kelautan dan Perikanan (KKP)
 // Badan Penyuluhan dan Pengembangan Sumber Daya Manusia Kelautan dan Perikanan (BPPSDM KP)
 
+export const PRODI_LIST = [
+  'Agribisnis Pengolahan Hasil Perikanan',
+  'Agribisnis Perikanan',
+  'Agribisnis Perikanan Air Payau dan Laut',
+  'Agribisnis Perikanan Air Tawar',
+  'Budidaya Ikan',
+  'Ekowisata Bahari',
+  'Konservasi',
+  'Mekanisasi Perikanan',
+  'Nautika Kapal Penangkap Ikan',
+  'Pengolahan Hasil Laut',
+  'Penyuluhan Perikanan',
+  'Perikanan Tangkap',
+  'Permesinan Kapal',
+  'Permesinan Perikanan',
+  'Teknik Budidaya Perikanan',
+  'Teknik Kelautan',
+  'Teknik Penanganan Patologi Perikanan',
+  'Teknik Penangkapan Ikan',
+  'Teknik Pengolahan Produk Perikanan',
+  'Teknika Kapal Penangkap Ikan',
+  'Teknologi Akuakultur',
+  'Teknologi Kelautan',
+  'Teknologi Penangkapan Ikan',
+  'Teknologi Pengelolaan Sumberdaya Perairan',
+  'Teknologi Pengolahan Hasil Perikanan'
+];
+
 export const SATDIK_LIST = [
   {
     id: 'poltek-aup',
@@ -24,7 +52,7 @@ export const SATDIK_LIST = [
     establishedYear: 1962,
     kampusCabang: ['Kampus Utama Pasar Minggu', 'Kampus Serang (Banten)', 'Kampus Bogor (Cilodong/Cibalagung)'],
     rector: 'Dr. Muhammad Hery Riyadi S.St.Pi., M.M.',
-    prodi: ['Teknologi Penangkapan Ikan', 'Permesinan Perikanan', 'Teknologi Akuakultur', 'Teknologi Pengolahan Hasil Maritim', 'Pengelolaan Sumberdaya Perairan', 'Penyuluhan Perikanan'],
+    prodi: ['Teknologi Penangkapan Ikan', 'Permesinan Perikanan', 'Teknologi Akuakultur', 'Teknologi Pengolahan Hasil Perikanan', 'Teknologi Pengelolaan Sumberdaya Perairan', 'Penyuluhan Perikanan'],
   },
   {
     id: 'poltek-kp-sidoarjo',
@@ -48,7 +76,7 @@ export const SATDIK_LIST = [
     establishedYear: 1982,
     kampusCabang: ['Kampus Sedati Sidoarjo', 'Kampus Tambak Banyuwangi'],
     rector: 'Dr. I Gusti Putu Gede Rumayasa, S.Pi., M.P.',
-    prodi: ['Teknik Budidaya Perikanan', 'Teknik Pengolahan Produk Perikanan', 'Teknologi Penanganan Patogen Air', 'Mekanisasi Perikanan'],
+    prodi: ['Teknik Budidaya Perikanan', 'Teknik Pengolahan Produk Perikanan', 'Teknik Penanganan Patologi Perikanan', 'Mekanisasi Perikanan', 'Agribisnis Perikanan'],
   },
   {
     id: 'poltek-kp-bitung',
@@ -72,7 +100,7 @@ export const SATDIK_LIST = [
     establishedYear: 1957,
     kampusCabang: ['Kampus Tandurusa Bitung'],
     rector: 'Daniel Heintje Ndahawali, S.Pi., M.Si.',
-    prodi: ['Teknik Penangkapan Ikan', 'Permesinan Kapal', 'Teknik Pengolahan Produk Perikanan'],
+    prodi: ['Teknik Penangkapan Ikan', 'Permesinan Kapal', 'Teknik Pengolahan Produk Perikanan', 'Mekanisasi Perikanan'],
   },
   {
     id: 'poltek-kp-sorong',
@@ -96,7 +124,7 @@ export const SATDIK_LIST = [
     establishedYear: 2001,
     kampusCabang: ['Kampus Klademak Sorong', 'Station Hatchery Saonek Raja Ampat'],
     rector: 'Muhammad Bilal, S.St.Pi., M.Si.',
-    prodi: ['Teknik Penangkapan Ikan', 'Teknik Budidaya Perikanan', 'Teknik Pengolahan Produk Perikanan'],
+    prodi: ['Teknik Penangkapan Ikan', 'Teknik Budidaya Perikanan', 'Teknik Pengolahan Produk Perikanan', 'Konservasi'],
   },
   {
     id: 'poltek-kp-karawang',
@@ -120,7 +148,7 @@ export const SATDIK_LIST = [
     establishedYear: 2016,
     kampusCabang: ['Kampus Pasir Putih Karawang'],
     rector: 'Dr. Asep Ridwan, S.St.Pi., M.Si.',
-    prodi: ['Teknik Penangkapan Ikan', 'Teknik Kelautan', 'Teknologi Akuakultur', 'Bioteknologi Kelautan'],
+    prodi: ['Teknik Penangkapan Ikan', 'Teknik Kelautan', 'Teknologi Akuakultur', 'Teknologi Kelautan', 'Pengolahan Hasil Laut'],
   },
   {
     id: 'poltek-kp-bone',
@@ -144,7 +172,7 @@ export const SATDIK_LIST = [
     establishedYear: 2016,
     kampusCabang: ['Kampus Tanete Riattang Timur'],
     rector: 'Dr. Dra. Hj. Andi Asni, M.Si.',
-    prodi: ['Teknik Penangkapan Ikan', 'Teknik Kelautan & Budidaya Air Payau', 'Teknologi Pengolahan Ikan'],
+    prodi: ['Teknik Penangkapan Ikan', 'Teknik Budidaya Perikanan', 'Teknologi Pengolahan Hasil Perikanan', 'Teknik Kelautan'],
   },
   {
     id: 'poltek-kp-kupang',
@@ -168,7 +196,7 @@ export const SATDIK_LIST = [
     establishedYear: 2016,
     kampusCabang: ['Kampus Bolok Kupang Barat'],
     rector: 'Dr. Aris Widagdo, S.St.Pi., M.Si.',
-    prodi: ['Teknik Budidaya Perikanan', 'Teknik Penangkapan Ikan', 'Mekanisasi Perikanan'],
+    prodi: ['Teknik Budidaya Perikanan', 'Teknik Penangkapan Ikan', 'Mekanisasi Perikanan', 'Teknik Pengolahan Produk Perikanan'],
   },
   {
     id: 'poltek-kp-dumai',
@@ -240,7 +268,7 @@ export const SATDIK_LIST = [
     establishedYear: 2017,
     kampusCabang: ['Kampus Pengambengan Jembrana'],
     rector: 'Dr. Ilham, S.St.Pi., M.St.Pi.',
-    prodi: ['Perikanan Tangkap', 'Budidaya Ikan Payau', 'Pengolahan Hasil Perikanan'],
+    prodi: ['Perikanan Tangkap', 'Budidaya Ikan', 'Pengolahan Hasil Laut', 'Agribisnis Perikanan'],
   },
   {
     id: 'akkp-wakatobi',
@@ -264,7 +292,7 @@ export const SATDIK_LIST = [
     establishedYear: 2017,
     kampusCabang: ['Kampus Wangi-Wangi Wakatobi'],
     rector: 'Drs. La Ode Muhammad Ridwan, M.Si.',
-    prodi: ['Ekowisata Bahari', 'Konservasi Sumberdaya Laut'],
+    prodi: ['Ekowisata Bahari', 'Konservasi'],
   },
   {
     id: 'supm-ladong',
@@ -288,7 +316,7 @@ export const SATDIK_LIST = [
     establishedYear: 1986,
     kampusCabang: ['Kampus Ladong Krueng Raya'],
     rector: 'Zulfikar, S.St.Pi.',
-    prodi: ['Nautika Perikanan Laut', 'Teknika Perikanan Laut', 'Agribisnis Perikanan Air Payau'],
+    prodi: ['Nautika Kapal Penangkap Ikan', 'Teknika Kapal Penangkap Ikan', 'Agribisnis Perikanan Air Payau dan Laut'],
   },
   {
     id: 'supm-pariaman',
@@ -312,7 +340,7 @@ export const SATDIK_LIST = [
     establishedYear: 1986,
     kampusCabang: ['Kampus Naras Pariaman'],
     rector: 'Dra. Harisjon, M.Si.',
-    prodi: ['Nautika Kapal Penangkap Ikan', 'Agribisnis Perikanan Air Payau', 'Agribisnis Pengolahan Hasil Perikanan'],
+    prodi: ['Nautika Kapal Penangkap Ikan', 'Agribisnis Perikanan Air Payau dan Laut', 'Agribisnis Pengolahan Hasil Perikanan'],
   },
   {
     id: 'supm-kotaagung',
@@ -336,7 +364,7 @@ export const SATDIK_LIST = [
     establishedYear: 1987,
     kampusCabang: ['Kampus Way Gelang Kotaagung'],
     rector: 'Khaerudin, S.St.Pi., M.M.',
-    prodi: ['Nautika Kapal Penangkap Ikan', 'Teknika Kapal Penangkap Ikan', 'Agribisnis Budidaya Perikanan'],
+    prodi: ['Nautika Kapal Penangkap Ikan', 'Teknika Kapal Penangkap Ikan', 'Agribisnis Perikanan Air Payau dan Laut', 'Agribisnis Perikanan Air Tawar'],
   },
   {
     id: 'supm-tegal',
@@ -360,7 +388,7 @@ export const SATDIK_LIST = [
     establishedYear: 1962,
     kampusCabang: ['Kampus Martoloyo Tegal'],
     rector: 'H. Maskuri, S.St.Pi., M.Si.',
-    prodi: ['Nautika Kapal Penangkap Ikan', 'Teknika Kapal Penangkap Ikan', 'Agribisnis Pengolahan Hasil Perikanan', 'Agribisnis Budidaya Air Payau'],
+    prodi: ['Nautika Kapal Penangkap Ikan', 'Teknika Kapal Penangkap Ikan', 'Agribisnis Pengolahan Hasil Perikanan', 'Agribisnis Perikanan Air Payau dan Laut'],
   },
   {
     id: 'supm-pontianak',
@@ -384,7 +412,7 @@ export const SATDIK_LIST = [
     establishedYear: 1988,
     kampusCabang: ['Kampus Sungai Raya Pontianak'],
     rector: 'Mustafa, S.St.Pi., M.Si.',
-    prodi: ['Nautika Kapal Penangkap Ikan', 'Agribisnis Budidaya Perikanan Air Tawar', 'Agribisnis Pengolahan Hasil Perikanan'],
+    prodi: ['Nautika Kapal Penangkap Ikan', 'Agribisnis Perikanan Air Tawar', 'Agribisnis Pengolahan Hasil Perikanan'],
   },
   {
     id: 'supm-bone',
@@ -408,7 +436,7 @@ export const SATDIK_LIST = [
     establishedYear: 1987,
     kampusCabang: ['Kampus Bajoe Bone'],
     rector: 'Drs. H. Syamsuddin, M.Si.',
-    prodi: ['Nautika Kapal Penangkap Ikan', 'Teknika Kapal Penangkap Ikan', 'Agribisnis Budidaya Perikanan Air Payau'],
+    prodi: ['Nautika Kapal Penangkap Ikan', 'Teknika Kapal Penangkap Ikan', 'Agribisnis Perikanan Air Payau dan Laut'],
   },
   {
     id: 'supm-waiheru',
@@ -432,20 +460,42 @@ export const SATDIK_LIST = [
     establishedYear: 1986,
     kampusCabang: ['Kampus Waiheru Baguala Ambon'],
     rector: 'Achmad Jais Ely, S.St.Pi., M.Si.',
-    prodi: ['Nautika Kapal Penangkap Ikan', 'Teknika Kapal Penangkap Ikan', 'Agribisnis Perikanan Air Payau & Laut', 'Agribisnis Pengolahan Hasil Perikanan'],
+    prodi: ['Nautika Kapal Penangkap Ikan', 'Teknika Kapal Penangkap Ikan', 'Agribisnis Perikanan Air Payau dan Laut', 'Agribisnis Pengolahan Hasil Perikanan'],
   }
 ];
 
 export const SARPRAS_CATEGORIES = [
   {
-    id: 'penangkapan_mesin',
-    name: 'Penangkapan Ikan dan Permesinan Kapal',
+    id: 'penangkapan_ikan',
+    name: 'Penangkapan Ikan',
     iconName: 'Ship',
     color: '#0284c7', // Sky Blue
     bgLight: 'bg-sky-500/10',
     borderLight: 'border-sky-500/30',
-    description: 'Kapal Latih Kenavigasian, Simulator Anjungan & Kamar Mesin, Bengkel Bubut & Fabrikasi Mesin Kapal, Alat Tangkap Perikanan (Purse Seine, Longline, Gillnet).',
-    standardMinimum: 'Minimal 1 Kapal Latih operasional per 200 taruna nautika/teknika, dan 1 Full Mission Bridge Simulator.',
+    description: 'Kapal Latih Kenavigasian, Simulator Anjungan & Radar Navigasi (FMBS), Lab Nautika, dan Alat Tangkap Perikanan (Purse Seine, Longline, Gillnet).',
+    standardMinimum: 'Minimal 1 Kapal Latih operasional per 200 taruna nautika dan 1 Full Mission Bridge Simulator.',
+    prodis: [
+      'Perikanan Tangkap',
+      'Teknik Penangkapan Ikan',
+      'Teknologi Penangkapan Ikan',
+      'Nautika Kapal Penangkap Ikan'
+    ]
+  },
+  {
+    id: 'permesinan_mekanisasi',
+    name: 'Permesinan dan Mekanisasi',
+    iconName: 'Wrench',
+    color: '#0ea5e9', // Light Blue / Steel
+    bgLight: 'bg-sky-600/10',
+    borderLight: 'border-sky-600/30',
+    description: 'Simulator Kamar Mesin (ERS), Bengkel Bubut & Las Fabrikasi STCW, Mesin Diesel Penggerak Kapal, Unit Mekanisasi dan Otomasi Perikanan.',
+    standardMinimum: 'Bengkel permesinan kapal terstandar STCW Ditjen Hubla, instalasi mesin penggerak dan simulator permesinan aktif.',
+    prodis: [
+      'Permesinan Perikanan',
+      'Permesinan Kapal',
+      'Mekanisasi Perikanan',
+      'Teknika Kapal Penangkap Ikan'
+    ]
   },
   {
     id: 'budidaya_perikanan',
@@ -456,36 +506,74 @@ export const SARPRAS_CATEGORIES = [
     borderLight: 'border-emerald-500/30',
     description: 'Hatchery Pembenihan Udang & Ikan, Kolam Tambak Bioflok & RAS, Kolam Pendederan/Pembesaran, Lab Kualitas Air, Pabrik Mini Pakan Mandiri.',
     standardMinimum: 'Kapasitas produksi minimal 500.000 nauplii/ekor benih per siklus, Lab air terkalibrasi KAN.',
+    prodis: [
+      'Budidaya Ikan',
+      'Teknik Budidaya Perikanan',
+      'Teknologi Akuakultur',
+      'Teknik Penanganan Patologi Perikanan'
+    ]
   },
   {
     id: 'pengolahan_hasil',
-    name: 'Pengolahan Hasil Perikanan',
+    name: 'Pengolahan Hasil Perikanan/Laut',
     iconName: 'Boxes',
     color: '#f59e0b', // Amber
     bgLight: 'bg-amber-500/10',
     borderLight: 'border-amber-500/30',
     description: 'Unit Pengolahan Ikan (UPI) Latih Standard HACCP/GMP, Cold Storage (-20°C s/d -40°C), Air Blast Freezer (ABF), Mesin Pengalengan Retort, Lab Mikrobiologi Pangan.',
     standardMinimum: 'Kapasitas pembekuan ABF min. 2 Ton/batch, Cold storage min. 10 Ton, Sertifikasi Kelayakan Pengolahan (SKP).',
+    prodis: [
+      'Pengolahan Hasil Laut',
+      'Teknologi Pengolahan Hasil Perikanan',
+      'Teknik Pengolahan Produk Perikanan'
+    ]
   },
   {
-    id: 'agribisnis_penyuluhan',
-    name: 'Agribisnis, Pengolahan dan Penyuluhan',
-    iconName: 'Factory',
-    color: '#ec4899', // Pink
-    bgLight: 'bg-pink-500/10',
-    borderLight: 'border-pink-500/30',
-    description: 'Teaching Factory (TEFA) Pengolahan & Agribisnis Perikanan, Laboratorium Penyuluhan & Komunikasi Pesisir, Pengemasan Produk Nilai Tambah, serta Inkubator Bisnis Vokasi KP.',
+    id: 'agribisnis_perikanan',
+    name: 'Agribisnis Perikanan',
+    iconName: 'TrendingUp',
+    color: '#8b5cf6', // Violet
+    bgLight: 'bg-violet-500/10',
+    borderLight: 'border-violet-500/30',
+    description: 'Teaching Factory (TEFA) Pengolahan & Agribisnis Komersial, Inkubator Bisnis Vokasi KP, Pengemasan & Rantai Pasok Hasil Perikanan, Gerai Produk Taruna.',
     standardMinimum: 'Unit bisnis terintegrasi kurikulum vokasi 70% praktik, memiliki perizinan PIRT/BPOM/Halal.',
+    prodis: [
+      'Agribisnis Pengolahan Hasil Perikanan',
+      'Agribisnis Perikanan',
+      'Agribisnis Perikanan Air Payau dan Laut',
+      'Agribisnis Perikanan Air Tawar'
+    ]
   },
   {
-    id: 'konservasi_pariwisata',
-    name: 'Konservasi dan Pariwisata',
+    id: 'kelautan_konservasi',
+    name: 'Kelautan, Konservasi, dan Pengolahan Lingkungan',
     iconName: 'Compass',
     color: '#06b6d4', // Cyan
     bgLight: 'bg-cyan-500/10',
     borderLight: 'border-cyan-500/30',
     description: 'Pusat Selam & Dive Center, Fasilitas Ekowisata Bahari Edukasi, Laboratorium Konservasi Kawasan Laut & Terumbu Karang, Wahana Wisata Mangrove & Pesisir.',
     standardMinimum: 'Fasilitas dive center bersertifikat, kompresor breathing air teruji, wahana edukasi konservasi aktif.',
+    prodis: [
+      'Teknik Kelautan',
+      'Teknologi Kelautan',
+      'Teknologi Pengelolaan Sumberdaya Perairan',
+      'Ekowisata Bahari',
+      'Konservasi'
+    ]
+  },
+  {
+    id: 'sosial_pemberdayaan',
+    name: 'Sosial & Pemberdayaan Masyarakat',
+    iconName: 'Users',
+    color: '#ec4899', // Pink
+    bgLight: 'bg-pink-500/10',
+    borderLight: 'border-pink-500/30',
+    description: 'Laboratorium Penyuluhan & Komunikasi Pesisir, Balai Pertemuan & Pemberdayaan Nelayan, Asrama Korps Taruna Bahari, Fasilitas Pembinaan Karakter Vokasi.',
+    standardMinimum: 'Sarana penyuluhan dan pendampingan kelompok nelayan/pembudidaya aktif, asrama taruna terstandar kedisiplinan bahari.',
+    prodis: [
+      'Penyuluhan Perikanan',
+      'Teknologi Pengelolaan Sumberdaya Perairan'
+    ]
   },
   {
     id: 'administrasi_umum',
@@ -496,8 +584,96 @@ export const SARPRAS_CATEGORIES = [
     borderLight: 'border-indigo-500/30',
     description: 'Gedung Rektorat & Tata Usaha, Ruang Administrasi & Layanan Terpadu, Kendaraan Dinas Operasional, Ruang Rapat Senat, Jaringan Server & Utilitas Kampus.',
     standardMinimum: 'Ketersediaan sarana perkantoran terakreditasi, jaringan intranet stabil, serta utilitas pendukung operasional kampus.',
+    prodis: []
   }
 ];
+
+// Mapping resmi Program Studi ke Bidang Sarpras
+export const PRODI_TO_CATEGORY_MAP = {
+  // 1. Penangkapan Ikan
+  'Perikanan Tangkap': 'penangkapan_ikan',
+  'Teknik Penangkapan Ikan': 'penangkapan_ikan',
+  'Teknologi Penangkapan Ikan': 'penangkapan_ikan',
+  'Nautika Kapal Penangkap Ikan': 'penangkapan_ikan',
+
+  // 2. Permesinan dan Mekanisasi
+  'Permesinan Perikanan': 'permesinan_mekanisasi',
+  'Permesinan Kapal': 'permesinan_mekanisasi',
+  'Mekanisasi Perikanan': 'permesinan_mekanisasi',
+  'Teknika Kapal Penangkap Ikan': 'permesinan_mekanisasi',
+
+  // 3. Budidaya Perikanan
+  'Budidaya Ikan': 'budidaya_perikanan',
+  'Teknik Budidaya Perikanan': 'budidaya_perikanan',
+  'Teknologi Akuakultur': 'budidaya_perikanan',
+  'Teknik Penanganan Patologi Perikanan': 'budidaya_perikanan',
+
+  // 4. Pengolahan Hasil Perikanan/Laut
+  'Pengolahan Hasil Laut': 'pengolahan_hasil',
+  'Teknologi Pengolahan Hasil Perikanan': 'pengolahan_hasil',
+  'Teknik Pengolahan Produk Perikanan': 'pengolahan_hasil',
+
+  // 5. Agribisnis Perikanan
+  'Agribisnis Pengolahan Hasil Perikanan': 'agribisnis_perikanan',
+  'Agribisnis Perikanan': 'agribisnis_perikanan',
+  'Agribisnis Perikanan Air Payau dan Laut': 'agribisnis_perikanan',
+  'Agribisnis Perikanan Air Tawar': 'agribisnis_perikanan',
+
+  // 6. Kelautan, Konservasi, dan Pengolahan Lingkungan
+  'Teknik Kelautan': 'kelautan_konservasi',
+  'Teknologi Kelautan': 'kelautan_konservasi',
+  'Teknologi Pengelolaan Sumberdaya Perairan': 'kelautan_konservasi',
+  'Ekowisata Bahari': 'kelautan_konservasi',
+  'Konservasi': 'kelautan_konservasi',
+
+  // 7. Sosial & Pemberdayaan Masyarakat
+  'Penyuluhan Perikanan': 'sosial_pemberdayaan',
+};
+
+// Mapping relasi multi-bidang (prodi yang terhubung ke lebih dari 1 bidang sarpras)
+export const PRODI_TO_CATEGORIES_MAP = {
+  'Perikanan Tangkap': ['penangkapan_ikan'],
+  'Teknik Penangkapan Ikan': ['penangkapan_ikan'],
+  'Teknologi Penangkapan Ikan': ['penangkapan_ikan'],
+  'Nautika Kapal Penangkap Ikan': ['penangkapan_ikan'],
+
+  'Permesinan Perikanan': ['permesinan_mekanisasi'],
+  'Permesinan Kapal': ['permesinan_mekanisasi'],
+  'Mekanisasi Perikanan': ['permesinan_mekanisasi'],
+  'Teknika Kapal Penangkap Ikan': ['permesinan_mekanisasi'],
+
+  'Budidaya Ikan': ['budidaya_perikanan'],
+  'Teknik Budidaya Perikanan': ['budidaya_perikanan'],
+  'Teknologi Akuakultur': ['budidaya_perikanan'],
+  'Teknik Penanganan Patologi Perikanan': ['budidaya_perikanan'],
+
+  'Pengolahan Hasil Laut': ['pengolahan_hasil'],
+  'Teknologi Pengolahan Hasil Perikanan': ['pengolahan_hasil'],
+  'Teknik Pengolahan Produk Perikanan': ['pengolahan_hasil'],
+
+  'Agribisnis Pengolahan Hasil Perikanan': ['agribisnis_perikanan'],
+  'Agribisnis Perikanan': ['agribisnis_perikanan'],
+  'Agribisnis Perikanan Air Payau dan Laut': ['agribisnis_perikanan'],
+  'Agribisnis Perikanan Air Tawar': ['agribisnis_perikanan'],
+
+  'Teknik Kelautan': ['kelautan_konservasi'],
+  'Teknologi Kelautan': ['kelautan_konservasi'],
+  'Teknologi Pengelolaan Sumberdaya Perairan': ['kelautan_konservasi', 'sosial_pemberdayaan'],
+  'Ekowisata Bahari': ['kelautan_konservasi'],
+  'Konservasi': ['kelautan_konservasi'],
+
+  'Penyuluhan Perikanan': ['sosial_pemberdayaan'],
+};
+
+export const getCategoryForProdi = (prodiName) => {
+  if (!prodiName) return null;
+  return PRODI_TO_CATEGORY_MAP[prodiName] || null;
+};
+
+export const getProdisForCategory = (categoryId) => {
+  const cat = SARPRAS_CATEGORIES.find(c => c.id === categoryId);
+  return cat?.prodis || [];
+};
 
 export const INITIAL_SARPRAS_DATA = [
   // Politeknik AUP Jakarta
@@ -506,7 +682,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Kapal Latih KM. Madidihang 03',
     satdikId: 'poltek-aup',
     satdikName: 'Politeknik Ahli Usaha Perikanan Jakarta',
-    category: 'penangkapan_mesin',
+    category: 'penangkapan_ikan',
     subcategory: 'Kapal Latih Vokasi',
     condition: 'Baik',
     conditionScore: 92,
@@ -529,7 +705,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Full Mission Ship Bridge Simulator System',
     satdikId: 'poltek-aup',
     satdikName: 'Politeknik Ahli Usaha Perikanan Jakarta',
-    category: 'penangkapan_mesin',
+    category: 'penangkapan_ikan',
     subcategory: 'Simulator Kenavigasian',
     condition: 'Baik',
     conditionScore: 95,
@@ -598,7 +774,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Gedung Asrama Korps Taruna Bima-Yudistira (Putra)',
     satdikId: 'poltek-aup',
     satdikName: 'Politeknik Ahli Usaha Perikanan Jakarta',
-    category: 'agribisnis_penyuluhan',
+    category: 'sosial_pemberdayaan',
     subcategory: 'Asrama Taruna',
     condition: 'Baik',
     conditionScore: 84,
@@ -621,7 +797,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Teaching Factory (TEFA) Pengalengan & Produk Nilai Tambah',
     satdikId: 'poltek-aup',
     satdikName: 'Politeknik Ahli Usaha Perikanan Jakarta',
-    category: 'agribisnis_penyuluhan',
+    category: 'agribisnis_perikanan',
     subcategory: 'TEFA Pengolahan',
     condition: 'Baik',
     conditionScore: 90,
@@ -692,7 +868,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Teaching Factory Bandeng Cabut Duri & Fish Jelly (Surimi)',
     satdikId: 'poltek-kp-sidoarjo',
     satdikName: 'Politeknik Kelautan dan Perikanan Sidoarjo',
-    category: 'agribisnis_penyuluhan',
+    category: 'agribisnis_perikanan',
     subcategory: 'TEFA Pengolahan',
     condition: 'Baik',
     conditionScore: 94,
@@ -738,7 +914,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Asrama Taruna Dewaruci & Menza Graha Bahari',
     satdikId: 'poltek-kp-sidoarjo',
     satdikName: 'Politeknik Kelautan dan Perikanan Sidoarjo',
-    category: 'agribisnis_penyuluhan',
+    category: 'sosial_pemberdayaan',
     subcategory: 'Asrama & Menza',
     condition: 'Rusak Ringan',
     conditionScore: 76,
@@ -763,7 +939,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Kapal Latih KM. Airaha 02',
     satdikId: 'poltek-kp-bitung',
     satdikName: 'Politeknik Kelautan dan Perikanan Bitung',
-    category: 'penangkapan_mesin',
+    category: 'penangkapan_ikan',
     subcategory: 'Kapal Latih Vokasi',
     condition: 'Baik',
     conditionScore: 86,
@@ -786,7 +962,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Engine Room Simulator & Marine Workshop Bengkel Las',
     satdikId: 'poltek-kp-bitung',
     satdikName: 'Politeknik Kelautan dan Perikanan Bitung',
-    category: 'penangkapan_mesin',
+    category: 'permesinan_mekanisasi',
     subcategory: 'Simulator & Bengkel Mesin',
     condition: 'Baik',
     conditionScore: 90,
@@ -834,7 +1010,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Kapal Latih KM. Frans Kaisiepo',
     satdikId: 'poltek-kp-sorong',
     satdikName: 'Politeknik Kelautan dan Perikanan Sorong',
-    category: 'penangkapan_mesin',
+    category: 'penangkapan_ikan',
     subcategory: 'Kapal Latih Vokasi',
     condition: 'Rusak Berat',
     conditionScore: 25,
@@ -880,7 +1056,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Dive Center & Kompresor Breathing Air Scuba Latih',
     satdikId: 'poltek-kp-sorong',
     satdikName: 'Politeknik Kelautan dan Perikanan Sorong',
-    category: 'konservasi_pariwisata',
+    category: 'kelautan_konservasi',
     subcategory: 'Sarana Selam & Konservasi',
     condition: 'Baik',
     conditionScore: 93,
@@ -928,7 +1104,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Laboratorium Dinamika Rancang Bangun Perahu & Fiber',
     satdikId: 'poltek-kp-karawang',
     satdikName: 'Politeknik Kelautan dan Perikanan Karawang',
-    category: 'penangkapan_mesin',
+    category: 'permesinan_mekanisasi',
     subcategory: 'Bengkel & Rancang Bangun',
     condition: 'Baik',
     conditionScore: 88,
@@ -953,7 +1129,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Kapal Latih KM. Bone Raya 01',
     satdikId: 'poltek-kp-bone',
     satdikName: 'Politeknik Kelautan dan Perikanan Bone',
-    category: 'penangkapan_mesin',
+    category: 'penangkapan_ikan',
     subcategory: 'Kapal Latih Vokasi',
     condition: 'Rusak Ringan',
     conditionScore: 72,
@@ -1024,7 +1200,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Asrama Taruna Sasando & Dapur Umum Bahari',
     satdikId: 'poltek-kp-kupang',
     satdikName: 'Politeknik Kelautan dan Perikanan Kupang',
-    category: 'konservasi_pariwisata',
+    category: 'sosial_pemberdayaan',
     subcategory: 'Asrama & Fasilitas Taruna',
     condition: 'Rusak Ringan',
     conditionScore: 62,
@@ -1049,7 +1225,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Laboratorium Simulator Kenavigasian & ECDIS Selat Malaka',
     satdikId: 'poltek-kp-dumai',
     satdikName: 'Politeknik Kelautan dan Perikanan Dumai',
-    category: 'penangkapan_mesin',
+    category: 'penangkapan_ikan',
     subcategory: 'Simulator Kenavigasian',
     condition: 'Baik',
     conditionScore: 91,
@@ -1120,7 +1296,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Dermaga Latih & Bengkel Mesin Tempel Nelayan',
     satdikId: 'poltek-kp-pangandaran',
     satdikName: 'Politeknik Kelautan dan Perikanan Pangandaran',
-    category: 'penangkapan_mesin',
+    category: 'permesinan_mekanisasi',
     subcategory: 'Dermaga & Bengkel',
     condition: 'Rusak Ringan',
     conditionScore: 55,
@@ -1170,7 +1346,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Pusat Praktik Konservasi Terumbu Karang & Ekowisata Bahari Wangi-Wangi',
     satdikId: 'akkp-wakatobi',
     satdikName: 'Akademi Komunitas KP Wakatobi',
-    category: 'konservasi_pariwisata',
+    category: 'kelautan_konservasi',
     subcategory: 'Konservasi & Ekowisata',
     condition: 'Baik',
     conditionScore: 89,
@@ -1195,7 +1371,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Kapal Latih KM. Ladong Bahari 01',
     satdikId: 'supm-ladong',
     satdikName: 'SUPM Ladong Aceh',
-    category: 'penangkapan_mesin',
+    category: 'penangkapan_ikan',
     subcategory: 'Kapal Latih Vokasi Menengah',
     condition: 'Rusak Ringan',
     conditionScore: 71,
@@ -1218,7 +1394,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Asrama Taruna Teuku Umar & Ruang Makan Menza',
     satdikId: 'supm-ladong',
     satdikName: 'SUPM Ladong Aceh',
-    category: 'agribisnis_penyuluhan',
+    category: 'sosial_pemberdayaan',
     subcategory: 'Asrama & Menza',
     condition: 'Baik',
     conditionScore: 83,
@@ -1243,7 +1419,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Kapal Latih KM. Pariaman Bahari 02',
     satdikId: 'supm-pariaman',
     satdikName: 'SUPM Pariaman',
-    category: 'penangkapan_mesin',
+    category: 'penangkapan_ikan',
     subcategory: 'Kapal Latih Vokasi Menengah',
     condition: 'Rusak Berat',
     conditionScore: 28,
@@ -1266,7 +1442,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Laboratorium Pengolahan Hasil Laut & TEFA Dendeng Tuna & Randang Belut',
     satdikId: 'supm-pariaman',
     satdikName: 'SUPM Pariaman',
-    category: 'agribisnis_penyuluhan',
+    category: 'agribisnis_perikanan',
     subcategory: 'TEFA Pengolahan Tradisional',
     condition: 'Baik',
     conditionScore: 89,
@@ -1314,7 +1490,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Bengkel Mesin Perkapalan & Bubut SUPM Kotaagung',
     satdikId: 'supm-kotaagung',
     satdikName: 'SUPM Kotaagung Lampung',
-    category: 'penangkapan_mesin',
+    category: 'permesinan_mekanisasi',
     subcategory: 'Bengkel Mesin',
     condition: 'Rusak Ringan',
     conditionScore: 73,
@@ -1339,7 +1515,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Kapal Latih KM. Bahari Mandiri 01',
     satdikId: 'supm-tegal',
     satdikName: 'SUPM Tegal',
-    category: 'penangkapan_mesin',
+    category: 'penangkapan_ikan',
     subcategory: 'Kapal Latih Vokasi Menengah',
     condition: 'Baik',
     conditionScore: 88,
@@ -1362,7 +1538,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Gedung Workshop Alat Tangkap & Kolam Uji Dinamika Jaring',
     satdikId: 'supm-tegal',
     satdikName: 'SUPM Tegal',
-    category: 'penangkapan_mesin',
+    category: 'penangkapan_ikan',
     subcategory: 'Bengkel & Uji Jaring',
     condition: 'Baik',
     conditionScore: 92,
@@ -1433,7 +1609,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Kapal Latih KM. Kapuas Bahari 01',
     satdikId: 'supm-pontianak',
     satdikName: 'SUPM Pontianak',
-    category: 'penangkapan_mesin',
+    category: 'penangkapan_ikan',
     subcategory: 'Kapal Latih Sungai & Estuari',
     condition: 'Rusak Ringan',
     conditionScore: 74,
@@ -1481,7 +1657,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Gedung Asrama Siswa Taruna Arung Palakka',
     satdikId: 'supm-bone',
     satdikName: 'SUPM Bone',
-    category: 'konservasi_pariwisata',
+    category: 'sosial_pemberdayaan',
     subcategory: 'Asrama Taruna',
     condition: 'Rusak Ringan',
     conditionScore: 77,
@@ -1506,7 +1682,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Kapal Latih KM. Siwalima 01',
     satdikId: 'supm-waiheru',
     satdikName: 'SUPM Waiheru Ambon',
-    category: 'penangkapan_mesin',
+    category: 'penangkapan_ikan',
     subcategory: 'Kapal Latih Vokasi Menengah',
     condition: 'Rusak Ringan',
     conditionScore: 60,
@@ -1529,7 +1705,7 @@ export const INITIAL_SARPRAS_DATA = [
     name: 'Teaching Factory Pengasapan Ikan Cakalang Fufu & Abon Ikan Laut Banda',
     satdikId: 'supm-waiheru',
     satdikName: 'SUPM Waiheru Ambon',
-    category: 'agribisnis_penyuluhan',
+    category: 'agribisnis_perikanan',
     subcategory: 'TEFA Pengolahan Tradisional',
     condition: 'Baik',
     conditionScore: 91,

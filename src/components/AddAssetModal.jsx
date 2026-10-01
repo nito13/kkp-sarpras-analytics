@@ -8,9 +8,10 @@ import {
   ShieldCheck, 
   Wrench, 
   Check, 
-  AlertCircle 
+  AlertCircle,
+  GraduationCap
 } from 'lucide-react';
-import { SATDIK_LIST, SARPRAS_CATEGORIES } from '../data/kkpData';
+import { SATDIK_LIST, SARPRAS_CATEGORIES, PRODI_LIST, getCategoryForProdi, getProdisForCategory } from '../data/kkpData';
 
 export default function AddAssetModal({
   isOpen,
@@ -19,11 +20,14 @@ export default function AddAssetModal({
 }) {
   if (!isOpen) return null;
 
+  const initialProdi = SATDIK_LIST[0]?.prodi?.[0] || 'Semua Program Studi (Umum)';
+  const initialCategory = getCategoryForProdi(initialProdi) || SARPRAS_CATEGORIES[0].id;
+
   const [formData, setFormData] = useState({
     name: '',
     satdikId: SATDIK_LIST[0].id,
-    category: SARPRAS_CATEGORIES[0].id,
-    subcategory: '',
+    prodi: initialProdi,
+    category: initialCategory,
     condition: 'Baik',
     acquisitionYear: 2024,
     utilizationRate: 85,
@@ -37,8 +41,52 @@ export default function AddAssetModal({
 
   const [errorMsg, setErrorMsg] = useState('');
 
+  const selectedSatdik = SATDIK_LIST.find(s => s.id === formData.satdikId) || SATDIK_LIST[0];
+  const campusProdis = selectedSatdik?.prodi || [];
+
   const handleChange = (e) => {
     const { name, value, type } = e.target;
+    if (name === 'satdikId') {
+      const nextSatdik = SATDIK_LIST.find(s => s.id === value);
+      const nextProdis = nextSatdik?.prodi || [];
+      const newProdi = nextProdis[0] || 'Semua Program Studi (Umum)';
+      const matchedCat = getCategoryForProdi(newProdi);
+      setFormData(prev => ({
+        ...prev,
+        satdikId: value,
+        prodi: newProdi,
+        ...(matchedCat ? { category: matchedCat } : {})
+      }));
+      return;
+    }
+
+    if (name === 'prodi') {
+      const matchedCat = getCategoryForProdi(value);
+      setFormData(prev => ({
+        ...prev,
+        prodi: value,
+        ...(matchedCat ? { category: matchedCat } : {})
+      }));
+      return;
+    }
+
+    if (name === 'category') {
+      const catProdis = getProdisForCategory(value);
+      let nextProdi = formData.prodi;
+      if (catProdis.length > 0 && !catProdis.includes(formData.prodi)) {
+        const campusMatch = campusProdis.find(p => catProdis.includes(p));
+        nextProdi = campusMatch || catProdis[0];
+      } else if (catProdis.length === 0) {
+        nextProdi = 'Semua Program Studi (Umum)';
+      }
+      setFormData(prev => ({
+        ...prev,
+        category: value,
+        prodi: nextProdi
+      }));
+      return;
+    }
+
     setFormData(prev => ({
       ...prev,
       [name]: type === 'number' ? Number(value) : value
@@ -52,7 +100,6 @@ export default function AddAssetModal({
       return;
     }
 
-    const selectedSatdik = SATDIK_LIST.find(s => s.id === formData.satdikId);
     const scoreMap = { 'Baik': 92, 'Rusak Ringan': 75, 'Rusak Berat': 25 };
     const urgencyMap = {
       'Baik': 'Normal',
@@ -67,7 +114,8 @@ export default function AddAssetModal({
       maintenanceUrgency: urgencyMap[formData.condition] || 'Normal',
       lastMaintenanceDate: new Date().toISOString().slice(0, 10),
       nextMaintenanceDate: '2027-01-15',
-      ...formData
+      ...formData,
+      prodi: formData.prodi || campusProdis[0] || 'Semua Program Studi (Umum)'
     };
 
     onAddAsset(newAsset);
@@ -127,7 +175,7 @@ export default function AddAssetModal({
             />
           </div>
 
-          {/* Row 2: Satdik & Bidang */}
+          {/* Row 2: Satdik & Program Studi */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-slate-300 font-semibold block mb-1">Satuan Pendidikan (Satdik)</label>
@@ -144,34 +192,72 @@ export default function AddAssetModal({
             </div>
 
             <div>
-              <label className="text-slate-300 font-semibold block mb-1">Bidang Sarpras Vokasi</label>
+              <label className="text-slate-300 font-semibold block mb-1 flex items-center justify-between">
+                <span>Program Studi</span>
+                <span className="text-[10px] text-cyan-400 font-normal">({campusProdis.length} prodi kampus)</span>
+              </label>
               <select
-                name="category"
-                value={formData.category}
+                name="prodi"
+                value={formData.prodi}
                 onChange={handleChange}
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500 truncate"
               >
-                {SARPRAS_CATEGORIES.map(c => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
+                <option value="Semua Program Studi (Umum)">Semua Program Studi (Umum / Fasilitas Bersama)</option>
+                {campusProdis.length > 0 && (
+                  <optgroup label={`Program Studi ${selectedSatdik.shortName}`}>
+                    {campusProdis.map(p => {
+                      const catId = getCategoryForProdi(p);
+                      const catName = SARPRAS_CATEGORIES.find(c => c.id === catId)?.name;
+                      return (
+                        <option key={p} value={p}>
+                          {p} {catName ? `(${catName})` : ''}
+                        </option>
+                      );
+                    })}
+                  </optgroup>
+                )}
+                <optgroup label="Daftar 25 Program Studi Nasional">
+                  {PRODI_LIST.filter(p => !campusProdis.includes(p)).map(p => {
+                    const catId = getCategoryForProdi(p);
+                    const catName = SARPRAS_CATEGORIES.find(c => c.id === catId)?.name;
+                    return (
+                      <option key={p} value={p}>
+                        {p} {catName ? `(${catName})` : ''}
+                      </option>
+                    );
+                  })}
+                </optgroup>
               </select>
             </div>
           </div>
 
-          {/* Row 3: Sub-Bidang & Kondisi */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="text-slate-300 font-semibold block mb-1">Sub-Bidang / Tipe</label>
-              <input
-                type="text"
-                name="subcategory"
-                value={formData.subcategory}
-                onChange={handleChange}
-                placeholder="Contoh: Simulator Kenavigasian / Hatchery / Cold Chain"
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
-              />
+          {/* Row 3: Bidang Sarpras */}
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-slate-300 font-semibold block">Bidang Sarpras</label>
+              {formData.prodi && formData.prodi !== 'Semua Program Studi (Umum)' && (
+                <span className="text-[10px] text-cyan-400 bg-cyan-950/70 border border-cyan-800/50 px-2 py-0.5 rounded-full flex items-center gap-1 font-medium">
+                  <GraduationCap className="w-3 h-3 text-cyan-400" />
+                  <span>Sesuai Prodi: {formData.prodi}</span>
+                </span>
+              )}
             </div>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+            >
+              {SARPRAS_CATEGORIES.map(c => (
+                <option key={c.id} value={c.id}>
+                  {c.name} {c.prodis?.length > 0 ? `(${c.prodis.length} Prodi Terkait)` : ''}
+                </option>
+              ))}
+            </select>
+          </div>
 
+          {/* Row 4: Kondisi, Utilisasi & Tahun Perolehan */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="text-slate-300 font-semibold block mb-1">Kondisi Fisik Aset</label>
               <select
@@ -185,10 +271,7 @@ export default function AddAssetModal({
                 <option value="Rusak Berat">Rusak Berat (Kritis)</option>
               </select>
             </div>
-          </div>
 
-          {/* Row 4: Utilisasi & Tahun Perolehan */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-slate-300 font-semibold block mb-1">Tingkat Utilisasi (%)</label>
               <input

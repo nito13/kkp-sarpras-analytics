@@ -12,6 +12,7 @@ import {
   Compass, 
   Factory, 
   Briefcase,
+  Wrench,
   ShieldAlert,
   ChevronRight,
   Filter
@@ -166,13 +167,19 @@ export default function ExecutiveDashboard({
   // Multi-line helper to prevent radar labels clipping on mobile screens
   const formatRadarLabel = (name) => {
     const manualWrap = {
-      'Penangkapan Ikan dan Permesinan Kapal': ['Penangkapan Ikan', '& Permesinan Kapal'],
+      'Penangkapan Ikan': ['Penangkapan', 'Ikan'],
+      'Permesinan dan Mekanisasi': ['Permesinan &', 'Mekanisasi'],
       'Budidaya Perikanan': ['Budidaya', 'Perikanan'],
+      'Pengolahan Hasil Perikanan/Laut': ['Pengolahan Hasil', 'Perikanan/Laut'],
       'Pengolahan Hasil Perikanan': ['Pengolahan Hasil', 'Perikanan'],
-      'Agribisnis, Pengolahan dan Penyuluhan': ['Agribisnis, Pengolahan', '& Penyuluhan'],
-      'Agribisnis Pengolahan dan Penyuluhan': ['Agribisnis, Pengolahan', '& Penyuluhan'],
-      'Konservasi dan Pariwisata': ['Konservasi &', 'Pariwisata'],
+      'Agribisnis Perikanan': ['Agribisnis', 'Perikanan'],
+      'Kelautan, Konservasi, dan Pengolahan Lingkungan': ['Kelautan, Konservasi', '& Pengolahan Lingk.'],
+      'Sosial & Pemberdayaan Masyarakat': ['Sosial &', 'Pemberdayaan Masy.'],
       'Administrasi & Umum': ['Administrasi', '& Umum'],
+      'Administasi & Umum': ['Administasi', '& Umum'],
+      'Penangkapan Ikan dan Permesinan Kapal': ['Penangkapan Ikan', '& Permesinan Kapal'],
+      'Agribisnis, Pengolahan dan Penyuluhan': ['Agribisnis, Pengolahan', '& Penyuluhan'],
+      'Konservasi dan Pariwisata': ['Konservasi &', 'Pariwisata'],
     };
     if (manualWrap[name]) return manualWrap[name];
     if (name.length <= 14) return name;
@@ -295,7 +302,7 @@ export default function ExecutiveDashboard({
               Dasbor Analitik Sarana & Prasarana Vokasi KKP
             </h2>
             <p className="text-slate-400 text-xs sm:text-sm mt-1 sm:mt-0.5 max-w-2xl text-center sm:text-left">
-              Monitoring kondisi fisik, kelayakan operasi armada kapal latih, tambak super intensif, UPI, laboratorium, dan asrama pada 18 Satuan Pendidikan Kelautan dan Perikanan se-Indonesia.
+              Monitoring kondisi fisik, kelayakan operasi armada kapal latih, tambak, laboratorium, dan asrama pada 18 Satuan Pendidikan Kelautan dan Perikanan se-Indonesia.
             </p>
           </div>
         </div>
@@ -625,15 +632,18 @@ export default function ExecutiveDashboard({
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-8 gap-3">
           {SARPRAS_CATEGORIES.map((cat) => {
             const data = categoryBreakdown[cat.id] || { count: 0, avgScore: 0 };
             const IconComponent = cat.iconName === 'Ship' ? Ship :
+              cat.iconName === 'Wrench' ? Wrench :
               cat.iconName === 'Fish' ? Fish :
               cat.iconName === 'Boxes' ? Boxes :
+              cat.iconName === 'TrendingUp' ? TrendingUp :
               cat.iconName === 'Compass' ? Compass :
-              cat.iconName === 'Factory' ? Factory :
-              cat.iconName === 'Briefcase' ? Briefcase : Building2;
+              cat.iconName === 'Users' ? Users :
+              cat.iconName === 'Briefcase' ? Briefcase :
+              cat.iconName === 'Factory' ? Factory : Building2;
 
             return (
               <div

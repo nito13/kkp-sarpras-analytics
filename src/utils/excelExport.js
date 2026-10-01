@@ -169,8 +169,8 @@ export function exportAssetsToExcel(assets, options = {}) {
     'ID Sistem',
     'Nama Sarana & Prasarana',
     'Satuan Pendidikan (Kampus)',
+    'Program Studi Terkait',
     'Bidang Sarpras',
-    'Sub-Bidang',
     'Kondisi Fisik',
     'Skor Kelayakan',
     'Tingkat Utilisasi',
@@ -251,8 +251,8 @@ export function exportAssetsToExcel(assets, options = {}) {
       createCell(a.id || '-', centerStyle, 's'),
       createCell(a.name || '-', leftBold),
       createCell(a.satdikName || '-', leftStyle),
+      createCell(a.prodi || 'Semua Program Studi (Umum)', leftStyle),
       createCell(a.category || '-', leftStyle),
-      createCell(a.subcategory || '-', leftStyle),
       createCell(a.condition || '-', conditionStyle),
       createCell(Number(a.conditionScore) || 0, percentStyle, 'n'),
       createCell(Number(a.utilizationRate) || 0, percentStyle, 'n'),
@@ -288,11 +288,11 @@ export function exportAssetsToExcel(assets, options = {}) {
   const signTitleStyle = { font: { name: 'Calibri', sz: 10, bold: true, color: { rgb: '0F172A' } }, alignment: { horizontal: 'center' } };
   const signNameStyle = { font: { name: 'Calibri', sz: 10, bold: true, color: { rgb: '003366' }, underline: true }, alignment: { horizontal: 'center' } };
 
-  ws[XLSX.utils.encode_cell({ r: signRow, c: 2 })] = createCell('Mengetahui,', signLabelStyle);
-  ws[XLSX.utils.encode_cell({ r: signRow + 1, c: 2 })] = createCell('Koordinator Sarana & Prasarana', signTitleStyle);
-  ws[XLSX.utils.encode_cell({ r: signRow + 2, c: 2 })] = createCell('Pusat Pendidikan Kelautan dan Perikanan', signLabelStyle);
-  ws[XLSX.utils.encode_cell({ r: signRow + 6, c: 2 })] = createCell('( Admin Sarpras Pusdik KP )', signNameStyle);
-  ws[XLSX.utils.encode_cell({ r: signRow + 7, c: 2 })] = createCell('Pusdik KP — BPPSDM Kelautan dan Perikanan', signLabelStyle);
+  ws[XLSX.utils.encode_cell({ r: signRow, c: 1 })] = createCell('Mengetahui,', signLabelStyle);
+  ws[XLSX.utils.encode_cell({ r: signRow + 1, c: 1 })] = createCell('Koordinator Sarana & Prasarana', signTitleStyle);
+  ws[XLSX.utils.encode_cell({ r: signRow + 2, c: 1 })] = createCell('Pusat Pendidikan Kelautan dan Perikanan', signLabelStyle);
+  ws[XLSX.utils.encode_cell({ r: signRow + 6, c: 1 })] = createCell('( Admin Sarpras Pusdik KP )', signNameStyle);
+  ws[XLSX.utils.encode_cell({ r: signRow + 7, c: 1 })] = createCell('Pusdik KP — BPPSDM Kelautan dan Perikanan', signLabelStyle);
 
   ws[XLSX.utils.encode_cell({ r: signRow, c: 8 })] = createCell('Dicetak melalui SARPRAS KKP,', signLabelStyle);
   ws[XLSX.utils.encode_cell({ r: signRow + 1, c: 8 })] = createCell('Petugas Operator Sistem:', signTitleStyle);
@@ -332,11 +332,11 @@ export function exportAssetsToExcel(assets, options = {}) {
     { s: { r: signRow + 2, c: 1 }, e: { r: signRow + 2, c: 3 } },
     { s: { r: signRow + 6, c: 1 }, e: { r: signRow + 6, c: 3 } },
     { s: { r: signRow + 7, c: 1 }, e: { r: signRow + 7, c: 3 } },
-    { s: { r: signRow, c: 7 }, e: { r: signRow, c: 10 } },
-    { s: { r: signRow + 1, c: 7 }, e: { r: signRow + 1, c: 10 } },
-    { s: { r: signRow + 2, c: 7 }, e: { r: signRow + 2, c: 10 } },
-    { s: { r: signRow + 6, c: 7 }, e: { r: signRow + 6, c: 10 } },
-    { s: { r: signRow + 7, c: 7 }, e: { r: signRow + 7, c: 10 } },
+    { s: { r: signRow, c: 8 }, e: { r: signRow, c: 11 } },
+    { s: { r: signRow + 1, c: 8 }, e: { r: signRow + 1, c: 11 } },
+    { s: { r: signRow + 2, c: 8 }, e: { r: signRow + 2, c: 11 } },
+    { s: { r: signRow + 6, c: 8 }, e: { r: signRow + 6, c: 11 } },
+    { s: { r: signRow + 7, c: 8 }, e: { r: signRow + 7, c: 11 } },
   ];
 
   // 8. LEBAR KOLOM (Auto Widths - 12 Kolom)
@@ -344,9 +344,9 @@ export function exportAssetsToExcel(assets, options = {}) {
     { wch: 6 },  // 0: No
     { wch: 14 }, // 1: ID Sistem
     { wch: 38 }, // 2: Nama Sarpras
-    { wch: 30 }, // 3: Satdik
-    { wch: 22 }, // 4: Bidang
-    { wch: 22 }, // 5: Sub-bidang
+    { wch: 28 }, // 3: Satdik
+    { wch: 32 }, // 4: Program Studi Terkait
+    { wch: 26 }, // 5: Bidang Sarpras
     { wch: 16 }, // 6: Kondisi Fisik
     { wch: 14 }, // 7: Skor Kelayakan
     { wch: 14 }, // 8: Utilisasi
@@ -466,7 +466,7 @@ export function exportRKAToExcel(simulation, options = {}) {
       createCell(a.id, centerStyle, 's'),
       createCell(a.name, leftBold),
       createCell(a.satdikName || '-', left),
-      createCell(a.subcategory || a.category || '-', left),
+      createCell(a.category || '-', left),
       createCell(a.condition || '-', condStyle),
       createCell(Number(a.fundedAmount || a.estimatedRepairCost) || 0, currStyle, 'n'),
       createCell('DISETUJUI (PRIORITAS 1)', approvedStyle)

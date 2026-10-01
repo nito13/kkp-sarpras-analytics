@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   School, 
   Award, 
@@ -14,9 +14,11 @@ import {
   ShieldCheck, 
   BarChart2,
   Check,
-  X
+  X,
+  GraduationCap,
+  Search
 } from 'lucide-react';
-import { SATDIK_LIST, NATIONAL_SARPRAS_TARGETS } from '../data/kkpData';
+import { SATDIK_LIST, NATIONAL_SARPRAS_TARGETS, PRODI_LIST, SARPRAS_CATEGORIES, getCategoryForProdi } from '../data/kkpData';
 
 export default function VokasiAnalytics({
   satdikBreakdown,
@@ -24,6 +26,13 @@ export default function VokasiAnalytics({
 }) {
   const [campus1Id, setCampus1Id] = useState('poltek-aup');
   const [campus2Id, setCampus2Id] = useState('poltek-kp-sidoarjo');
+  const [prodiSearch, setProdiSearch] = useState('');
+  const [activeProdiDetail, setActiveProdiDetail] = useState(null);
+
+  const filteredProdiList = useMemo(() => {
+    if (!prodiSearch.trim()) return PRODI_LIST;
+    return PRODI_LIST.filter(p => p.toLowerCase().includes(prodiSearch.toLowerCase()));
+  }, [prodiSearch]);
 
   const campus1 = SATDIK_LIST.find(s => s.id === campus1Id) || SATDIK_LIST[0];
   const campus2 = SATDIK_LIST.find(s => s.id === campus2Id) || SATDIK_LIST[1];
@@ -33,7 +42,12 @@ export default function VokasiAnalytics({
 
   // Calculate Kapasitas dan Kelayakan Fasilitas Asrama across all satdik
   const asramaData = SATDIK_LIST.map(sat => {
-    const asramaAssets = assets.filter(a => a.satdikId === sat.id && a.category === 'asrama_penunjang');
+    const asramaAssets = assets.filter(a => a.satdikId === sat.id && (
+      a.category === 'sosial_pemberdayaan' ||
+      a.category === 'asrama_penunjang' ||
+      /asrama|menza/i.test(a.subcategory || '') ||
+      /asrama/i.test(a.name || '')
+    ));
     let totalBeds = 0;
     let totalScore = 0;
     asramaAssets.forEach(a => {
@@ -228,6 +242,18 @@ export default function VokasiAnalytics({
                 <span className="text-slate-400">Akreditasi Satdik:</span>
                 <span className="font-bold text-white">{campus1.akreditasi}</span>
               </div>
+              <div className="pt-1.5 border-t border-slate-800/60">
+                <span className="text-[10px] text-slate-400 font-medium block mb-1">
+                  Program Studi ({campus1.prodi?.length || 0}):
+                </span>
+                <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto pr-1 scrollbar-thin">
+                  {campus1.prodi?.map((p, idx) => (
+                    <span key={idx} className="px-1.5 py-0.5 rounded text-[9px] bg-cyan-950/60 text-cyan-300 border border-cyan-800/40">
+                      {p}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -262,6 +288,18 @@ export default function VokasiAnalytics({
               <div className="flex items-center justify-between gap-2">
                 <span className="text-slate-400">Akreditasi Satdik:</span>
                 <span className="font-bold text-white">{campus2.akreditasi}</span>
+              </div>
+              <div className="pt-1.5 border-t border-slate-800/60">
+                <span className="text-[10px] text-slate-400 font-medium block mb-1">
+                  Program Studi ({campus2.prodi?.length || 0}):
+                </span>
+                <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto pr-1 scrollbar-thin">
+                  {campus2.prodi?.map((p, idx) => (
+                    <span key={idx} className="px-1.5 py-0.5 rounded text-[9px] bg-amber-950/60 text-amber-300 border border-amber-800/40">
+                      {p}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -319,9 +357,109 @@ export default function VokasiAnalytics({
                   <td className="py-2 px-3 font-bold text-white">{campus1.akreditasi}</td>
                   <td className="py-2 px-3 font-bold text-white">{campus2.akreditasi}</td>
                 </tr>
+                <tr className="hover:bg-slate-800/40 transition-colors">
+                  <td className="py-2 px-3 text-slate-400 font-medium">Program Kejuruan</td>
+                  <td className="py-2 px-3 font-bold text-cyan-300">{campus1.prodi?.length || 0} Program Studi</td>
+                  <td className="py-2 px-3 font-bold text-amber-300">{campus2.prodi?.length || 0} Program Studi</td>
+                </tr>
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+
+      {/* Direktori Sebaran 25 Program Studi Vokasi BPPSDM KP */}
+      <div className="bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-700/70 shadow-md space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 className="text-base font-bold text-white tracking-tight flex items-center gap-2">
+              <GraduationCap className="w-5 h-5 text-cyan-400" />
+              <span>Direktori 25 Program Studi Vokasi Kelautan & Perikanan</span>
+            </h3>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Sebaran 25 program studi resmi BPPSDM KP pada 18 satuan pendidikan (Politeknik & SUPM) di seluruh Indonesia.
+            </p>
+          </div>
+          <div className="relative min-w-[240px]">
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Cari dari 25 program studi..."
+              value={prodiSearch}
+              onChange={(e) => setProdiSearch(e.target.value)}
+              className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+            />
+          </div>
+        </div>
+
+        {/* Grid Program Studi */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+          {filteredProdiList.map((prodiName, idx) => {
+            const campusesWithProdi = SATDIK_LIST.filter(s => s.prodi && s.prodi.includes(prodiName));
+            const isSelected = activeProdiDetail === prodiName;
+
+            return (
+              <div
+                key={idx}
+                onClick={() => setActiveProdiDetail(isSelected ? null : prodiName)}
+                className={`p-3 rounded-xl border cursor-pointer transition-all duration-200 ${
+                  isSelected
+                    ? 'bg-slate-900 border-cyan-500 ring-1 ring-cyan-500/50 shadow-md'
+                    : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900/90'
+                }`}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex-1 min-w-0">
+                    <span className="font-semibold text-xs text-white block leading-snug">
+                      {prodiName}
+                    </span>
+                    <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                      <span className="text-[10px] text-cyan-400 font-medium">
+                        {campusesWithProdi.length} Satdik
+                      </span>
+                      {(() => {
+                        const catId = getCategoryForProdi(prodiName);
+                        const cat = SARPRAS_CATEGORIES.find(c => c.id === catId);
+                        if (!cat) return null;
+                        return (
+                          <span className={`text-[9px] px-1.5 py-0.5 rounded font-medium ${cat.bgLight} border ${cat.borderLight} text-slate-300`}>
+                            {cat.name}
+                          </span>
+                        );
+                      })()}
+                    </div>
+                  </div>
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded transition-colors ${
+                    isSelected ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : 'bg-slate-800 text-slate-400'
+                  }`}>
+                    {isSelected ? 'Tutup' : 'Lihat Satdik'}
+                  </span>
+                </div>
+
+                {isSelected && (
+                  <div className="mt-2.5 pt-2 border-t border-slate-800 text-[11px] space-y-1.5">
+                    <span className="text-[10px] text-slate-400 font-semibold block">Kampus Pengampu:</span>
+                    <div className="space-y-1 max-h-36 overflow-y-auto pr-1 scrollbar-thin">
+                      {campusesWithProdi.map((c, cIdx) => (
+                        <div key={cIdx} className="flex items-center justify-between text-[10px] bg-slate-950/70 px-2 py-1 rounded border border-slate-800/80">
+                          <span className="text-slate-200 font-medium truncate max-w-[170px]" title={c.name}>
+                            {c.shortName}
+                          </span>
+                          <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
+                            c.jenjang === 'Pendidikan Tinggi'
+                              ? 'bg-cyan-950/70 text-cyan-400 border border-cyan-800/50'
+                              : 'bg-amber-950/70 text-amber-400 border border-amber-800/50'
+                          }`}>
+                            {c.type}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 

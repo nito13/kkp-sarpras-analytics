@@ -7,10 +7,11 @@ import {
   Ship, 
   Fish, 
   Boxes, 
-  Anchor, 
-  Factory, 
   Briefcase,
   Compass,
+  Wrench,
+  Users,
+  TrendingUp,
   CheckCircle2, 
   AlertTriangle, 
   ArrowUpDown, 
@@ -21,9 +22,10 @@ import {
   ChevronLeft,
   ChevronRight,
   ShieldAlert,
-  Download
+  Download,
+  GraduationCap
 } from 'lucide-react';
-import { SATDIK_LIST, SARPRAS_CATEGORIES } from '../data/kkpData';
+import { SATDIK_LIST, SARPRAS_CATEGORIES, PRODI_LIST, getCategoryForProdi, getProdisForCategory } from '../data/kkpData';
 import { exportAssetsToExcel } from '../utils/excelExport';
 import AssetDetailModal from './AssetDetailModal';
 
@@ -37,6 +39,7 @@ export default function AssetExplorer({
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSatdik, setSelectedSatdik] = useState(initialSatdikFilter);
+  const [selectedProdi, setSelectedProdi] = useState('ALL');
   const [selectedCategory, setSelectedCategory] = useState(initialCategoryFilter);
   const [selectedCondition, setSelectedCondition] = useState('ALL');
   const [selectedUrgency, setSelectedUrgency] = useState('ALL');
@@ -68,20 +71,62 @@ export default function AssetExplorer({
     if (initialCategoryFilter) setSelectedCategory(initialCategoryFilter);
   }, [initialCategoryFilter]);
 
+  // Available Prodi options based on selected campus and selected category
+  const availableProdis = useMemo(() => {
+    let prodis = PRODI_LIST;
+    if (selectedSatdik !== 'ALL') {
+      const sat = SATDIK_LIST.find(s => s.id === selectedSatdik);
+      prodis = sat?.prodi || PRODI_LIST;
+    }
+    if (selectedCategory !== 'ALL') {
+      const catProdis = getProdisForCategory(selectedCategory);
+      if (catProdis.length > 0) {
+        return prodis.filter(p => catProdis.includes(p));
+      }
+    }
+    return prodis;
+  }, [selectedSatdik, selectedCategory]);
+
+  const handleCategoryFilterChange = (catId) => {
+    setSelectedCategory(catId);
+    setCurrentPage(1);
+    if (catId !== 'ALL' && selectedProdi !== 'ALL') {
+      const catProdis = getProdisForCategory(catId);
+      if (catProdis.length > 0 && !catProdis.includes(selectedProdi)) {
+        setSelectedProdi('ALL');
+      }
+    }
+  };
+
+  const handleProdiFilterChange = (prodiName) => {
+    setSelectedProdi(prodiName);
+    setCurrentPage(1);
+    if (prodiName !== 'ALL' && prodiName !== 'Semua Program Studi (Umum)') {
+      const matchedCat = getCategoryForProdi(prodiName);
+      if (matchedCat && selectedCategory !== 'ALL' && selectedCategory !== matchedCat) {
+        setSelectedCategory(matchedCat);
+      }
+    }
+  };
+
   // Filter and sort logic
   const filteredAssets = useMemo(() => {
     return assets.filter(item => {
       const matchSearch = searchQuery === '' ||
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.satdikName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (item.prodi && item.prodi.toLowerCase().includes(searchQuery.toLowerCase())) ||
         (item.specs && item.specs.toLowerCase().includes(searchQuery.toLowerCase()));
 
       const matchSatdik = selectedSatdik === 'ALL' || item.satdikId === selectedSatdik;
+      const matchProdi = selectedProdi === 'ALL' || 
+        (item.prodi && item.prodi.toLowerCase() === selectedProdi.toLowerCase()) ||
+        (selectedProdi === 'Semua Program Studi (Umum)' && (!item.prodi || item.prodi.includes('Umum')));
       const matchCat = selectedCategory === 'ALL' || item.category === selectedCategory;
       const matchCond = selectedCondition === 'ALL' || item.condition === selectedCondition;
       const matchUrg = selectedUrgency === 'ALL' || item.maintenanceUrgency === selectedUrgency;
 
-      return matchSearch && matchSatdik && matchCat && matchCond && matchUrg;
+      return matchSearch && matchSatdik && matchProdi && matchCat && matchCond && matchUrg;
     }).sort((a, b) => {
       let valA = a[sortField];
       let valB = b[sortField];
@@ -98,7 +143,7 @@ export default function AssetExplorer({
       if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
       return 0;
     });
-  }, [assets, searchQuery, selectedSatdik, selectedCategory, selectedCondition, selectedUrgency, sortField, sortDirection]);
+  }, [assets, searchQuery, selectedSatdik, selectedProdi, selectedCategory, selectedCondition, selectedUrgency, sortField, sortDirection]);
 
   // Pagination calculation
   const totalPages = Math.ceil(filteredAssets.length / itemsPerPage) || 1;
@@ -116,6 +161,7 @@ export default function AssetExplorer({
   const handleResetFilters = () => {
     setSearchQuery('');
     setSelectedSatdik('ALL');
+    setSelectedProdi('ALL');
     setSelectedCategory('ALL');
     setSelectedCondition('ALL');
     setSelectedUrgency('ALL');
@@ -130,6 +176,7 @@ export default function AssetExplorer({
       currentUser,
       filterSatdikName: selectedSatdik === 'ALL' ? 'Semua Satdik (18 Kampus)' : (satdikObj?.name || selectedSatdik),
       filterCategoryName: selectedCategory === 'ALL' ? 'Semua Bidang' : (catObj?.name || selectedCategory),
+      filterProdiName: selectedProdi === 'ALL' ? 'Semua Program Studi' : selectedProdi,
       filenamePrefix: `SARPRAS_KKP_${selectedSatdik !== 'ALL' ? selectedSatdik : 'Inventaris'}`
     });
   };
@@ -141,18 +188,34 @@ export default function AssetExplorer({
 
   const getCategoryIcon = (category) => {
     switch(category) {
-      case 'penangkapan_mesin': return Ship;
-      case 'budidaya_perikanan': return Fish;
-      case 'pengolahan_hasil': return Boxes;
-      case 'agribisnis_penyuluhan': return Factory;
-      case 'konservasi_pariwisata': return Compass;
-      case 'maritim_kapal': return Ship;
-      case 'akuakultur': return Fish;
-      case 'pengolahan_upi': return Boxes;
-      case 'alat_tangkap': return Ship;
-      case 'tefa': return Factory;
-      case 'administrasi_umum': return Briefcase;
-      default: return Building2;
+      case 'penangkapan_ikan':
+      case 'penangkapan_mesin':
+      case 'maritim_kapal':
+      case 'alat_tangkap':
+        return Ship;
+      case 'permesinan_mekanisasi':
+        return Wrench;
+      case 'budidaya_perikanan':
+      case 'akuakultur':
+        return Fish;
+      case 'pengolahan_hasil':
+      case 'pengolahan_upi':
+        return Boxes;
+      case 'agribisnis_perikanan':
+      case 'agribisnis_penyuluhan':
+      case 'tefa':
+        return TrendingUp;
+      case 'kelautan_konservasi':
+      case 'konservasi_pariwisata':
+        return Compass;
+      case 'sosial_pemberdayaan':
+      case 'asrama_penunjang':
+        return Users;
+      case 'administrasi_umum':
+      case 'administasi_umum':
+        return Briefcase;
+      default:
+        return Building2;
     }
   };
 
@@ -213,13 +276,13 @@ export default function AssetExplorer({
       {/* Multi-Dimensional Filter Toolbar */}
       <div className="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/70 shadow-md space-y-3">
         {/* Row 1: Search & Primary Dropdowns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5">
           {/* Search Input */}
-          <div className="lg:col-span-4 relative">
+          <div className="lg:col-span-3 relative">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Cari nama sarpras atau spesifikasi..."
+              placeholder="Cari sarpras / spesifikasi..."
               value={searchQuery}
               onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
               className="w-full pl-9 pr-4 py-2 bg-slate-900 text-slate-100 placeholder-slate-400 text-xs rounded-xl border border-slate-700 focus:outline-none focus:border-cyan-500"
@@ -230,8 +293,13 @@ export default function AssetExplorer({
           <div className="lg:col-span-3">
             <select
               value={selectedSatdik}
-              onChange={(e) => { setSelectedSatdik(e.target.value); setCurrentPage(1); }}
+              onChange={(e) => { 
+                setSelectedSatdik(e.target.value); 
+                setSelectedProdi('ALL');
+                setCurrentPage(1); 
+              }}
               className="w-full py-2 px-3 bg-slate-900 text-slate-200 text-xs rounded-xl border border-slate-700 focus:outline-none focus:border-cyan-500 truncate"
+              title="Filter Satuan Pendidikan"
             >
               <option value="ALL">Semua Satdik (18 Kampus)</option>
               {SATDIK_LIST.map(s => (
@@ -240,16 +308,41 @@ export default function AssetExplorer({
             </select>
           </div>
 
+          {/* Program Studi */}
+          <div className="lg:col-span-2">
+            <select
+              value={selectedProdi}
+              onChange={(e) => handleProdiFilterChange(e.target.value)}
+              className="w-full py-2 px-3 bg-slate-900 text-slate-200 text-xs rounded-xl border border-slate-700 focus:outline-none focus:border-cyan-500 truncate"
+              title="Filter Program Studi"
+            >
+              <option value="ALL">Semua Program Studi</option>
+              <option value="Semua Program Studi (Umum)">Fasilitas Bersama / Umum</option>
+              {availableProdis.map(p => {
+                const catId = getCategoryForProdi(p);
+                const catName = SARPRAS_CATEGORIES.find(c => c.id === catId)?.name;
+                return (
+                  <option key={p} value={p}>
+                    {p} {catName ? `(${catName})` : ''}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+
           {/* Bidang Sarpras */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-2">
             <select
               value={selectedCategory}
-              onChange={(e) => { setSelectedCategory(e.target.value); setCurrentPage(1); }}
+              onChange={(e) => handleCategoryFilterChange(e.target.value)}
               className="w-full py-2 px-3 bg-slate-900 text-slate-200 text-xs rounded-xl border border-slate-700 focus:outline-none focus:border-cyan-500 truncate"
+              title="Filter Bidang Sarpras"
             >
-              <option value="ALL">Semua Bidang Sarpras</option>
+              <option value="ALL">Semua Bidang</option>
               {SARPRAS_CATEGORIES.map(c => (
-                <option key={c.id} value={c.id}>{c.name}</option>
+                <option key={c.id} value={c.id}>
+                  {c.name} {c.prodis?.length > 0 ? `(${c.prodis.length} Prodi)` : ''}
+                </option>
               ))}
             </select>
           </div>
@@ -260,6 +353,7 @@ export default function AssetExplorer({
               value={selectedCondition}
               onChange={(e) => { setSelectedCondition(e.target.value); setCurrentPage(1); }}
               className="w-full py-2 px-3 bg-slate-900 text-slate-200 text-xs rounded-xl border border-slate-700 focus:outline-none focus:border-cyan-500"
+              title="Filter Kondisi Fisik"
             >
               <option value="ALL">Semua Kondisi</option>
               <option value="Baik">Baik (Layak Penuh)</option>
@@ -289,16 +383,16 @@ export default function AssetExplorer({
               ⚠ Urgensi Kritis ({assets.filter(a => a.maintenanceUrgency === 'Kritis / Segera').length})
             </button>
 
-            {/* Penangkapan & Permesinan Only */}
+            {/* Penangkapan Ikan Only */}
             <button
-              onClick={() => { setSelectedCategory(selectedCategory === 'penangkapan_mesin' ? 'ALL' : 'penangkapan_mesin'); setCurrentPage(1); }}
+              onClick={() => { setSelectedCategory(selectedCategory === 'penangkapan_ikan' ? 'ALL' : 'penangkapan_ikan'); setCurrentPage(1); }}
               className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-colors ${
-                selectedCategory === 'penangkapan_mesin'
+                selectedCategory === 'penangkapan_ikan'
                   ? 'bg-sky-500/20 text-sky-300 border-sky-500/50'
                   : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:text-slate-200'
               }`}
             >
-              ⚓ Penangkapan & Permesinan ({assets.filter(a => a.category === 'penangkapan_mesin').length})
+              ⚓ Penangkapan Ikan ({assets.filter(a => a.category === 'penangkapan_ikan').length})
             </button>
           </div>
 
@@ -390,10 +484,16 @@ export default function AssetExplorer({
                             <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center flex-shrink-0">
                               <CategoryIcon className="w-4 h-4" />
                             </div>
-                            <div className="max-w-[260px] truncate">
+                            <div className="max-w-[280px]">
                               <span className="font-bold text-white block truncate" title={asset.name}>
                                 {asset.name}
                               </span>
+                              {asset.prodi && (
+                                <span className="inline-flex items-center gap-1 text-[10px] text-cyan-300 font-medium truncate mt-0.5" title={`Program Studi: ${asset.prodi}`}>
+                                  <GraduationCap className="w-3 h-3 text-cyan-400 flex-shrink-0" />
+                                  <span className="truncate">{asset.prodi}</span>
+                                </span>
+                              )}
                             </div>
                           </div>
                         </td>
@@ -409,7 +509,7 @@ export default function AssetExplorer({
                         {/* Category */}
                         <td className="p-3.5">
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-900 border border-slate-700 text-slate-300">
-                            {asset.subcategory || asset.category}
+                            {SARPRAS_CATEGORIES.find(c => c.id === asset.category)?.name || asset.category}
                           </span>
                         </td>
 
@@ -512,6 +612,13 @@ export default function AssetExplorer({
                     <p className="text-xs text-slate-400 mt-0.5 line-clamp-1">
                       {asset.satdikName}
                     </p>
+
+                    {asset.prodi && (
+                      <div className="flex items-center gap-1.5 text-[11px] text-cyan-300 font-medium truncate mt-1">
+                        <GraduationCap className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
+                        <span className="truncate">{asset.prodi}</span>
+                      </div>
+                    )}
 
                     <p className="text-xs text-slate-300 mt-2 line-clamp-2 bg-slate-900/60 p-2 rounded-lg border border-slate-800">
                       {asset.specs || asset.capacityDesc}

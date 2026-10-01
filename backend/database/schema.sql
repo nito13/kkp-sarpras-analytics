@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS `assets` (
     `name` VARCHAR(255) NOT NULL,
     `satdik_id` VARCHAR(50) NOT NULL,
     `satdik_name` VARCHAR(255) NOT NULL,
+    `prodi` VARCHAR(150) NULL,
     `category` VARCHAR(100) NOT NULL,
     `subcategory` VARCHAR(150) NULL,
     `condition` VARCHAR(50) NOT NULL,

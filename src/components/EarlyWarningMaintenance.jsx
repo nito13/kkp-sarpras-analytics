@@ -161,10 +161,10 @@ export default function EarlyWarningMaintenance({
                 </span>
               </div>
 
-              {/* Institution and Subcategory */}
+              {/* Institution and Program Studi */}
               <div className="text-xs text-slate-300 mt-2 flex items-center justify-between">
                 <span className="font-medium text-cyan-300">{asset.satdikName}</span>
-                <span className="text-[11px] text-slate-400">{asset.subcategory}</span>
+                <span className="text-[11px] text-slate-400 font-medium">{asset.prodi || 'Semua Program Studi (Umum)'}</span>
               </div>
 
               {/* Technical Issues Summary */}

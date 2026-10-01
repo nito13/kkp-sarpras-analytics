@@ -1,20 +1,100 @@
-import { SATDIK_LIST, SARPRAS_CATEGORIES, INITIAL_SARPRAS_DATA } from './kkpData.js';
+import { SATDIK_LIST, SARPRAS_CATEGORIES, INITIAL_SARPRAS_DATA, getProdisForCategory, getCategoryForProdi } from './kkpData.js';
 
 // Generates a comprehensive dataset of 100+ assets ensuring all 18 Satdik have rich, realistic sarpras
 
-export function normalizeCategory(cat) {
-  if (!cat) return 'penangkapan_mesin';
-  if (cat === 'maritim_kapal' || cat === 'alat_tangkap') return 'penangkapan_mesin';
-  if (cat === 'akuakultur') return 'budidaya_perikanan';
-  if (cat === 'pengolahan_upi') return 'pengolahan_hasil';
-  if (cat === 'tefa') return 'agribisnis_penyuluhan';
-  if (cat === 'administrasi_umum') return 'administrasi_umum';
-  if (cat === 'asrama_penunjang') return 'konservasi_pariwisata';
-  return cat;
+export function normalizeCategory(cat, asset = {}) {
+  if (!cat) return 'penangkapan_ikan';
+  const c = String(cat).toLowerCase().trim();
+  const sub = String(asset?.subcategory || '').toLowerCase();
+  const name = String(asset?.name || '').toLowerCase();
+  const itemText = `${sub} ${name}`;
+  const text = `${c} ${sub} ${name}`;
+
+  if (c === 'penangkapan_ikan' || c === 'penangkapan ikan') return 'penangkapan_ikan';
+  if (c === 'permesinan_mekanisasi' || c === 'permesinan dan mekanisasi') return 'permesinan_mekanisasi';
+  if (c === 'budidaya_perikanan' || c === 'budidaya perikanan' || c === 'akuakultur') return 'budidaya_perikanan';
+  if (c === 'pengolahan_hasil' || c === 'pengolahan hasil perikanan' || c === 'pengolahan hasil perikanan/laut' || c === 'pengolahan_upi') return 'pengolahan_hasil';
+  if (c === 'agribisnis_perikanan' || c === 'agribisnis perikanan') return 'agribisnis_perikanan';
+  if (c === 'kelautan_konservasi' || c === 'kelautan, konservasi, dan pengolahan lingkungan' || c === 'konservasi_pariwisata' || c === 'konservasi dan pariwisata') return 'kelautan_konservasi';
+  if (c === 'sosial_pemberdayaan' || c === 'sosial & pemberdayaan masyarakat' || c === 'sosial dan pemberdayaan masyarakat') return 'sosial_pemberdayaan';
+  if (c === 'administrasi_umum' || c === 'administrasi & umum' || c === 'administasi & umum' || c === 'administasi_umum') return 'administrasi_umum';
+
+  // Legacy mappings: penangkapan_mesin
+  if (c === 'penangkapan_mesin' || c.includes('penangkapan ikan dan permesinan kapal')) {
+    if (/mesin|bengkel|las|bubut|diesel|motor|mekanisasi/i.test(itemText)) {
+      return 'permesinan_mekanisasi';
+    }
+    return 'penangkapan_ikan';
+  }
+
+  // Legacy: maritim_kapal / alat_tangkap
+  if (c === 'maritim_kapal' || c === 'alat_tangkap') {
+    if (/mesin|bengkel|las|bubut|motor/i.test(itemText)) return 'permesinan_mekanisasi';
+    return 'penangkapan_ikan';
+  }
+
+  // Legacy: agribisnis_penyuluhan
+  if (c === 'agribisnis_penyuluhan' || c.includes('agribisnis, pengolahan')) {
+    if (/asrama|menza|siswa|taruna|karakter|penyuluhan|sosial/i.test(itemText)) {
+      return 'sosial_pemberdayaan';
+    }
+    return 'agribisnis_perikanan';
+  }
+
+  // Legacy: konservasi_pariwisata
+  if (c === 'konservasi_pariwisata' || c.includes('konservasi dan pariwisata')) {
+    if (/asrama|menza|siswa|taruna/i.test(itemText)) {
+      return 'sosial_pemberdayaan';
+    }
+    return 'kelautan_konservasi';
+  }
+
+  // Legacy: asrama_penunjang
+  if (c === 'asrama_penunjang') return 'sosial_pemberdayaan';
+  if (c === 'tefa') return 'agribisnis_perikanan';
+
+  // Fallback by keyword search
+  if (/mesin|bengkel|las|bubut|motor|mekanisasi/i.test(text)) return 'permesinan_mekanisasi';
+  if (/kapal|navigasi|simulator|nautika|tangkap|jaring|sonar/i.test(text)) return 'penangkapan_ikan';
+  if (/tambak|hatchery|akuakultur|benih|bioflok|kolam|kja/i.test(text)) return 'budidaya_perikanan';
+  if (/cold storage|upi|beku|freezer|abf|pengalengan|mutu/i.test(text)) return 'pengolahan_hasil';
+  if (/tefa|bisnis|agribisnis|produk|gerai|kantin/i.test(text)) return 'agribisnis_perikanan';
+  if (/dive|selam|konservasi|terumbu|mangrove|bahari|wisata/i.test(text)) return 'kelautan_konservasi';
+  if (/asrama|menza|taruna|siswa|komunikasi|penyuluhan|sosial/i.test(text)) return 'sosial_pemberdayaan';
+  if (/rektorat|kantor|administrasi|administasi|layanan|tata usaha/i.test(text)) return 'administrasi_umum';
+
+  return 'penangkapan_ikan';
+}
+
+export function getProdiForAsset(asset, satdik) {
+  if (asset.prodi && typeof asset.prodi === 'string' && asset.prodi.trim()) return asset.prodi.trim();
+  const campus = satdik || SATDIK_LIST.find(s => s.id === asset.satdikId);
+  const prodis = campus?.prodi || [];
+  if (prodis.length === 0) return 'Semua Program Studi (Umum)';
+
+  const cat = normalizeCategory(asset.category, asset);
+  const text = `${asset.name || ''} ${asset.specs || ''}`.toLowerCase();
+
+  // Fasilitas umum / pendukung non-teknis / administrasi
+  if (cat === 'administrasi_umum' || /asrama|menza|gedung kantor|layanan terpadu|senat|tata usaha|utilitas/i.test(text)) {
+    return 'Semua Program Studi (Umum)';
+  }
+
+  // Cari prodi yang resmi terhubung dengan kategori bidang sarpras ini
+  const targetProdis = getProdisForCategory(cat);
+  if (targetProdis && targetProdis.length > 0) {
+    // Utamakan prodi yang memang dimiliki oleh kampus
+    const match = prodis.find(p => targetProdis.includes(p));
+    if (match) return match;
+    // Jika kampus belum memiliki prodi tersebut secara spesifik, gunakan prodi standar bidang
+    return targetProdis[0];
+  }
+
+  return prodis[0] || 'Semua Program Studi (Umum)';
 }
 
 export function getFullSarprasData() {
-  const assets = [...INITIAL_SARPRAS_DATA].map(a => ({ ...a, category: normalizeCategory(a.category) }));
+  const assets = [...INITIAL_SARPRAS_DATA].map(a => ({ ...a, category: normalizeCategory(a.category, a) }));
 
   // Helper to check existing count per satdik
   const countPerSatdik = {};
@@ -26,7 +106,7 @@ export function getFullSarprasData() {
   const additionalTemplates = [
     {
       satdikId: 'poltek-kp-dumai',
-      category: 'penangkapan_mesin',
+      category: 'permesinan_mekanisasi',
       subcategory: 'Bengkel Permesinan Kapal',
       name: 'Bengkel Bubut & Fabrikasi Mesin Kapal Dumai',
       specs: '5 Unit Mesin Bubut Metal 3-Phase, 4 Unit Mesin Las SMAW & GTAW Argon, Crane Gantry 5 Ton',
@@ -47,7 +127,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-dumai',
-      category: 'konservasi_pariwisata',
+      category: 'sosial_pemberdayaan',
       subcategory: 'Asrama Taruna',
       name: 'Gedung Asrama Lancang Kuning Taruna Dumai',
       specs: 'Gedung 3 Lantai, 80 Kamar, Sistem Filter Air Payau Menjadi Tawar (SWRO 20 m³/hari)',
@@ -110,7 +190,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-karawang',
-      category: 'konservasi_pariwisata',
+      category: 'sosial_pemberdayaan',
       subcategory: 'Asrama Taruna',
       name: 'Asrama Taruna Tarumanegara & Menza Bahari',
       specs: 'Gedung 3 Lantai, Kapasitas 480 Tempat Tidur, Menza Berkapasitas 500 Taruna, Lapangan Apel',
@@ -153,7 +233,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-bone',
-      category: 'konservasi_pariwisata',
+      category: 'sosial_pemberdayaan',
       subcategory: 'Asrama Taruna',
       name: 'Gedung Asrama Taruna Mappanyukki',
       specs: 'Gedung 3 Lantai, Kapasitas 520 Taruna, Dapur Gas Sentral, Sistem Penampungan Air Hujan',
@@ -174,7 +254,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-kupang',
-      category: 'penangkapan_mesin',
+      category: 'penangkapan_ikan',
       subcategory: 'Kapal Latih Vokasi',
       name: 'Kapal Latih KM. Flobamora 01',
       specs: 'LOA: 28.0 m, 120 GT, Mesin Yanmar 600 HP, Pancing Rawai Tuna (Longline), Sonar Furuno',
@@ -195,7 +275,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-kupang',
-      category: 'pengolahan_hasil',
+      category: 'agribisnis_perikanan',
       subcategory: 'UPI & TEFA',
       name: "Teaching Factory Se'i Ikan & Abon Cakalang Timor",
       specs: 'Smoker Cabinet Digital 6 Rak Stainless Steel, Vacuum Packaging Machine, Cold Room 10 Ton',
@@ -216,7 +296,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-pangandaran',
-      category: 'konservasi_pariwisata',
+      category: 'sosial_pemberdayaan',
       subcategory: 'Asrama Taruna',
       name: 'Asrama Taruna & Taruni Nyi Roro Kidul Pangandaran',
       specs: 'Gedung 2 Lantai Tahan Gempa & Tsunami-Ready, 60 Kamar, Ruang Komputer Multimedia',
@@ -237,7 +317,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-jembrana',
-      category: 'penangkapan_mesin',
+      category: 'penangkapan_ikan',
       subcategory: 'Kapal Latih & Kenavigasian',
       name: 'Kapal Latih KM. Bali Bahari 01 & Simulator Navigasi',
       specs: '90 GT, Mesin Mitsubishi 450 HP, Purse Seine Mini, Simulator JRC Selat Bali',
@@ -258,7 +338,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'poltek-kp-jembrana',
-      category: 'konservasi_pariwisata',
+      category: 'sosial_pemberdayaan',
       subcategory: 'Asrama Taruna',
       name: 'Asrama Taruna Tirta Gangga Jembrana',
       specs: 'Gedung 3 Lantai Arsitektur Bali-Modern, 72 Kamar, Ruang Menza Kapasitas 450 Taruna',
@@ -279,7 +359,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'akkp-wakatobi',
-      category: 'agribisnis_penyuluhan',
+      category: 'sosial_pemberdayaan',
       subcategory: 'Asrama Taruna',
       name: 'Asrama Taruna Bajo Wangi-Wangi',
       specs: 'Gedung 2 Lantai Konsep Tropis Bahari, Kapasitas 220 Siswa, Menza Bersama',
@@ -321,7 +401,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'supm-ladong',
-      category: 'pengolahan_hasil',
+      category: 'agribisnis_perikanan',
       subcategory: 'UPI & TEFA',
       name: 'TEFA Keumamah (Ikan Kayu Tradisional Aceh) & Cold Room',
       specs: 'Ruang Pengasapan Stainless Steel Higienis, Mesin Vacuum Packaging, Cold Room 5 Ton',
@@ -342,7 +422,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'supm-pariaman',
-      category: 'agribisnis_penyuluhan',
+      category: 'sosial_pemberdayaan',
       subcategory: 'Asrama Taruna',
       name: 'Asrama Siswa Taruna Imam Bonjol Pariaman',
       specs: 'Gedung 2 Lantai, 48 Kamar Siswa, Ruang Makan Menza Bersama, Lapangan Futsal',
@@ -363,7 +443,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'supm-kotaagung',
-      category: 'agribisnis_penyuluhan',
+      category: 'sosial_pemberdayaan',
       subcategory: 'Asrama Taruna',
       name: 'Asrama Siswa Taruna Raden Intan & Menza Way Gelang',
       specs: 'Gedung 2 Lantai, Kapasitas 360 Siswa, Dapur Sentral, Lapangan Upacara Taruna',
@@ -384,7 +464,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'supm-tegal',
-      category: 'agribisnis_penyuluhan',
+      category: 'sosial_pemberdayaan',
       subcategory: 'Asrama Taruna',
       name: 'Gedung Asrama Siswa Taruna Bahari Kalinyamat',
       specs: 'Gedung 3 Lantai, Kapasitas 450 Siswa, Menza Kapasitas 500 Taruna, Klinik Kesehatan Bahari',
@@ -405,7 +485,7 @@ export function getFullSarprasData() {
     },
     {
       satdikId: 'supm-pontianak',
-      category: 'agribisnis_penyuluhan',
+      category: 'sosial_pemberdayaan',
       subcategory: 'Asrama Taruna',
       name: 'Asrama Taruna Khatulistiwa & Balai Pertemuan',
       specs: 'Gedung 2 Lantai Konstruksi Beton Tiang Pancang Rawa, 45 Kamar Siswa, Menza Sungai Raya',
@@ -436,7 +516,13 @@ export function getFullSarprasData() {
     });
   });
 
-  return assets;
+  return assets.map(a => {
+    const satdik = SATDIK_LIST.find(s => s.id === a.satdikId);
+    return {
+      ...a,
+      prodi: a.prodi || getProdiForAsset(a, satdik)
+    };
+  });
 }
 
 // Compute comprehensive national KPIs and analytics

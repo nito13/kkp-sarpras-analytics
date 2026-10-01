@@ -29,8 +29,8 @@
                 "Teknologi Penangkapan Ikan",
                 "Permesinan Perikanan",
                 "Teknologi Akuakultur",
-                "Teknologi Pengolahan Hasil Maritim",
-                "Pengelolaan Sumberdaya Perairan",
+                "Teknologi Pengolahan Hasil Perikanan",
+                "Teknologi Pengelolaan Sumberdaya Perairan",
                 "Penyuluhan Perikanan"
             ]
         },
@@ -61,8 +61,9 @@
             "prodi": [
                 "Teknik Budidaya Perikanan",
                 "Teknik Pengolahan Produk Perikanan",
-                "Teknologi Penanganan Patogen Air",
-                "Mekanisasi Perikanan"
+                "Teknik Penanganan Patologi Perikanan",
+                "Mekanisasi Perikanan",
+                "Agribisnis Perikanan"
             ]
         },
         {
@@ -91,7 +92,8 @@
             "prodi": [
                 "Teknik Penangkapan Ikan",
                 "Permesinan Kapal",
-                "Teknik Pengolahan Produk Perikanan"
+                "Teknik Pengolahan Produk Perikanan",
+                "Mekanisasi Perikanan"
             ]
         },
         {
@@ -121,7 +123,8 @@
             "prodi": [
                 "Teknik Penangkapan Ikan",
                 "Teknik Budidaya Perikanan",
-                "Teknik Pengolahan Produk Perikanan"
+                "Teknik Pengolahan Produk Perikanan",
+                "Konservasi"
             ]
         },
         {
@@ -151,7 +154,8 @@
                 "Teknik Penangkapan Ikan",
                 "Teknik Kelautan",
                 "Teknologi Akuakultur",
-                "Bioteknologi Kelautan"
+                "Teknologi Kelautan",
+                "Pengolahan Hasil Laut"
             ]
         },
         {
@@ -179,8 +183,9 @@
             "rector": "Dr. Dra. Hj. Andi Asni, M.Si.",
             "prodi": [
                 "Teknik Penangkapan Ikan",
-                "Teknik Kelautan & Budidaya Air Payau",
-                "Teknologi Pengolahan Ikan"
+                "Teknik Budidaya Perikanan",
+                "Teknologi Pengolahan Hasil Perikanan",
+                "Teknik Kelautan"
             ]
         },
         {
@@ -209,7 +214,8 @@
             "prodi": [
                 "Teknik Budidaya Perikanan",
                 "Teknik Penangkapan Ikan",
-                "Mekanisasi Perikanan"
+                "Mekanisasi Perikanan",
+                "Teknik Pengolahan Produk Perikanan"
             ]
         },
         {
@@ -295,8 +301,9 @@
             "rector": "Dr. Ilham, S.St.Pi., M.St.Pi.",
             "prodi": [
                 "Perikanan Tangkap",
-                "Budidaya Ikan Payau",
-                "Pengolahan Hasil Perikanan"
+                "Budidaya Ikan",
+                "Pengolahan Hasil Laut",
+                "Agribisnis Perikanan"
             ]
         },
         {
@@ -324,7 +331,7 @@
             "rector": "Drs. La Ode Muhammad Ridwan, M.Si.",
             "prodi": [
                 "Ekowisata Bahari",
-                "Konservasi Sumberdaya Laut"
+                "Konservasi"
             ]
         },
         {
@@ -351,9 +358,9 @@
             ],
             "rector": "Zulfikar, S.St.Pi.",
             "prodi": [
-                "Nautika Perikanan Laut",
-                "Teknika Perikanan Laut",
-                "Agribisnis Perikanan Air Payau"
+                "Nautika Kapal Penangkap Ikan",
+                "Teknika Kapal Penangkap Ikan",
+                "Agribisnis Perikanan Air Payau dan Laut"
             ]
         },
         {
@@ -381,7 +388,7 @@
             "rector": "Dra. Harisjon, M.Si.",
             "prodi": [
                 "Nautika Kapal Penangkap Ikan",
-                "Agribisnis Perikanan Air Payau",
+                "Agribisnis Perikanan Air Payau dan Laut",
                 "Agribisnis Pengolahan Hasil Perikanan"
             ]
         },
@@ -411,7 +418,8 @@
             "prodi": [
                 "Nautika Kapal Penangkap Ikan",
                 "Teknika Kapal Penangkap Ikan",
-                "Agribisnis Budidaya Perikanan"
+                "Agribisnis Perikanan Air Payau dan Laut",
+                "Agribisnis Perikanan Air Tawar"
             ]
         },
         {
@@ -441,7 +449,7 @@
                 "Nautika Kapal Penangkap Ikan",
                 "Teknika Kapal Penangkap Ikan",
                 "Agribisnis Pengolahan Hasil Perikanan",
-                "Agribisnis Budidaya Air Payau"
+                "Agribisnis Perikanan Air Payau dan Laut"
             ]
         },
         {
@@ -469,7 +477,7 @@
             "rector": "Mustafa, S.St.Pi., M.Si.",
             "prodi": [
                 "Nautika Kapal Penangkap Ikan",
-                "Agribisnis Budidaya Perikanan Air Tawar",
+                "Agribisnis Perikanan Air Tawar",
                 "Agribisnis Pengolahan Hasil Perikanan"
             ]
         },
@@ -499,7 +507,7 @@
             "prodi": [
                 "Nautika Kapal Penangkap Ikan",
                 "Teknika Kapal Penangkap Ikan",
-                "Agribisnis Budidaya Perikanan Air Payau"
+                "Agribisnis Perikanan Air Payau dan Laut"
             ]
         },
         {
@@ -528,7 +536,7 @@
             "prodi": [
                 "Nautika Kapal Penangkap Ikan",
                 "Teknika Kapal Penangkap Ikan",
-                "Agribisnis Perikanan Air Payau & Laut",
+                "Agribisnis Perikanan Air Payau dan Laut",
                 "Agribisnis Pengolahan Hasil Perikanan"
             ]
         }
@@ -539,7 +547,7 @@
             "name": "Kapal Latih KM. Madidihang 03",
             "satdikId": "poltek-aup",
             "satdikName": "Politeknik Ahli Usaha Perikanan Jakarta",
-            "category": "penangkapan_mesin",
+            "category": "penangkapan_ikan",
             "subcategory": "Kapal Latih Vokasi",
             "condition": "Baik",
             "conditionScore": 92,
@@ -561,7 +569,7 @@
             "name": "Full Mission Ship Bridge Simulator System",
             "satdikId": "poltek-aup",
             "satdikName": "Politeknik Ahli Usaha Perikanan Jakarta",
-            "category": "penangkapan_mesin",
+            "category": "penangkapan_ikan",
             "subcategory": "Simulator Kenavigasian",
             "condition": "Baik",
             "conditionScore": 95,
@@ -627,7 +635,7 @@
             "name": "Gedung Asrama Korps Taruna Bima-Yudistira (Putra)",
             "satdikId": "poltek-aup",
             "satdikName": "Politeknik Ahli Usaha Perikanan Jakarta",
-            "category": "agribisnis_penyuluhan",
+            "category": "sosial_pemberdayaan",
             "subcategory": "Asrama Taruna",
             "condition": "Baik",
             "conditionScore": 84,
@@ -649,7 +657,7 @@
             "name": "Teaching Factory (TEFA) Pengalengan & Produk Nilai Tambah",
             "satdikId": "poltek-aup",
             "satdikName": "Politeknik Ahli Usaha Perikanan Jakarta",
-            "category": "agribisnis_penyuluhan",
+            "category": "agribisnis_perikanan",
             "subcategory": "TEFA Pengolahan",
             "condition": "Baik",
             "conditionScore": 90,
@@ -715,7 +723,7 @@
             "name": "Teaching Factory Bandeng Cabut Duri & Fish Jelly (Surimi)",
             "satdikId": "poltek-kp-sidoarjo",
             "satdikName": "Politeknik Kelautan dan Perikanan Sidoarjo",
-            "category": "agribisnis_penyuluhan",
+            "category": "agribisnis_perikanan",
             "subcategory": "TEFA Pengolahan",
             "condition": "Baik",
             "conditionScore": 94,
@@ -759,7 +767,7 @@
             "name": "Asrama Taruna Dewaruci & Menza Graha Bahari",
             "satdikId": "poltek-kp-sidoarjo",
             "satdikName": "Politeknik Kelautan dan Perikanan Sidoarjo",
-            "category": "agribisnis_penyuluhan",
+            "category": "sosial_pemberdayaan",
             "subcategory": "Asrama & Menza",
             "condition": "Rusak Ringan",
             "conditionScore": 76,
@@ -781,7 +789,7 @@
             "name": "Kapal Latih KM. Airaha 02",
             "satdikId": "poltek-kp-bitung",
             "satdikName": "Politeknik Kelautan dan Perikanan Bitung",
-            "category": "penangkapan_mesin",
+            "category": "penangkapan_ikan",
             "subcategory": "Kapal Latih Vokasi",
             "condition": "Baik",
             "conditionScore": 86,
@@ -803,7 +811,7 @@
             "name": "Engine Room Simulator & Marine Workshop Bengkel Las",
             "satdikId": "poltek-kp-bitung",
             "satdikName": "Politeknik Kelautan dan Perikanan Bitung",
-            "category": "penangkapan_mesin",
+            "category": "permesinan_mekanisasi",
             "subcategory": "Simulator & Bengkel Mesin",
             "condition": "Baik",
             "conditionScore": 90,
@@ -847,7 +855,7 @@
             "name": "Kapal Latih KM. Frans Kaisiepo",
             "satdikId": "poltek-kp-sorong",
             "satdikName": "Politeknik Kelautan dan Perikanan Sorong",
-            "category": "penangkapan_mesin",
+            "category": "penangkapan_ikan",
             "subcategory": "Kapal Latih Vokasi",
             "condition": "Rusak Berat",
             "conditionScore": 25,
@@ -891,7 +899,7 @@
             "name": "Dive Center & Kompresor Breathing Air Scuba Latih",
             "satdikId": "poltek-kp-sorong",
             "satdikName": "Politeknik Kelautan dan Perikanan Sorong",
-            "category": "konservasi_pariwisata",
+            "category": "kelautan_konservasi",
             "subcategory": "Sarana Selam & Konservasi",
             "condition": "Baik",
             "conditionScore": 93,
@@ -935,7 +943,7 @@
             "name": "Laboratorium Dinamika Rancang Bangun Perahu & Fiber",
             "satdikId": "poltek-kp-karawang",
             "satdikName": "Politeknik Kelautan dan Perikanan Karawang",
-            "category": "penangkapan_mesin",
+            "category": "permesinan_mekanisasi",
             "subcategory": "Bengkel & Rancang Bangun",
             "condition": "Baik",
             "conditionScore": 88,
@@ -957,7 +965,7 @@
             "name": "Kapal Latih KM. Bone Raya 01",
             "satdikId": "poltek-kp-bone",
             "satdikName": "Politeknik Kelautan dan Perikanan Bone",
-            "category": "penangkapan_mesin",
+            "category": "penangkapan_ikan",
             "subcategory": "Kapal Latih Vokasi",
             "condition": "Rusak Ringan",
             "conditionScore": 72,
@@ -1023,7 +1031,7 @@
             "name": "Asrama Taruna Sasando & Dapur Umum Bahari",
             "satdikId": "poltek-kp-kupang",
             "satdikName": "Politeknik Kelautan dan Perikanan Kupang",
-            "category": "konservasi_pariwisata",
+            "category": "sosial_pemberdayaan",
             "subcategory": "Asrama & Fasilitas Taruna",
             "condition": "Rusak Ringan",
             "conditionScore": 62,
@@ -1045,7 +1053,7 @@
             "name": "Laboratorium Simulator Kenavigasian & ECDIS Selat Malaka",
             "satdikId": "poltek-kp-dumai",
             "satdikName": "Politeknik Kelautan dan Perikanan Dumai",
-            "category": "penangkapan_mesin",
+            "category": "penangkapan_ikan",
             "subcategory": "Simulator Kenavigasian",
             "condition": "Baik",
             "conditionScore": 91,
@@ -1111,7 +1119,7 @@
             "name": "Dermaga Latih & Bengkel Mesin Tempel Nelayan",
             "satdikId": "poltek-kp-pangandaran",
             "satdikName": "Politeknik Kelautan dan Perikanan Pangandaran",
-            "category": "penangkapan_mesin",
+            "category": "permesinan_mekanisasi",
             "subcategory": "Dermaga & Bengkel",
             "condition": "Rusak Ringan",
             "conditionScore": 55,
@@ -1155,7 +1163,7 @@
             "name": "Pusat Praktik Konservasi Terumbu Karang & Ekowisata Bahari Wangi-Wangi",
             "satdikId": "akkp-wakatobi",
             "satdikName": "Akademi Komunitas KP Wakatobi",
-            "category": "konservasi_pariwisata",
+            "category": "kelautan_konservasi",
             "subcategory": "Konservasi & Ekowisata",
             "condition": "Baik",
             "conditionScore": 89,
@@ -1177,7 +1185,7 @@
             "name": "Kapal Latih KM. Ladong Bahari 01",
             "satdikId": "supm-ladong",
             "satdikName": "SUPM Ladong Aceh",
-            "category": "penangkapan_mesin",
+            "category": "penangkapan_ikan",
             "subcategory": "Kapal Latih Vokasi Menengah",
             "condition": "Rusak Ringan",
             "conditionScore": 71,
@@ -1199,7 +1207,7 @@
             "name": "Asrama Taruna Teuku Umar & Ruang Makan Menza",
             "satdikId": "supm-ladong",
             "satdikName": "SUPM Ladong Aceh",
-            "category": "agribisnis_penyuluhan",
+            "category": "sosial_pemberdayaan",
             "subcategory": "Asrama & Menza",
             "condition": "Baik",
             "conditionScore": 83,
@@ -1221,7 +1229,7 @@
             "name": "Kapal Latih KM. Pariaman Bahari 02",
             "satdikId": "supm-pariaman",
             "satdikName": "SUPM Pariaman",
-            "category": "penangkapan_mesin",
+            "category": "penangkapan_ikan",
             "subcategory": "Kapal Latih Vokasi Menengah",
             "condition": "Rusak Berat",
             "conditionScore": 28,
@@ -1243,7 +1251,7 @@
             "name": "Laboratorium Pengolahan Hasil Laut & TEFA Dendeng Tuna & Randang Belut",
             "satdikId": "supm-pariaman",
             "satdikName": "SUPM Pariaman",
-            "category": "agribisnis_penyuluhan",
+            "category": "agribisnis_perikanan",
             "subcategory": "TEFA Pengolahan Tradisional",
             "condition": "Baik",
             "conditionScore": 89,
@@ -1287,7 +1295,7 @@
             "name": "Bengkel Mesin Perkapalan & Bubut SUPM Kotaagung",
             "satdikId": "supm-kotaagung",
             "satdikName": "SUPM Kotaagung Lampung",
-            "category": "penangkapan_mesin",
+            "category": "permesinan_mekanisasi",
             "subcategory": "Bengkel Mesin",
             "condition": "Rusak Ringan",
             "conditionScore": 73,
@@ -1309,7 +1317,7 @@
             "name": "Kapal Latih KM. Bahari Mandiri 01",
             "satdikId": "supm-tegal",
             "satdikName": "SUPM Tegal",
-            "category": "penangkapan_mesin",
+            "category": "penangkapan_ikan",
             "subcategory": "Kapal Latih Vokasi Menengah",
             "condition": "Baik",
             "conditionScore": 88,
@@ -1331,7 +1339,7 @@
             "name": "Gedung Workshop Alat Tangkap & Kolam Uji Dinamika Jaring",
             "satdikId": "supm-tegal",
             "satdikName": "SUPM Tegal",
-            "category": "penangkapan_mesin",
+            "category": "permesinan_mekanisasi",
             "subcategory": "Bengkel & Uji Jaring",
             "condition": "Baik",
             "conditionScore": 92,
@@ -1397,7 +1405,7 @@
             "name": "Kapal Latih KM. Kapuas Bahari 01",
             "satdikId": "supm-pontianak",
             "satdikName": "SUPM Pontianak",
-            "category": "penangkapan_mesin",
+            "category": "penangkapan_ikan",
             "subcategory": "Kapal Latih Sungai & Estuari",
             "condition": "Rusak Ringan",
             "conditionScore": 74,
@@ -1441,7 +1449,7 @@
             "name": "Gedung Asrama Siswa Taruna Arung Palakka",
             "satdikId": "supm-bone",
             "satdikName": "SUPM Bone",
-            "category": "konservasi_pariwisata",
+            "category": "sosial_pemberdayaan",
             "subcategory": "Asrama Taruna",
             "condition": "Rusak Ringan",
             "conditionScore": 77,
@@ -1463,7 +1471,7 @@
             "name": "Kapal Latih KM. Siwalima 01",
             "satdikId": "supm-waiheru",
             "satdikName": "SUPM Waiheru Ambon",
-            "category": "penangkapan_mesin",
+            "category": "penangkapan_ikan",
             "subcategory": "Kapal Latih Vokasi Menengah",
             "condition": "Rusak Ringan",
             "conditionScore": 60,
@@ -1485,7 +1493,7 @@
             "name": "Teaching Factory Pengasapan Ikan Cakalang Fufu & Abon Ikan Laut Banda",
             "satdikId": "supm-waiheru",
             "satdikName": "SUPM Waiheru Ambon",
-            "category": "agribisnis_penyuluhan",
+            "category": "agribisnis_perikanan",
             "subcategory": "TEFA Pengolahan Tradisional",
             "condition": "Baik",
             "conditionScore": 91,
@@ -1528,7 +1536,7 @@
             "id": "SAR-ADD-001",
             "satdikName": "Politeknik Kelautan dan Perikanan Dumai",
             "satdikId": "poltek-kp-dumai",
-            "category": "penangkapan_mesin",
+            "category": "permesinan_mekanisasi",
             "subcategory": "Bengkel Permesinan Kapal",
             "name": "Bengkel Bubut & Fabrikasi Mesin Kapal Dumai",
             "specs": "5 Unit Mesin Bubut Metal 3-Phase, 4 Unit Mesin Las SMAW & GTAW Argon, Crane Gantry 5 Ton",
@@ -1550,7 +1558,7 @@
             "id": "SAR-ADD-002",
             "satdikName": "Politeknik Kelautan dan Perikanan Dumai",
             "satdikId": "poltek-kp-dumai",
-            "category": "agribisnis_penyuluhan",
+            "category": "sosial_pemberdayaan",
             "subcategory": "Asrama Taruna",
             "name": "Gedung Asrama Lancang Kuning Taruna Dumai",
             "specs": "Gedung 3 Lantai, 80 Kamar, Sistem Filter Air Payau Menjadi Tawar (SWRO 20 m³/hari)",
@@ -1594,7 +1602,7 @@
             "id": "SAR-ADD-004",
             "satdikName": "Politeknik Kelautan dan Perikanan Karawang",
             "satdikId": "poltek-kp-karawang",
-            "category": "agribisnis_penyuluhan",
+            "category": "sosial_pemberdayaan",
             "subcategory": "Asrama Taruna",
             "name": "Asrama Taruna Tarumanegara & Menza Bahari",
             "specs": "Gedung 3 Lantai, Kapasitas 480 Tempat Tidur, Menza Berkapasitas 500 Taruna, Lapangan Apel",
@@ -1638,7 +1646,7 @@
             "id": "SAR-ADD-006",
             "satdikName": "Politeknik Kelautan dan Perikanan Bone",
             "satdikId": "poltek-kp-bone",
-            "category": "konservasi_pariwisata",
+            "category": "sosial_pemberdayaan",
             "subcategory": "Asrama Taruna",
             "name": "Gedung Asrama Taruna Mappanyukki",
             "specs": "Gedung 3 Lantai, Kapasitas 520 Taruna, Dapur Gas Sentral, Sistem Penampungan Air Hujan",
@@ -1660,7 +1668,7 @@
             "id": "SAR-ADD-007",
             "satdikName": "Politeknik Kelautan dan Perikanan Kupang",
             "satdikId": "poltek-kp-kupang",
-            "category": "penangkapan_mesin",
+            "category": "penangkapan_ikan",
             "subcategory": "Kapal Latih Vokasi",
             "name": "Kapal Latih KM. Flobamora 01",
             "specs": "LOA: 28.0 m, 120 GT, Mesin Yanmar 600 HP, Pancing Rawai Tuna (Longline), Sonar Furuno",
@@ -1704,7 +1712,7 @@
             "id": "SAR-ADD-009",
             "satdikName": "Politeknik Kelautan dan Perikanan Pangandaran",
             "satdikId": "poltek-kp-pangandaran",
-            "category": "konservasi_pariwisata",
+            "category": "sosial_pemberdayaan",
             "subcategory": "Asrama Taruna",
             "name": "Asrama Taruna & Taruni Nyi Roro Kidul Pangandaran",
             "specs": "Gedung 2 Lantai Tahan Gempa & Tsunami-Ready, 60 Kamar, Ruang Komputer Multimedia",
@@ -1726,7 +1734,7 @@
             "id": "SAR-ADD-010",
             "satdikName": "Politeknik Kelautan dan Perikanan Jembrana",
             "satdikId": "poltek-kp-jembrana",
-            "category": "penangkapan_mesin",
+            "category": "penangkapan_ikan",
             "subcategory": "Kapal Latih & Kenavigasian",
             "name": "Kapal Latih KM. Bali Bahari 01 & Simulator Navigasi",
             "specs": "90 GT, Mesin Mitsubishi 450 HP, Purse Seine Mini, Simulator JRC Selat Bali",
@@ -1748,7 +1756,7 @@
             "id": "SAR-ADD-011",
             "satdikName": "Politeknik Kelautan dan Perikanan Jembrana",
             "satdikId": "poltek-kp-jembrana",
-            "category": "konservasi_pariwisata",
+            "category": "sosial_pemberdayaan",
             "subcategory": "Asrama Taruna",
             "name": "Asrama Taruna Tirta Gangga Jembrana",
             "specs": "Gedung 3 Lantai Arsitektur Bali-Modern, 72 Kamar, Ruang Menza Kapasitas 450 Taruna",
@@ -1770,7 +1778,7 @@
             "id": "SAR-ADD-012",
             "satdikName": "Akademi Komunitas KP Wakatobi",
             "satdikId": "akkp-wakatobi",
-            "category": "konservasi_pariwisata",
+            "category": "sosial_pemberdayaan",
             "subcategory": "Asrama Taruna",
             "name": "Asrama Taruna Bajo Wangi-Wangi",
             "specs": "Gedung 2 Lantai Konsep Tropis Bahari, Kapasitas 220 Siswa, Menza Bersama",
@@ -1836,7 +1844,7 @@
             "id": "SAR-ADD-015",
             "satdikName": "Sekolah Usaha Perikanan Menengah (SUPM) Pariaman",
             "satdikId": "supm-pariaman",
-            "category": "agribisnis_penyuluhan",
+            "category": "sosial_pemberdayaan",
             "subcategory": "Asrama Taruna",
             "name": "Asrama Siswa Taruna Imam Bonjol Pariaman",
             "specs": "Gedung 2 Lantai, 48 Kamar Siswa, Ruang Makan Menza Bersama, Lapangan Futsal",
@@ -1858,7 +1866,7 @@
             "id": "SAR-ADD-016",
             "satdikName": "Sekolah Usaha Perikanan Menengah (SUPM) Kotaagung",
             "satdikId": "supm-kotaagung",
-            "category": "agribisnis_penyuluhan",
+            "category": "sosial_pemberdayaan",
             "subcategory": "Asrama Taruna",
             "name": "Asrama Siswa Taruna Raden Intan & Menza Way Gelang",
             "specs": "Gedung 2 Lantai, Kapasitas 360 Siswa, Dapur Sentral, Lapangan Upacara Taruna",
@@ -1880,7 +1888,7 @@
             "id": "SAR-ADD-017",
             "satdikName": "Sekolah Usaha Perikanan Menengah (SUPM) Tegal",
             "satdikId": "supm-tegal",
-            "category": "agribisnis_penyuluhan",
+            "category": "sosial_pemberdayaan",
             "subcategory": "Asrama Taruna",
             "name": "Gedung Asrama Siswa Taruna Bahari Kalinyamat",
             "specs": "Gedung 3 Lantai, Kapasitas 450 Siswa, Menza Kapasitas 500 Taruna, Klinik Kesehatan Bahari",
@@ -1902,7 +1910,7 @@
             "id": "SAR-ADD-018",
             "satdikName": "Sekolah Usaha Perikanan Menengah (SUPM) Pontianak",
             "satdikId": "supm-pontianak",
-            "category": "konservasi_pariwisata",
+            "category": "sosial_pemberdayaan",
             "subcategory": "Asrama Taruna",
             "name": "Asrama Taruna Khatulistiwa & Balai Pertemuan",
             "specs": "Gedung 2 Lantai Konstruksi Beton Tiang Pancang Rawa, 45 Kamar Siswa, Menza Sungai Raya",
@@ -1944,5 +1952,32 @@
             ],
             "avatarUrl": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200"
         }
+    ],
+    "prodiList": [
+        "Agribisnis Pengolahan Hasil Perikanan",
+        "Agribisnis Perikanan",
+        "Agribisnis Perikanan Air Payau dan Laut",
+        "Agribisnis Perikanan Air Tawar",
+        "Budidaya Ikan",
+        "Ekowisata Bahari",
+        "Konservasi",
+        "Mekanisasi Perikanan",
+        "Nautika Kapal Penangkap Ikan",
+        "Pengolahan Hasil Laut",
+        "Penyuluhan Perikanan",
+        "Perikanan Tangkap",
+        "Permesinan Kapal",
+        "Permesinan Perikanan",
+        "Teknik Budidaya Perikanan",
+        "Teknik Kelautan",
+        "Teknik Penanganan Patologi Perikanan",
+        "Teknik Penangkapan Ikan",
+        "Teknik Pengolahan Produk Perikanan",
+        "Teknika Kapal Penangkap Ikan",
+        "Teknologi Akuakultur",
+        "Teknologi Kelautan",
+        "Teknologi Penangkapan Ikan",
+        "Teknologi Pengelolaan Sumberdaya Perairan",
+        "Teknologi Pengolahan Hasil Perikanan"
     ]
 }
