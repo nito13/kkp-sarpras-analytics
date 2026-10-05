@@ -18,20 +18,16 @@ function formatAssetOutput($row) {
         'satdikName' => $row['satdik_name'],
         'prodi' => $row['prodi'] ?? '',
         'category' => $row['category'],
-        'subcategory' => $row['subcategory'] ?? '',
         'condition' => $row['condition'],
         'conditionScore' => (int)($row['condition_score'] ?? 80),
         'acquisitionYear' => (int)($row['acquisition_year'] ?? date('Y')),
         'utilizationRate' => (int)($row['utilization_rate'] ?? 0),
         'capacityDesc' => $row['capacity_desc'] ?? '',
         'specs' => $row['specs'] ?? '',
-        'certificationStatus' => $row['certification_status'] ?? '',
-        'certificationAuthority' => $row['certification_authority'] ?? '',
         'certExpiryDate' => $row['cert_expiry_date'] ?? '',
         'lastMaintenanceDate' => $row['last_maintenance_date'] ?? '',
         'nextMaintenanceDate' => $row['next_maintenance_date'] ?? '',
         'maintenanceUrgency' => $row['maintenance_urgency'] ?? 'Normal',
-        'estimatedRepairCost' => (float)($row['estimated_repair_cost'] ?? 0),
         'issuesSummary' => $row['issues_summary'] ?? '',
     ];
 }
@@ -91,17 +87,17 @@ switch ($method) {
 
         $stmt = $pdo->prepare("
             INSERT INTO assets (
-                id, name, satdik_id, satdik_name, prodi, category, subcategory,
+                id, name, satdik_id, satdik_name, prodi, category,
                 `condition`, condition_score, acquisition_year, utilization_rate,
-                capacity_desc, specs, certification_status, certification_authority,
+                capacity_desc, specs,
                 cert_expiry_date, last_maintenance_date, next_maintenance_date,
-                maintenance_urgency, estimated_repair_cost, issues_summary
+                maintenance_urgency, issues_summary
             ) VALUES (
-                :id, :name, :satdik_id, :satdik_name, :prodi, :category, :subcategory,
+                :id, :name, :satdik_id, :satdik_name, :prodi, :category,
                 :condition, :condition_score, :acquisition_year, :utilization_rate,
-                :capacity_desc, :specs, :certification_status, :certification_authority,
+                :capacity_desc, :specs,
                 :cert_expiry_date, :last_maintenance_date, :next_maintenance_date,
-                :maintenance_urgency, :estimated_repair_cost, :issues_summary
+                :maintenance_urgency, :issues_summary
             )
         ");
 
@@ -112,20 +108,16 @@ switch ($method) {
             ':satdik_name' => $input['satdikName'] ?? '',
             ':prodi' => $input['prodi'] ?? 'Semua Program Studi (Umum)',
             ':category' => $input['category'] ?? 'sarana_pendidikan',
-            ':subcategory' => $input['subcategory'] ?? '',
             ':condition' => $input['condition'] ?? 'Baik',
             ':condition_score' => $input['conditionScore'] ?? 90,
             ':acquisition_year' => $input['acquisitionYear'] ?? (int)date('Y'),
             ':utilization_rate' => $input['utilizationRate'] ?? 80,
             ':capacity_desc' => $input['capacityDesc'] ?? '',
             ':specs' => $input['specs'] ?? '',
-            ':certification_status' => $input['certificationStatus'] ?? 'Tidak Wajib',
-            ':certification_authority' => $input['certificationAuthority'] ?? '',
             ':cert_expiry_date' => !empty($input['certExpiryDate']) ? $input['certExpiryDate'] : null,
             ':last_maintenance_date' => !empty($input['lastMaintenanceDate']) ? $input['lastMaintenanceDate'] : date('Y-m-d'),
             ':next_maintenance_date' => !empty($input['nextMaintenanceDate']) ? $input['nextMaintenanceDate'] : date('Y-m-d', strtotime('+6 months')),
             ':maintenance_urgency' => $input['maintenanceUrgency'] ?? 'Normal',
-            ':estimated_repair_cost' => $input['estimatedRepairCost'] ?? 0,
             ':issues_summary' => $input['issuesSummary'] ?? '',
         ]);
 
@@ -169,20 +161,16 @@ switch ($method) {
             'satdikName' => 'satdik_name',
             'prodi' => 'prodi',
             'category' => 'category',
-            'subcategory' => 'subcategory',
             'condition' => 'condition',
             'conditionScore' => 'condition_score',
             'acquisitionYear' => 'acquisition_year',
             'utilizationRate' => 'utilization_rate',
             'capacityDesc' => 'capacity_desc',
             'specs' => 'specs',
-            'certificationStatus' => 'certification_status',
-            'certificationAuthority' => 'certification_authority',
             'certExpiryDate' => 'cert_expiry_date',
             'lastMaintenanceDate' => 'last_maintenance_date',
             'nextMaintenanceDate' => 'next_maintenance_date',
             'maintenanceUrgency' => 'maintenance_urgency',
-            'estimatedRepairCost' => 'estimated_repair_cost',
             'issuesSummary' => 'issues_summary',
         ];
 

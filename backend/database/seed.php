@@ -121,17 +121,17 @@ try {
     echo "[5/5] Mengisi inventaris aset Sarpras...\n";
     $stmtAsset = $pdo->prepare("
         INSERT INTO `assets` (
-            id, name, satdik_id, satdik_name, category, subcategory,
+            id, name, satdik_id, satdik_name, category,
             `condition`, condition_score, acquisition_year, utilization_rate,
-            capacity_desc, specs, certification_status, certification_authority,
+            capacity_desc, specs,
             cert_expiry_date, last_maintenance_date, next_maintenance_date,
-            maintenance_urgency, estimated_repair_cost, issues_summary
+            maintenance_urgency, issues_summary
         ) VALUES (
-            :id, :name, :satdik_id, :satdik_name, :category, :subcategory,
+            :id, :name, :satdik_id, :satdik_name, :category,
             :condition, :condition_score, :acquisition_year, :utilization_rate,
-            :capacity_desc, :specs, :certification_status, :certification_authority,
+            :capacity_desc, :specs,
             :cert_expiry_date, :last_maintenance_date, :next_maintenance_date,
-            :maintenance_urgency, :estimated_repair_cost, :issues_summary
+            :maintenance_urgency, :issues_summary
         ) ON DUPLICATE KEY UPDATE
             name = VALUES(name), `condition` = VALUES(`condition`), 
             condition_score = VALUES(condition_score),
@@ -146,20 +146,16 @@ try {
             ':satdik_id' => $a['satdikId'],
             ':satdik_name' => $a['satdikName'],
             ':category' => $a['category'],
-            ':subcategory' => $a['subcategory'] ?? null,
             ':condition' => $a['condition'],
             ':condition_score' => $a['conditionScore'] ?? 80,
             ':acquisition_year' => $a['acquisitionYear'] ?? null,
             ':utilization_rate' => $a['utilizationRate'] ?? 0,
             ':capacity_desc' => $a['capacityDesc'] ?? null,
             ':specs' => $a['specs'] ?? null,
-            ':certification_status' => $a['certificationStatus'] ?? null,
-            ':certification_authority' => $a['certificationAuthority'] ?? null,
             ':cert_expiry_date' => !empty($a['certExpiryDate']) ? $a['certExpiryDate'] : null,
             ':last_maintenance_date' => !empty($a['lastMaintenanceDate']) ? $a['lastMaintenanceDate'] : null,
             ':next_maintenance_date' => !empty($a['nextMaintenanceDate']) ? $a['nextMaintenanceDate'] : null,
             ':maintenance_urgency' => $a['maintenanceUrgency'] ?? 'Normal',
-            ':estimated_repair_cost' => $a['estimatedRepairCost'] ?? 0,
             ':issues_summary' => $a['issuesSummary'] ?? null,
         ]);
         $assetCount++;
