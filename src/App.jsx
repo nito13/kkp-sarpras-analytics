@@ -53,6 +53,30 @@ export default function App() {
   // Active navigation tab
   const [activeTab, setActiveTab] = useState('dashboard');
 
+  // Scroll to top helper function (smooth scroll with instant fallback)
+  const scrollToTop = () => {
+    try {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    } catch {
+      window.scrollTo(0, 0);
+    }
+  };
+
+  // Otomatis scroll ke posisi paling atas saat berpindah tab/menu
+  useEffect(() => {
+    scrollToTop();
+    const timer = setTimeout(() => {
+      scrollToTop();
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [activeTab]);
+
+  // Handler pergantian tab yang menjamin scroll ke atas (bahkan jika tab yang sama diklik)
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    scrollToTop();
+  };
+
   // Pre-filter states for Explorer tab
   const [explorerSatdikFilter, setExplorerSatdikFilter] = useState('ALL');
   const [explorerCategoryFilter, setExplorerCategoryFilter] = useState('ALL');
@@ -194,13 +218,13 @@ export default function App() {
   const handleFilterCategoryAndNavigate = (categoryId) => {
     setExplorerCategoryFilter(categoryId);
     setExplorerSatdikFilter('ALL');
-    setActiveTab('explorer');
+    handleTabChange('explorer');
   };
 
   const handleSelectSatdikAndNavigate = (satdikId) => {
     setExplorerSatdikFilter(satdikId);
     setExplorerCategoryFilter('ALL');
-    setActiveTab('explorer');
+    handleTabChange('explorer');
   };
 
   // Export Excel handler dengan format tabel rapi, kop KKP, dan formula
@@ -225,7 +249,7 @@ export default function App() {
       {/* Navigation Header */}
       <Navbar
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleTabChange}
         totalAssets={kpis?.totalAssets || 0}
         criticalCount={kpis?.urgentAssets?.length || 0}
         onOpenAddModal={() => setIsAddModalOpen(true)}
@@ -250,7 +274,7 @@ export default function App() {
             <button
               onClick={() => {
                 setExplorerSatdikFilter(currentUser.accessibleSatdik);
-                setActiveTab('explorer');
+                handleTabChange('explorer');
               }}
               className="underline text-cyan-300 hover:text-white font-medium text-[11px]"
             >
@@ -265,7 +289,7 @@ export default function App() {
         {activeTab === 'dashboard' && (
           <ExecutiveDashboard
             kpis={kpis}
-            onNavigateTab={setActiveTab}
+            onNavigateTab={handleTabChange}
             onFilterCategory={handleFilterCategoryAndNavigate}
             onSelectSatdik={handleSelectSatdikAndNavigate}
           />
@@ -316,7 +340,7 @@ export default function App() {
       {/* Mobile Bottom Navigation Bar (Muncul Khusus di Handphone/Layar Kecil) */}
       <MobileBottomNav
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleTabChange}
         criticalCount={kpis?.urgentAssets?.length || 0}
         onOpenAddModal={() => setIsAddModalOpen(true)}
         canAddAsset={currentUser?.permissions?.includes('edit_all') || currentUser?.permissions?.includes('edit_own')}
