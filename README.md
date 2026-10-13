@@ -27,7 +27,7 @@ Sistem mengelola data aset autentik dan terverifikasi dari 18 satuan pendidikan 
 14. **Sekolah Usaha Perikanan Menengah (SUPM) Kotaagung** (Tanggamus, Lampung)
 15. **Sekolah Usaha Perikanan Menengah (SUPM) Tegal** (Jawa Tengah)
 16. **Sekolah Usaha Perikanan Menengah (SUPM) Pontianak** (Kalimantan Barat)
-17. **Sekolah Usaha Perikanan Menengah (SUPM) Bone** (Sulawesi Selatan)
+17. **Sekolah Usaha Perikanan Menengah (SUPM) Sorong** (Papua Barat Daya)
 18. **Sekolah Usaha Perikanan Menengah (SUPM) Waiheru Ambon** (Maluku)
 
 ---
