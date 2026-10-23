@@ -1,18 +1,33 @@
 <!doctype html>
-<html lang="id">
+<html lang="id" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="./logo-kkp.png" />
+    <link rel="icon" type="image/png" href="assets/logo-kkp.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SARPRAS KKP | Analitik Data Sarana & Prasarana Pendidikan Kelautan dan Perikanan</title>
-    <meta name="description" content="Sistem Informasi & Analitik Data Sarana dan Prasarana (Sarpras) pada Satuan Pendidikan Kementerian Kelautan dan Perikanan Republik Indonesia." />
-    <!-- Google Fonts: Inter -->
+    <title>SARPRAS KKP | Analitik Data Sarana &amp; Prasarana Pendidikan Kelautan dan Perikanan</title>
+    <meta name="description" content="Sistem Informasi &amp; Analitik Data Sarana dan Prasarana (Sarpras) pada Satuan Pendidikan Kementerian Kelautan dan Perikanan Republik Indonesia." />
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Stylesheets: Tailwind CSS + Leaflet GIS + Custom Style -->
+    <link rel="stylesheet" href="assets/css/tailwind.min.css" />
+    <link rel="stylesheet" href="assets/css/leaflet.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
   </head>
   <body class="bg-slate-900 text-slate-100 antialiased selection:bg-cyan-500 selection:text-white">
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Pustaka Vendor (React, Lucide Icons, Chart.js, Leaflet GIS, SheetJS Excel) -->
+    <script src="assets/js/vendor/react-vendor.min.js"></script>
+    <script src="assets/js/vendor/leaflet.js"></script>
+    <script src="assets/js/vendor/xlsx.bundle.js"></script>
+
+    <!-- Modul Inti Aplikasi SARPRAS KKP (Dapat dipantau & diubah langsung tanpa npm run build) -->
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/excel-export.js"></script>
+    <script src="assets/js/app.js"></script>
   </body>
 </html>

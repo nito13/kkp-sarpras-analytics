@@ -1,9 +1,18 @@
+/**
+ * ============================================================================
+ * SARPRAS KKP — Modul Ekspor Laporan Excel Resmi (.xlsx) Multi-Sheet
+ * Badan Penyuluhan dan Pengembangan SDM Kelautan dan Perikanan (BPPSDMKP)
+ * ============================================================================
+ */
+(function (window) {
+  'use strict';
+
 // src/utils/excelExport.js
 // Generator Dokumen Microsoft Excel Asli (.xlsx OpenXML)
 // Menghasilkan tabel rapi bergaris, kop dinas resmi KKP, pewarnaan status, dan formula angka
 // 100% kompatibel tanpa peringatan corrupt / extension mismatch di Microsoft Excel
 
-import XLSX from 'xlsx-js-style';
+  const XLSX = window.XLSX;
 
 /**
  * Format angka ke format Rupiah teks
@@ -60,7 +69,7 @@ function createCell(val, style = {}, type = null) {
 /**
  * Ekspor Inventaris Aset Sarpras ke File Asli Microsoft Excel (.xlsx)
  */
-export function exportAssetsToExcel(assets, options = {}) {
+  function exportAssetsToExcel(assets, options = {}) {
   const {
     currentUser = null,
     filterSatdikName = 'Seluruh Satuan Pendidikan (18 Kampus Vokasi KKP)',
@@ -370,7 +379,7 @@ export function exportAssetsToExcel(assets, options = {}) {
 /**
  * Ekspor Format RKA Prioritas Anggaran ke File Asli Microsoft Excel (.xlsx)
  */
-export function exportRKAToExcel(simulation, options = {}) {
+  function exportRKAToExcel(simulation, options = {}) {
   const {
     currentUser = null,
     filenamePrefix = 'RKA_Prioritas_Sarpras_Pusdik_KP'
@@ -557,3 +566,10 @@ export function exportRKAToExcel(simulation, options = {}) {
   const filename = `${filenamePrefix}_${new Date().toISOString().slice(0, 10)}.xlsx`;
   XLSX.writeFile(wb, filename);
 }
+
+
+  window.SARPRAS_EXCEL = {
+    exportAssetsToExcel: exportAssetsToExcel,
+    exportRKAToExcel: exportRKAToExcel
+  };
+})(window);

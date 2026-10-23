@@ -1,26 +1,18 @@
-DirectoryIndex index.php index.html
-
-<IfModule mod_mime.c>
-    AddType image/svg+xml .svg .svgz
-    AddEncoding gzip .svgz
+<IfModule mod_dir.c>
+    DirectoryIndex index.php index.html
 </IfModule>
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Route /api/ ke backend/api/
-    RewriteRule ^api/(.*)$ backend/api/$1 [QSA,L]
+    # Kompatibilitas lama apabila ada request ke /backend/api/*
+    RewriteRule ^backend/api/(.*)$ api/$1 [L,QSA]
 
-    # Jangan proses jika file atau folder fisik ada
+    # Lewatkan file dan direktori fisik yang ada (assets/, api/, dll.)
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
 
-    # Cek apakah file ada di folder dist/ (misal logo-kkp.svg, favicon.svg, dsb.)
-    RewriteCond %{DOCUMENT_ROOT}/kkp-sarpras-analytics/dist/$1 -f [OR]
-    RewriteCond %{DOCUMENT_ROOT}/dist/$1 -f
-    RewriteRule ^(.*)$ dist/$1 [L]
-
-    # SPA Fallback ke index.php
-    RewriteRule ^.*$ index.php [L]
+    # Fallback ke index.php
+    RewriteRule ^ index.php [L]
 </IfModule>
