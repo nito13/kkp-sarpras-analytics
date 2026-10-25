@@ -2,13 +2,23 @@
     DirectoryIndex index.php index.html
 </IfModule>
 
+<IfModule mod_mime.c>
+    AddType image/svg+xml .svg .svgz
+    AddEncoding gzip .svgz
+</IfModule>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Kompatibilitas lama apabila ada request ke /backend/api/*
-    RewriteRule ^backend/api/(.*)$ api/$1 [L,QSA]
+    # Routing Khusus Health Monitoring
+    RewriteRule ^api/health\.php$ Monitoring/health.php [L,QSA]
+    RewriteRule ^APIs/health\.php$ Monitoring/health.php [L,QSA]
 
-    # Lewatkan file dan direktori fisik yang ada (assets/, api/, dll.)
+    # Kompatibilitas REST API Lama ke APIs/
+    RewriteRule ^backend/api/(.*)$ APIs/$1 [L,QSA]
+    RewriteRule ^api/(.*)$ APIs/$1 [L,QSA]
+
+    # Lewatkan file dan direktori fisik yang ada (Frontend/, Services/, APIs/, Monitoring/, dll.)
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]

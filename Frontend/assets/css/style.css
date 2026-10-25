@@ -1,0 +1,695 @@
+/* ============================================================================
+   SARPRAS KKP - Custom Stylesheet & Theme Overrides (Mode Gelap & Terang)
+   BPPSDMKP - Kementerian Kelautan dan Perikanan RI
+   File ini dapat diedit langsung tanpa perlu npm run build.
+   ============================================================================ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0f172a;
+  color: #f1f5f9;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+::selection {
+  background-color: #06b6d4;
+  color: #ffffff;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0284c7;
+}
+
+/* Animations */
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ==============================================================
+   LIGHT THEME OVERRIDES (WARNA SOLID PADA MODE TERANG)
+   Tanpa gradien / tanpa transparansi kusam, 100% warna solid tegas
+   ============================================================== */
+
+/* 1. Global Page Background & Base Text */
+html.light body {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* Hilangkan SEMUA gradien di Mode Terang dan gantikan warna solid */
+html.light [class*="bg-gradient-"] {
+  background-image: none !important;
+}
+
+/* 2. Solid Surfaces (Cards, Containers, Modals) */
+html.light .bg-slate-900,
+html.light .bg-slate-950,
+html.light .bg-slate-800,
+html.light [class*="bg-slate-900/"],
+html.light [class*="bg-slate-950/"],
+html.light [class*="bg-slate-800/"] {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.03) !important;
+}
+
+/* 3. Solid Sub-panels, secondary containers, and wells */
+html.light [class*="bg-slate-950/"],
+html.light [class*="bg-slate-900/"] {
+  background-color: #f8fafc !important;
+  background-image: none !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* 3b. Progress bar tracks in Light Mode */
+html.light [class*="bg-slate-800"][class*="rounded-full"],
+html.light [class*="bg-slate-700"][class*="rounded-full"],
+html.light .h-1\.5.bg-slate-800,
+html.light .h-2.bg-slate-800 {
+  background-color: #e2e8f0 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* 4. Solid Top Branding Banner (Solid Deep Navy KKP) */
+html.light .top-branding-banner {
+  background-color: #032b5f !important;
+  background-image: none !important;
+  border-bottom: 2px solid #0284c7 !important;
+  color: #ffffff !important;
+}
+html.light .top-branding-banner * {
+  color: #ffffff !important;
+}
+html.light .top-branding-banner .text-slate-400 {
+  color: #bae6fd !important;
+}
+
+/* 5. Solid Special Alert & Header Cards */
+/* Peringatan Dini (Early Warning) - Solid Light Red */
+html.light [class*="from-rose-950"],
+html.light [class*="via-rose-950"],
+html.light [class*="via-rose-900"] {
+  background-color: #fee2e2 !important;
+  background-image: none !important;
+  border-color: #f87171 !important;
+  color: #991b1b !important;
+}
+html.light [class*="from-rose-950"] h2,
+html.light [class*="from-rose-950"] h3,
+html.light [class*="from-rose-950"] .font-bold {
+  color: #991b1b !important;
+}
+html.light [class*="from-rose-950"] p,
+html.light [class*="from-rose-950"] span:not([class*="bg-"]) {
+  color: #7f1d1d !important;
+}
+
+/* Budget Simulator Header - Solid Light Indigo */
+html.light [class*="from-indigo-950"],
+html.light [class*="via-indigo-950"] {
+  background-color: #e0e7ff !important;
+  background-image: none !important;
+  border-color: #818cf8 !important;
+  color: #312e81 !important;
+}
+html.light [class*="from-indigo-950"] h2,
+html.light [class*="from-indigo-950"] .font-bold {
+  color: #312e81 !important;
+}
+html.light [class*="from-indigo-950"] p,
+html.light [class*="from-indigo-950"] span:not([class*="bg-"]) {
+  color: #3730a3 !important;
+}
+
+/* Modal Full Edit Kendali Penuh Banner - Solid Light Sky */
+html.light [class*="from-cyan-950"],
+html.light [class*="via-blue-950"] {
+  background-color: #e0f2fe !important;
+  background-image: none !important;
+  border-color: #38bdf8 !important;
+  color: #0369a1 !important;
+}
+html.light [class*="from-cyan-950"] h4,
+html.light [class*="from-cyan-950"] p {
+  color: #0369a1 !important;
+}
+
+/* 6. Solid Buttons (No Gradients) */
+/* Primary Cyan / Sky Action Buttons */
+html.light .bg-cyan-600,
+html.light .bg-blue-600,
+html.light [class*="from-cyan-600"] {
+  background-color: #0284c7 !important;
+  background-image: none !important;
+  border-color: #0284c7 !important;
+  color: #ffffff !important;
+}
+html.light .bg-cyan-600:hover,
+html.light .bg-blue-600:hover,
+html.light [class*="from-cyan-600"]:hover {
+  background-color: #0369a1 !important;
+}
+html.light .bg-cyan-600 *,
+html.light .bg-blue-600 *,
+html.light [class*="from-cyan-600"] * {
+  color: #ffffff !important;
+}
+
+/* Primary Emerald Action Buttons */
+html.light .bg-emerald-600,
+html.light [class*="from-emerald-600"] {
+  background-color: #059669 !important;
+  background-image: none !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
+}
+html.light .bg-emerald-600:hover,
+html.light [class*="from-emerald-600"]:hover {
+  background-color: #047857 !important;
+}
+html.light .bg-emerald-600 *,
+html.light [class*="from-emerald-600"] * {
+  color: #ffffff !important;
+}
+
+/* Rose Action Buttons */
+html.light .bg-rose-600 {
+  background-color: #e11d48 !important;
+  background-image: none !important;
+  border-color: #e11d48 !important;
+  color: #ffffff !important;
+}
+html.light .bg-rose-600:hover {
+  background-color: #be123c !important;
+}
+html.light .bg-rose-600 * {
+  color: #ffffff !important;
+}
+
+/* Secondary & Reset Buttons */
+html.light button.bg-slate-900,
+html.light button.bg-slate-800 {
+  background-color: #f1f5f9 !important;
+  background-image: none !important;
+  border-color: #cbd5e1 !important;
+  color: #334155 !important;
+}
+html.light button.bg-slate-900:hover,
+html.light button.bg-slate-800:hover {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* Export Excel Green Solid Container */
+html.light [class*="bg-emerald-950/80"] {
+  background-color: #ecfdf5 !important;
+  background-image: none !important;
+  border-color: #34d399 !important;
+  color: #065f46 !important;
+}
+html.light [class*="bg-emerald-950/80"]:hover {
+  background-color: #d1fae5 !important;
+  color: #047857 !important;
+}
+html.light [class*="bg-emerald-950/80"] svg {
+  color: #059669 !important;
+}
+
+/* 7. Solid Badges & Status Pills (Warna Solid Tegas) */
+html.light [class*="bg-emerald-500/10"],
+html.light [class*="bg-emerald-500/15"],
+html.light [class*="bg-emerald-500/20"],
+html.light [class*="bg-emerald-950"] {
+  background-color: #dcfce7 !important;
+  background-image: none !important;
+  color: #15803d !important;
+  border-color: #4ade80 !important;
+}
+
+html.light [class*="bg-cyan-500/10"],
+html.light [class*="bg-cyan-500/15"],
+html.light [class*="bg-cyan-500/20"],
+html.light [class*="bg-cyan-950"],
+html.light [class*="bg-sky-500/10"],
+html.light [class*="bg-sky-500/15"],
+html.light [class*="bg-sky-500/20"] {
+  background-color: #e0f2fe !important;
+  background-image: none !important;
+  color: #0369a1 !important;
+  border-color: #38bdf8 !important;
+}
+
+html.light [class*="bg-amber-500/10"],
+html.light [class*="bg-amber-500/15"],
+html.light [class*="bg-amber-500/20"] {
+  background-color: #fef9c3 !important;
+  background-image: none !important;
+  color: #854d0e !important;
+  border-color: #facc15 !important;
+}
+
+html.light [class*="bg-rose-500/10"],
+html.light [class*="bg-rose-500/15"],
+html.light [class*="bg-rose-500/20"],
+html.light [class*="bg-rose-950"] {
+  background-color: #fee2e2 !important;
+  background-image: none !important;
+  color: #991b1b !important;
+  border-color: #f87171 !important;
+}
+
+html.light [class*="bg-indigo-500/10"],
+html.light [class*="bg-indigo-500/15"],
+html.light [class*="bg-indigo-500/20"],
+html.light [class*="bg-indigo-950"] {
+  background-color: #e0e7ff !important;
+  background-image: none !important;
+  color: #3730a3 !important;
+  border-color: #818cf8 !important;
+}
+
+html.light [class*="bg-purple-500/10"],
+html.light [class*="bg-purple-500/15"],
+html.light [class*="bg-purple-500/20"] {
+  background-color: #f3e8ff !important;
+  background-image: none !important;
+  color: #6b21a8 !important;
+  border-color: #c084fc !important;
+}
+
+/* 8. Solid Borders in Light Mode */
+html.light .border-slate-800,
+html.light .border-slate-700,
+html.light .border-slate-700\/80,
+html.light .border-slate-700\/70,
+html.light .border-slate-700\/60,
+html.light .border-slate-700\/50,
+html.light .border-slate-800\/60,
+html.light .border-slate-800\/80,
+html.light .border-slate-750 {
+  border-color: #cbd5e1 !important;
+}
+
+/* 9. Ultra-Clear, Sharp, High-Contrast Typography in Light Mode */
+html.light {
+  color-scheme: light;
+}
+
+html.light body {
+  background-color: #f1f5f9 !important;
+  color: #090d16 !important; /* Deepest solid black-slate */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Headings and Titles - Bold, Deep Black */
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light h5,
+html.light h6 {
+  color: #090d16 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em;
+}
+
+/* Labels & Form Titles */
+html.light label {
+  color: #090d16 !important;
+  font-weight: 600 !important;
+}
+
+/* Paragraphs & General Body Text */
+html.light p {
+  color: #1e293b !important;
+}
+
+/* All text-white outside colored buttons/top banner becomes deep jet black */
+html.light .text-white:not([class*="bg-cyan-600"]):not([class*="bg-blue-600"]):not([class*="bg-emerald-600"]):not([class*="bg-rose-600"]):not(.top-branding-banner *):not([class*="from-cyan-600"] *):not([class*="from-emerald-600"] *):not(.bg-cyan-500 *) {
+  color: #090d16 !important;
+  font-weight: 600 !important;
+}
+
+/* Primary text & prominent subheadings */
+html.light .text-slate-100,
+html.light .text-slate-200 {
+  color: #090d16 !important;
+  font-weight: 600 !important;
+}
+
+/* Secondary text, descriptions, table contents */
+html.light .text-slate-300 {
+  color: #1e293b !important; /* Deep slate-800 instead of pale gray */
+  font-weight: 500 !important;
+}
+
+/* Metadata, card labels, BMN codes, years, small subtitles */
+html.light .text-slate-400 {
+  color: #334155 !important; /* Solid Slate-700 instead of faint #475569 */
+  font-weight: 500 !important;
+}
+
+/* Subtle hints & timestamps */
+html.light .text-slate-500 {
+  color: #475569 !important; /* Slate-600 instead of faint #64748b */
+  font-weight: 500 !important;
+}
+
+/* Monospace BMN codes and values - make crisp and legible */
+html.light .font-mono {
+  color: #0369a1 !important;
+  font-weight: 700 !important;
+}
+
+/* Navigation buttons clarity in Light Mode */
+html.light header button {
+  font-weight: 600 !important;
+}
+html.light header button:not([class*="bg-cyan-600"]):not([class*="from-cyan-600"]) {
+  color: #1e293b !important;
+}
+html.light header button:not([class*="bg-cyan-600"]):not([class*="from-cyan-600"]):hover {
+  background-color: #e2e8f0 !important;
+  color: #090d16 !important;
+}
+
+/* Solid Bold Metrics & Accent Text */
+html.light .text-emerald-400,
+html.light .text-emerald-300 {
+  color: #047857 !important; /* Solid Emerald 700 */
+  font-weight: 700 !important;
+}
+
+html.light .text-cyan-400,
+html.light .text-cyan-300 {
+  color: #0369a1 !important; /* Solid Sky 700 */
+  font-weight: 700 !important;
+}
+
+html.light .text-sky-400,
+html.light .text-sky-300 {
+  color: #0284c7 !important; /* Solid Sky 600 */
+  font-weight: 700 !important;
+}
+
+html.light .text-amber-400,
+html.light .text-amber-300 {
+  color: #92400e !important; /* Solid Amber 800 */
+  font-weight: 700 !important;
+}
+
+html.light .text-rose-400,
+html.light .text-rose-300 {
+  color: #9f1239 !important; /* Solid Rose 800 */
+  font-weight: 700 !important;
+}
+
+html.light .text-indigo-400,
+html.light .text-indigo-300 {
+  color: #3730a3 !important; /* Solid Indigo 700 */
+  font-weight: 700 !important;
+}
+
+html.light .text-purple-400,
+html.light .text-purple-300 {
+  color: #6b21a8 !important; /* Solid Purple 700 */
+  font-weight: 700 !important;
+}
+
+/* 10. Solid Form Inputs & Selects */
+html.light input,
+html.light select,
+html.light option,
+html.light textarea {
+  background-color: #ffffff !important;
+  color: #090d16 !important;
+  font-weight: 500 !important;
+  border-color: #cbd5e1 !important;
+}
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #64748b !important;
+  font-weight: 400 !important;
+}
+html.light input:focus,
+html.light select:focus,
+html.light textarea:focus {
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2) !important;
+}
+
+/* 11. Solid Tables with Clear Typography */
+html.light table th,
+html.light table thead tr {
+  background-color: #f1f5f9 !important;
+  color: #090d16 !important;
+  font-weight: 700 !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+html.light table td {
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+  font-weight: 500 !important;
+}
+html.light table td span {
+  font-weight: 600;
+}
+html.light table tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+
+/* 12. Solid Geospatial Map Canvas */
+html.light .geospatial-canvas-container,
+html.light .relative.w-full.h-\[400px\],
+html.light .relative.w-full.h-\[460px\] {
+  background-color: #dbeafe !important;
+  background-image: none !important;
+  border-color: #93c5fd !important;
+}
+html.light svg g[fill="#1e293b"] {
+  fill: #475569 !important;
+  stroke: #334155 !important;
+}
+html.light svg text {
+  fill: #0f172a !important;
+  text-shadow: 0 1px 2px #ffffff !important;
+}
+
+/* 13. Solid Modals & Backdrops */
+html.light .fixed.inset-0 {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+}
+html.light .fixed.inset-0 .bg-slate-900 {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+html.light .fixed.inset-0 .bg-slate-800\/95,
+html.light .fixed.inset-0 .bg-slate-800\/90,
+html.light .fixed.inset-0 .bg-slate-800\/80 {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* 14. Solid Login Screen */
+html.light .min-h-screen.bg-gradient-to-br {
+  background-color: #f1f5f9 !important;
+  background-image: none !important;
+  color: #0f172a !important;
+}
+html.light .min-h-screen.bg-gradient-to-br .bg-slate-900\/95 {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08) !important;
+}
+html.light .min-h-screen.bg-gradient-to-br button[type="button"].bg-slate-950\/70 {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+html.light .min-h-screen.bg-gradient-to-br button[type="button"].bg-slate-950\/70:hover {
+  background-color: #f1f5f9 !important;
+  border-color: #0284c7 !important;
+}
+html.light .login-logo-container,
+html.light .header-logo-container {
+  border-color: #000000 !important;
+}
+
+/* Light Mode scrollbars */
+html.light ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+html.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* 15. Mobile Bottom Navigation in Light Mode */
+html.light nav.fixed.bottom-0 {
+  background-color: #ffffff !important;
+  border-top: 1px solid #cbd5e1 !important;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08) !important;
+}
+html.light nav.fixed.bottom-0 button:not(.text-cyan-400) {
+  color: #334155 !important;
+}
+html.light nav.fixed.bottom-0 button:not(.text-cyan-400) * {
+  color: #334155 !important;
+}
+html.light nav.fixed.bottom-0 button.text-cyan-400,
+html.light nav.fixed.bottom-0 button.text-cyan-400 * {
+  color: #0284c7 !important;
+}
+
+/* Mobile responsive helpers */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  .mobile-main-container {
+    padding-bottom: 5.5rem !important;
+  }
+}
+
+/* ==============================================================
+   LEAFLET REAL MAP STYLING & CUSTOM POPUPS
+   ============================================================== */
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  background-color: #0b1120 !important;
+  font-family: inherit !important;
+  z-index: 1 !important;
+}
+
+/* Custom Marker Styling */
+.custom-satdik-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Leaflet Popup Styling */
+.leaflet-popup-content-wrapper {
+  background: #0f172a !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.4) !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+
+.leaflet-popup-tip-container {
+  overflow: visible !important;
+}
+
+.leaflet-popup-tip {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  box-shadow: none !important;
+}
+
+.leaflet-popup-close-button {
+  color: #94a3b8 !important;
+  padding: 8px 10px !important;
+  font-size: 18px !important;
+  z-index: 20 !important;
+}
+
+.leaflet-popup-close-button:hover {
+  color: #ffffff !important;
+}
+
+/* Leaflet Tooltip */
+.leaflet-tooltip.satdik-map-tooltip {
+  background: rgba(15, 23, 42, 0.95) !important;
+  color: #f8fafc !important;
+  border: 1px solid #0284c7 !important;
+  border-radius: 8px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+  padding: 4px 8px !important;
+  backdrop-filter: blur(4px);
+}
+
+.leaflet-tooltip-top.satdik-map-tooltip:before {
+  border-top-color: #0284c7 !important;
+}
+
+.leaflet-tooltip-bottom.satdik-map-tooltip:before {
+  border-bottom-color: #0284c7 !important;
+}
+
+/* Light Mode Overrides for Leaflet */
+html.light .leaflet-container {
+  background-color: #e2e8f0 !important;
+}
+
+html.light .leaflet-popup-content-wrapper {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light .leaflet-popup-tip {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light .leaflet-popup-close-button {
+  color: #64748b !important;
+}
+
+html.light .leaflet-popup-close-button:hover {
+  color: #0f172a !important;
+}
+
+html.light .leaflet-tooltip.satdik-map-tooltip {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #0f172a !important;
+  border-color: #0284c7 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+}
+

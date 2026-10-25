@@ -2,7 +2,11 @@
 // backend/database/seed.php
 // Skrip Inisialisasi dan Seeder Database MySQL Laragon untuk SARPRAS KKP
 
-require_once __DIR__ . '/../config/database.php';
+if (file_exists(__DIR__ . '/../Backend/config/database.php')) {
+    require_once __DIR__ . '/../Backend/config/database.php';
+} else {
+    require_once __DIR__ . '/../config/database.php';
+}
 
 echo "=== MEMULAI SETUP DATABASE SARPRAS KKP (LARAGON) ===\n\n";
 
