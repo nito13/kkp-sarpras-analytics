@@ -18,6 +18,9 @@
     RewriteRule ^backend/api/(.*)$ APIs/$1 [L,QSA]
     RewriteRule ^api/(.*)$ APIs/$1 [L,QSA]
 
+    # Kompatibilitas Path Lama assets/ ke Frontend/assets/
+    RewriteRule ^assets/(.*)$ Frontend/assets/$1 [L,QSA]
+
     # Lewatkan file dan direktori fisik yang ada (Frontend/, Services/, APIs/, Monitoring/, dll.)
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
