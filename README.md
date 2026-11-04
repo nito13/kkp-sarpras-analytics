@@ -44,6 +44,8 @@ kkp-sarpras-analytics/
 │   ├── seed_data.json              # Dataset lengkap 18 Satdik, pengguna RBAC, & inventaris aset
 │   ├── backup_kkp_sarpras_db.sql   # SQL dump backup database utama
 │   ├── backup_monitoring_sarpras.sql # SQL dump backup database riwayat monitoring
+│   ├── Dokumentasi_Database_SARPRAS_KKP.pdf # Dokumen arsitektur database (Versi PDF)
+│   ├── Dokumentasi_Database_SARPRAS_KKP.pptx # Presentasi arsitektur database (Versi PPTX)
 │   └── README.md                   # Dokumentasi modul Database
 │
 ├── 🌐 APIs/                        # DOMAIN 4: Titik Akhir REST API

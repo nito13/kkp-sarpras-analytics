@@ -568,8 +568,433 @@ function createCell(val, style = {}, type = null) {
 }
 
 
+/**
+ * Ekspor Rekapitulasi & Detail Ketersediaan Asrama Taruna ke File Resmi Microsoft Excel (.xlsx)
+ */
+function exportAsramaToExcel(asramaData, satdikList = [], options = {}) {
+  const {
+    currentUser = null,
+    filterSatdikName = 'Seluruh Satuan Pendidikan Terdata (16 Satdik)',
+    filenamePrefix = 'SARPRAS_KKP_Kapasitas_Asrama'
+  } = options;
+
+  const summary = Array.isArray(asramaData?.summary) ? asramaData.summary : [];
+  const buildings = Array.isArray(asramaData?.buildings) ? asramaData.buildings : [];
+
+  if (summary.length === 0 && buildings.length === 0) {
+    alert('Tidak ada data kapasitas asrama untuk diekspor ke Excel.');
+    return;
+  }
+
+  const satdikMap = {};
+  (satdikList || []).forEach(s => { satdikMap[s.id] = s; });
+
+  const wb = XLSX.utils.book_new();
+  const printedAt = getFormattedDateTime();
+  const userName = currentUser?.name || 'Admin Sarpras Pusdik KP';
+  const userRole = currentUser?.roleLabel || 'Pengelola SARPRAS KKP';
+
+  const kopStyleKemen = { font: { name: 'Calibri', sz: 14, bold: true, color: { rgb: '003366' } }, alignment: { horizontal: 'center', vertical: 'center' } };
+  const kopStyleBadan = { font: { name: 'Calibri', sz: 11, bold: true, color: { rgb: '0F766E' } }, alignment: { horizontal: 'center', vertical: 'center' } };
+  const kopStylePusat = { font: { name: 'Calibri', sz: 11, bold: true, color: { rgb: '1E3A8A' } }, alignment: { horizontal: 'center', vertical: 'center' } };
+  const titleStyle = { font: { name: 'Calibri', sz: 12, bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '0B3D60' } }, alignment: { horizontal: 'center', vertical: 'center' } };
+  const tableHeaderStyle = {
+    font: { name: 'Calibri', sz: 10, bold: true, color: { rgb: 'FFFFFF' } },
+    fill: { fgColor: { rgb: '0B3D60' } },
+    alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+    border: borderThin
+  };
+
+  // ================= SHEET 1: REKAP PER SATDIK =================
+  const ws1 = {};
+  ws1['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', kopStyleKemen);
+  ws1['A2'] = createCell('BADAN PENYULUHAN DAN PENGEMBANGAN SDM KELAUTAN DAN PERIKANAN (BPPSDM KP)', kopStyleBadan);
+  ws1['A3'] = createCell('PUSAT PENDIDIKAN KELAUTAN DAN PERIKANAN (PUSDIK KP)', kopStylePusat);
+  ws1['A5'] = createCell('LAPORAN REKAPITULASI KETERSEDIAAN & RASIO KETERCUKUPAN ASRAMA TARUNA (STANDAR 4 M²/ORANG)', titleStyle);
+
+  const metaStyle = { font: { name: 'Calibri', sz: 10, color: { rgb: '334155' } } };
+  const metaBold = { font: { name: 'Calibri', sz: 10, bold: true, color: { rgb: '0F172A' } } };
+  ws1['A6'] = createCell('Cakupan Satuan Pendidikan:', metaStyle);
+  ws1['C6'] = createCell(filterSatdikName, metaBold);
+  ws1['H6'] = createCell('Waktu Cetak:', metaStyle);
+  ws1['J6'] = createCell(printedAt, metaStyle);
+  ws1['A7'] = createCell('Dicetak Oleh:', metaStyle);
+  ws1['C7'] = createCell(userName + ' (' + userRole + ')', metaBold);
+  ws1['H7'] = createCell('Sumber Data:', metaStyle);
+  ws1['J7'] = createCell(asramaData?.meta?.sumber || 'Rekap Asrama Satdik KP', metaBold);
+
+  const rekapHeaders = [
+    'No.',
+    'Satuan Pendidikan',
+    'Provinsi / Wilayah',
+    'Unit Asrama',
+    'Kamar / Barak',
+    'Luas Kamar (m²)',
+    'Kapasitas 4 m² (Org)',
+    'Kapasitas Aktif (Org)',
+    'Jumlah Taruna',
+    'Selisih (+/-)',
+    'Rasio Ketercukupan',
+    'Kapasitas Adj. (Org)',
+    'Dokumen Google Drive'
+  ];
+  rekapHeaders.forEach((h, c) => {
+    ws1[XLSX.utils.encode_cell({ r: 8, c })] = createCell(h, tableHeaderStyle);
+  });
+
+  let r1 = 9;
+  let totUnit = 0, totKamar = 0, totLuas = 0, totKap = 0, totAktif = 0, totTaruna = 0, totAdj = 0;
+
+  summary.forEach((s, idx) => {
+    const sat = satdikMap[s.satdikId] || {};
+    const taruna = Number(sat.tarunaCount) || 0;
+    const kap = Math.round(Number(s.kapasitas) || 0);
+    const aktif = Math.round(Number(s.kapasitasAktif ?? s.kapasitas) || 0);
+    const diff = kap - taruna;
+    const ratio = taruna > 0 ? Math.round((kap / taruna) * 1000) / 10 : 0;
+    const adj = s.kapasitasAdjustment != null ? Math.round(Number(s.kapasitasAdjustment)) : '';
+
+    totUnit += Number(s.jumlahAsrama) || 0;
+    totKamar += Number(s.jumlahKamar) || 0;
+    totLuas += Number(s.luasM2) || 0;
+    totKap += kap;
+    totAktif += aktif;
+    totTaruna += taruna;
+    if (typeof adj === 'number') totAdj += adj;
+
+    const bg = idx % 2 === 0 ? 'F8FAFC' : 'FFFFFF';
+    const base = { font: { name: 'Calibri', sz: 10, color: { rgb: '0F172A' } }, border: borderThin, fill: { fgColor: { rgb: bg } } };
+    const center = { ...base, alignment: { horizontal: 'center', vertical: 'center' } };
+    const left = { ...base, alignment: { horizontal: 'left', vertical: 'center' } };
+    const leftBold = { ...left, font: { ...base.font, bold: true } };
+    const numInt = { ...base, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0' };
+    const numDec = { ...base, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0.00' };
+    const ratioStyle = {
+      ...center,
+      font: { name: 'Calibri', sz: 10, bold: true, color: { rgb: ratio >= 100 ? '065F46' : ratio >= 70 ? '92400E' : '9F1239' } },
+      fill: { fgColor: { rgb: ratio >= 100 ? 'D1FAE5' : ratio >= 70 ? 'FEF3C7' : 'FFE4E6' } }
+    };
+
+    const vals = [
+      [idx + 1, center, 'n'],
+      [sat.name || s.namaExcel || s.satdikId, leftBold, 's'],
+      [sat.provinsi ? sat.provinsi + ' (' + (sat.region || '') + ')' : '-', left, 's'],
+      [Number(s.jumlahAsrama) || 0, numInt, 'n'],
+      [Number(s.jumlahKamar) || 0, numInt, 'n'],
+      [Number(s.luasM2) || 0, numDec, 'n'],
+      [kap, numInt, 'n'],
+      [aktif, numInt, 'n'],
+      [taruna, numInt, 'n'],
+      [diff, numInt, 'n'],
+      [ratio + '%', ratioStyle, 's'],
+      [adj === '' ? '-' : adj, adj === '' ? center : numInt, adj === '' ? 's' : 'n'],
+      [s.driveUrl || '-', left, 's']
+    ];
+    vals.forEach(([v, st, t], c) => {
+      const cell = createCell(v, st, t);
+      if (c === 12 && s.driveUrl) cell.l = { Target: s.driveUrl, Tooltip: 'Buka Dokumen Google Drive' };
+      ws1[XLSX.utils.encode_cell({ r: r1, c })] = cell;
+    });
+    r1++;
+  });
+
+  const totStyle = { font: { name: 'Calibri', sz: 10, bold: true, color: { rgb: '0B3D60' } }, fill: { fgColor: { rgb: 'E0F2FE' } }, border: borderDoubleBottom, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0' };
+  const totDec = { ...totStyle, numFmt: '#,##0.00' };
+  const totLabel = { ...totStyle, alignment: { horizontal: 'center', vertical: 'center' } };
+  const totRatio = totTaruna > 0 ? (Math.round((totKap / totTaruna) * 1000) / 10) + '%' : '-';
+  ws1[XLSX.utils.encode_cell({ r: r1, c: 0 })] = createCell('TOTAL', totLabel, 's');
+  ws1[XLSX.utils.encode_cell({ r: r1, c: 1 })] = createCell(summary.length + ' Satuan Pendidikan', totLabel, 's');
+  ws1[XLSX.utils.encode_cell({ r: r1, c: 2 })] = createCell('', totLabel, 's');
+  ws1[XLSX.utils.encode_cell({ r: r1, c: 3 })] = createCell(totUnit, totStyle, 'n');
+  ws1[XLSX.utils.encode_cell({ r: r1, c: 4 })] = createCell(totKamar, totStyle, 'n');
+  ws1[XLSX.utils.encode_cell({ r: r1, c: 5 })] = createCell(Math.round(totLuas * 100) / 100, totDec, 'n');
+  ws1[XLSX.utils.encode_cell({ r: r1, c: 6 })] = createCell(totKap, totStyle, 'n');
+  ws1[XLSX.utils.encode_cell({ r: r1, c: 7 })] = createCell(totAktif, totStyle, 'n');
+  ws1[XLSX.utils.encode_cell({ r: r1, c: 8 })] = createCell(totTaruna, totStyle, 'n');
+  ws1[XLSX.utils.encode_cell({ r: r1, c: 9 })] = createCell(totKap - totTaruna, totStyle, 'n');
+  ws1[XLSX.utils.encode_cell({ r: r1, c: 10 })] = createCell(totRatio, totLabel, 's');
+  ws1[XLSX.utils.encode_cell({ r: r1, c: 11 })] = createCell(totAdj > 0 ? totAdj : '-', totAdj > 0 ? totStyle : totLabel, totAdj > 0 ? 'n' : 's');
+  ws1[XLSX.utils.encode_cell({ r: r1, c: 12 })] = createCell('', totLabel, 's');
+
+  ws1['!merges'] = [
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 12 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 12 } },
+    { s: { r: 2, c: 0 }, e: { r: 2, c: 12 } },
+    { s: { r: 4, c: 0 }, e: { r: 4, c: 12 } }
+  ];
+  ws1['!cols'] = [
+    { wch: 5 }, { wch: 36 }, { wch: 24 }, { wch: 12 }, { wch: 13 }, { wch: 16 },
+    { wch: 17 }, { wch: 17 }, { wch: 14 }, { wch: 13 }, { wch: 17 }, { wch: 17 }, { wch: 44 }
+  ];
+  ws1['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: r1 + 1, c: 12 } });
+  XLSX.utils.book_append_sheet(wb, ws1, 'Rekap Kapasitas Asrama');
+
+  // ================= SHEET 2: DETAIL GEDUNG ASRAMA =================
+  if (buildings.length > 0) {
+    const ws2 = {};
+    ws2['A1'] = createCell('RINCIAN INVENTARIS GEDUNG & KAMAR ASRAMA TARUNA SATUAN PENDIDIKAN KKP', titleStyle);
+    const gHeaders = [
+      'No.', 'Kode Gedung', 'Satuan Pendidikan', 'Kampus / Lokasi', 'Nama Gedung Asrama',
+      'Peruntukan', 'Kamar / Barak', 'Rincian Dimensi Kamar', 'Luas Total (m²)', 'Kapasitas (Org)', 'Status', 'Keterangan'
+    ];
+    gHeaders.forEach((h, c) => {
+      ws2[XLSX.utils.encode_cell({ r: 2, c })] = createCell(h, tableHeaderStyle);
+    });
+    let r2 = 3;
+    buildings.forEach((b, idx) => {
+      const sat = satdikMap[b.satdikId] || {};
+      const bg = idx % 2 === 0 ? 'F8FAFC' : 'FFFFFF';
+      const base = { font: { name: 'Calibri', sz: 10, color: { rgb: '0F172A' } }, border: borderThin, fill: { fgColor: { rgb: bg } } };
+      const center = { ...base, alignment: { horizontal: 'center', vertical: 'center' } };
+      const left = { ...base, alignment: { horizontal: 'left', vertical: 'center' } };
+      const leftBold = { ...left, font: { ...base.font, bold: true } };
+      const numInt = { ...base, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0' };
+      const numDec = { ...base, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0.00' };
+      const dims = Array.isArray(b.rincian) && b.rincian.length > 0
+        ? b.rincian.map(rc => (rc.label && rc.label !== b.nama ? rc.label + ': ' : '') + (rc.ukuran || '-') + ' (' + rc.jumlah + ' ruang)').join('; ')
+        : '-';
+      const vals = [
+        [idx + 1, center, 'n'],
+        [b.id, center, 's'],
+        [sat.shortName || sat.name || b.satdikId, left, 's'],
+        [b.kampus || 'Kampus Utama', left, 's'],
+        [b.nama, leftBold, 's'],
+        [b.peruntukan || '-', center, 's'],
+        [Number(b.jumlahKamar) || 0, numInt, 'n'],
+        [dims, left, 's'],
+        [Number(b.luasM2) || 0, numDec, 'n'],
+        [Math.round(Number(b.kapasitas) || 0), numInt, 'n'],
+        [b.status || 'Digunakan', center, 's'],
+        [b.keterangan || '-', left, 's']
+      ];
+      vals.forEach(([v, st, t], c) => {
+        ws2[XLSX.utils.encode_cell({ r: r2, c })] = createCell(v, st, t);
+      });
+      r2++;
+    });
+    ws2['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 11 } }];
+    ws2['!cols'] = [
+      { wch: 5 }, { wch: 14 }, { wch: 24 }, { wch: 18 }, { wch: 28 }, { wch: 13 },
+      { wch: 13 }, { wch: 42 }, { wch: 15 }, { wch: 15 }, { wch: 16 }, { wch: 28 }
+    ];
+    ws2['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: r2, c: 11 } });
+    XLSX.utils.book_append_sheet(wb, ws2, 'Detail Gedung Asrama');
+  }
+
+  const filename = `${filenamePrefix}_${new Date().toISOString().slice(0, 10)}.xlsx`;
+  XLSX.writeFile(wb, filename);
+}
+
+/**
+ * Ekspor Rekapitulasi & Matriks Pemenuhan Standar Minimal Sarpras Prodi ke File Resmi Microsoft Excel (.xlsx)
+ */
+function exportStandarToExcel(standarData, satdikList = [], options = {}) {
+  const {
+    currentUser = null,
+    filterScopeLabel = 'Seluruh Rumpun Prodi (12 Bidang) & 11 Satdik Pendidikan Tinggi',
+    selectedSatdik = 'ALL',
+    filenamePrefix = 'SARPRAS_KKP_Standar_Minimal_Prodi'
+  } = options;
+
+  const bidangList = Array.isArray(standarData?.bidang) ? standarData.bidang : [];
+  const rekapList = Array.isArray(standarData?.rekap) ? standarData.rekap : [];
+  const itemsList = Array.isArray(standarData?.items) ? standarData.items : [];
+
+  if (rekapList.length === 0 && itemsList.length === 0) {
+    alert('Tidak ada data standar sarpras prodi untuk diekspor ke Excel.');
+    return;
+  }
+
+  const satdikMap = {};
+  (satdikList || []).forEach(s => { satdikMap[s.id] = s; });
+  const bidangMap = {};
+  bidangList.forEach(b => { bidangMap[b.id] = b; });
+
+  const wb = XLSX.utils.book_new();
+  const printedAt = getFormattedDateTime();
+  const userName = currentUser?.name || 'Admin Sarpras Pusdik KP';
+
+  const kopStyleKemen = { font: { name: 'Calibri', sz: 14, bold: true, color: { rgb: '003366' } }, alignment: { horizontal: 'center', vertical: 'center' } };
+  const kopStyleBadan = { font: { name: 'Calibri', sz: 11, bold: true, color: { rgb: '0F766E' } }, alignment: { horizontal: 'center', vertical: 'center' } };
+  const kopStylePusat = { font: { name: 'Calibri', sz: 11, bold: true, color: { rgb: '1E3A8A' } }, alignment: { horizontal: 'center', vertical: 'center' } };
+  const titleStyle = { font: { name: 'Calibri', sz: 12, bold: true, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '0B3D60' } }, alignment: { horizontal: 'center', vertical: 'center' } };
+  const metaLabel = { font: { name: 'Calibri', sz: 10, bold: true, color: { rgb: '334155' } }, fill: { fgColor: { rgb: 'F1F5F9' } }, border: borderThin };
+  const metaVal = { font: { name: 'Calibri', sz: 10, color: { rgb: '0F172A' } }, fill: { fgColor: { rgb: 'FFFFFF' } }, border: borderThin };
+  const tableHeaderStyle = {
+    font: { name: 'Calibri', sz: 10, bold: true, color: { rgb: 'FFFFFF' } },
+    fill: { fgColor: { rgb: '0F172A' } },
+    alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+    border: borderThin
+  };
+
+  // ================= SHEET 1: REKAP PEMENUHAN STANDAR =================
+  const ws1 = {};
+  const colMax1 = 12;
+  ws1['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', kopStyleKemen);
+  ws1['A2'] = createCell('BADAN PENYULUHAN DAN PENGEMBANGAN SUMBER DAYA MANUSIA KELAUTAN DAN PERIKANAN (BPPSDM KP)', kopStyleBadan);
+  ws1['A3'] = createCell('PUSAT PENDIDIKAN KELAUTAN DAN PERIKANAN — ANALITIK STANDAR MINIMAL SARPRAS PRODI', kopStylePusat);
+  ws1['A5'] = createCell('LAPORAN REKAPITULASI PEMENUHAN STANDAR MINIMAL & GAP SARPRAS PROGRAM STUDI', titleStyle);
+
+  ws1['A6'] = createCell('Cakupan Filter', metaLabel);
+  ws1['C6'] = createCell(filterScopeLabel, metaVal);
+  ws1['H6'] = createCell('Waktu Cetak', metaLabel);
+  ws1['J6'] = createCell(printedAt, metaVal);
+
+  ws1['A7'] = createCell('Sumber Data', metaLabel);
+  ws1['C7'] = createCell(standarData?.meta?.sumber || 'Data Contoh.xlsx', metaVal);
+  ws1['H7'] = createCell('Dicetak Oleh', metaLabel);
+  ws1['J7'] = createCell(userName, metaVal);
+
+  const headers1 = [
+    'No.', 'Rumpun / Bidang Prodi', 'Satuan Pendidikan', 'Prasarana Standar',
+    'Prasarana Terpenuhi', '% Prasarana', 'Sarana Standar', 'Sarana Terpenuhi',
+    '% Sarana', 'Total Item Standar', 'Defisit / Belum Ada', '% Pemenuhan Total', 'Status Kesiapan'
+  ];
+  headers1.forEach((h, c) => {
+    ws1[XLSX.utils.encode_cell({ r: 9, c })] = createCell(h, tableHeaderStyle);
+  });
+
+  let r1 = 10;
+  rekapList.forEach((rk, idx) => {
+    const bObj = bidangMap[rk.bidangId] || {};
+    const sObj = satdikMap[rk.satdikId] || {};
+    const bg = idx % 2 === 0 ? 'F8FAFC' : 'FFFFFF';
+    const base = { font: { name: 'Calibri', sz: 10, color: { rgb: '0F172A' } }, border: borderThin, fill: { fgColor: { rgb: bg } } };
+    const center = { ...base, alignment: { horizontal: 'center', vertical: 'center' } };
+    const left = { ...base, alignment: { horizontal: 'left', vertical: 'center' } };
+    const leftBold = { ...left, font: { ...base.font, bold: true } };
+    const numInt = { ...base, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0' };
+    const numPct = { ...base, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '0.0"%"' };
+
+    const pct = Number(rk.persenTotal) || 0;
+    const statusLabel = pct >= 70 ? 'Memadai (≥70%)' : pct >= 40 ? 'Perlu Penguatan (40-69%)' : 'Defisit Prioritas (<40%)';
+    const statusColor = pct >= 70 ? 'DCFCE7' : pct >= 40 ? 'FEF3C7' : 'FFE4E6';
+    const statusText = pct >= 70 ? '166534' : pct >= 40 ? '92400E' : '9F1239';
+    const statusCell = {
+      font: { name: 'Calibri', sz: 10, bold: true, color: { rgb: statusText } },
+      fill: { fgColor: { rgb: statusColor } },
+      alignment: { horizontal: 'center', vertical: 'center' },
+      border: borderThin
+    };
+
+    const defisitCount = (Number(rk.totalSebagian) || 0) + (Number(rk.totalKosong) || 0);
+    const rowVals = [
+      [idx + 1, center, 'n'],
+      [bObj.nama || rk.bidangId, leftBold, 's'],
+      [sObj.shortName || sObj.name || rk.satdikId, left, 's'],
+      [Number(rk.prasaranaTotal) || 0, numInt, 'n'],
+      [Number(rk.prasaranaTerpenuhi) || 0, numInt, 'n'],
+      [Number(rk.persenPrasarana) || 0, numPct, 'n'],
+      [Number(rk.saranaTotal) || 0, numInt, 'n'],
+      [Number(rk.saranaTerpenuhi) || 0, numInt, 'n'],
+      [Number(rk.persenSarana) || 0, numPct, 'n'],
+      [Number(rk.totalItems) || 0, numInt, 'n'],
+      [defisitCount, numInt, 'n'],
+      [pct, numPct, 'n'],
+      [statusLabel, statusCell, 's']
+    ];
+    rowVals.forEach(([v, st, t], c) => {
+      ws1[XLSX.utils.encode_cell({ r: r1, c })] = createCell(v, st, t);
+    });
+    r1++;
+  });
+
+  ws1['!merges'] = [
+    { s: { r: 0, c: 0 }, e: { r: 0, c: colMax1 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: colMax1 } },
+    { s: { r: 2, c: 0 }, e: { r: 2, c: colMax1 } },
+    { s: { r: 4, c: 0 }, e: { r: 4, c: colMax1 } },
+    { s: { r: 5, c: 0 }, e: { r: 5, c: 1 } },
+    { s: { r: 5, c: 2 }, e: { r: 5, c: 6 } },
+    { s: { r: 5, c: 7 }, e: { r: 5, c: 8 } },
+    { s: { r: 5, c: 9 }, e: { r: 5, c: colMax1 } },
+    { s: { r: 6, c: 0 }, e: { r: 6, c: 1 } },
+    { s: { r: 6, c: 2 }, e: { r: 6, c: 6 } },
+    { s: { r: 6, c: 7 }, e: { r: 6, c: 8 } },
+    { s: { r: 6, c: 9 }, e: { r: 6, c: colMax1 } },
+  ];
+  ws1['!cols'] = [
+    { wch: 5 }, { wch: 30 }, { wch: 24 }, { wch: 14 }, { wch: 15 },
+    { wch: 13 }, { wch: 14 }, { wch: 15 }, { wch: 12 }, { wch: 15 },
+    { wch: 16 }, { wch: 16 }, { wch: 24 }
+  ];
+  ws1['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: r1, c: colMax1 } });
+  XLSX.utils.book_append_sheet(wb, ws1, 'Rekap Standar Prodi');
+
+  // ================= SHEET 2: RINCIAN ITEM STANDAR =================
+  if (itemsList.length > 0) {
+    const ws2 = {};
+    ws2['A1'] = createCell('RINCIAN KATALOG & REALISASI STANDAR MINIMAL SARANA PRASARANA PRODI KKP', titleStyle);
+    const singleSat = selectedSatdik && selectedSatdik !== 'ALL' ? (satdikMap[selectedSatdik]?.shortName || selectedSatdik) : null;
+    const iHeaders = [
+      'No.', 'Kode Item', 'Rumpun Prodi', 'Seksi', 'Kode Grup', 'Fasilitas / Laboratorium / Workshop',
+      'Sub-Ruang / Kategori', 'Nama Item Standar', 'Vol Standar', 'Satuan',
+      singleSat ? `Realisasi (${singleSat})` : 'Ringkasan Realisasi Kampus',
+      'Kondisi / Catatan Audit'
+    ];
+    iHeaders.forEach((h, c) => {
+      ws2[XLSX.utils.encode_cell({ r: 2, c })] = createCell(h, tableHeaderStyle);
+    });
+    let r2 = 3;
+    itemsList.forEach((it, idx) => {
+      const bObj = bidangMap[it.bidangId] || {};
+      const bg = idx % 2 === 0 ? 'F8FAFC' : 'FFFFFF';
+      const base = { font: { name: 'Calibri', sz: 10, color: { rgb: '0F172A' } }, border: borderThin, fill: { fgColor: { rgb: bg } } };
+      const center = { ...base, alignment: { horizontal: 'center', vertical: 'center' } };
+      const left = { ...base, alignment: { horizontal: 'left', vertical: 'center' } };
+      const leftBold = { ...left, font: { ...base.font, bold: true } };
+      const numInt = { ...base, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0' };
+
+      let realCellVal = '-';
+      let realCellType = 's';
+      let realCellStyle = left;
+      if (singleSat && it.real && it.real[selectedSatdik] !== undefined) {
+        realCellVal = Number(it.real[selectedSatdik]) || 0;
+        realCellType = 'n';
+        realCellStyle = numInt;
+      } else if (it.real) {
+        realCellVal = Object.entries(it.real)
+          .map(([sid, v]) => `${satdikMap[sid]?.shortName?.replace('Politeknik KP ', '') || sid}: ${v}`)
+          .join(' | ');
+      }
+      const noteCombined = [it.kondisi ? `Kondisi: ${it.kondisi}` : '', it.ket || ''].filter(Boolean).join(' — ') || '-';
+
+      const vals = [
+        [idx + 1, center, 'n'],
+        [it.id, center, 's'],
+        [bObj.nama || it.bidangId, left, 's'],
+        [it.sec === 'A' ? 'A. Prasarana' : 'B. Sarana', center, 's'],
+        [it.grpCode || '-', center, 's'],
+        [it.grpName || '-', left, 's'],
+        [it.subGrp || '-', left, 's'],
+        [it.nama, leftBold, 's'],
+        [Number(it.stdVol) || 0, numInt, 'n'],
+        [it.satuan || 'Unit', center, 's'],
+        [realCellVal, realCellStyle, realCellType],
+        [noteCombined, left, 's']
+      ];
+      vals.forEach(([v, st, t], c) => {
+        ws2[XLSX.utils.encode_cell({ r: r2, c })] = createCell(v, st, t);
+      });
+      r2++;
+    });
+    ws2['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 11 } }];
+    ws2['!cols'] = [
+      { wch: 6 }, { wch: 13 }, { wch: 24 }, { wch: 13 }, { wch: 10 }, { wch: 32 },
+      { wch: 24 }, { wch: 34 }, { wch: 12 }, { wch: 10 }, { wch: 34 }, { wch: 36 }
+    ];
+    ws2['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: r2, c: 11 } });
+    XLSX.utils.book_append_sheet(wb, ws2, 'Rincian Item Standar');
+  }
+
+  const filename = `${filenamePrefix}_${new Date().toISOString().slice(0, 10)}.xlsx`;
+  XLSX.writeFile(wb, filename);
+}
+
   window.SARPRAS_EXCEL = {
     exportAssetsToExcel: exportAssetsToExcel,
-    exportRKAToExcel: exportRKAToExcel
+    exportRKAToExcel: exportRKAToExcel,
+    exportAsramaToExcel: exportAsramaToExcel,
+    exportStandarToExcel: exportStandarToExcel
   };
 })(window);

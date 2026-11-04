@@ -75,3 +75,113 @@ CREATE TABLE IF NOT EXISTS `assets` (
     INDEX `idx_condition` (`condition`),
     CONSTRAINT `fk_asset_satdik` FOREIGN KEY (`satdik_id`) REFERENCES `satdik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- 4. Rekapitulasi Ketersediaan Asrama per Satdik (sumber: Excel Rekap Asrama, sheet "Rekap")
+CREATE TABLE IF NOT EXISTS `asrama_rekap` (
+    `satdik_id` VARCHAR(50) NOT NULL PRIMARY KEY,
+    `nama_excel` VARCHAR(255) NULL,
+    `jumlah_asrama` INT DEFAULT 0,
+    `jumlah_kamar` INT DEFAULT 0,
+    `luas_m2` DECIMAL(10, 2) DEFAULT 0,
+    `kapasitas` DECIMAL(10, 2) DEFAULT 0,
+    `kapasitas_aktif` DECIMAL(10, 2) DEFAULT 0,
+    `luas_adjustment` DECIMAL(10, 2) NULL,
+    `kapasitas_adjustment` DECIMAL(10, 2) NULL,
+    `jumlah_tidak_dipakai` INT DEFAULT 0,
+    `jumlah_perlu_renovasi` INT DEFAULT 0,
+    `keterangan` TEXT NULL,
+    `drive_url` TEXT NULL,
+    `sumber` VARCHAR(255) NULL,
+    `tanggal_data` DATE NULL,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT `fk_asrama_rekap_satdik` FOREIGN KEY (`satdik_id`) REFERENCES `satdik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 5. Detail Gedung Asrama per Satdik (sumber: Excel Rekap Asrama, sheet detail per kampus)
+CREATE TABLE IF NOT EXISTS `asrama_gedung` (
+    `id` VARCHAR(50) NOT NULL PRIMARY KEY,
+    `satdik_id` VARCHAR(50) NOT NULL,
+    `kampus` VARCHAR(150) NULL,
+    `nama` VARCHAR(255) NOT NULL,
+    `peruntukan` VARCHAR(50) NULL,
+    `jumlah_kamar` INT DEFAULT 0,
+    `luas_m2` DECIMAL(10, 2) DEFAULT 0,
+    `kapasitas` DECIMAL(10, 2) DEFAULT 0,
+    `status` VARCHAR(50) DEFAULT 'Digunakan',
+    `keterangan` TEXT NULL,
+    `rincian_json` TEXT NULL,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX `idx_asrama_satdik` (`satdik_id`),
+    CONSTRAINT `fk_asrama_gedung_satdik` FOREIGN KEY (`satdik_id`) REFERENCES `satdik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- 6. Master Bidang / Rumpun Standar Minimal Sarpras Prodi (sumber: Excel/Data Contoh.xlsx)
+CREATE TABLE IF NOT EXISTS `standar_bidang` (
+    `id` VARCHAR(50) NOT NULL PRIMARY KEY,
+    `code` VARCHAR(10) NOT NULL,
+    `sheet_name` VARCHAR(150) NOT NULL,
+    `nama` VARCHAR(255) NOT NULL,
+    `category_id` VARCHAR(100) NULL,
+    `prodi_json` TEXT NULL,
+    `satdik_ids_json` TEXT NULL,
+    `prasarana_count` INT DEFAULT 0,
+    `sarana_count` INT DEFAULT 0,
+    `total_items` INT DEFAULT 0,
+    `group_notes_json` LONGTEXT NULL,
+    `sumber` VARCHAR(255) NULL,
+    `tanggal_data` DATE NULL,
+    `sort_order` INT DEFAULT 0,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 7. Rekapitulasi Pemenuhan Standar Minimal per Bidang & Satdik
+CREATE TABLE IF NOT EXISTS `standar_rekap` (
+    `id` VARCHAR(80) NOT NULL PRIMARY KEY,
+    `bidang_id` VARCHAR(50) NOT NULL,
+    `satdik_id` VARCHAR(50) NOT NULL,
+    `prasarana_total` INT DEFAULT 0,
+    `prasarana_terpenuhi` INT DEFAULT 0,
+    `prasarana_sebagian` INT DEFAULT 0,
+    `prasarana_kosong` INT DEFAULT 0,
+    `sarana_total` INT DEFAULT 0,
+    `sarana_terpenuhi` INT DEFAULT 0,
+    `sarana_sebagian` INT DEFAULT 0,
+    `sarana_kosong` INT DEFAULT 0,
+    `total_items` INT DEFAULT 0,
+    `total_terpenuhi` INT DEFAULT 0,
+    `total_sebagian` INT DEFAULT 0,
+    `total_kosong` INT DEFAULT 0,
+    `persen_prasarana` DECIMAL(5, 1) DEFAULT 0,
+    `persen_sarana` DECIMAL(5, 1) DEFAULT 0,
+    `persen_total` DECIMAL(5, 1) DEFAULT 0,
+    `std_vol_sum` DECIMAL(12, 2) DEFAULT 0,
+    `real_vol_sum` DECIMAL(12, 2) DEFAULT 0,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX `idx_std_rekap_bidang` (`bidang_id`),
+    INDEX `idx_std_rekap_satdik` (`satdik_id`),
+    CONSTRAINT `fk_std_rekap_bidang` FOREIGN KEY (`bidang_id`) REFERENCES `standar_bidang` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_std_rekap_satdik` FOREIGN KEY (`satdik_id`) REFERENCES `satdik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 8. Katalog & Realisasi Item Standar Minimal Sarpras Prodi (4.369 item standar)
+CREATE TABLE IF NOT EXISTS `standar_item` (
+    `id` VARCHAR(50) NOT NULL PRIMARY KEY,
+    `bidang_id` VARCHAR(50) NOT NULL,
+    `sec` CHAR(1) NOT NULL,
+    `sub_sec` VARCHAR(10) NULL,
+    `grp_code` VARCHAR(30) NULL,
+    `grp_name` VARCHAR(255) NOT NULL,
+    `sub_grp` VARCHAR(255) NULL,
+    `item_no` VARCHAR(20) NULL,
+    `nama` TEXT NOT NULL,
+    `std_vol` DECIMAL(10, 2) DEFAULT 1,
+    `satuan` VARCHAR(50) DEFAULT 'Unit',
+    `realisasi_json` TEXT NOT NULL,
+    `kondisi` VARCHAR(10) NULL,
+    `keterangan` TEXT NULL,
+    `sort_order` INT DEFAULT 0,
+    INDEX `idx_std_item_bidang_sec` (`bidang_id`, `sec`, `sort_order`),
+    CONSTRAINT `fk_std_item_bidang` FOREIGN KEY (`bidang_id`) REFERENCES `standar_bidang` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

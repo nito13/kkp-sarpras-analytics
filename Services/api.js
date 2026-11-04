@@ -170,6 +170,65 @@
     return { success: true, data: data.data };
   }
 
+  async function apiFetchAsrama(satdikId) {
+    const query = satdikId && satdikId !== 'ALL' ? '?satdik_id=' + encodeURIComponent(satdikId) : '';
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/asrama.php' + query, {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/asrama.php' + query, {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memuat data kapasitas asrama.');
+    }
+    return {
+      success: true,
+      meta: data.meta || null,
+      summary: data.summary || [],
+      buildings: data.buildings || []
+    };
+  }
+
+  async function apiFetchStandarSarpras(params) {
+    const opts = params || {};
+    const parts = [];
+    if (opts.mode) parts.push('mode=' + encodeURIComponent(opts.mode));
+    if (opts.bidangId && opts.bidangId !== 'ALL') parts.push('bidang_id=' + encodeURIComponent(opts.bidangId));
+    if (opts.satdikId && opts.satdikId !== 'ALL') parts.push('satdik_id=' + encodeURIComponent(opts.satdikId));
+    const query = parts.length > 0 ? '?' + parts.join('&') : '';
+
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/standar_sarpras.php' + query, {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/standar_sarpras.php' + query, {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memuat data standar sarpras prodi.');
+    }
+    return {
+      success: true,
+      meta: data.meta || null,
+      bidang: data.bidang || [],
+      rekap: data.rekap || [],
+      items: data.items || []
+    };
+  }
+
   window.SARPRAS_API = {
     API_BASE_URL: API_BASE_URL,
     MONITORING_BASE_URL: MONITORING_BASE_URL,
@@ -180,6 +239,8 @@
     apiCreateAsset: apiCreateAsset,
     apiUpdateAsset: apiUpdateAsset,
     apiDeleteAsset: apiDeleteAsset,
-    apiFetchSatdik: apiFetchSatdik
+    apiFetchSatdik: apiFetchSatdik,
+    apiFetchAsrama: apiFetchAsrama,
+    apiFetchStandarSarpras: apiFetchStandarSarpras
   };
 })(window);

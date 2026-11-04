@@ -13,6 +13,8 @@ Database/
 ├── seed_data.json                  # Dataset lengkap 18 Satdik, pengguna dinas RBAC, & inventaris aset
 ├── backup_kkp_sarpras_db.sql       # File dump cadangan SQL lengkap (struktur + data)
 ├── backup_monitoring_sarpras.sql   # File cadangan database monitoring & riwayat inspeksi
+├── Dokumentasi_Database_SARPRAS_KKP.pdf   # Dokumen arsitektur basis data resmi (Versi PDF)
+├── Dokumentasi_Database_SARPRAS_KKP.pptx  # Presentasi arsitektur basis data (Versi PPTX)
 └── README.md                       # Dokumentasi modul Database
 ```
 

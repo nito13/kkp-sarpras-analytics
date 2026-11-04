@@ -166,6 +166,219 @@ try {
     }
     echo "  -> Berhasil menyimpan $assetCount data Aset Sarpras.\n";
 
+    // 7. Hapus aset asrama dummy lama maupun baris ASR-* dari tabel assets (kini terpisah di asrama_rekap & asrama_gedung)
+    $legacyAsramaIds = [
+        'SAR-AUP-005', 'SAR-SDJ-004', 'SAR-KPG-002', 'SAR-LDG-002', 'SAR-SSO-002',
+        'SAR-ADD-002', 'SAR-ADD-004', 'SAR-ADD-006', 'SAR-ADD-009', 'SAR-ADD-011',
+        'SAR-ADD-012', 'SAR-ADD-015', 'SAR-ADD-016', 'SAR-ADD-017', 'SAR-ADD-018',
+    ];
+    $placeholders = implode(',', array_fill(0, count($legacyAsramaIds), '?'));
+    $stmtDel = $pdo->prepare("DELETE FROM `assets` WHERE id LIKE 'ASR-%' OR id IN ($placeholders)");
+    $stmtDel->execute($legacyAsramaIds);
+    echo "  -> Membersihkan " . $stmtDel->rowCount() . " baris asrama dari tabel assets (dipindahkan ke tabel khusus asrama).\n";
+
+    // 8. Data Ketersediaan Asrama (hasil konversi Excel oleh Database/import_asrama.py)
+    $asramaFile = __DIR__ . '/asrama_data.json';
+    if (file_exists($asramaFile)) {
+        echo "[6/6] Mengisi data ketersediaan asrama taruna...\n";
+        $asrama = json_decode(file_get_contents($asramaFile), true);
+        if (!$asrama) {
+            throw new Exception("Format asrama_data.json tidak valid.");
+        }
+        $meta = $asrama['meta'] ?? [];
+
+        $pdo->beginTransaction();
+        $pdo->exec("DELETE FROM `asrama_gedung`");
+        $pdo->exec("DELETE FROM `asrama_rekap`");
+
+        $stmtRekap = $pdo->prepare("
+            INSERT INTO `asrama_rekap` (
+                satdik_id, nama_excel, jumlah_asrama, jumlah_kamar, luas_m2, kapasitas, kapasitas_aktif,
+                luas_adjustment, kapasitas_adjustment, jumlah_tidak_dipakai, jumlah_perlu_renovasi,
+                keterangan, drive_url, sumber, tanggal_data
+            ) VALUES (
+                :satdik_id, :nama_excel, :jumlah_asrama, :jumlah_kamar, :luas_m2, :kapasitas, :kapasitas_aktif,
+                :luas_adjustment, :kapasitas_adjustment, :jumlah_tidak_dipakai, :jumlah_perlu_renovasi,
+                :keterangan, :drive_url, :sumber, :tanggal_data
+            )
+        ");
+        foreach ($asrama['summary'] as $s) {
+            $stmtRekap->execute([
+                ':satdik_id' => $s['satdikId'],
+                ':nama_excel' => $s['namaExcel'] ?? null,
+                ':jumlah_asrama' => $s['jumlahAsrama'] ?? 0,
+                ':jumlah_kamar' => $s['jumlahKamar'] ?? 0,
+                ':luas_m2' => $s['luasM2'] ?? 0,
+                ':kapasitas' => $s['kapasitas'] ?? 0,
+                ':kapasitas_aktif' => $s['kapasitasAktif'] ?? 0,
+                ':luas_adjustment' => $s['luasAdjustment'] ?? null,
+                ':kapasitas_adjustment' => $s['kapasitasAdjustment'] ?? null,
+                ':jumlah_tidak_dipakai' => $s['jumlahTidakDipakai'] ?? 0,
+                ':jumlah_perlu_renovasi' => $s['jumlahPerluRenovasi'] ?? 0,
+                ':keterangan' => $s['keterangan'] ?? null,
+                ':drive_url' => $s['driveUrl'] ?? null,
+                ':sumber' => $meta['sumber'] ?? null,
+                ':tanggal_data' => $meta['tanggalData'] ?? null,
+            ]);
+        }
+
+        $stmtGedung = $pdo->prepare("
+            INSERT INTO `asrama_gedung` (
+                id, satdik_id, kampus, nama, peruntukan, jumlah_kamar, luas_m2, kapasitas,
+                status, keterangan, rincian_json
+            ) VALUES (
+                :id, :satdik_id, :kampus, :nama, :peruntukan, :jumlah_kamar, :luas_m2, :kapasitas,
+                :status, :keterangan, :rincian_json
+            )
+        ");
+        foreach ($asrama['buildings'] as $b) {
+            $stmtGedung->execute([
+                ':id' => $b['id'],
+                ':satdik_id' => $b['satdikId'],
+                ':kampus' => $b['kampus'] ?? null,
+                ':nama' => $b['nama'],
+                ':peruntukan' => $b['peruntukan'] ?? null,
+                ':jumlah_kamar' => $b['jumlahKamar'] ?? 0,
+                ':luas_m2' => $b['luasM2'] ?? 0,
+                ':kapasitas' => $b['kapasitas'] ?? 0,
+                ':status' => $b['status'] ?? 'Digunakan',
+                ':keterangan' => $b['keterangan'] ?? null,
+                ':rincian_json' => json_encode($b['rincian'] ?? [], JSON_UNESCAPED_UNICODE),
+            ]);
+        }
+        $pdo->commit();
+        echo "  -> Berhasil menyimpan " . count($asrama['summary']) . " rekap satdik dan " . count($asrama['buildings']) . " gedung asrama.\n";
+    } else {
+        echo "[6/7] Lewati data asrama (asrama_data.json belum ada — jalankan: python Database/import_asrama.py)\n";
+    }
+
+    // 9. Data Standar Minimal & Realisasi Sarpras Prodi (hasil konversi Excel/Data Contoh.xlsx)
+    $standarFile = __DIR__ . '/standar_data.json';
+    if (file_exists($standarFile)) {
+        echo "[7/7] Mengisi data standar minimal & realisasi sarpras prodi...\n";
+        $standar = json_decode(file_get_contents($standarFile), true);
+        if (!$standar) {
+            throw new Exception("Format standar_data.json tidak valid.");
+        }
+        $sMeta = $standar['meta'] ?? [];
+
+        $pdo->beginTransaction();
+        $pdo->exec("DELETE FROM `standar_item`");
+        $pdo->exec("DELETE FROM `standar_rekap`");
+        $pdo->exec("DELETE FROM `standar_bidang`");
+
+        $stmtBidang = $pdo->prepare("
+            INSERT INTO `standar_bidang` (
+                id, code, sheet_name, nama, category_id, prodi_json, satdik_ids_json,
+                prasarana_count, sarana_count, total_items, group_notes_json,
+                sumber, tanggal_data, sort_order
+            ) VALUES (
+                :id, :code, :sheet_name, :nama, :category_id, :prodi_json, :satdik_ids_json,
+                :prasarana_count, :sarana_count, :total_items, :group_notes_json,
+                :sumber, :tanggal_data, :sort_order
+            )
+        ");
+        foreach (($standar['bidang'] ?? []) as $idx => $b) {
+            $stmtBidang->execute([
+                ':id' => $b['id'],
+                ':code' => $b['code'],
+                ':sheet_name' => $b['sheetName'],
+                ':nama' => $b['nama'],
+                ':category_id' => $b['categoryId'] ?? null,
+                ':prodi_json' => json_encode($b['prodi'] ?? [], JSON_UNESCAPED_UNICODE),
+                ':satdik_ids_json' => json_encode($b['satdikIds'] ?? [], JSON_UNESCAPED_UNICODE),
+                ':prasarana_count' => $b['prasaranaCount'] ?? 0,
+                ':sarana_count' => $b['saranaCount'] ?? 0,
+                ':total_items' => $b['totalItems'] ?? 0,
+                ':group_notes_json' => json_encode($b['groupNotes'] ?? [], JSON_UNESCAPED_UNICODE),
+                ':sumber' => $sMeta['sumber'] ?? 'Data Contoh.xlsx',
+                ':tanggal_data' => $sMeta['tanggalData'] ?? null,
+                ':sort_order' => $idx + 1,
+            ]);
+        }
+
+        $stmtStdRekap = $pdo->prepare("
+            INSERT INTO `standar_rekap` (
+                id, bidang_id, satdik_id,
+                prasarana_total, prasarana_terpenuhi, prasarana_sebagian, prasarana_kosong,
+                sarana_total, sarana_terpenuhi, sarana_sebagian, sarana_kosong,
+                total_items, total_terpenuhi, total_sebagian, total_kosong,
+                persen_prasarana, persen_sarana, persen_total, std_vol_sum, real_vol_sum
+            ) VALUES (
+                :id, :bidang_id, :satdik_id,
+                :prasarana_total, :prasarana_terpenuhi, :prasarana_sebagian, :prasarana_kosong,
+                :sarana_total, :sarana_terpenuhi, :sarana_sebagian, :sarana_kosong,
+                :total_items, :total_terpenuhi, :total_sebagian, :total_kosong,
+                :persen_prasarana, :persen_sarana, :persen_total, :std_vol_sum, :real_vol_sum
+            )
+        ");
+        foreach (($standar['rekap'] ?? []) as $rk) {
+            $stmtStdRekap->execute([
+                ':id' => $rk['id'],
+                ':bidang_id' => $rk['bidangId'],
+                ':satdik_id' => $rk['satdikId'],
+                ':prasarana_total' => $rk['prasaranaTotal'] ?? 0,
+                ':prasarana_terpenuhi' => $rk['prasaranaTerpenuhi'] ?? 0,
+                ':prasarana_sebagian' => $rk['prasaranaSebagian'] ?? 0,
+                ':prasarana_kosong' => $rk['prasaranaKosong'] ?? 0,
+                ':sarana_total' => $rk['saranaTotal'] ?? 0,
+                ':sarana_terpenuhi' => $rk['saranaTerpenuhi'] ?? 0,
+                ':sarana_sebagian' => $rk['saranaSebagian'] ?? 0,
+                ':sarana_kosong' => $rk['saranaKosong'] ?? 0,
+                ':total_items' => $rk['totalItems'] ?? 0,
+                ':total_terpenuhi' => $rk['totalTerpenuhi'] ?? 0,
+                ':total_sebagian' => $rk['totalSebagian'] ?? 0,
+                ':total_kosong' => $rk['totalKosong'] ?? 0,
+                ':persen_prasarana' => $rk['persenPrasarana'] ?? 0,
+                ':persen_sarana' => $rk['persenSarana'] ?? 0,
+                ':persen_total' => $rk['persenTotal'] ?? 0,
+                ':std_vol_sum' => $rk['stdVolSum'] ?? 0,
+                ':real_vol_sum' => $rk['realVolSum'] ?? 0,
+            ]);
+        }
+
+        // Batch insert 4.369 baris standar_item per 200 baris untuk kecepatan optimal
+        $allItems = $standar['items'] ?? [];
+        $chunks = array_chunk($allItems, 200);
+        $globalOrder = 0;
+        foreach ($chunks as $chunk) {
+            $placeholders = [];
+            $params = [];
+            foreach ($chunk as $it) {
+                $globalOrder++;
+                $placeholders[] = "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $params[] = $it['id'];
+                $params[] = $it['bidangId'];
+                $params[] = $it['sec'];
+                $params[] = $it['subSec'] ?? null;
+                $params[] = $it['grpCode'] ?? null;
+                $params[] = mb_substr($it['grpName'] ?? '', 0, 250);
+                $params[] = !empty($it['subGrp']) ? mb_substr($it['subGrp'], 0, 250) : null;
+                $params[] = $it['no'] ?? null;
+                $params[] = $it['nama'];
+                $params[] = $it['stdVol'] ?? 1;
+                $params[] = $it['satuan'] ?? 'Unit';
+                $params[] = json_encode($it['real'] ?? [], JSON_UNESCAPED_UNICODE);
+                $params[] = $it['kondisi'] ?? null;
+                $params[] = $it['ket'] ?? null;
+                $params[] = $globalOrder;
+            }
+            $sqlBatch = "INSERT INTO `standar_item` (
+                id, bidang_id, sec, sub_sec, grp_code, grp_name, sub_grp, item_no,
+                nama, std_vol, satuan, realisasi_json, kondisi, keterangan, sort_order
+            ) VALUES " . implode(',', $placeholders);
+            $stmtBatch = $pdo->prepare($sqlBatch);
+            $stmtBatch->execute($params);
+        }
+
+        $pdo->commit();
+        echo "  -> Berhasil menyimpan " . count($standar['bidang']) . " bidang, "
+            . count($standar['rekap']) . " rekap kampus, dan "
+            . count($allItems) . " item standar sarpras prodi.\n";
+    } else {
+        echo "[7/7] Lewati data standar sarpras prodi (standar_data.json belum ada — jalankan: python Database/import_standar_sarpras.py)\n";
+    }
+
     echo "\n=== SEEDING BERHASIL! DATABASE KKP_SARPRAS_DB SIAP DIGUNAKAN ===\n";
 
 } catch (Exception $e) {
