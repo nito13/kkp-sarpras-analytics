@@ -15,7 +15,6 @@
     {
       id: 'USR-001',
       name: 'Admin Sarpras Pusdik KP',
-      nip: '198501012010011001',
       email: 'admin.pusdik@kkp.go.id',
       password: 'pusdik',
       role: 'admin_pusdik',
@@ -30,7 +29,6 @@
     {
       id: 'USR-SAT-01',
       name: 'Admin Sarpras Politeknik AUP Jakarta',
-      nip: '198602112011011001',
       email: 'sarpras.aup@kkp.go.id',
       password: 'aup',
       role: 'operator_kampus',
@@ -45,7 +43,6 @@
     {
       id: 'USR-SAT-02',
       name: 'Admin Sarpras Politeknik KP Sidoarjo',
-      nip: '198703122012011002',
       email: 'sarpras.sidoarjo@kkp.go.id',
       password: 'sidoarjo',
       role: 'operator_kampus',
@@ -60,7 +57,6 @@
     {
       id: 'USR-SAT-03',
       name: 'Admin Sarpras Politeknik KP Bitung',
-      nip: '198804132013011003',
       email: 'sarpras.bitung@kkp.go.id',
       password: 'bitung',
       role: 'operator_kampus',
@@ -75,7 +71,6 @@
     {
       id: 'USR-SAT-04',
       name: 'Admin Sarpras Politeknik KP Sorong',
-      nip: '198905142014011004',
       email: 'sarpras.polteksorong@kkp.go.id',
       password: 'polteksorong',
       role: 'operator_kampus',
@@ -90,7 +85,6 @@
     {
       id: 'USR-SAT-05',
       name: 'Admin Sarpras Politeknik KP Karawang',
-      nip: '199006152015011005',
       email: 'sarpras.karawang@kkp.go.id',
       password: 'karawang',
       role: 'operator_kampus',
@@ -105,7 +99,6 @@
     {
       id: 'USR-SAT-06',
       name: 'Admin Sarpras Politeknik KP Bone',
-      nip: '199107162016011006',
       email: 'sarpras.bone@kkp.go.id',
       password: 'bone',
       role: 'operator_kampus',
@@ -120,7 +113,6 @@
     {
       id: 'USR-SAT-07',
       name: 'Admin Sarpras Politeknik KP Kupang',
-      nip: '199208172017011007',
       email: 'sarpras.kupang@kkp.go.id',
       password: 'kupang',
       role: 'operator_kampus',
@@ -135,7 +127,6 @@
     {
       id: 'USR-SAT-08',
       name: 'Admin Sarpras Politeknik KP Dumai',
-      nip: '199309182018011008',
       email: 'sarpras.dumai@kkp.go.id',
       password: 'dumai',
       role: 'operator_kampus',
@@ -150,7 +141,6 @@
     {
       id: 'USR-SAT-09',
       name: 'Admin Sarpras Politeknik KP Pangandaran',
-      nip: '199410192019011009',
       email: 'sarpras.pangandaran@kkp.go.id',
       password: 'pangandaran',
       role: 'operator_kampus',
@@ -165,7 +155,6 @@
     {
       id: 'USR-SAT-10',
       name: 'Admin Sarpras Politeknik KP Jembrana',
-      nip: '199511202020011010',
       email: 'sarpras.jembrana@kkp.go.id',
       password: 'jembrana',
       role: 'operator_kampus',
@@ -180,14 +169,13 @@
     {
       id: 'USR-SAT-11',
       name: 'Admin Sarpras AK-KP Wakatobi',
-      nip: '199612212021011011',
       email: 'sarpras.wakatobi@kkp.go.id',
       password: 'wakatobi',
       role: 'operator_kampus',
       roleLabel: 'Operator Satdik — AK-KP Wakatobi',
       jabatan: 'Pengelola Sarana dan Prasarana Kampus',
       unitKerja: 'Akademi Komunitas Kelautan dan Perikanan Wakatobi',
-      accessibleSatdik: 'ak-kp-wakatobi',
+      accessibleSatdik: 'akkp-wakatobi',
       satdikName: 'Akademi Komunitas Kelautan dan Perikanan Wakatobi',
       permissions: ['view_all', 'edit_own', 'request_maintenance', 'export_reports'],
       avatarUrl: ''
@@ -195,7 +183,6 @@
     {
       id: 'USR-SAT-12',
       name: 'Admin Sarpras SUPM Ladong',
-      nip: '198701222012011012',
       email: 'sarpras.ladong@kkp.go.id',
       password: 'ladong',
       role: 'operator_kampus',
@@ -210,7 +197,6 @@
     {
       id: 'USR-SAT-13',
       name: 'Admin Sarpras SUPM Pariaman',
-      nip: '198802232013011013',
       email: 'sarpras.pariaman@kkp.go.id',
       password: 'pariaman',
       role: 'operator_kampus',
@@ -225,14 +211,13 @@
     {
       id: 'USR-SAT-14',
       name: 'Admin Sarpras SUPM Kota Agung',
-      nip: '198903242014011014',
       email: 'sarpras.kotaagung@kkp.go.id',
       password: 'kotaagung',
       role: 'operator_kampus',
       roleLabel: 'Operator Satdik — SUPM Kota Agung',
       jabatan: 'Pengelola Sarana dan Prasarana Sekolah',
       unitKerja: 'SUPM Negeri Kota Agung',
-      accessibleSatdik: 'supm-kota-agung',
+      accessibleSatdik: 'supm-kotaagung',
       satdikName: 'SUPM Negeri Kota Agung',
       permissions: ['view_all', 'edit_own', 'request_maintenance', 'export_reports'],
       avatarUrl: ''
@@ -240,7 +225,6 @@
     {
       id: 'USR-SAT-15',
       name: 'Admin Sarpras SUPM Tegal',
-      nip: '199004252015011015',
       email: 'sarpras.tegal@kkp.go.id',
       password: 'tegal',
       role: 'operator_kampus',
@@ -255,7 +239,6 @@
     {
       id: 'USR-SAT-16',
       name: 'Admin Sarpras SUPM Pontianak',
-      nip: '199105262016011016',
       email: 'sarpras.pontianak@kkp.go.id',
       password: 'pontianak',
       role: 'operator_kampus',
@@ -270,7 +253,6 @@
     {
       id: 'USR-SAT-17',
       name: 'Admin Sarpras SUPM Waiheru Ambon',
-      nip: '199206272017011017',
       email: 'sarpras.waiheru@kkp.go.id',
       password: 'waiheru',
       role: 'operator_kampus',
@@ -285,7 +267,6 @@
     {
       id: 'USR-SAT-18',
       name: 'Admin Sarpras SUPM Sorong',
-      nip: '199307282018011018',
       email: 'sarpras.supmsorong@kkp.go.id',
       password: 'supmsorong',
       role: 'operator_kampus',
@@ -305,7 +286,7 @@
     const cleanPass = (password || '').trim();
 
     return AUTH_USERS.find(u =>
-      (u.email.toLowerCase() === cleanId || (u.nip && u.nip !== '-' && u.nip.replace(/\s+/g, '') === cleanId.replace(/\s+/g, ''))) &&
+      u.email.toLowerCase() === cleanId &&
       u.password === cleanPass
     );
   }

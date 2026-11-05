@@ -15,7 +15,6 @@ function formatUserOutput($row) {
     return [
         'id' => $row['id'],
         'name' => $row['name'],
-        'nip' => $row['nip'],
         'email' => $row['email'],
         'role' => $row['role'],
         'roleLabel' => $row['role_label'] ?? '',
@@ -38,26 +37,24 @@ if ($method === 'POST') {
     if (empty($identifier) || empty($password)) {
         jsonResponse([
             'status' => 'error',
-            'message' => 'Email/NIP dan password wajib diisi'
+            'message' => 'Email dan password wajib diisi'
         ], 400);
     }
 
     $cleanId = strtolower($identifier);
-    $cleanNip = str_replace(' ', '', $identifier);
 
     $stmt = $pdo->prepare("
         SELECT * FROM users 
         WHERE LOWER(email) = :email 
-           OR (nip != '-' AND nip != '' AND REPLACE(nip, ' ', '') = :nip)
         LIMIT 1
     ");
-    $stmt->execute([':email' => $cleanId, ':nip' => $cleanNip]);
+    $stmt->execute([':email' => $cleanId]);
     $user = $stmt->fetch();
 
     if (!$user || $user['password'] !== $password) {
         jsonResponse([
             'status' => 'error',
-            'message' => 'Email / NIP atau password salah'
+            'message' => 'Email atau password salah'
         ], 401);
     }
 

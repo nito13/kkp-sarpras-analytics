@@ -196,6 +196,70 @@
     };
   }
 
+  async function apiCreateAsramaBuilding(payload) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/asrama.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      res = await fetch('api/asrama.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal menambahkan gedung asrama ke database.');
+    }
+    return { success: true, data: data.data, summaryRow: data.summaryRow };
+  }
+
+  async function apiUpdateAsramaBuilding(id, updates) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/asrama.php?id=' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({ id: id }, updates))
+      });
+    } catch (e) {
+      res = await fetch('api/asrama.php?id=' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({ id: id }, updates))
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memperbarui gedung asrama.');
+    }
+    return { success: true, data: data.data, summaryRow: data.summaryRow };
+  }
+
+  async function apiDeleteAsramaBuilding(id) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/asrama.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/asrama.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal menghapus gedung asrama.');
+    }
+    return { success: true, deletedId: id, summaryRow: data.summaryRow };
+  }
+
   async function apiFetchStandarSarpras(params) {
     const opts = params || {};
     const parts = [];
@@ -229,6 +293,102 @@
     };
   }
 
+  async function apiCreateStandarItem(payload) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/standar_sarpras.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      res = await fetch('api/standar_sarpras.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal menambahkan item standar sarpras.');
+    }
+    return { success: true, data: data.data, bidang: data.bidang, rekap: data.rekap };
+  }
+
+  async function apiUpdateStandarItem(id, updates) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/standar_sarpras.php?id=' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({ id: id }, updates))
+      });
+    } catch (e) {
+      res = await fetch('api/standar_sarpras.php?id=' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({ id: id }, updates))
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memperbarui item standar sarpras.');
+    }
+    return { success: true, data: data.data, bidang: data.bidang, rekap: data.rekap };
+  }
+
+  async function apiDeleteStandarItem(id) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/standar_sarpras.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/standar_sarpras.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal menghapus item standar sarpras.');
+    }
+    return { success: true, deletedId: id, bidang: data.bidang, rekap: data.rekap };
+  }
+
+  async function apiBulkImport(payload) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/bulk_import.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      res = await fetch('api/bulk_import.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal mengimpor data Excel ke database.');
+    }
+    return {
+      success: true,
+      message: data.message,
+      counts: data.counts || {},
+      assets: data.assets || [],
+      buildings: data.buildings || [],
+      asramaSummary: data.asramaSummary || [],
+      standarItems: data.standarItems || [],
+      standarBidang: data.standarBidang || [],
+      standarRekap: data.standarRekap || []
+    };
+  }
+
   window.SARPRAS_API = {
     API_BASE_URL: API_BASE_URL,
     MONITORING_BASE_URL: MONITORING_BASE_URL,
@@ -241,6 +401,13 @@
     apiDeleteAsset: apiDeleteAsset,
     apiFetchSatdik: apiFetchSatdik,
     apiFetchAsrama: apiFetchAsrama,
-    apiFetchStandarSarpras: apiFetchStandarSarpras
+    apiCreateAsramaBuilding: apiCreateAsramaBuilding,
+    apiUpdateAsramaBuilding: apiUpdateAsramaBuilding,
+    apiDeleteAsramaBuilding: apiDeleteAsramaBuilding,
+    apiFetchStandarSarpras: apiFetchStandarSarpras,
+    apiCreateStandarItem: apiCreateStandarItem,
+    apiUpdateStandarItem: apiUpdateStandarItem,
+    apiDeleteStandarItem: apiDeleteStandarItem,
+    apiBulkImport: apiBulkImport
   };
 })(window);
