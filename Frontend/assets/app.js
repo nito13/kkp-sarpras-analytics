@@ -3703,7 +3703,7 @@ const UserProfileModal = window.__UserProfileModal;
 		);
 	}
 
-	window.__AsramaCapacityView = function AsramaCapacityView({ asramaData, satdikList, currentUser, onExportAsrama, onAddBuilding, onUpdateBuilding, onDeleteBuilding, onOpenAddModal }) {
+	window.__AsramaCapacityView = function AsramaCapacityView({ asramaData, satdikList, currentUser, onAddBuilding, onUpdateBuilding, onDeleteBuilding, onOpenAddModal }) {
 		const { isDark } = useTheme();
 		const detailRef = useRef(null);
 
@@ -4015,13 +4015,6 @@ const UserProfileModal = window.__UserProfileModal;
 							onClick: () => setBasisMode("aktif"),
 							className: `px-2.5 py-1 text-xs font-semibold rounded-lg transition-colors ${basisMode === "aktif" ? "bg-cyan-600 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"}`
 						}, "Aktif Dipakai")
-					),
-					onExportAsrama && /* @__PURE__ */ React.createElement("button", {
-						onClick: () => onExportAsrama({ summary: filteredSummary, buildings: filteredBuildings, meta: asramaData?.meta }, selectedSatdik === "ALL" ? "16 Satdik Terdata" : (satdikMap[selectedSatdik]?.name || selectedSatdik)),
-						className: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 text-emerald-200 border border-emerald-700/60 text-xs font-semibold shadow-sm transition-all"
-					},
-						/* @__PURE__ */ React.createElement(Download, { className: "w-3.5 h-3.5 text-emerald-400" }),
-						/* @__PURE__ */ React.createElement("span", null, "Ekspor Rekap Asrama")
 					)
 				)
 			),
@@ -4602,7 +4595,7 @@ const AsramaCapacityView = window.__AsramaCapacityView;
 		return (Math.round((Number(n) || 0) * 10) / 10).toFixed(1);
 	}
 
-	window.__StandarProdiView = function StandarProdiView({ standarData, satdikList, currentUser, onExportStandar, onAddItem, onUpdateItem, onDeleteItem, onOpenAddModal }) {
+	window.__StandarProdiView = function StandarProdiView({ standarData, satdikList, currentUser, onAddItem, onUpdateItem, onDeleteItem, onOpenAddModal }) {
 		const { isDark } = useTheme();
 		const catalogRef = useRef(null);
 
@@ -5112,20 +5105,6 @@ const AsramaCapacityView = window.__AsramaCapacityView;
 						),
 						/* @__PURE__ */ React.createElement("h2", { className: "text-lg sm:text-2xl font-extrabold text-white tracking-tight mt-1" }, "Standar Minimal & Gap Sarpras Program Studi"),
 						/* @__PURE__ */ React.createElement("p", { className: "text-xs sm:text-sm text-slate-300 max-w-2xl mt-0.5" }, "Pemetaan pemenuhan standar minimal Prasarana (Ruang Lab/Workshop/Kapal Latih) dan Sarana (Peralatan & Perabot Praktik) antar-kampus tanpa mencampuri KPI valuasi aset BMN utama.")
-					)
-				),
-				/* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center justify-center sm:justify-end gap-2 relative z-10" },
-					onExportStandar && /* @__PURE__ */ React.createElement("button", {
-						onClick: () => onExportStandar({
-							meta: standarData?.meta,
-							bidang: availableBidang,
-							rekap: filteredRekap,
-							items: filteredItems
-						}, scopeLabel, selectedSatdik),
-						className: "inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md transition-all"
-					},
-						/* @__PURE__ */ React.createElement(Download, { className: "w-4 h-4" }),
-						/* @__PURE__ */ React.createElement("span", null, "Ekspor Excel Standar (.xlsx)")
 					)
 				)
 			),
@@ -6307,7 +6286,6 @@ const StandarProdiView = window.__StandarProdiView;
 			asramaData,
 			satdikList: SATDIK_LIST,
 			currentUser,
-			onExportAsrama: handleExportAsrama,
 			onAddBuilding: handleAddAsramaBuilding,
 			onUpdateBuilding: handleUpdateAsramaBuilding,
 			onDeleteBuilding: handleDeleteAsramaBuilding,
@@ -6316,7 +6294,6 @@ const StandarProdiView = window.__StandarProdiView;
 			standarData,
 			satdikList: SATDIK_LIST,
 			currentUser,
-			onExportStandar: handleExportStandar,
 			onAddItem: handleAddStandarItem,
 			onUpdateItem: handleUpdateStandarItem,
 			onDeleteItem: handleDeleteStandarItem,
