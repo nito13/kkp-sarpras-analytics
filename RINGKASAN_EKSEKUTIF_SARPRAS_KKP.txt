@@ -1,0 +1,146 @@
+======================================================================================================
+RINGKASAN EKSEKUTIF NASIONAL — KONDISI SARANA & PRASARANA SATUAN PENDIDIKAN VOKASI KKP
+Kementerian Kelautan dan Perikanan RI — BPPSDM KP (Pusat Pendidikan Kelautan dan Perikanan)
+Sumber Data: Database Live SIM-SARPRAS KKP (kkp_sarpras_db) per 5 November 2026
+======================================================================================================
+
+1. IKHTISAR INDIKATOR KINERJA UTAMA (KPI NASIONAL)
+------------------------------------------------------------------------------------------------------
+- Jumlah Satuan Pendidikan (Satdik) : 18 Kampus (10 Politeknik KP, 1 Akademi Komunitas, 7 SUPM Negeri)
+- Total Populasi Taruna Aktif       : 9.050 Orang (6.440 Pendidikan Tinggi [71,2%] | 2.610 SUPM [28,8%])
+- Inventaris Aset BMN Terdata       : 48 Unit strategis lintas 18 Satdik
+- Indeks Kelayakan Sarpras (IKSP)   : 81,5% (Baik: 34 [70,8%] | Rusak Ringan: 12 [25,0%] | Rusak Berat: 2 [4,2%])
+- Rata-rata Tingkat Utilisasi BMN   : 78,4% (Urgensi: 34 Normal | 8 Medium | 6 Kritis/Segera)
+- Infrastruktur Fisik Asrama        : 104 Gedung | 1.272 Kamar | Luas 28.335,1 m2 (pada 16 Satdik terdata)
+- Daya Tampung Asrama Aktif (4m2)   : 6.753 Orang dari 8.360 Taruna (80,8% -> Defisit bersih 1.607 tempat tidur)
+- Katalog Standar Minimal Prodi     : 4.369 Item (425 Prasarana [A] & 3.944 Sarana [B]) di 12 Rumpun Prodi
+- Rata-rata Pemenuhan Standar Prodi : 22,7% (Prasarana 39,1% vs Sarana 21,2% pada 37 kombinasi Prodi-Satdik)
+
+KESIMPULAN UTAMA:
+Kondisi fisik aset BMN eksisting tergolong baik (81,5%), namun kelengkapan alat praktik terhadap
+standar minimal kurikulum prodi masih sangat rendah (22,7%; 74,9% item belum tersedia), disertai
+defisit daya tampung asrama sebesar 1.607 tempat tidur. Fokus anggaran perlu memprioritaskan:
+(1) Perbaikan darurat 2 kapal latih rusak berat, (2) Pengadaan sarana/alat praktik laboratorium,
+dan (3) Pembangunan serta revitalisasi asrama pada Satdik defisit berat.
+
+
+2. PROFIL SATUAN PENDIDIKAN & POPULASI TARUNA (18 SATDIK)
+------------------------------------------------------------------------------------------------------
+Pendidikan Tinggi Vokasi (11 Satdik — 6.440 Taruna):
+  01. Politeknik AUP Jakarta        : 1.420 taruna    07. Politeknik KP Kupang          :   460 taruna
+  02. Politeknik KP Sidoarjo        :   880 taruna    08. Politeknik KP Dumai           :   420 taruna
+  03. Politeknik KP Bitung          :   650 taruna    09. Politeknik KP Jembrana        :   410 taruna
+  04. Politeknik KP Bone            :   580 taruna    10. Politeknik KP Pangandaran     :   390 taruna
+  05. Politeknik KP Sorong          :   520 taruna    11. Akademi Komunitas KP Wakatobi :   220 taruna
+  06. Politeknik KP Karawang        :   490 taruna
+
+Pendidikan Menengah Vokasi / SUPM (7 Satdik — 2.610 Taruna):
+  12. SUPM Negeri Tegal             :   450 taruna    16. SUPM Negeri Kotaagung         :   360 taruna
+  13. SUPM Negeri Waiheru           :   390 taruna    17. SUPM Negeri Ladong            :   340 taruna
+  14. SUPM Negeri Pariaman          :   380 taruna    18. SUPM Negeri Sorong            :   320 taruna
+  15. SUPM Negeri Pontianak         :   370 taruna
+
+
+3. KONDISI & KELAYAKAN INVENTARIS ASET SARPRAS BMN (48 UNIT)
+------------------------------------------------------------------------------------------------------
+- Komposisi Kondisi Fisik : Baik 34 unit (70,8%) | Rusak Ringan 12 unit (25,0%) | Rusak Berat 2 unit (4,2%)
+- Sebaran Bidang BMN      : Penangkapan Ikan (13), Budidaya Perikanan (13), Pengolahan Hasil (9),
+                            Permesinan & Mekanisasi (6), Agribisnis (4), Kelautan & Konservasi (2),
+                            Administrasi & Umum (1), Sosial & Pemberdayaan (0).
+
+- DAFTAR ASET RUSAK BERAT (PENANGANAN DARURAT):
+  1) Kapal Latih KM. Pariaman Bahari 02 — SUPM Negeri Pariaman (Bidang Penangkapan Ikan)
+  2) Kapal Latih KM. Frans Kaisiepo     — Politeknik KP Sorong (Bidang Penangkapan Ikan)
+
+- Peringkat Skor Kelayakan BMN per Satdik (Tertinggi -> Terendah):
+  01. Poltek KP Karawang     : 92,0% (3u: 3B)         10. SUPM Pontianak         : 81,5% (2u: 1B, 1RR)
+  02. Poltek KP Sidoarjo     : 91,3% (3u: 3B)         11. SUPM Kotaagung         : 79,5% (2u: 1B, 1RR)
+  03. Poltek KP Jembrana     : 89,5% (2u: 2B)         12. SUPM Ladong            : 79,0% (2u: 1B, 1RR)
+  04. Poltek KP Dumai        : 89,0% (3u: 3B)         13. SUPM Waiheru           : 79,0% (3u: 2B, 1RR)
+  05. AK-KP Wakatobi         : 88,5% (2u: 2B)         14. Poltek KP Bone         : 76,7% (3u: 1B, 2RR)
+  06. SUPM Sorong            : 87,0% (1u: 1B)         15. Poltek KP Pangandaran  : 72,5% (2u: 1B, 1RR)
+  07. Politeknik AUP Jakarta : 85,8% (6u: 5B, 1RR)    16. Poltek KP Kupang       : 72,0% (3u: 1B, 2RR)
+  08. SUPM Tegal             : 85,0% (3u: 2B, 1RR)    17. Poltek KP Sorong       : 68,3% (3u: 2B, 1RB)
+  09. Poltek KP Bitung       : 83,3% (3u: 2B, 1RR)    18. SUPM Pariaman          : 58,5% (2u: 1B, 1RB)
+
+
+4. KAPASITAS RUANG ASRAMA TARUNA (16 DARI 18 SATDIK TERDATA)
+------------------------------------------------------------------------------------------------------
+- Total Fisik Nasional : 104 Gedung | 1.272 Kamar | Luas 28.335,1 m2 | Kapasitas Total 7.118 orang
+- Status Gedung        : 95 Digunakan (91,3%) | 5 Perlu Renovasi (Politeknik AUP) | 4 Tidak Digunakan (SUPM Kotaagung)
+- Belum Terdata        : SUPM Negeri Pontianak (370 taruna) & SUPM Negeri Sorong (320 taruna)
+
+Rincian Ketercukupan Asrama terhadap Populasi Taruna (Standar 4 m2/orang):
+  [DEFISIT BERAT < 60%]
+  - Poltek KP Dumai        :  3 gd |   6 kmr |   566,0 m2 | Kap. Aktif   140 vs   420 taruna ( 33% | -280)
+  - SUPM Kotaagung         :  7 gd |  46 kmr | 1.489,6 m2 | Kap. Aktif   162 vs   360 taruna ( 45% | -198) *4 gd nonaktif
+  - Poltek KP Jembrana     :  2 gd |  14 kmr |   792,0 m2 | Kap. Aktif   198 vs   410 taruna ( 48% | -212)
+  - Poltek KP Sidoarjo     :  8 gd |  64 kmr | 1.794,9 m2 | Kap. Aktif   447 vs   880 taruna ( 51% | -433)
+  - Poltek KP Karawang     :  1 gd |  70 kmr | 1.283,1 m2 | Kap. Aktif   280 vs   490 taruna ( 57% | -210)
+
+  [DEFISIT SEDANG 60% - 89%]
+  - AK-KP Wakatobi         :  2 gd |  16 kmr |   510,3 m2 | Kap. Aktif   140 vs   220 taruna ( 64% |  -80)
+  - Poltek KP Pangandaran  :  2 gd |  16 kmr | 1.102,4 m2 | Kap. Aktif   276 vs   390 taruna ( 71% | -114)
+  - Poltek KP Bitung       :  3 gd |  66 kmr | 1.714,0 m2 | Kap. Aktif   482 vs   650 taruna ( 74% | -168)
+  - SUPM Tegal             : 13 gd |  94 kmr | 1.463,7 m2 | Kap. Aktif   366 vs   450 taruna ( 81% |  -84)
+  - Poltek KP Sorong       :  6 gd |  83 kmr | 1.769,1 m2 | Kap. Aktif   442 vs   520 taruna ( 85% |  -78)
+
+  [MENCUKUPI / SURPLUS >= 90%]
+  - Politeknik AUP Jakarta : 24 gd | 337 kmr | 6.143,5 m2 | Kap. Aktif 1.383 vs 1.420 taruna ( 97% |  -37) *5 gd renovasi
+  - Poltek KP Bone         :  8 gd | 130 kmr | 2.330,3 m2 | Kap. Aktif   580 vs   580 taruna (100% |    0)
+  - SUPM Ladong            :  5 gd |  73 kmr | 1.360,0 m2 | Kap. Aktif   340 vs   340 taruna (100% |    0)
+  - SUPM Pariaman          :  4 gd |  46 kmr | 1.515,4 m2 | Kap. Aktif   392 vs   380 taruna (103% |  +12)
+  - SUPM Waiheru           :  7 gd |  65 kmr | 1.736,0 m2 | Kap. Aktif   434 vs   390 taruna (111% |  +44)
+  - Poltek KP Kupang       :  9 gd | 146 kmr | 2.764,9 m2 | Kap. Aktif   691 vs   460 taruna (150% | +231)
+
+
+5. PEMENUHAN STANDAR MINIMAL SARPRAS PROGRAM STUDI (11 SATDIK PENDIDIKAN TINGGI)
+------------------------------------------------------------------------------------------------------
+- Cakupan Matriks      : 12 Rumpun Prodi | 37 Kombinasi Prodi-Satdik | 18.454 Titik Penilaian
+- Distribusi Titik     : Terpenuhi Penuh 3.649 (19,8%) | Sebagian 986 (5,3%) | Belum Tersedia 13.819 (74,9%)
+- Kesiapan 37 Prodi    : Memadai (>=70%): 0 prodi | Perlu Penguatan (40-69%): 3 prodi | Defisit (<40%): 34 prodi
+
+Rata-rata Pemenuhan per 12 Rumpun Prodi:
+  01. PTL - Patologi Perikanan         : 67,5% (250 item | 1 kampus)
+  02. PNY - Penyuluhan Perikanan       : 52,5% (280 item | 1 kampus)
+  03. AGR - Agribisnis Perikanan       : 35,3% (102 item | 1 kampus)
+  04. MKN - Mekanisasi Perikanan       : 30,1% (117 item | 1 kampus)
+  05. BDP - Budidaya Perikanan         : 27,9% (596 item | 7 kampus; rentang 14,8% - 52,6%)
+  06. PGH - Pengolahan Hasil Perikanan : 21,9% (440 item | 7 kampus; rentang  6,7% - 35,2%)
+  07. PIK - Penangkapan Ikan           : 19,3% (795 item | 8 kampus; rentang  5,5% - 37,4%)
+  08. PMK - Permesinan Kapal           : 18,1% (473 item | 5 kampus; rentang 13,9% - 28,2%)
+  09. KLT - Teknik & Teknologi Kelautan: 12,7% (206 item | 3 kampus; rentang  2,7% - 18,5%)
+  10. KSV - Konservasi & Ekowisata     : 10,6% (298 item | 1 kampus)
+  11. SDP - Pengelolaan SDP            :  6,7% (402 item | 1 kampus)
+  12. PSC - Pascasarjana Terapan AUP   :  4,6% (410 item | 1 kampus)
+
+Rata-rata Pemenuhan per 11 Satdik Pendidikan Tinggi (Total | Prasarana A | Sarana B):
+  01. Poltek KP Sidoarjo    : 36,2% (A: 47,8% | B: 34,4% | 5 rumpun)
+  02. Poltek KP Pangandaran : 26,9% (A: 39,0% | B: 25,8% | 2 rumpun)
+  03. Politeknik AUP Jakarta: 25,1% (A: 41,0% | B: 23,1% | 7 rumpun)
+  04. Poltek KP Bone        : 23,9% (A: 39,4% | B: 22,1% | 3 rumpun)
+  05. Poltek KP Bitung      : 23,9% (A: 60,9% | B: 21,0% | 3 rumpun)
+  06. Poltek KP Sorong      : 20,6% (A: 52,2% | B: 17,1% | 3 rumpun)
+  07. Poltek KP Kupang      : 19,2% (A: 39,7% | B: 18,0% | 3 rumpun)
+  08. Poltek KP Dumai       : 18,6% (A: 23,0% | B: 18,5% | 3 rumpun)
+  09. Poltek KP Karawang    : 16,3% (A: 35,0% | B: 15,6% | 4 rumpun)
+  10. Poltek KP Jembrana    : 11,6% (A: 14,3% | B: 11,6% | 3 rumpun)
+  11. AK-KP Wakatobi        : 10,6% (A: 14,8% | B: 10,1% | 1 rumpun)
+
+
+6. REKOMENDASI TINDAK LANJUT PRIORITAS (PUSDIK KP — BPPSDM KP)
+------------------------------------------------------------------------------------------------------
+[P1 - DARURAT]     Perbaikan berat/penggantian 2 Kapal Latih rusak berat di SUPM Pariaman dan Poltek KP
+                   Sorong serta penanganan 6 aset berstatus pemeliharaan kritis.
+[P2 - TINGGI]      Pengadaan Sarana Praktik (Kategori B: mesin & instrumen lab) berbasis gap standar,
+                   diprioritaskan pada Jembrana, Wakatobi, Karawang, Dumai, Bitung, dan Sorong.
+[P3 - TINGGI]      Pembangunan asrama baru di Dumai, Sidoarjo, Jembrana, & Karawang; reaktivasi 4 gedung
+                   nonaktif di SUPM Kotaagung; serta renovasi 5 gedung asrama di Politeknik AUP.
+[P4 - MENENGAH]    Pemeliharaan preventif terhadap 12 unit BMN Rusak Ringan (Bone, Kupang, Pangandaran,
+                   Bitung, AUP, dan SUPM terkait) guna mencegah eskalasi kerusakan.
+[P5 - TATA KELOLA] Percepatan pengisian data asrama SUPM Pontianak & SUPM Sorong serta perluasan input
+                   aset BMN detail seluruh Satdik melalui fitur Import Excel Terpadu.
+
+======================================================================================================
+Dokumen ini disusun otomatis dari database aktual SIM-SARPRAS KKP tanpa mengubah kode/desain aplikasi.
+======================================================================================================
