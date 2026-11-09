@@ -185,3 +185,59 @@ CREATE TABLE IF NOT EXISTS `standar_item` (
     INDEX `idx_std_item_bidang_sec` (`bidang_id`, `sec`, `sort_order`),
     CONSTRAINT `fk_std_item_bidang` FOREIGN KEY (`bidang_id`) REFERENCES `standar_bidang` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 9. Rekapitulasi Prasarana & Sarana Tambak dan Kolam per Satdik
+CREATE TABLE IF NOT EXISTS `tambak_rekap` (
+    `satdik_id` VARCHAR(50) NOT NULL PRIMARY KEY,
+    `nama_satdik` VARCHAR(100) NOT NULL,
+    `kode_satdik` VARCHAR(20) NOT NULL DEFAULT '',
+    `jenjang` VARCHAR(50) NOT NULL DEFAULT 'Politeknik',
+    `jumlah_unit` INT DEFAULT 0,
+    `jumlah_tambak` INT DEFAULT 0,
+    `jumlah_kolam` INT DEFAULT 0,
+    `jumlah_tandon` INT DEFAULT 0,
+    `luas_total_m2` DECIMAL(12, 2) DEFAULT 0,
+    `luas_tambak_m2` DECIMAL(12, 2) DEFAULT 0,
+    `luas_kolam_m2` DECIMAL(12, 2) DEFAULT 0,
+    `kondisi_baik` INT DEFAULT 0,
+    `kondisi_rusak_ringan` INT DEFAULT 0,
+    `kondisi_rusak_berat` INT DEFAULT 0,
+    `unit_aktif` INT DEFAULT 0,
+    `unit_belum_dimanfaatkan` INT DEFAULT 0,
+    `total_kincir` INT DEFAULT 0,
+    `daya_listrik` VARCHAR(255) NULL,
+    `lokasi_utama` VARCHAR(255) NULL,
+    `map_url` TEXT NULL,
+    `keterangan` TEXT NULL,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT `fk_tambak_rekap_satdik` FOREIGN KEY (`satdik_id`) REFERENCES `satdik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 10. Detail Unit Tambak dan Kolam Satuan Pendidikan (370 unit)
+CREATE TABLE IF NOT EXISTS `tambak_unit` (
+    `id` VARCHAR(50) NOT NULL PRIMARY KEY,
+    `satdik_id` VARCHAR(50) NOT NULL,
+    `no_urut` INT DEFAULT 1,
+    `nama` VARCHAR(200) NOT NULL,
+    `jenis` VARCHAR(50) NOT NULL DEFAULT 'Tambak',
+    `kampus_lokasi` VARCHAR(200) NULL,
+    `luas_m2` DECIMAL(12, 2) DEFAULT 0,
+    `luas_label` VARCHAR(80) NULL,
+    `kondisi` VARCHAR(50) NOT NULL DEFAULT 'Baik',
+    `fungsi` VARCHAR(255) NULL,
+    `status_operasional` VARCHAR(80) NOT NULL DEFAULT 'Aktif Budidaya',
+    `pelataran` VARCHAR(120) NULL,
+    `pelataran_kategori` VARCHAR(80) NULL,
+    `listrik` VARCHAR(255) NULL,
+    `kincir` VARCHAR(255) NULL,
+    `jumlah_kincir` INT DEFAULT 0,
+    `lokasi_label` VARCHAR(255) NULL,
+    `map_url` TEXT NULL,
+    `keterangan` TEXT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX `idx_tambak_unit_satdik` (`satdik_id`),
+    INDEX `idx_tambak_unit_jenis` (`jenis`),
+    INDEX `idx_tambak_unit_kondisi` (`kondisi`),
+    CONSTRAINT `fk_tambak_unit_satdik` FOREIGN KEY (`satdik_id`) REFERENCES `satdik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

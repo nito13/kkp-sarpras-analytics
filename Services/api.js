@@ -66,90 +66,6 @@
     return { success: true, user: data.user };
   }
 
-  async function apiFetchAssets() {
-    let res;
-    try {
-      res = await fetch(API_BASE_URL + '/assets.php', {
-        method: 'GET',
-        headers: { 'Accept': 'application/json' }
-      });
-    } catch (e) {
-      res = await fetch('api/assets.php', {
-        method: 'GET',
-        headers: { 'Accept': 'application/json' }
-      });
-    }
-    const data = await res.json();
-    if (!res.ok || (data.status !== 'success' && !data.success)) {
-      throw new Error(data.message || 'Gagal memuat data aset dari server.');
-    }
-    return { success: true, data: data.data };
-  }
-
-  async function apiCreateAsset(assetPayload) {
-    let res;
-    try {
-      res = await fetch(API_BASE_URL + '/assets.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(assetPayload)
-      });
-    } catch (e) {
-      res = await fetch('api/assets.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(assetPayload)
-      });
-    }
-    const data = await res.json();
-    if (!res.ok || (data.status !== 'success' && !data.success)) {
-      throw new Error(data.message || 'Gagal menyimpan aset baru ke database.');
-    }
-    return { success: true, data: data.data };
-  }
-
-  async function apiUpdateAsset(id, updates) {
-    let res;
-    try {
-      res = await fetch(API_BASE_URL + '/assets.php?id=' + encodeURIComponent(id), {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(Object.assign({ id: id }, updates))
-      });
-    } catch (e) {
-      res = await fetch('api/assets.php?id=' + encodeURIComponent(id), {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(Object.assign({ id: id }, updates))
-      });
-    }
-    const data = await res.json();
-    if (!res.ok || (data.status !== 'success' && !data.success)) {
-      throw new Error(data.message || 'Gagal memperbarui aset di database.');
-    }
-    return { success: true, data: data.data };
-  }
-
-  async function apiDeleteAsset(id) {
-    let res;
-    try {
-      res = await fetch(API_BASE_URL + '/assets.php?id=' + encodeURIComponent(id), {
-        method: 'DELETE',
-        headers: { 'Accept': 'application/json' }
-      });
-    } catch (e) {
-      res = await fetch('api/assets.php?id=' + encodeURIComponent(id), {
-        method: 'DELETE',
-        headers: { 'Accept': 'application/json' }
-      });
-    }
-    const data = await res.json();
-    if (!res.ok || (data.status !== 'success' && !data.success)) {
-      throw new Error(data.message || 'Gagal menghapus aset dari database.');
-    }
-    return true;
-  }
-
   async function apiFetchSatdik() {
     let res;
     try {
@@ -389,16 +305,115 @@
     };
   }
 
+  async function apiFetchTambakKolam(satdikId) {
+    const query = satdikId && satdikId !== 'ALL' ? '?satdik_id=' + encodeURIComponent(satdikId) : '';
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/tambak_kolam.php' + query, {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/tambak_kolam.php' + query, {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memuat data tambak dan kolam.');
+    }
+    return {
+      success: true,
+      meta: data.meta || null,
+      summary: data.summary || [],
+      units: data.units || []
+    };
+  }
+
+  async function apiCreateTambakUnit(payload) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/tambak_kolam.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      res = await fetch('api/tambak_kolam.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal menambahkan unit tambak/kolam.');
+    }
+    return {
+      success: true,
+      unit: data.data ? data.data.unit : null,
+      summaryRow: data.data ? data.data.summary : null
+    };
+  }
+
+  async function apiUpdateTambakUnit(id, updates) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/tambak_kolam.php?id=' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({ id: id }, updates))
+      });
+    } catch (e) {
+      res = await fetch('api/tambak_kolam.php?id=' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({ id: id }, updates))
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memperbarui unit tambak/kolam.');
+    }
+    return {
+      success: true,
+      unit: data.data ? data.data.unit : null,
+      summaryRow: data.data ? data.data.summary : null
+    };
+  }
+
+  async function apiDeleteTambakUnit(id) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/tambak_kolam.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/tambak_kolam.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal menghapus unit tambak/kolam.');
+    }
+    return {
+      success: true,
+      deletedId: id,
+      satdikId: data.data ? data.data.satdikId : null,
+      summaryRow: data.data ? data.data.summary : null
+    };
+  }
+
   window.SARPRAS_API = {
     API_BASE_URL: API_BASE_URL,
     MONITORING_BASE_URL: MONITORING_BASE_URL,
     checkBackendHealth: checkBackendHealth,
     apiCheckHealth: checkBackendHealth,
     apiLogin: apiLogin,
-    apiFetchAssets: apiFetchAssets,
-    apiCreateAsset: apiCreateAsset,
-    apiUpdateAsset: apiUpdateAsset,
-    apiDeleteAsset: apiDeleteAsset,
     apiFetchSatdik: apiFetchSatdik,
     apiFetchAsrama: apiFetchAsrama,
     apiCreateAsramaBuilding: apiCreateAsramaBuilding,
@@ -408,6 +423,10 @@
     apiCreateStandarItem: apiCreateStandarItem,
     apiUpdateStandarItem: apiUpdateStandarItem,
     apiDeleteStandarItem: apiDeleteStandarItem,
+    apiFetchTambakKolam: apiFetchTambakKolam,
+    apiCreateTambakUnit: apiCreateTambakUnit,
+    apiUpdateTambakUnit: apiUpdateTambakUnit,
+    apiDeleteTambakUnit: apiDeleteTambakUnit,
     apiBulkImport: apiBulkImport
   };
 })(window);

@@ -376,7 +376,109 @@ try {
             . count($standar['rekap']) . " rekap kampus, dan "
             . count($allItems) . " item standar sarpras prodi.\n";
     } else {
-        echo "[7/7] Lewati data standar sarpras prodi (standar_data.json belum ada — jalankan: python Database/import_standar_sarpras.py)\n";
+        echo "[7/8] Lewati data standar sarpras prodi (standar_data.json belum ada — jalankan: python Database/import_standar_sarpras.py)\n";
+    }
+
+    // 10. Data Tambak dan Kolam Satuan Pendidikan (hasil ekstraksi PDF 1c-Data Tambak dan Kolam)
+    $tambakFile = __DIR__ . '/tambak_data.json';
+    if (file_exists($tambakFile)) {
+        echo "[8/8] Mengisi data prasarana dan sarana tambak & kolam...\n";
+        $tambak = json_decode(file_get_contents($tambakFile), true);
+        if (!$tambak) {
+            throw new Exception("Format tambak_data.json tidak valid.");
+        }
+
+        $pdo->beginTransaction();
+        $pdo->exec("DELETE FROM `tambak_unit`");
+        $pdo->exec("DELETE FROM `tambak_rekap`");
+
+        $stmtTambakRekap = $pdo->prepare("
+            INSERT INTO `tambak_rekap` (
+                satdik_id, nama_satdik, kode_satdik, jenjang,
+                jumlah_unit, jumlah_tambak, jumlah_kolam, jumlah_tandon,
+                luas_total_m2, luas_tambak_m2, luas_kolam_m2,
+                kondisi_baik, kondisi_rusak_ringan, kondisi_rusak_berat,
+                unit_aktif, unit_belum_dimanfaatkan, total_kincir,
+                daya_listrik, lokasi_utama, map_url, keterangan
+            ) VALUES (
+                :satdik_id, :nama_satdik, :kode_satdik, :jenjang,
+                :jumlah_unit, :jumlah_tambak, :jumlah_kolam, :jumlah_tandon,
+                :luas_total_m2, :luas_tambak_m2, :luas_kolam_m2,
+                :kondisi_baik, :kondisi_rusak_ringan, :kondisi_rusak_berat,
+                :unit_aktif, :unit_belum_dimanfaatkan, :total_kincir,
+                :daya_listrik, :lokasi_utama, :map_url, :keterangan
+            )
+        ");
+
+        foreach (($tambak['summary'] ?? []) as $s) {
+            $stmtTambakRekap->execute([
+                ':satdik_id' => $s['satdikId'],
+                ':nama_satdik' => $s['namaSatdik'],
+                ':kode_satdik' => $s['kodeSatdik'] ?? '',
+                ':jenjang' => $s['jenjang'] ?? 'Politeknik',
+                ':jumlah_unit' => $s['jumlahUnit'] ?? 0,
+                ':jumlah_tambak' => $s['jumlahTambak'] ?? 0,
+                ':jumlah_kolam' => $s['jumlahKolam'] ?? 0,
+                ':jumlah_tandon' => $s['jumlahTandon'] ?? 0,
+                ':luas_total_m2' => $s['luasTotalM2'] ?? 0,
+                ':luas_tambak_m2' => $s['luasTambakM2'] ?? 0,
+                ':luas_kolam_m2' => $s['luasKolamM2'] ?? 0,
+                ':kondisi_baik' => $s['kondisiBaik'] ?? 0,
+                ':kondisi_rusak_ringan' => $s['kondisiRusakRingan'] ?? 0,
+                ':kondisi_rusak_berat' => $s['kondisiRusakBerat'] ?? 0,
+                ':unit_aktif' => $s['unitAktif'] ?? 0,
+                ':unit_belum_dimanfaatkan' => $s['unitBelumDimanfaatkan'] ?? 0,
+                ':total_kincir' => $s['totalKincir'] ?? 0,
+                ':daya_listrik' => $s['dayaListrik'] ?? null,
+                ':lokasi_utama' => $s['lokasiUtama'] ?? null,
+                ':map_url' => $s['mapUrl'] ?? null,
+                ':keterangan' => $s['keterangan'] ?? null,
+            ]);
+        }
+
+        $stmtTambakUnit = $pdo->prepare("
+            INSERT INTO `tambak_unit` (
+                id, satdik_id, no_urut, nama, jenis, kampus_lokasi,
+                luas_m2, luas_label, kondisi, fungsi, status_operasional,
+                pelataran, pelataran_kategori, listrik, kincir, jumlah_kincir,
+                lokasi_label, map_url, keterangan
+            ) VALUES (
+                :id, :satdik_id, :no_urut, :nama, :jenis, :kampus_lokasi,
+                :luas_m2, :luas_label, :kondisi, :fungsi, :status_operasional,
+                :pelataran, :pelataran_kategori, :listrik, :kincir, :jumlah_kincir,
+                :lokasi_label, :map_url, :keterangan
+            )
+        ");
+
+        foreach (($tambak['units'] ?? []) as $u) {
+            $stmtTambakUnit->execute([
+                ':id' => $u['id'],
+                ':satdik_id' => $u['satdikId'],
+                ':no_urut' => $u['noUrut'] ?? 1,
+                ':nama' => $u['nama'],
+                ':jenis' => $u['jenis'] ?? 'Tambak',
+                ':kampus_lokasi' => $u['kampusLokasi'] ?? null,
+                ':luas_m2' => $u['luasM2'] ?? 0,
+                ':luas_label' => $u['luasLabel'] ?? null,
+                ':kondisi' => $u['kondisi'] ?? 'Baik',
+                ':fungsi' => $u['fungsi'] ?? null,
+                ':status_operasional' => $u['statusOperasional'] ?? 'Aktif Budidaya',
+                ':pelataran' => $u['pelataran'] ?? null,
+                ':pelataran_kategori' => $u['pelataranKategori'] ?? 'Tanah',
+                ':listrik' => $u['listrik'] ?? null,
+                ':kincir' => $u['kincir'] ?? null,
+                ':jumlah_kincir' => $u['jumlahKincir'] ?? 0,
+                ':lokasi_label' => $u['lokasiLabel'] ?? null,
+                ':map_url' => $u['mapUrl'] ?? null,
+                ':keterangan' => $u['keterangan'] ?? null,
+            ]);
+        }
+
+        $pdo->commit();
+        echo "  -> Berhasil menyimpan " . count($tambak['summary'] ?? []) . " rekap satdik dan "
+            . count($tambak['units'] ?? []) . " unit tambak & kolam.\n";
+    } else {
+        echo "[8/8] Lewati data tambak & kolam (tambak_data.json belum ada — jalankan: python Database/import_tambak_kolam.py)\n";
     }
 
     echo "\n=== SEEDING BERHASIL! DATABASE KKP_SARPRAS_DB SIAP DIGUNAKAN ===\n";

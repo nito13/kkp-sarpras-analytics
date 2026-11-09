@@ -1,10 +1,9 @@
 <?php
 // APIs/bulk_import.php
 // REST API Batch Import Data Sarpras KKP dari File Excel (.xlsx / .xls / .csv)
-// Mendukung transaksi penuh (ACID) untuk 3 kategori sekaligus:
-//   1. Aset Sarpras BMN (assets)
-//   2. Gedung Asrama Taruna (asrama_gedung + rekalkulasi asrama_rekap)
-//   3. Item Standar Minimal Prodi (standar_item + rekalkulasi standar_bidang & standar_rekap)
+// Mendukung transaksi penuh (ACID) untuk:
+//   1. Gedung Asrama Taruna (asrama_gedung + rekalkulasi asrama_rekap)
+//   2. Item Standar Minimal Prodi (standar_item + rekalkulasi standar_bidang & standar_rekap)
 
 if (file_exists(__DIR__ . '/../Backend/config/database.php')) {
     require_once __DIR__ . '/../Backend/config/database.php';
@@ -24,28 +23,6 @@ $fmtNum = function ($v) {
     $i = (int)round($f);
     return abs($f - $i) < 0.0001 ? $i : round($f, 2);
 };
-
-function formatBulkAssetOutput(array $row): array {
-    return [
-        'id' => $row['id'],
-        'name' => $row['name'],
-        'satdikId' => $row['satdik_id'],
-        'satdikName' => $row['satdik_name'],
-        'prodi' => $row['prodi'] ?? '',
-        'category' => $row['category'],
-        'condition' => $row['condition'],
-        'conditionScore' => (int)($row['condition_score'] ?? 85),
-        'acquisitionYear' => (int)($row['acquisition_year'] ?? date('Y')),
-        'utilizationRate' => (int)($row['utilization_rate'] ?? 80),
-        'capacityDesc' => $row['capacity_desc'] ?? '',
-        'specs' => $row['specs'] ?? '',
-        'certExpiryDate' => $row['cert_expiry_date'] ?? '',
-        'lastMaintenanceDate' => $row['last_maintenance_date'] ?? '',
-        'nextMaintenanceDate' => $row['next_maintenance_date'] ?? '',
-        'maintenanceUrgency' => $row['maintenance_urgency'] ?? 'Normal',
-        'issuesSummary' => $row['issues_summary'] ?? '',
-    ];
-}
 
 function formatBulkBuildingOutput(array $r): array {
     return [
@@ -393,11 +370,10 @@ if (!is_array($payload)) {
     ], 400);
 }
 
-$inAssets = isset($payload['assets']) && is_array($payload['assets']) ? $payload['assets'] : [];
 $inBuildings = isset($payload['buildings']) && is_array($payload['buildings']) ? $payload['buildings'] : [];
 $inStandar = isset($payload['standarItems']) && is_array($payload['standarItems']) ? $payload['standarItems'] : [];
 
-if (empty($inAssets) && empty($inBuildings) && empty($inStandar)) {
+if (empty($inBuildings) && empty($inStandar)) {
     jsonResponse([
         'status' => 'error',
         'message' => 'Tidak ada baris data valid untuk diimpor.'
@@ -415,7 +391,6 @@ try {
     // Abaikan jika tabel satdik kosong
 }
 
-$createdAssets = [];
 $createdBuildings = [];
 $createdStandarItems = [];
 $affectedAsramaSatdik = [];
@@ -425,96 +400,7 @@ try {
     $pdo->beginTransaction();
 
     // ---------------------------------------------------------
-    // 1. BATCH INSERT: ASET SARPRAS BMN
-    // ---------------------------------------------------------
-    if (!empty($inAssets)) {
-        $stmtCheckAssetId = $pdo->prepare("SELECT COUNT(*) FROM assets WHERE id = :id");
-        $stmtInsAsset = $pdo->prepare("
-            INSERT INTO assets (
-                id, name, satdik_id, satdik_name, prodi, category,
-                `condition`, condition_score, acquisition_year, utilization_rate,
-                capacity_desc, specs,
-                cert_expiry_date, last_maintenance_date, next_maintenance_date,
-                maintenance_urgency, issues_summary
-            ) VALUES (
-                :id, :name, :satdik_id, :satdik_name, :prodi, :category,
-                :condition, :condition_score, :acquisition_year, :utilization_rate,
-                :capacity_desc, :specs,
-                :cert_expiry_date, :last_maintenance_date, :next_maintenance_date,
-                :maintenance_urgency, :issues_summary
-            )
-        ");
-        $stmtGetAsset = $pdo->prepare("SELECT * FROM assets WHERE id = :id");
-
-        foreach ($inAssets as $item) {
-            if (empty($item['name']) || empty($item['satdikId'])) {
-                continue;
-            }
-            $satdikId = trim((string)$item['satdikId']);
-            $name = trim((string)$item['name']);
-            $satdikName = !empty($item['satdikName'])
-                ? trim((string)$item['satdikName'])
-                : ($satdikNameMap[$satdikId] ?? $satdikId);
-
-            $cond = !empty($item['condition']) ? trim((string)$item['condition']) : 'Baik';
-            if (!in_array($cond, ['Baik', 'Rusak Ringan', 'Rusak Berat'], true)) {
-                $cond = 'Baik';
-            }
-            $defaultScore = $cond === 'Baik' ? 92 : ($cond === 'Rusak Ringan' ? 75 : 25);
-            $defaultUrgency = $cond === 'Rusak Berat' ? 'Kritis / Segera' : 'Normal';
-
-            $cleanCode = strtoupper(preg_replace('/[^a-zA-Z0-9]/', '', str_replace(['poltek-', 'supm-', 'akkp-', 'kp-'], '', $satdikId)));
-            $cleanCode = substr($cleanCode, 0, 4) ?: 'IMP';
-
-            if (!empty($item['id'])) {
-                $candidateId = trim((string)$item['id']);
-                $stmtCheckAssetId->execute([':id' => $candidateId]);
-                if ((int)$stmtCheckAssetId->fetchColumn() > 0) {
-                    $candidateId = '';
-                }
-            } else {
-                $candidateId = '';
-            }
-
-            if ($candidateId === '') {
-                do {
-                    $candidateId = 'SAR-' . $cleanCode . '-' . rand(100, 9999);
-                    $stmtCheckAssetId->execute([':id' => $candidateId]);
-                } while ((int)$stmtCheckAssetId->fetchColumn() > 0);
-            }
-
-            $stmtInsAsset->execute([
-                ':id' => $candidateId,
-                ':name' => $name,
-                ':satdik_id' => $satdikId,
-                ':satdik_name' => $satdikName,
-                ':prodi' => !empty($item['prodi']) ? trim((string)$item['prodi']) : 'Semua Program Studi (Umum)',
-                ':category' => !empty($item['category']) ? trim((string)$item['category']) : 'administrasi_umum',
-                ':condition' => $cond,
-                ':condition_score' => isset($item['conditionScore']) ? (int)$item['conditionScore'] : $defaultScore,
-                ':acquisition_year' => !empty($item['acquisitionYear']) ? (int)$item['acquisitionYear'] : (int)date('Y'),
-                ':utilization_rate' => isset($item['utilizationRate']) ? max(0, min(100, (int)$item['utilizationRate'])) : 85,
-                ':capacity_desc' => isset($item['capacityDesc']) ? trim((string)$item['capacityDesc']) : '',
-                ':specs' => isset($item['specs']) ? trim((string)$item['specs']) : '',
-                ':cert_expiry_date' => !empty($item['certExpiryDate']) ? $item['certExpiryDate'] : null,
-                ':last_maintenance_date' => !empty($item['lastMaintenanceDate']) ? $item['lastMaintenanceDate'] : date('Y-m-d'),
-                ':next_maintenance_date' => !empty($item['nextMaintenanceDate']) ? $item['nextMaintenanceDate'] : date('Y-m-d', strtotime('+6 months')),
-                ':maintenance_urgency' => !empty($item['maintenanceUrgency']) ? $item['maintenanceUrgency'] : $defaultUrgency,
-                ':issues_summary' => isset($item['issuesSummary']) && trim((string)$item['issuesSummary']) !== ''
-                    ? trim((string)$item['issuesSummary'])
-                    : 'Kondisi aset beroperasi normal sesuai standar teknis operasional vokasi.',
-            ]);
-
-            $stmtGetAsset->execute([':id' => $candidateId]);
-            $createdRow = $stmtGetAsset->fetch();
-            if ($createdRow) {
-                $createdAssets[] = formatBulkAssetOutput($createdRow);
-            }
-        }
-    }
-
-    // ---------------------------------------------------------
-    // 2. BATCH INSERT: GEDUNG ASRAMA TARUNA
+    // 1. BATCH INSERT: GEDUNG ASRAMA TARUNA
     // ---------------------------------------------------------
     if (!empty($inBuildings)) {
         $stmtCheckAsrId = $pdo->prepare("SELECT COUNT(*) FROM asrama_gedung WHERE id = :id");
@@ -731,18 +617,16 @@ try {
 
     $pdo->commit();
 
-    $totalInserted = count($createdAssets) + count($createdBuildings) + count($createdStandarItems);
+    $totalInserted = count($createdBuildings) + count($createdStandarItems);
 
     jsonResponse([
         'status' => 'success',
         'message' => "Berhasil mengimpor $totalInserted baris data ke database MySQL.",
         'counts' => [
-            'assets' => count($createdAssets),
             'buildings' => count($createdBuildings),
             'standarItems' => count($createdStandarItems),
             'total' => $totalInserted,
         ],
-        'assets' => $createdAssets,
         'buildings' => $createdBuildings,
         'asramaSummary' => $updatedAsramaSummary,
         'standarItems' => $createdStandarItems,
