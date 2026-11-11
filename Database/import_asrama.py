@@ -1,5 +1,5 @@
 """
-Konverter Rekap Asrama (Excel) -> Dataset SIM-SARPRAS KKP
+Konverter Rekap Asrama (Excel) -> Dataset Sarana dan Prasarana Satuan Pendidikan KP
 =========================================================
 Membaca file  Excel/3. 05072025_Rekap Asrama_Adjustmen.xlsx  (sheet "Rekap" + 16 sheet
 detail per Satdik) lalu menghasilkan:
@@ -288,7 +288,7 @@ def main():
     js = (
         '/**\n'
         ' * ============================================================================\n'
-        ' * SARPRAS KKP — Dataset Ketersediaan Ruang Asrama Taruna (16 Satdik)\n'
+        ' * Sarana dan Prasarana Satuan Pendidikan KP — Dataset Ketersediaan Ruang Asrama Taruna (16 Satdik)\n'
         ' * ============================================================================\n'
         f' * Sumber : Excel/{os.path.basename(XLSX)}\n'
         ' * FILE INI DIHASILKAN OTOMATIS oleh Database/import_asrama.py — jangan diedit manual.\n'

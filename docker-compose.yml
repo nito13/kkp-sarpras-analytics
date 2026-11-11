@@ -1,0 +1,86 @@
+services:
+  # -------------------------------------------------------------
+  # Layanan Web Server SIM-SARPRAS KKP (PHP 8.2 + Apache)
+  # -------------------------------------------------------------
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kkp-sarpras-web
+    restart: unless-stopped
+    ports:
+      # Port default 8080 (agar tidak bentrok jika Laragon Apache sedang aktif di port 80)
+      - "${PORT:-8080}:80"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=${DB_NAME:-kkp_sarpras_db}
+      - DB_USER=${DB_USER:-root}
+      - DB_PASS=${DB_PASS:-rootpassword}
+      - AUTO_SEED=${AUTO_SEED:-true}
+    volumes:
+      # Mount folder lokal agar perubahan kode langsung terlihat tanpa rebuild container
+      - .:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - kkp-network
+
+  # -------------------------------------------------------------
+  # Layanan Basis Data Relasional (MySQL 8.0)
+  # -------------------------------------------------------------
+  db:
+    image: mysql:8.0
+    container_name: kkp-sarpras-db
+    restart: unless-stopped
+    ports:
+      # Port external 3307 (agar tidak bentrok jika Laragon MySQL aktif di port 3306)
+      - "${DB_EXTERNAL_PORT:-3307}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS:-rootpassword}
+      MYSQL_DATABASE: ${DB_NAME:-kkp_sarpras_db}
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - db_data:/var/lib/mysql
+      # Inisialisasi skema DDL awal saat pertama kali container MySQL dibuat
+      - ./Database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - kkp-network
+
+  # -------------------------------------------------------------
+  # Layanan phpMyAdmin (GUI Database Web, mirip Laragon Database UI)
+  # -------------------------------------------------------------
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: kkp-sarpras-pma
+    restart: unless-stopped
+    ports:
+      - "${PMA_PORT:-8081}:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ${DB_PASS:-rootpassword}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - kkp-network
+
+volumes:
+  db_data:
+    name: kkp_sarpras_db_data
+
+networks:
+  kkp-network:
+    name: kkp-sarpras-network
+    driver: bridge

@@ -1,6 +1,6 @@
 <?php
 // backend/config/database.php
-// Konfigurasi Database MySQL Laragon untuk SARPRAS KKP
+// Konfigurasi Database MySQL Laragon untuk Sarana dan Prasarana Satuan Pendidikan KP
 
 // Header CORS agar dapat diakses dari Frontend React (port 5173 atau port lainnya)
 if (php_sapi_name() !== 'cli') {
@@ -15,7 +15,26 @@ if (php_sapi_name() !== 'cli') {
     }
 }
 
-// Konfigurasi default Laragon
+// Baca file .env jika ada di root proyek (opsional, untuk fleksibilitas Docker & Lokal)
+$envFile = dirname(__DIR__, 2) . '/.env';
+if (file_exists($envFile)) {
+    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if ($line === '' || strpos($line, '#') === 0) continue;
+        if (strpos($line, '=') !== false) {
+            list($envKey, $envVal) = explode('=', $line, 2);
+            $envKey = trim($envKey);
+            $envVal = trim($envVal, " \t\n\r\0\x0B\"'");
+            if (getenv($envKey) === false) {
+                putenv("{$envKey}={$envVal}");
+                $_ENV[$envKey] = $envVal;
+            }
+        }
+    }
+}
+
+// Konfigurasi default Laragon / Docker
 define('DB_HOST', getenv('DB_HOST') ?: '127.0.0.1');
 define('DB_PORT', getenv('DB_PORT') ?: '3306');
 define('DB_NAME', getenv('DB_NAME') ?: 'kkp_sarpras_db');

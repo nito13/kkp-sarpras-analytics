@@ -1,4 +1,4 @@
-# ⚓ SIM-SARPRAS KKP — Sistem Informasi Analitik Sarana & Prasarana Satuan Pendidikan Tinggi KKP
+# ⚓ Sarana dan Prasarana Satuan Pendidikan KP — Sistem Informasi Analitik Sarana & Prasarana Satuan Pendidikan Vokasi KKP
 
 Aplikasi web analitik terpusat untuk memantau, mengelola, dan menganalisis aset sarana dan prasarana pendidikan pada **18 Satuan Pendidikan Vokasi KKP** di bawah naungan **BPPSDM KP — Kementerian Kelautan dan Perikanan RI**.
 
@@ -66,6 +66,58 @@ kkp-sarpras-analytics/
     ├── diagnostic.php              # Utilitas diagnosa lengkap lingkungan PHP, ekstensi, & izin folder
     └── README.md                   # Dokumentasi modul Monitoring
 ```
+
+---
+
+## 🐳 Cara Menjalankan Aplikasi Menggunakan Docker
+
+Projek ini sudah dilengkapi dengan konfigurasi **Docker & Docker Compose** multi-container (PHP 8.2 Apache + MySQL 8.0 + phpMyAdmin), sehingga dapat langsung dijalankan tanpa perlu menginstal Laragon, PHP, ataupun MySQL manual di sistem host.
+
+### 1. Menjalankan Container
+Buka terminal pada direktori proyek ini, lalu jalankan:
+```bash
+docker compose up -d --build
+```
+> *Catatan:* Perintah di atas akan otomatis mengunduh image, membangun web server, menyalakan database MySQL, mengeksekusi skema tabel, dan menjalankan seeder otomatis (`Database/seed.php`).
+
+### 2. Akses Layanan Melalui Browser
+| Layanan | URL Browser | Keterangan |
+| :--- | :--- | :--- |
+| **Aplikasi Sarana dan Prasarana Satuan Pendidikan KP** | [http://localhost:8080](http://localhost:8080) | Antarmuka web utama analitik sarpras |
+| **Pemeriksaan Health API** | [http://localhost:8080/Monitoring/health.php](http://localhost:8080/Monitoring/health.php) | Status koneksi PDO MySQL & counter aset |
+| **Diagnosa Sistem** | [http://localhost:8080/Monitoring/diagnostic.php](http://localhost:8080/Monitoring/diagnostic.php) | Diagnosa ekstensi PHP, latensi & memori |
+| **phpMyAdmin** | [http://localhost:8081](http://localhost:8081) | Web GUI database (User: `root`, Pass: `rootpassword`) |
+
+### 3. Kredensial Database Docker
+- **Host dari dalam container**: `db`
+- **Host dari komputer Anda (Navicat/DBeaver/HeidiSQL)**: `127.0.0.1` port `3307`
+- **Database**: `kkp_sarpras_db`
+- **User**: `root`
+- **Password**: `rootpassword`
+
+*(Port external disetel ke `3307` dan port web ke `8080` agar tidak bentrok jika Laragon lokal Anda sedang aktif).*
+
+### 4. Perintah Tambahan Docker
+- **Melihat status container**:
+  ```bash
+  docker compose ps
+  ```
+- **Melihat log real-time**:
+  ```bash
+  docker compose logs -f
+  ```
+- **Menjalankan ulang seeder database secara manual**:
+  ```bash
+  docker compose exec web php Database/seed.php
+  ```
+- **Menghentikan container**:
+  ```bash
+  docker compose down
+  ```
+- **Menghentikan & menghapus volume database (reset data)**:
+  ```bash
+  docker compose down -v
+  ```
 
 ---
 

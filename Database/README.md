@@ -1,4 +1,4 @@
-# 🗄️ Modul Database — SIM-SARPRAS KKP
+# 🗄️ Modul Database — Sarana dan Prasarana Satuan Pendidikan KP
 
 Folder `Database` menyimpan seluruh artefak basis data relasional MySQL, skema tabel (DDL), skrip migrasi/seeder awal (DML), dataset JSON master, serta file cadangan (database backup/dump).
 

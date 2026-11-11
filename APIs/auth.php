@@ -1,6 +1,6 @@
 <?php
 // backend/api/auth.php
-// REST API Otentikasi Pengguna SARPRAS KKP
+// REST API Otentikasi Pengguna Sarana dan Prasarana Satuan Pendidikan KP
 
 if (file_exists(__DIR__ . '/../Backend/config/database.php')) {
     require_once __DIR__ . '/../Backend/config/database.php';

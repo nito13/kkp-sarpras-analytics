@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * SARPRAS KKP — Dataset Ketersediaan Ruang Asrama Taruna (16 Satdik)
+ * Sarana dan Prasarana Satuan Pendidikan KP — Dataset Ketersediaan Ruang Asrama Taruna (16 Satdik)
  * ============================================================================
  * Sumber : Excel/3. 05072025_Rekap Asrama_Adjustmen.xlsx
  * FILE INI DIHASILKAN OTOMATIS oleh Database/import_asrama.py — jangan diedit manual.

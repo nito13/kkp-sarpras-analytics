@@ -1,11 +1,11 @@
 <?php
 // Backend/index.php
-// Gateway & API Information Center SIM-SARPRAS KKP
+// Gateway & API Information Center Sarana dan Prasarana Satuan Pendidikan KP
 
 require_once __DIR__ . '/config/database.php';
 
 jsonResponse([
-    'service' => 'SIM-SARPRAS KKP Backend Core',
+    'service' => 'Sarana dan Prasarana Satuan Pendidikan KP Backend Core',
     'status' => 'operational',
     'version' => '2.0.0',
     'endpoints' => [

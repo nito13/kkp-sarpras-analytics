@@ -1,5 +1,5 @@
 """
-Konverter Standar Minimal & Realisasi Sarpras Prodi (Excel) -> Dataset SIM-SARPRAS KKP
+Konverter Standar Minimal & Realisasi Sarpras Prodi (Excel) -> Dataset Sarana dan Prasarana Satuan Pendidikan KP
 ======================================================================================
 Membaca file  Excel/Data Contoh.xlsx  (12 sheet aktif per Bidang/Rumpun Prodi + komentar
 audit XML xl/comments1.xml) lalu menghasilkan:
@@ -594,7 +594,7 @@ def main():
     js_header = (
         '/**\n'
         ' * ============================================================================\n'
-        ' * SARPRAS KKP — Dataset Pemenuhan Standar Minimal Sarpras Prodi (Zero-Build)\n'
+        ' * Sarana dan Prasarana Satuan Pendidikan KP — Dataset Pemenuhan Standar Minimal Sarpras Prodi (Zero-Build)\n'
         ' * Sumber: Excel/Data Contoh.xlsx (12 Rumpun Prodi, 11 Satdik Pendidikan Tinggi)\n'
         ' * Dihasilkan otomatis oleh Database/import_standar_sarpras.py\n'
         ' * ============================================================================\n'

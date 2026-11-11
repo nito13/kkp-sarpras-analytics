@@ -1,4 +1,4 @@
-# 🌐 Modul APIs — SIM-SARPRAS KKP
+# 🌐 Modul APIs — Sarana dan Prasarana Satuan Pendidikan KP
 
 Folder `APIs` berisi titik akhir antarmuka program aplikasi (REST API Endpoints) berbasis PHP Native yang melayani pertukaran data JSON antara Frontend dan Database MySQL.
 

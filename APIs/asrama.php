@@ -222,7 +222,19 @@ switch ($method) {
             
         $status = !empty($input['status']) ? trim($input['status']) : 'Digunakan';
         $keterangan = !empty($input['keterangan']) ? trim($input['keterangan']) : '';
-        $rincianJson = !empty($input['rincian']) ? json_encode($input['rincian'], JSON_UNESCAPED_UNICODE) : null;
+        $cleanRincian = [];
+        if (!empty($input['rincian']) && is_array($input['rincian'])) {
+            foreach ($input['rincian'] as $rc) {
+                $cleanRincian[] = [
+                    'label' => trim($rc['label'] ?? ''),
+                    'ukuran' => trim($rc['ukuran'] ?? '-'),
+                    'jumlah' => (int)($rc['jumlah'] ?? 0),
+                    'luasM2' => (float)($rc['luasM2'] ?? 0),
+                    'kapasitas' => (float)($rc['kapasitas'] ?? 0),
+                ];
+            }
+        }
+        $rincianJson = !empty($cleanRincian) ? json_encode($cleanRincian, JSON_UNESCAPED_UNICODE) : null;
 
         // Generate ID jika belum ada
         if (!empty($input['id'])) {
@@ -328,8 +340,20 @@ switch ($method) {
         }
 
         if (isset($input['rincian'])) {
+            $cleanRincian = [];
+            if (!empty($input['rincian']) && is_array($input['rincian'])) {
+                foreach ($input['rincian'] as $rc) {
+                    $cleanRincian[] = [
+                        'label' => trim($rc['label'] ?? ''),
+                        'ukuran' => trim($rc['ukuran'] ?? '-'),
+                        'jumlah' => (int)($rc['jumlah'] ?? 0),
+                        'luasM2' => (float)($rc['luasM2'] ?? 0),
+                        'kapasitas' => (float)($rc['kapasitas'] ?? 0),
+                    ];
+                }
+            }
             $fields[] = "`rincian_json` = :rincian_json";
-            $params[':rincian_json'] = !empty($input['rincian']) ? json_encode($input['rincian'], JSON_UNESCAPED_UNICODE) : null;
+            $params[':rincian_json'] = !empty($cleanRincian) ? json_encode($cleanRincian, JSON_UNESCAPED_UNICODE) : null;
         }
 
         if (empty($fields)) {

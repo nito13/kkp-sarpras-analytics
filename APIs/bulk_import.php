@@ -1,6 +1,6 @@
 <?php
 // APIs/bulk_import.php
-// REST API Batch Import Data Sarpras KKP dari File Excel (.xlsx / .xls / .csv)
+// REST API Batch Import Data Sarana dan Prasarana Satuan Pendidikan KP dari File Excel (.xlsx / .xls / .csv)
 // Mendukung transaksi penuh (ACID) untuk:
 //   1. Gedung Asrama Taruna (asrama_gedung + rekalkulasi asrama_rekap)
 //   2. Item Standar Minimal Prodi (standar_item + rekalkulasi standar_bidang & standar_rekap)
@@ -349,7 +349,7 @@ if ($method === 'GET') {
         'status' => 'success',
         'endpoint' => 'bulk_import',
         'ready' => true,
-        'message' => 'Endpoint Batch Import Excel SIM-SARPRAS KKP siap menerima metode POST JSON.'
+        'message' => 'Endpoint Batch Import Excel Sarana dan Prasarana Satuan Pendidikan KP siap menerima metode POST JSON.'
     ]);
 }
 

@@ -1,6 +1,6 @@
 <?php
 // Monitoring/diagnostic.php
-// Skrip Diagnosa Kesehatan Lingkungan & Infrastruktur SIM-SARPRAS KKP
+// Skrip Diagnosa Kesehatan Lingkungan & Infrastruktur Sarana dan Prasarana Satuan Pendidikan KP
 
 if (file_exists(__DIR__ . '/../Backend/config/database.php')) {
     require_once __DIR__ . '/../Backend/config/database.php';

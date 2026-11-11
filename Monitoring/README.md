@@ -1,4 +1,4 @@
-# 📡 Modul Monitoring — SIM-SARPRAS KKP
+# 📡 Modul Monitoring — Sarana dan Prasarana Satuan Pendidikan KP
 
 Folder `Monitoring` bertanggung jawab atas pemantauan operasional sistem (System Health), status koneksi basis data MySQL Laragon, metrik telemetri server, dan diagnosa lingkungan PHP.
 

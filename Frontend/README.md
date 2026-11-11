@@ -1,4 +1,4 @@
-# 🖥️ Modul Frontend — SIM-SARPRAS KKP
+# 🖥️ Modul Frontend — Sarana dan Prasarana Satuan Pendidikan KP
 
 Folder `Frontend` berisi seluruh antarmuka pengguna (User Interface), tata letak halaman web, styling tampilan visual, iconografi, dan pustaka client-side untuk Sistem Informasi Analitik Sarana & Prasarana Satuan Pendidikan Tinggi Kementerian Kelautan dan Perikanan RI.
 

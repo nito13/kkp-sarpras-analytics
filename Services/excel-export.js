@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * SARPRAS KKP — Modul Ekspor Laporan Excel Resmi (.xlsx) Multi-Sheet
+ * Sarana dan Prasarana Satuan Pendidikan KP — Modul Ekspor Laporan Excel Resmi (.xlsx) Multi-Sheet
  * Badan Penyuluhan dan Pengembangan SDM Kelautan dan Perikanan (BPPSDMKP)
  * ============================================================================
  */
@@ -282,7 +282,7 @@ function exportAsramaToExcel(asramaData, satdikList = [], options = {}) {
   const wb = XLSX.utils.book_new();
   const printedAt = getFormattedDateTime();
   const userName = currentUser?.name || 'Admin Sarpras Pusdik KP';
-  const userRole = currentUser?.roleLabel || 'Pengelola SARPRAS KKP';
+  const userRole = currentUser?.roleLabel || 'Pengelola Sarana dan Prasarana Satuan Pendidikan KP';
 
   const kopStyleKemen = { font: { name: 'Calibri', sz: 14, bold: true, color: { rgb: '003366' } }, alignment: { horizontal: 'center', vertical: 'center' } };
   const kopStyleBadan = { font: { name: 'Calibri', sz: 11, bold: true, color: { rgb: '0F766E' } }, alignment: { horizontal: 'center', vertical: 'center' } };
@@ -683,7 +683,7 @@ function exportStandarToExcel(standarData, satdikList = [], options = {}) {
 
   
 /**
- * Ekspor Dokumen Komprehensif Seluruh Data SARPRAS KKP (Multi-Sheet All-in-One)
+ * Ekspor Dokumen Komprehensif Seluruh Data Sarana dan Prasarana Satuan Pendidikan KP (Multi-Sheet All-in-One)
  * Menyatukan:
  * - Sheet 1: Ringkasan & KPI Nasional (Executive Dashboard + Rekap 18 Satdik Komprehensif)
  * - Sheet 2: Kapasitas Asrama Taruna (Rekapitulasi rasio 4m²/orang per Satdik)
@@ -706,13 +706,13 @@ function exportComprehensiveToExcel(params = {}) {
 
   const {
     filterSatdikName = 'Seluruh Satuan Pendidikan (18 Kampus Vokasi KKP)',
-    filenamePrefix = 'SARPRAS_KKP_Laporan_Komprehensif_Nasional'
+    filenamePrefix = 'Sarana_Prasarana_Satdik_KP_Laporan_Komprehensif_Nasional'
   } = options;
 
   const wb = XLSX.utils.book_new();
   const printedAt = getFormattedDateTime();
   const userName = currentUser?.name || 'Admin Sarpras Pusdik KP';
-  const userRole = currentUser?.roleLabel || 'Pengelola SARPRAS KKP';
+  const userRole = currentUser?.roleLabel || 'Pengelola Sarana dan Prasarana Satuan Pendidikan KP';
 
   // Memastikan data selalu lengkap dengan fallback ke master window data jika belum ter-fetch
   const effectiveSatdikList = (Array.isArray(satdikList) && satdikList.length > 0)
@@ -774,8 +774,8 @@ function exportComprehensiveToExcel(params = {}) {
   ws1['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', kopStyleKemen);
   ws1['A2'] = createCell('BADAN PENYULUHAN DAN PENGEMBANGAN SDM KELAUTAN DAN PERIKANAN (BPPSDM KP)', kopStyleBadan);
   ws1['A3'] = createCell('PUSAT PENDIDIKAN KELAUTAN DAN PERIKANAN (PUSDIK KP)', kopStylePusat);
-  ws1['A4'] = createCell('Sistem Informasi & Analitik Sarana Prasarana Pendidikan Vokasi KP (SARPRAS)', kopStyleApp);
-  ws1['A6'] = createCell('LAPORAN KOMPREHENSIF EKSEKUTIF SARPRAS, ASRAMA, & STANDAR PRODI VOKASI KP', titleStyle);
+  ws1['A4'] = createCell('Sistem Informasi & Analitik Sarana dan Prasarana Satuan Pendidikan KP', kopStyleApp);
+  ws1['A6'] = createCell('LAPORAN KOMPREHENSIF EKSEKUTIF SARANA DAN PRASARANA SATUAN PENDIDIKAN KP', titleStyle);
 
   ws1['A7'] = createCell('Cakupan Laporan:', metaLabel);
   ws1['C7'] = createCell(filterSatdikName, metaValBold);
@@ -981,7 +981,7 @@ function exportComprehensiveToExcel(params = {}) {
   ws1[XLSX.utils.encode_cell({ r: signRow1 + 6, c: 2 })] = createCell('( Admin Sarpras Pusdik KP )', signNameStyle);
   ws1[XLSX.utils.encode_cell({ r: signRow1 + 7, c: 2 })] = createCell('Pusdik KP — BPPSDM Kelautan dan Perikanan', signLabelStyle);
 
-  ws1[XLSX.utils.encode_cell({ r: signRow1, c: 10 })] = createCell('Dicetak melalui SARPRAS KKP,', signLabelStyle);
+  ws1[XLSX.utils.encode_cell({ r: signRow1, c: 10 })] = createCell('Dicetak melalui Sarana dan Prasarana Satuan Pendidikan KP,', signLabelStyle);
   ws1[XLSX.utils.encode_cell({ r: signRow1 + 1, c: 10 })] = createCell('Petugas Operator Sistem:', signTitleStyle);
   ws1[XLSX.utils.encode_cell({ r: signRow1 + 2, c: 10 })] = createCell('Pada: ' + printedAt, signLabelStyle);
   ws1[XLSX.utils.encode_cell({ r: signRow1 + 6, c: 10 })] = createCell('( ' + userName + ' )', signNameStyle);
@@ -1525,8 +1525,8 @@ function buildImportTemplateWorkbook(options = {}) {
   // ================= SHEET 1: PETUNJUK_PENGISIAN =================
   const wsGuide = {};
   wsGuide['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', kopKemen);
-  wsGuide['A2'] = createCell('BPPSDM KP — PUSAT PENDIDIKAN KELAUTAN DAN PERIKANAN (SIM-SARPRAS KKP)', kopBadan);
-  wsGuide['A4'] = createCell('PANDUAN RESMI PENGISIAN TEMPLATE IMPORT DATA EXCEL SIM-SARPRAS KKP', bannerStyle);
+  wsGuide['A2'] = createCell('BPPSDM KP — PUSAT PENDIDIKAN KELAUTAN DAN PERIKANAN (Sarana dan Prasarana Satuan Pendidikan KP)', kopBadan);
+  wsGuide['A4'] = createCell('PANDUAN RESMI PENGISIAN TEMPLATE IMPORT DATA EXCEL SARANA DAN PRASARANA SATUAN PENDIDIKAN KP', bannerStyle);
 
   const steps = [
     ['No.', 'Tahapan / Aturan Pengisian', 'Penjelasan Lengkap'],
@@ -1536,7 +1536,7 @@ function buildImportTemplateWorkbook(options = {}) {
     ['4', 'Kemudahan Penulisan Kode Satdik', 'Pada kolom Satdik, Anda bebas mengetik Kode Satdik (contoh: poltek-aup, supm-tegal) ATAU Nama Kampus / Kota (contoh: Politeknik AUP, Poltek KP Sidoarjo, Sorong, Tegal). Daftar resmi tersedia di sheet REFERENSI_KODE.'],
     ['5', 'Kalkulasi Otomatis Asrama', 'Pada sheet INPUT_GEDUNG_ASRAMA, apabila kolom Total Luas (m²) atau Kapasitas (Orang) dikosongkan/diisi 0, sistem otomatis menghitung Luas = Jumlah Kamar × Panjang × Lebar serta Kapasitas = Luas ÷ 4 m²/orang.'],
     ['6', 'Pencatatan Realisasi Standar Prodi', 'Pada sheet INPUT_STANDAR_PRODI, Anda dapat menuliskan kode rumpun (misal PIK, PMK, BDP, PGH) atau nama rumpun prodi, serta langsung mencantumkan Satdik Realisasi dan Volume Riil jika ingin memetakan capaian kampus secara langsung.'],
-    ['7', 'Unggah ke Aplikasi SIM-SARPRAS', 'Simpan file Excel ini (.xlsx), buka aplikasi SIM-SARPRAS KKP, klik tombol "+ Tambah Sarpras" di bilah navigasi atas, pilih tab "4. Import Excel (.xlsx)", lalu pilih/tarik file ini untuk meninjau pratinjau dan menyimpan ke database MySQL.']
+    ['7', 'Unggah ke Aplikasi', 'Simpan file Excel ini (.xlsx), buka aplikasi Sarana dan Prasarana Satuan Pendidikan KP, klik tombol "+ Tambah Sarpras" di bilah navigasi atas, pilih tab "4. Import Excel (.xlsx)", lalu pilih/tarik file ini untuk meninjau pratinjau dan menyimpan ke database MySQL.']
   ];
 
   steps[0].forEach((h, c) => {
@@ -1823,7 +1823,7 @@ function buildImportTemplateWorkbook(options = {}) {
 
   // ================= SHEET 5: REFERENSI_KODE =================
   const wsRef = {};
-  wsRef['A1'] = createCell('DAFTAR KODE REFERENSI RESMI SIM-SARPRAS KKP (ACUAN PENGISIAN EXCEL)', bannerStyle);
+  wsRef['A1'] = createCell('DAFTAR KODE REFERENSI RESMI SARANA DAN PRASARANA SATUAN PENDIDIKAN KP (ACUAN PENGISIAN EXCEL)', bannerStyle);
 
   const satHeaders = ['Kode Satdik (ID)', 'Nama Singkat', 'Nama Resmi Satuan Pendidikan', 'Kota & Provinsi'];
   satHeaders.forEach((h, c) => {
@@ -2316,7 +2316,7 @@ function exportTambakToExcel(tambakData, satdikList = [], options = {}) {
   const wb = XLSX.utils.book_new();
   const printedAt = getFormattedDateTime();
   const userName = currentUser?.name || 'Admin Sarpras Pusdik KP';
-  const userRole = currentUser?.roleLabel || 'Pengelola SARPRAS KKP';
+  const userRole = currentUser?.roleLabel || 'Pengelola Sarana dan Prasarana Satuan Pendidikan KP';
 
   const kopStyleKemen = { font: { name: 'Calibri', sz: 14, bold: true, color: { rgb: '003366' } }, alignment: { horizontal: 'center', vertical: 'center' } };
   const kopStyleBadan = { font: { name: 'Calibri', sz: 11, bold: true, color: { rgb: '0F766E' } }, alignment: { horizontal: 'center', vertical: 'center' } };

@@ -1,6 +1,6 @@
 <?php
 // backend/database/seed.php
-// Skrip Inisialisasi dan Seeder Database MySQL Laragon untuk SARPRAS KKP
+// Skrip Inisialisasi dan Seeder Database MySQL Laragon untuk Sarana dan Prasarana Satuan Pendidikan KP
 
 if (file_exists(__DIR__ . '/../Backend/config/database.php')) {
     require_once __DIR__ . '/../Backend/config/database.php';
@@ -8,7 +8,7 @@ if (file_exists(__DIR__ . '/../Backend/config/database.php')) {
     require_once __DIR__ . '/../config/database.php';
 }
 
-echo "=== MEMULAI SETUP DATABASE SARPRAS KKP (LARAGON) ===\n\n";
+echo "=== MEMULAI SETUP DATABASE SARANA DAN PRASARANA SATUAN PENDIDIKAN KP (LARAGON) ===\n\n";
 
 try {
     // 1. Konek ke MySQL tanpa pilih database dulu untuk memastikan database kkp_sarpras_db dibuat

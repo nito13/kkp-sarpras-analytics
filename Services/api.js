@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * SARPRAS KKP — Layanan Koneksi REST API Backend PHP & MySQL (PDO)
+ * Sarana dan Prasarana Satuan Pendidikan KP — Layanan Koneksi REST API Backend PHP & MySQL (PDO)
  * Badan Penyuluhan dan Pengembangan SDM Kelautan dan Perikanan (BPPSDMKP)
  * ============================================================================
  * Modul Services/api.js:
@@ -11,8 +11,9 @@
   'use strict';
 
   // Base URL relatif terhadap root aplikasi di Laragon
-  const API_BASE_URL = 'APIs';
-  const MONITORING_BASE_URL = 'Monitoring';
+  const isFrontendSubdir = typeof window !== 'undefined' && window.location.pathname.toLowerCase().includes('/frontend');
+  const API_BASE_URL = isFrontendSubdir ? '../APIs' : 'APIs';
+  const MONITORING_BASE_URL = isFrontendSubdir ? '../Monitoring' : 'Monitoring';
 
   async function checkBackendHealth() {
     try {

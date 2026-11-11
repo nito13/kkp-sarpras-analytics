@@ -1,4 +1,4 @@
-# 💼 Modul Services — SIM-SARPRAS KKP
+# 💼 Modul Services — Sarana dan Prasarana Satuan Pendidikan KP
 
 Folder `Services` merupakan lapisan logika bisnis (Business Logic Layer) dan layanan pendukung yang terpisah dari antarmuka visual. Modul di dalam folder ini menangani komputasi analitik, manajemen sesi pengguna, komunikasi jaringan HTTP, serta pembuatan dokumen laporan.
 

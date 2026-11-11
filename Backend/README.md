@@ -1,6 +1,6 @@
-# ⚙️ Modul Backend — SIM-SARPRAS KKP
+# ⚙️ Modul Backend — Sarana dan Prasarana Satuan Pendidikan KP
 
-Folder `Backend` bertindak sebagai inti server-side (Server-Side Core) untuk aplikasi SIM-SARPRAS KKP. Modul ini bertanggung jawab atas konfigurasi koneksi database, response payload formatting, handling CORS, dan manajemen gateway server.
+Folder `Backend` bertindak sebagai inti server-side (Server-Side Core) untuk aplikasi Sarana dan Prasarana Satuan Pendidikan KP. Modul ini bertanggung jawab atas konfigurasi koneksi database, response payload formatting, handling CORS, dan manajemen gateway server.
 
 ---
 

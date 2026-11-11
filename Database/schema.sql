@@ -1,4 +1,4 @@
--- Skema Database SARPRAS KKP untuk MySQL Laragon
+-- Skema Database Sarana dan Prasarana Satuan Pendidikan KP untuk MySQL Laragon
 CREATE DATABASE IF NOT EXISTS `kkp_sarpras_db` 
 CHARACTER SET utf8mb4 
 COLLATE utf8mb4_unicode_ci;

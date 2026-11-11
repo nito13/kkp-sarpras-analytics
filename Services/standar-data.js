@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * SARPRAS KKP — Dataset Pemenuhan Standar Minimal Sarpras Prodi (Zero-Build)
+ * Sarana dan Prasarana Satuan Pendidikan KP — Dataset Pemenuhan Standar Minimal Sarpras Prodi (Zero-Build)
  * Sumber: Excel/Data Contoh.xlsx (12 Rumpun Prodi, 11 Satdik Pendidikan Tinggi)
  * Dihasilkan otomatis oleh Database/import_standar_sarpras.py
  * ============================================================================

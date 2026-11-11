@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * SARPRAS KKP — Modul Autentikasi & Manajemen Sesi Pengguna (RBAC)
+ * Sarana dan Prasarana Satuan Pendidikan KP — Modul Autentikasi & Manajemen Sesi Pengguna (RBAC)
  * Badan Penyuluhan dan Pengembangan SDM Kelautan dan Perikanan (BPPSDMKP)
  * ============================================================================
  */
@@ -9,7 +9,7 @@
 
   const SESSION_KEY = 'kkp_auth_session_v2';
 
-  // Daftar Akun & Hak Akses Pengguna SARPRAS KKP (1 Admin Pusat + 18 Satdik KKP)
+  // Daftar Akun & Hak Akses Pengguna Sarana dan Prasarana Satuan Pendidikan KP (1 Admin Pusat + 18 Satdik KKP)
   // Kementerian Kelautan dan Perikanan Republik Indonesia
   const AUTH_USERS = [
     {
