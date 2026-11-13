@@ -86,6 +86,7 @@ function formatBulkTanahOutput(array $r, array $satdikNameMap): array {
         'tahunPerolehan' => (int)($r['tahun_perolehan'] ?? 2020),
         'asalPerolehan' => $r['asal_perolehan'] ?? 'APBN',
         'keterangan' => $r['keterangan'] ?? '',
+        'fotoSatelit' => $r['foto_satelit'] ?? '',
     ];
 }
 
@@ -649,7 +650,7 @@ try {
     }
 
     // ---------------------------------------------------------
-    // 3. BATCH INSERT: BIDANG TANAH & LAHAN (KIB A BMN)
+    // 3. BATCH INSERT: BIDANG TANAH & LAHAN
     // ---------------------------------------------------------
     if (!empty($inTanah)) {
         $stmtCheckTnhId = $pdo->prepare("SELECT COUNT(*) FROM tanah_bidang WHERE id = :id");
@@ -658,20 +659,25 @@ try {
                 id, satdik_id, nama_bidang, kode_bmn, nup,
                 luas_m2, luas_ha, status_sertifikat, no_sertifikat,
                 tanggal_sertifikat, atas_nama, peruntukan, status_pemanfaatan,
-                alamat, kota, provinsi, tahun_perolehan, asal_perolehan, keterangan
+                alamat, kota, provinsi, tahun_perolehan, asal_perolehan, keterangan, foto_satelit
             ) VALUES (
                 :id, :satdik_id, :nama_bidang, :kode_bmn, :nup,
                 :luas_m2, :luas_ha, :status_sertifikat, :no_sertifikat,
                 :tanggal_sertifikat, :atas_nama, :peruntukan, :status_pemanfaatan,
-                :alamat, :kota, :provinsi, :tahun_perolehan, :asal_perolehan, :keterangan
+                :alamat, :kota, :provinsi, :tahun_perolehan, :asal_perolehan, :keterangan, :foto_satelit
             )
         ");
         $stmtGetTnh = $pdo->prepare("SELECT * FROM tanah_bidang WHERE id = :id");
 
         foreach ($inTanah as $idx => $t) {
             $sid = trim($t['satdikId'] ?? '');
+            if (!$sid) continue;
             $nama = trim($t['namaBidang'] ?? ($t['nama'] ?? ''));
-            if (!$sid || !$nama) continue;
+            $noSertifikat = isset($t['noSertifikat']) ? trim($t['noSertifikat']) : '-';
+            if (!$nama) {
+                $sName = $satdikNameMap[$sid] ?? $sid;
+                $nama = 'Lahan ' . $sName . ($noSertifikat !== '-' ? " ($noSertifikat)" : '');
+            }
 
             $prefix = strtoupper(substr(preg_replace('/[^a-zA-Z0-9]/', '', $sid), -3));
             $tId = !empty($t['id']) ? trim($t['id']) : ('TNH-' . $prefix . '-' . time() . '-' . ($idx + 1) . '-' . rand(10, 99));
@@ -686,18 +692,18 @@ try {
             $nup = isset($t['nup']) ? max(1, (int)$t['nup']) : ($idx + 1);
             $luasM2 = isset($t['luasM2']) ? max(0, (float)$t['luasM2']) : 0;
             $luasHa = isset($t['luasHa']) && $t['luasHa'] > 0 ? (float)$t['luasHa'] : round($luasM2 / 10000, 4);
-            $statusSertifikat = !empty($t['statusSertifikat']) ? trim($t['statusSertifikat']) : 'Sertifikat Hak Pakai (SHP)';
-            $noSertifikat = isset($t['noSertifikat']) ? trim($t['noSertifikat']) : '-';
+            $statusSertifikat = !empty($t['statusSertifikat']) ? trim($t['statusSertifikat']) : ($noSertifikat !== '-' ? 'Sertifikat Hak Pakai (SHP)' : 'Dalam Proses BPN');
             $tanggalSertifikat = isset($t['tanggalSertifikat']) ? trim($t['tanggalSertifikat']) : '-';
             $atasNama = !empty($t['atasNama']) ? trim($t['atasNama']) : 'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan';
             $peruntukan = !empty($t['peruntukan']) ? trim($t['peruntukan']) : 'Kampus & Fasilitas Akademik';
             $statusPemanfaatan = !empty($t['statusPemanfaatan']) ? trim($t['statusPemanfaatan']) : 'Digunakan Sendiri (Operasional)';
-            $alamat = isset($t['alamat']) ? trim($t['alamat']) : '';
+            $alamat = isset($t['alamat']) ? trim($t['alamat']) : (isset($t['lokasi']) ? trim($t['lokasi']) : '');
             $kota = isset($t['kota']) ? trim($t['kota']) : '';
             $provinsi = isset($t['provinsi']) ? trim($t['provinsi']) : '';
             $tahunPerolehan = isset($t['tahunPerolehan']) ? max(1950, (int)$t['tahunPerolehan']) : 2020;
             $asalPerolehan = !empty($t['asalPerolehan']) ? trim($t['asalPerolehan']) : 'APBN';
             $keterangan = isset($t['keterangan']) ? trim($t['keterangan']) : '';
+            $fotoSatelit = isset($t['fotoSatelit']) ? trim($t['fotoSatelit']) : (isset($t['foto']) ? trim($t['foto']) : '');
 
             $stmtInsTnh->execute([
                 ':id' => $tId,
@@ -719,6 +725,7 @@ try {
                 ':tahun_perolehan' => $tahunPerolehan,
                 ':asal_perolehan' => $asalPerolehan,
                 ':keterangan' => $keterangan,
+                ':foto_satelit' => $fotoSatelit,
             ]);
 
             $stmtGetTnh->execute([':id' => $tId]);

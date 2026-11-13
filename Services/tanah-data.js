@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * Sarana dan Prasarana Satuan Pendidikan KP — Dataset Master Tanah & Lahan (KIB A BMN)
+ * Sarana dan Prasarana Satuan Pendidikan KP — Dataset Master Tanah & Lahan
  * Badan Penyuluhan dan Pengembangan SDM Kelautan dan Perikanan (BPPSDM KP)
  * Meliputi 18 Satuan Pendidikan Vokasi KKP (Pendidikan Tinggi & Menengah SUPM)
  * ============================================================================
@@ -78,7 +78,7 @@
 
   window.SARPRAS_TANAH = {
     meta: {
-      sumber: 'Data Master Tanah & Lahan Satuan Pendidikan KP (KIB A BMN)',
+      sumber: 'Data Master Tanah & Lahan Satuan Pendidikan KP',
       tanggalData: '2026-11-13',
       jumlahSatdik: 18,
       statusSertifikatOptions: [

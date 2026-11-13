@@ -1630,12 +1630,12 @@ function exportComprehensiveToExcel(params = {}) {
   XLSX.utils.book_append_sheet(wb, wsPemb2, 'Detail Sarpras Pembelajaran');
 
   // =========================================================================
-  // SHEET 10: REKAPITULASI DATA TANAH & LAHAN PER SATDIK (KIB A BMN)
+  // SHEET 10: REKAPITULASI DATA TANAH & LAHAN PER SATDIK
   // =========================================================================
   const wsTanah1 = {};
   wsTanah1['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', kopStyleKemen);
   wsTanah1['A2'] = createCell('BADAN PENYULUHAN DAN PENGEMBANGAN SDM KELAUTAN DAN PERIKANAN (BPPSDM KP)', kopStyleBadan);
-  wsTanah1['A3'] = createCell('REKAPITULASI INVENTARIS ASET TANAH DAN LAHAN SATUAN PENDIDIKAN KP (KIB A BMN)', titleStyle);
+  wsTanah1['A3'] = createCell('REKAPITULASI INVENTARIS ASET TANAH DAN LAHAN SATUAN PENDIDIKAN KP', titleStyle);
   wsTanah1['A4'] = createCell('Cakupan Data: Seluruh 18 Satuan Pendidikan Vokasi KKP | Dicetak: ' + printedAt, kopStyleApp);
 
   const tnhHeaders1 = [
@@ -1706,19 +1706,23 @@ function exportComprehensiveToExcel(params = {}) {
   XLSX.utils.book_append_sheet(wb, wsTanah1, 'Rekapitulasi Tanah');
 
   // =========================================================================
-  // SHEET 11: KIB A - DETAIL INVENTARIS TANAH BMN SATDIK KP
+  // SHEET 11: DETAIL INVENTARIS TANAH DAN LAHAN SATDIK KP
   // =========================================================================
   const wsTanah2 = {};
   wsTanah2['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', kopStyleKemen);
   wsTanah2['A2'] = createCell('BADAN PENYULUHAN DAN PENGEMBANGAN SDM KELAUTAN DAN PERIKANAN (BPPSDM KP)', kopStyleBadan);
-  wsTanah2['A3'] = createCell('KARTU INVENTARIS BARANG (KIB A) — RINCIAN TANAH BMN SATUAN PENDIDIKAN KP', titleStyle);
+  wsTanah2['A3'] = createCell('RINCIAN DATA INVENTARIS TANAH DAN LAHAN SATUAN PENDIDIKAN KP', titleStyle);
   wsTanah2['A4'] = createCell('Cakupan Data: Seluruh Bidang Tanah BMN Satdik | Dicetak: ' + printedAt, kopStyleApp);
 
   const tnhHeaders2 = [
-    'No', 'ID Bidang', 'Kode BMN', 'NUP', 'Satuan Pendidikan', 'Nama Bidang / Lokasi',
-    'Luas (m²)', 'Luas (Ha)', 'Status Hak / Sertifikat', 'Nomor Sertifikat', 'Tanggal Terbit',
-    'Atas Nama', 'Peruntukan Utama', 'Status Pemanfaatan',
-    'Alamat Lengkap', 'Kota / Kab', 'Provinsi', 'Tahun Perolehan', 'Asal Perolehan', 'Keterangan'
+    'No',
+    'Nama Satuan Pendidikan',
+    'Nomor Sertifikat',
+    'Nama Kepemilikan',
+    'Luas Tanah (m²)',
+    'Lokasi',
+    'Keterangan',
+    'Foto Satelit (jika ada)'
   ];
   tnhHeaders2.forEach((h, c) => {
     wsTanah2[XLSX.utils.encode_cell({ r: 5, c })] = createCell(h, tableHeaderStyle);
@@ -1727,29 +1731,23 @@ function exportComprehensiveToExcel(params = {}) {
   let rowTnh2 = 6;
   effectiveTanahData.forEach((p, idx) => {
     const sat = satdikMap[p.satdikId] || {};
-    const satName = sat.shortName || sat.name || p.satdikName || p.satdikId;
+    const satName = sat.name || sat.shortName || p.satdikName || p.satdikId;
+    const noSertifikat = p.noSertifikat || '-';
+    const atasNama = p.atasNama || 'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan';
+    const luasM2 = Number(p.luasM2) || 0;
+    const lokasi = p.lokasi || p.alamat || [sat.alamat, sat.kota, sat.provinsi].filter(Boolean).join(', ') || '-';
+    const keterangan = p.keterangan || '-';
+    const fotoSatelit = p.fotoSatelit || p.foto || '-';
 
     const rowData = [
       [idx + 1, centerP1, 'n'],
-      [p.id, centerP1, 's'],
-      [p.kodeBmn || '-', centerP1, 's'],
-      [p.nup || 1, centerP1, 'n'],
-      [satName, leftP1, 's'],
-      [p.namaBidang, leftBoldP1, 's'],
-      [Number(p.luasM2) || 0, numIntP1, 'n'],
-      [Number(p.luasHa) || Number(((Number(p.luasM2) || 0) / 10000).toFixed(2)), numDecP1, 'n'],
-      [p.statusSertifikat || 'Sertifikat Hak Pakai (SHP)', centerP1, 's'],
-      [p.noSertifikat || '-', leftP1, 's'],
-      [p.tanggalSertifikat || '-', centerP1, 's'],
-      [p.atasNama || 'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan', leftP1, 's'],
-      [p.peruntukan || 'Kampus & Fasilitas Akademik', leftP1, 's'],
-      [p.statusPemanfaatan || 'Digunakan Sendiri (Operasional)', centerP1, 's'],
-      [p.alamat || '-', leftP1, 's'],
-      [p.kota || '-', leftP1, 's'],
-      [p.provinsi || '-', leftP1, 's'],
-      [p.tahunPerolehan || '-', centerP1, 's'],
-      [p.asalPerolehan || 'APBN', centerP1, 's'],
-      [p.keterangan || '-', leftP1, 's']
+      [satName, leftBoldP1, 's'],
+      [noSertifikat, leftP1, 's'],
+      [atasNama, leftP1, 's'],
+      [luasM2, numIntP1, 'n'],
+      [lokasi, leftP1, 's'],
+      [keterangan, leftP1, 's'],
+      [fotoSatelit, leftP1, 's']
     ];
 
     rowData.forEach(([val, st, type], col) => {
@@ -1759,19 +1757,23 @@ function exportComprehensiveToExcel(params = {}) {
   });
 
   wsTanah2['!merges'] = [
-    { s: { r: 0, c: 0 }, e: { r: 0, c: 19 } },
-    { s: { r: 1, c: 0 }, e: { r: 1, c: 19 } },
-    { s: { r: 2, c: 0 }, e: { r: 2, c: 19 } },
-    { s: { r: 3, c: 0 }, e: { r: 3, c: 19 } }
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 7 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 7 } },
+    { s: { r: 2, c: 0 }, e: { r: 2, c: 7 } },
+    { s: { r: 3, c: 0 }, e: { r: 3, c: 7 } }
   ];
   wsTanah2['!cols'] = [
-    { wch: 6 }, { wch: 14 }, { wch: 20 }, { wch: 8 }, { wch: 28 }, { wch: 34 },
-    { wch: 14 }, { wch: 12 }, { wch: 24 }, { wch: 30 }, { wch: 14 },
-    { wch: 36 }, { wch: 28 }, { wch: 26 },
-    { wch: 36 }, { wch: 18 }, { wch: 18 }, { wch: 12 }, { wch: 16 }, { wch: 35 }
+    { wch: 6 },
+    { wch: 32 },
+    { wch: 28 },
+    { wch: 36 },
+    { wch: 18 },
+    { wch: 40 },
+    { wch: 36 },
+    { wch: 32 }
   ];
-  wsTanah2['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: rowTnh2, c: 19 } });
-  XLSX.utils.book_append_sheet(wb, wsTanah2, 'KIB A - Detail Tanah BMN');
+  wsTanah2['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: Math.max(rowTnh2 - 1, 5), c: 7 } });
+  XLSX.utils.book_append_sheet(wb, wsTanah2, 'Detail Tanah & Lahan');
 
   // SIMPAN FILE WORKBOOK
   const filename = filenamePrefix + '_' + new Date().toISOString().slice(0, 10) + '.xlsx';
@@ -1882,7 +1884,7 @@ function buildImportTemplateWorkbook(options = {}) {
 
   const steps = [
     ['No.', 'Tahapan / Aturan Pengisian', 'Penjelasan Lengkap'],
-    ['1', 'Pilih Sheet Sesuai Jenis Data', 'Template ini memuat 5 lembar kerja input: INPUT_GEDUNG_ASRAMA (Asrama Taruna), INPUT_TAMBAK_KOLAM (Tambak & Kolam Budidaya), INPUT_SARPRAS_PEMBELAJARAN (Kelas, Perpustakaan, TEFA, Simulator), INPUT_DATA_TANAH (Data Tanah & Lahan KIB A), dan INPUT_STANDAR_PRODI (Standar Minimal Prodi). Anda dapat mengisi salah satu saja atau seluruhnya sekaligus dalam satu kali unggah.'],
+    ['1', 'Pilih Sheet Sesuai Jenis Data', 'Template ini memuat 5 lembar kerja input: INPUT_GEDUNG_ASRAMA (Asrama Taruna), INPUT_TAMBAK_KOLAM (Tambak & Kolam Budidaya), INPUT_SARPRAS_PEMBELAJARAN (Kelas, Perpustakaan, TEFA, Simulator), INPUT_DATA_TANAH (Data Tanah & Lahan), dan INPUT_STANDAR_PRODI (Standar Minimal Prodi). Anda dapat mengisi salah satu saja atau seluruhnya sekaligus dalam satu kali unggah.'],
     ['2', 'Mulai Mengisi di Baris ke-9', 'Isi data baru Anda mulai pada Baris ke-9 (sel berwarna putih bergaris). Baris ke-6 [PETUNJUK] dan Baris ke-7 s.d. ke-8 [CONTOH] akan otomatis dilewati oleh sistem saat proses import sehingga tidak perlu dihapus.'],
     ['3', 'Kolom Bertanda Bintang (*)', 'Kolom dengan tanda (*) pada judul tabel adalah KOLOM WAJIB. Jika dikosongkan pada baris yang terisi, sistem akan menampilkan peringatan validasi sebelum data disimpan.'],
     ['4', 'Kemudahan Penulisan Kode Satdik', 'Pada kolom Satdik, Anda bebas mengetik Kode Satdik (contoh: poltek-aup, supm-tegal) ATAU Nama Kampus / Kota (contoh: Politeknik AUP, Poltek KP Sidoarjo, Sorong, Tegal). Daftar resmi tersedia di sheet REFERENSI_KODE.'],
@@ -2207,98 +2209,54 @@ function buildImportTemplateWorkbook(options = {}) {
   if (templateType === 'all' || templateType === 'tanah') {
     appendInputSheet(
       'INPUT_DATA_TANAH',
-      '4. TABEL INPUT DATA TANAH & LAHAN SATDIK KP (KIB A BMN)',
+      '4. TABEL INPUT DATA TANAH & LAHAN SATDIK KP',
       [
         'Status Baris',
-        'Kode / Nama Satdik *',
-        'Nama Bidang / Peruntukan Lahan *',
-        'Kode BMN',
-        'NUP',
-        'Luas Tanah (m²) *',
-        'Status Sertifikat *',
+        'Nama Satuan Pendidikan *',
         'Nomor Sertifikat',
-        'Tanggal Terbit (YYYY-MM-DD)',
-        'Atas Nama',
-        'Peruntukan Utama',
-        'Status Pemanfaatan',
-        'Alamat Lengkap Lahan',
-        'Kota / Kabupaten',
-        'Provinsi',
-        'Nilai Aset BMN (Rp)',
-        'Tahun Perolehan',
-        'Asal Perolehan',
-        'Keterangan Tambahan'
+        'Nama Kepemilikan',
+        'Luas Tanah (m²) *',
+        'Lokasi',
+        'Keterangan',
+        'Foto Satelit (jika ada)'
       ],
-      [1, 2, 5, 6],
+      [1, 4],
       [
         '[PETUNJUK]',
-        'Wajib. Contoh: poltek-aup atau SUPM Tegal',
-        'Wajib. Contoh: Kampus Utama Sedati / Tambak Pesisir',
-        'Kode BMN KIB A (contoh: 2.01.01.01.001.0001)',
-        'Nomor Urut Pendaftaran BMN (contoh: 1)',
-        'Wajib. Luas tanah dalam meter persegi (m²)',
-        'Wajib. Sertifikat Hak Pakai (SHP) / Dalam Proses BPN / Hibah Pemda',
-        'Nomor register SHP dari BPN',
-        'Format tanggal: YYYY-MM-DD (contoh: 2018-05-20)',
-        'Default: Pemerintah RI c.q. Kementerian Kelautan dan Perikanan',
-        'Kampus & Fasilitas Akademik / Tambak & Budidaya Praktik / Workshop / Lahan Cadangan',
-        'Digunakan Sendiri (Operasional) / KSP / Pinjam Pakai',
-        'Alamat fisik lokasi bidang tanah',
-        'Kota atau Kabupaten lokasi tanah',
-        'Provinsi lokasi tanah',
-        'Nilai perolehan / estimasi aset BMN dalam Rupiah',
-        'Tahun perolehan tanah (contoh: 2012)',
-        'APBN / Hibah Pemda / Pemberian Hak',
-        'Catatan batas tanah, riwayat perolehan, atau rencana pemanfaatan'
+        'Wajib. Nama atau kode Satdik (contoh: Politeknik AUP atau SUPM Tegal)',
+        'Nomor register sertifikat SHP BPN (contoh: SHP No. 00014/Pasar Minggu 2012)',
+        'Nama pemegang hak kepemilikan (contoh: Pemerintah RI c.q. Kementerian Kelautan dan Perikanan)',
+        'Wajib. Luas tanah dalam satuan meter persegi (m²)',
+        'Alamat lengkap / kota lokasi bidang tanah',
+        'Catatan batas lahan, riwayat perolehan, atau peruntukan operasional',
+        'Link URL foto atau nama file citra satelit lahan (opsional)'
       ],
       [
         [
           '[CONTOH]',
           sampleSatdik1,
-          'Kampus Utama & Kompleks Akademik',
-          '2.01.01.01.001.0001',
-          1,
-          120000,
-          'Sertifikat Hak Pakai (SHP)',
           'SHP No. 00014/Pasar Minggu 2012',
-          '2012-07-18',
           'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan',
-          'Kampus & Fasilitas Akademik',
-          'Digunakan Sendiri (Operasional)',
-          'Jl. AUP No. 1, Pasar Minggu',
-          'Jakarta Selatan',
-          'DKI Jakarta',
-          420000000000,
-          1962,
-          'APBN',
-          'Kawasan kampus terpadu, rektorat, dan asrama taruna'
+          120000,
+          'Jl. AUP No. 1, Pasar Minggu, Jakarta Selatan',
+          'Kawasan kampus utama terpadu, rektorat, dan asrama taruna',
+          'https://example.com/satelit-kampus-utama.jpg'
         ],
         [
           '[CONTOH]',
           sampleSatdik2,
-          'Kawasan Tambak Percobaan Budidaya',
-          '2.01.01.01.002.0002',
-          2,
-          120000,
-          'Sertifikat Hak Pakai (SHP)',
           'SHP No. 00089/Sedati 2010',
-          '2010-09-15',
           'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan',
-          'Tambak & Budidaya Praktik',
-          'Digunakan Sendiri (Operasional)',
-          'Desa Buncitan, Sedati',
-          'Kab. Sidoarjo',
-          'Jawa Timur',
-          96000000000,
-          1982,
-          'APBN',
-          '46 petak tambak pembesaran bandeng dan udang'
+          120000,
+          'Desa Buncitan, Kec. Sedati, Kab. Sidoarjo, Jawa Timur',
+          'Instalasi tambak percontohan budidaya air payau',
+          ''
         ]
       ],
-      [14, 24, 32, 22, 8, 16, 26, 30, 16, 36, 28, 24, 30, 32, 18, 18, 22, 14, 16, 36]
+      [14, 30, 32, 38, 18, 40, 38, 32]
     );
-  }
-
+  }
+
   // ================= SHEET 5: INPUT_STANDAR_PRODI =================
   if (templateType === 'all' || templateType === 'standar') {
     appendInputSheet(
@@ -2608,7 +2566,7 @@ function parseImportExcelWorkbook(arrayBuffer, context = {}) {
     else if (upperName.indexOf('INPUT_TAMBAK') !== -1 || upperName.indexOf('INPUT_KOLAM') !== -1) sheetCategory = 'tambak';
     else if (upperName.indexOf('INPUT_PEMBELAJARAN') !== -1 || upperName.indexOf('SARPRAS_PEMBELAJARAN') !== -1) sheetCategory = 'pembelajaran';
     else if (upperName.indexOf('INPUT_STANDAR') !== -1) sheetCategory = 'standar';
-    else if (upperName.indexOf('INPUT_DATA_TANAH') !== -1 || upperName.indexOf('INPUT_TANAH') !== -1 || upperName.indexOf('DATA_TANAH') !== -1 || upperName.indexOf('TANAH') !== -1 || upperName.indexOf('KIB A') !== -1 || upperName.indexOf('KIB_A') !== -1) sheetCategory = 'tanah';
+    else if (upperName.indexOf('INPUT_DATA_TANAH') !== -1 || upperName.indexOf('INPUT_TANAH') !== -1 || upperName.indexOf('DATA_TANAH') !== -1 || upperName.indexOf('TANAH') !== -1) sheetCategory = 'tanah';
 
     for (let r = 0; r < Math.min(rows.length, 15); r++) {
       const rowStrs = (rows[r] || []).map(c => cleanStr(c).toLowerCase());
@@ -2841,25 +2799,26 @@ function parseImportExcelWorkbook(arrayBuffer, context = {}) {
         });
       }
     } else if (sheetCategory === 'tanah') {
-      const cSatdik = findCol(headerLower, ['satdik', 'kampus', 'unit kerja'], 1);
-      const cNama = findCol(headerLower, ['nama bidang', 'nama tanah', 'bidang tanah', 'peruntukan'], 2);
-      const cKodeBmn = findCol(headerLower, ['kode bmn', 'bmn'], 3);
-      const cNup = findCol(headerLower, ['nup', 'no urut'], 4);
-      const cLuas = findCol(headerLower, ['luas', 'luas tanah', 'luas (m2)', 'luas m2'], 5);
-      const cStatusSertifikat = findCol(headerLower, ['status sertifikat', 'sertifikat', 'status hak'], 6);
-      const cNoSertifikat = findCol(headerLower, ['nomor sertifikat', 'no sertifikat', 'no. sertifikat'], 7);
-      const cTglSertifikat = findCol(headerLower, ['tanggal terbit', 'tanggal', 'tgl sertifikat'], 8);
-      const cAtasNama = findCol(headerLower, ['atas nama', 'pemegang hak'], 9);
-      const cPeruntukan = findCol(headerLower, ['peruntukan', 'penggunaan utama'], 10);
-      const cStatusManfaat = findCol(headerLower, ['status pemanfaatan', 'pemanfaatan'], 11);
-      const cKeamanan = findCol(headerLower, ['keamanan', 'kondisi keamanan', 'patok'], 12);
-      const cAlamat = findCol(headerLower, ['alamat', 'lokasi'], 13);
-      const cKota = findCol(headerLower, ['kota', 'kabupaten'], 14);
-      const cProv = findCol(headerLower, ['provinsi'], 15);
-      const cNilai = findCol(headerLower, ['nilai aset', 'nilai bmn', 'nilai'], 16);
-      const cTahun = findCol(headerLower, ['tahun', 'tahun perolehan'], 17);
-      const cAsal = findCol(headerLower, ['asal', 'asal perolehan'], 18);
-      const cKet = findCol(headerLower, ['keterangan', 'catatan'], 19);
+      const cSatdik = findCol(headerLower, ['nama satuan pendidikan', 'satuan pendidikan', 'satdik', 'kampus', 'unit kerja'], 1);
+      const cNoSertifikat = findCol(headerLower, ['nomor sertifikat', 'no sertifikat', 'no. sertifikat', 'sertifikat'], 2);
+      const cAtasNama = findCol(headerLower, ['nama kepemilikan', 'kepemilikan', 'atas nama', 'pemegang hak'], 3);
+      const cLuas = findCol(headerLower, ['luas tanah', 'luas tanah (m2)', 'luas tanah (m²)', 'luas (m2)', 'luas (m²)', 'luas m2', 'luas'], 4);
+      const cLokasi = findCol(headerLower, ['lokasi', 'alamat lengkap', 'alamat', 'kota'], 5);
+      const cKet = findCol(headerLower, ['keterangan', 'catatan', 'keterangan tambahan'], 6);
+      const cFoto = findCol(headerLower, ['foto satelit', 'foto satelit (jika ada)', 'foto', 'foto satelit/lahan', 'link foto', 'url foto'], 7);
+
+      // Fallback untuk template lama jika ada
+      const cNama = findCol(headerLower, ['nama bidang', 'nama tanah', 'bidang tanah', 'peruntukan'], -1);
+      const cKodeBmn = findCol(headerLower, ['kode bmn', 'bmn'], -1);
+      const cNup = findCol(headerLower, ['nup', 'no urut'], -1);
+      const cStatusSertifikat = findCol(headerLower, ['status sertifikat', 'status hak'], -1);
+      const cTglSertifikat = findCol(headerLower, ['tanggal terbit', 'tanggal', 'tgl sertifikat'], -1);
+      const cPeruntukan = findCol(headerLower, ['peruntukan', 'penggunaan utama'], -1);
+      const cStatusManfaat = findCol(headerLower, ['status pemanfaatan', 'pemanfaatan'], -1);
+      const cKota = findCol(headerLower, ['kota', 'kabupaten'], -1);
+      const cProv = findCol(headerLower, ['provinsi'], -1);
+      const cTahun = findCol(headerLower, ['tahun', 'tahun perolehan'], -1);
+      const cAsal = findCol(headerLower, ['asal', 'asal perolehan'], -1);
 
       for (let r = headerRowIdx + 1; r < rows.length; r++) {
         const row = rows[r];
@@ -2867,47 +2826,59 @@ function parseImportExcelWorkbook(arrayBuffer, context = {}) {
         const excelRow = r + 1;
 
         const rawSatdik = cleanStr(row[cSatdik]);
-        const nama = cleanStr(row[cNama]);
-        if (!rawSatdik && !nama) continue;
+        const noSertifikat = cleanStr(row[cNoSertifikat]) || '-';
+        const rawLuas = row[cLuas];
+        const rawNama = cNama !== -1 ? cleanStr(row[cNama]) : '';
+        if (!rawSatdik && !noSertifikat && (rawLuas === undefined || rawLuas === '') && !rawNama) continue;
 
-        if (!nama) {
-          warnings.push({ sheet: sheetName, row: excelRow, message: 'Nama Bidang Tanah kosong — baris dilewati.' });
-          continue;
-        }
         const satObj = resolveSatdik(rawSatdik);
         if (!satObj) {
-          warnings.push({ sheet: sheetName, row: excelRow, message: 'Kode/Nama Satdik "' + (rawSatdik || '-') + '" tidak dikenali untuk bidang tanah "' + nama + '".' });
+          warnings.push({ sheet: sheetName, row: excelRow, message: 'Kode/Nama Satdik "' + (rawSatdik || '-') + '" tidak dikenali.' });
           continue;
         }
 
         const luasM2 = Math.max(0, parseNum(row[cLuas], 0));
         const luasHa = Number((luasM2 / 10000).toFixed(2));
-        const nup = Math.max(1, Math.round(parseNum(row[cNup], 1)));
-        const nilaiAsetRp = Math.max(0, parseNum(row[cNilai], 0));
-        const tahunPerolehan = Math.max(1950, Math.round(parseNum(row[cTahun], new Date().getFullYear())));
+        const atasNama = cleanStr(row[cAtasNama]) || 'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan';
+        const lokasi = cleanStr(row[cLokasi]) || satObj.alamat || '';
+        const keterangan = cleanStr(row[cKet]);
+        const fotoSatelit = cFoto !== -1 ? cleanStr(row[cFoto]) : '';
+
+        const nama = rawNama || ('Lahan ' + (satObj.shortName || satObj.name) + (noSertifikat && noSertifikat !== '-' ? ' (' + noSertifikat + ')' : ''));
+        const nup = (cNup !== -1 && Math.max(1, Math.round(parseNum(row[cNup], 1)))) || 1;
+        const kodeBmn = (cKodeBmn !== -1 && cleanStr(row[cKodeBmn])) || '2.01.01.01.001.0001';
+        const statusSertifikat = (cStatusSertifikat !== -1 && cleanStr(row[cStatusSertifikat])) || (noSertifikat && noSertifikat !== '-' ? 'Sertifikat Hak Pakai (SHP)' : 'Dalam Proses BPN');
+        const tanggalSertifikat = (cTglSertifikat !== -1 && cleanStr(row[cTglSertifikat])) || '-';
+        const peruntukan = (cPeruntukan !== -1 && cleanStr(row[cPeruntukan])) || 'Kampus & Fasilitas Penunjang';
+        const statusPemanfaatan = (cStatusManfaat !== -1 && cleanStr(row[cStatusManfaat])) || 'Digunakan Sendiri (Operasional)';
+        const kota = (cKota !== -1 && cleanStr(row[cKota])) || satObj.kota || '';
+        const provinsi = (cProv !== -1 && cleanStr(row[cProv])) || satObj.provinsi || '';
+        const tahunPerolehan = (cTahun !== -1 && Math.max(1950, Math.round(parseNum(row[cTahun], new Date().getFullYear())))) || new Date().getFullYear();
+        const asalPerolehan = (cAsal !== -1 && cleanStr(row[cAsal])) || 'APBN';
 
         tanahParcels.push({
           satdikId: satObj.id,
-          satdikName: satObj.shortName || satObj.name,
+          satdikName: satObj.name,
+          satdikShortName: satObj.shortName || satObj.name,
           namaBidang: nama,
-          kodeBmn: cleanStr(row[cKodeBmn]) || '2.01.01.01.001.0001',
+          kodeBmn,
           nup,
           luasM2,
           luasHa,
-          statusSertifikat: cleanStr(row[cStatusSertifikat]) || 'Sertifikat Hak Pakai (SHP)',
-          noSertifikat: cleanStr(row[cNoSertifikat]) || '-',
-          tanggalSertifikat: cleanStr(row[cTglSertifikat]) || '-',
-          atasNama: cleanStr(row[cAtasNama]) || 'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan',
-          peruntukan: cleanStr(row[cPeruntukan]) || 'Kampus & Fasilitas Akademik',
-          statusPemanfaatan: cleanStr(row[cStatusManfaat]) || 'Digunakan Sendiri (Operasional)',
-          kondisiKeamanan: cleanStr(row[cKeamanan]) || 'Aman (Patok & Plang BMN Terpasang)',
-          alamat: cleanStr(row[cAlamat]) || satObj.alamat || '',
-          kota: cleanStr(row[cKota]) || satObj.kota || '',
-          provinsi: cleanStr(row[cProv]) || satObj.provinsi || '',
-          nilaiAsetRp,
+          statusSertifikat,
+          noSertifikat,
+          tanggalSertifikat,
+          atasNama,
+          peruntukan,
+          statusPemanfaatan,
+          alamat: lokasi,
+          lokasi,
+          kota,
+          provinsi,
           tahunPerolehan,
-          asalPerolehan: cleanStr(row[cAsal]) || 'APBN',
-          keterangan: cleanStr(row[cKet])
+          asalPerolehan,
+          keterangan,
+          fotoSatelit
         });
       }
     } else if (sheetCategory === 'standar') {
@@ -3322,7 +3293,7 @@ function exportTanahToExcel(parcels, satdikList, options = {}) {
   const {
     currentUser = null,
     filterScopeLabel = 'Seluruh Satuan Pendidikan Vokasi KKP (18 Satdik)',
-    filenamePrefix = 'Sarana_Prasarana_Satdik_KP_KIB_A_Tanah_BMN'
+    filenamePrefix = 'Sarana_Prasarana_Satdik_KP_Data_Tanah'
   } = options;
 
   const wb = XLSX.utils.book_new();
@@ -3349,14 +3320,18 @@ function exportTanahToExcel(parcels, satdikList, options = {}) {
 
   ws['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', { font: fontTitle });
   ws['A2'] = createCell('BADAN PENYULUHAN DAN PENGEMBANGAN SDM KELAUTAN DAN PERIKANAN (BPPSDM KP)', { font: { name: 'Arial', sz: 10, bold: true } });
-  ws['A3'] = createCell('KARTU INVENTARIS BARANG (KIB A) — TANAH DAN LAHAN SATUAN PENDIDIKAN KP', { font: { name: 'Arial', sz: 11, bold: true, color: { rgb: '0284C7' } } });
+  ws['A3'] = createCell('DATA INVENTARIS TANAH DAN LAHAN SATUAN PENDIDIKAN KP', { font: { name: 'Arial', sz: 11, bold: true, color: { rgb: '0284C7' } } });
   ws['A4'] = createCell('Cakupan Data: ' + filterScopeLabel + ' | Dicetak: ' + getFormattedDateTime(), { font: { name: 'Arial', sz: 9, italic: true } });
 
   const headers = [
-    'No', 'ID Bidang', 'Kode BMN', 'NUP', 'Satuan Pendidikan', 'Nama Bidang / Peruntukan',
-    'Luas (m²)', 'Luas (Ha)', 'Status Hak / Sertifikat', 'Nomor Sertifikat', 'Tanggal Terbit',
-    'Atas Nama', 'Peruntukan Utama', 'Status Pemanfaatan',
-    'Alamat Lengkap', 'Kota / Kab', 'Provinsi', 'Tahun Perolehan', 'Asal Perolehan', 'Keterangan'
+    'No',
+    'Nama Satuan Pendidikan',
+    'Nomor Sertifikat',
+    'Nama Kepemilikan',
+    'Luas Tanah (m²)',
+    'Lokasi',
+    'Keterangan',
+    'Foto Satelit (jika ada)'
   ];
 
   headers.forEach((h, c) => {
@@ -3366,29 +3341,23 @@ function exportTanahToExcel(parcels, satdikList, options = {}) {
   let row = 6;
   items.forEach((item, idx) => {
     const sat = satdikMap[item.satdikId] || {};
-    const satName = sat.shortName || sat.name || item.satdikName || item.satdikId;
+    const satName = sat.name || sat.shortName || item.satdikName || item.satdikId;
+    const noSertifikat = item.noSertifikat || '-';
+    const atasNama = item.atasNama || 'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan';
+    const luasM2 = Number(item.luasM2) || 0;
+    const lokasi = item.lokasi || item.alamat || [sat.alamat, sat.kota, sat.provinsi].filter(Boolean).join(', ') || '-';
+    const keterangan = item.keterangan || '-';
+    const fotoSatelit = item.fotoSatelit || item.foto || '-';
 
     const rowData = [
       [idx + 1, center, 'n'],
-      [item.id, center, 's'],
-      [item.kodeBmn || '-', center, 's'],
-      [item.nup || 1, center, 'n'],
-      [satName, left, 's'],
-      [item.namaBidang, leftBold, 's'],
-      [Number(item.luasM2) || 0, numInt, 'n'],
-      [Number(item.luasHa) || Number(((Number(item.luasM2) || 0) / 10000).toFixed(2)), numDec, 'n'],
-      [item.statusSertifikat || 'Sertifikat Hak Pakai (SHP)', center, 's'],
-      [item.noSertifikat || '-', left, 's'],
-      [item.tanggalSertifikat || '-', center, 's'],
-      [item.atasNama || 'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan', left, 's'],
-      [item.peruntukan || 'Kampus & Fasilitas Akademik', left, 's'],
-      [item.statusPemanfaatan || 'Digunakan Sendiri (Operasional)', center, 's'],
-      [item.alamat || '-', left, 's'],
-      [item.kota || '-', left, 's'],
-      [item.provinsi || '-', left, 's'],
-      [item.tahunPerolehan || '-', center, 's'],
-      [item.asalPerolehan || 'APBN', center, 's'],
-      [item.keterangan || '-', left, 's']
+      [satName, leftBold, 's'],
+      [noSertifikat, left, 's'],
+      [atasNama, left, 's'],
+      [luasM2, numInt, 'n'],
+      [lokasi, left, 's'],
+      [keterangan, left, 's'],
+      [fotoSatelit, left, 's']
     ];
 
     rowData.forEach(([val, st, type], col) => {
@@ -3397,14 +3366,24 @@ function exportTanahToExcel(parcels, satdikList, options = {}) {
     row++;
   });
 
-  ws['!cols'] = [
-    { wch: 6 }, { wch: 14 }, { wch: 20 }, { wch: 8 }, { wch: 28 }, { wch: 34 },
-    { wch: 14 }, { wch: 12 }, { wch: 24 }, { wch: 30 }, { wch: 14 },
-    { wch: 36 }, { wch: 28 }, { wch: 26 },
-    { wch: 36 }, { wch: 18 }, { wch: 18 }, { wch: 12 }, { wch: 16 }, { wch: 35 }
+  ws['!merges'] = [
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 7 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 7 } },
+    { s: { r: 2, c: 0 }, e: { r: 2, c: 7 } },
+    { s: { r: 3, c: 0 }, e: { r: 3, c: 7 } }
   ];
-  ws['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: row, c: 19 } });
-  XLSX.utils.book_append_sheet(wb, ws, 'KIB A - Tanah BMN');
+  ws['!cols'] = [
+    { wch: 6 },
+    { wch: 32 },
+    { wch: 28 },
+    { wch: 36 },
+    { wch: 18 },
+    { wch: 40 },
+    { wch: 36 },
+    { wch: 32 }
+  ];
+  ws['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: Math.max(row - 1, 5), c: 7 } });
+  XLSX.utils.book_append_sheet(wb, ws, 'Data Tanah & Lahan');
 
   const filename = filenamePrefix + '_' + new Date().toISOString().slice(0, 10) + '.xlsx';
   XLSX.writeFile(wb, filename);

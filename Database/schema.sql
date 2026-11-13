@@ -242,7 +242,7 @@ CREATE TABLE IF NOT EXISTS `tambak_unit` (
     CONSTRAINT `fk_tambak_unit_satdik` FOREIGN KEY (`satdik_id`) REFERENCES `satdik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 11. Detail Bidang Tanah dan Lahan Satuan Pendidikan (KIB A BMN)
+-- 11. Detail Bidang Tanah dan Lahan Satuan Pendidikan
 CREATE TABLE IF NOT EXISTS `tanah_bidang` (
     `id` VARCHAR(64) NOT NULL PRIMARY KEY,
     `satdik_id` VARCHAR(50) NOT NULL,
@@ -263,6 +263,7 @@ CREATE TABLE IF NOT EXISTS `tanah_bidang` (
     `tahun_perolehan` INT DEFAULT 2020,
     `asal_perolehan` VARCHAR(100) DEFAULT 'APBN',
     `keterangan` TEXT NULL,
+    `foto_satelit` TEXT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX `idx_tanah_satdik` (`satdik_id`),

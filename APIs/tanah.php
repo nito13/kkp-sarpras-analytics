@@ -1,7 +1,7 @@
 <?php
 /**
  * ============================================================================
- * REST API ENDPOINT: INVENTARIS DATA TANAH & LAHAN (KIB A BMN) SATDIK KKP
+ * REST API ENDPOINT: INVENTARIS DATA TANAH & LAHAN SATDIK KKP
  * ============================================================================
  * Path: APIs/tanah.php
  *
@@ -60,6 +60,7 @@ function formatTanahRow(array $row, array $satdikMap = []): array {
         'tahunPerolehan' => (int) ($row['tahun_perolehan'] ?? 2020),
         'asalPerolehan' => $row['asal_perolehan'] ?? 'APBN',
         'keterangan' => $row['keterangan'] ?? '',
+        'fotoSatelit' => $row['foto_satelit'] ?? '',
         'createdAt' => $row['created_at'] ?? null,
         'updatedAt' => $row['updated_at'] ?? null,
     ];
@@ -154,6 +155,7 @@ switch ($method) {
         $tahunPerolehan = isset($body['tahunPerolehan']) ? max(1950, (int) $body['tahunPerolehan']) : 2020;
         $asalPerolehan = !empty($body['asalPerolehan']) ? trim($body['asalPerolehan']) : 'APBN';
         $keterangan = isset($body['keterangan']) ? trim($body['keterangan']) : '';
+        $fotoSatelit = isset($body['fotoSatelit']) ? trim($body['fotoSatelit']) : '';
 
         try {
             $stmtIns = $pdo->prepare("
@@ -161,12 +163,12 @@ switch ($method) {
                     `id`, `satdik_id`, `nama_bidang`, `kode_bmn`, `nup`,
                     `luas_m2`, `luas_ha`, `status_sertifikat`, `no_sertifikat`,
                     `tanggal_sertifikat`, `atas_nama`, `peruntukan`, `status_pemanfaatan`,
-                    `alamat`, `kota`, `provinsi`, `tahun_perolehan`, `asal_perolehan`, `keterangan`
+                    `alamat`, `kota`, `provinsi`, `tahun_perolehan`, `asal_perolehan`, `keterangan`, `foto_satelit`
                 ) VALUES (
                     :id, :satdik_id, :nama_bidang, :kode_bmn, :nup,
                     :luas_m2, :luas_ha, :status_sertifikat, :no_sertifikat,
                     :tanggal_sertifikat, :atas_nama, :peruntukan, :status_pemanfaatan,
-                    :alamat, :kota, :provinsi, :tahun_perolehan, :asal_perolehan, :keterangan
+                    :alamat, :kota, :provinsi, :tahun_perolehan, :asal_perolehan, :keterangan, :foto_satelit
                 )
             ");
 
@@ -190,6 +192,7 @@ switch ($method) {
                 ':tahun_perolehan' => $tahunPerolehan,
                 ':asal_perolehan' => $asalPerolehan,
                 ':keterangan' => $keterangan,
+                ':foto_satelit' => $fotoSatelit,
             ]);
 
             $stmtGet = $pdo->prepare("SELECT * FROM `tanah_bidang` WHERE `id` = :id");
@@ -253,6 +256,7 @@ switch ($method) {
             $tahunPerolehan = isset($body['tahunPerolehan']) ? (int) $body['tahunPerolehan'] : $existing['tahun_perolehan'];
             $asalPerolehan = isset($body['asalPerolehan']) ? trim($body['asalPerolehan']) : $existing['asal_perolehan'];
             $keterangan = isset($body['keterangan']) ? trim($body['keterangan']) : $existing['keterangan'];
+            $fotoSatelit = isset($body['fotoSatelit']) ? trim($body['fotoSatelit']) : ($existing['foto_satelit'] ?? '');
 
             $stmtUpd = $pdo->prepare("
                 UPDATE `tanah_bidang` SET
@@ -273,7 +277,8 @@ switch ($method) {
                     `provinsi` = :provinsi,
                     `tahun_perolehan` = :tahun_perolehan,
                     `asal_perolehan` = :asal_perolehan,
-                    `keterangan` = :keterangan
+                    `keterangan` = :keterangan,
+                    `foto_satelit` = :foto_satelit
                 WHERE `id` = :id
             ");
 
@@ -297,6 +302,7 @@ switch ($method) {
                 ':tahun_perolehan' => $tahunPerolehan,
                 ':asal_perolehan' => $asalPerolehan,
                 ':keterangan' => $keterangan,
+                ':foto_satelit' => $fotoSatelit,
             ]);
 
             $stmtGet = $pdo->prepare("SELECT * FROM `tanah_bidang` WHERE `id` = :id");

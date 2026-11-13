@@ -8,16 +8,18 @@
 (function (window) {
   'use strict';
 
-  const STORAGE_KEY = 'kkp_sarpras_pembelajaran_v1';
+  const STORAGE_KEY = 'kkp_sarpras_pembelajaran_v2';
+  const LEGACY_STORAGE_KEY = 'kkp_sarpras_pembelajaran_v1';
 
   const INITIAL_FACILITIES = [
-    // 1. POLITEKNIK AUP JAKARTA
+    // 1. POLITEKNIK AUP (3 LOKASI KAMPUS: JAKARTA, BOGOR, SERANG)
     {
       id: 'KLS-AUP-01',
       satdikId: 'poltek-aup',
+      kampus: 'Kampus Jakarta',
       category: 'kelas',
       name: 'Smart Classroom Pascasarjana & Sarjana Terapan',
-      gedung: 'Gedung Rektorat Lt. 3',
+      gedung: 'Gedung Rektorat Lt. 3 (Pasar Minggu)',
       luasM2: 96,
       kapasitas: 40,
       kondisi: 'Baik',
@@ -25,14 +27,15 @@
       spesifikasi: 'Interactive Smartboard 86", Sound System Konferensi, 40 Kursi Ergonomis, Dual AC 2 PK, High Speed Wi-Fi 100 Mbps',
       sertifikasi: 'Standard Smart Class BPPSDM KP',
       tahunPengadaan: 2023,
-      keterangan: 'Digunakan untuk perkuliahan hybrid, sidang tesis pascasarjana, dan kuliah tamu internasional.'
+      keterangan: 'Digunakan untuk perkuliahan hybrid, sidang tesis pascasarjana, dan kuliah tamu internasional Kampus Jakarta.'
     },
     {
       id: 'KLS-AUP-02',
       satdikId: 'poltek-aup',
+      kampus: 'Kampus Jakarta',
       category: 'kelas',
       name: 'Ruang Kuliah Bersama Teori A-1 s/d A-4',
-      gedung: 'Gedung Kuliah Bersama Lt. 2',
+      gedung: 'Gedung Kuliah Bersama Lt. 2 (Pasar Minggu)',
       luasM2: 240,
       kapasitas: 140,
       kondisi: 'Baik',
@@ -40,14 +43,15 @@
       spesifikasi: '4 Ruang Partisi Akustik, Laser Projector 4000 Lumens, Meja/Kursi Taruna Standard STCW, AC Split',
       sertifikasi: 'Standard Akademik KKP',
       tahunPengadaan: 2021,
-      keterangan: 'Ruang kuliah reguler taruna tingkat I dan II seluruh prodi.'
+      keterangan: 'Ruang kuliah reguler taruna tingkat I dan II seluruh prodi di Kampus Jakarta Pasar Minggu.'
     },
     {
       id: 'LIB-AUP-01',
       satdikId: 'poltek-aup',
+      kampus: 'Kampus Jakarta',
       category: 'perpustakaan',
       name: 'Gedung Perpustakaan Maritim Terpadu AUP',
-      gedung: 'Gedung Perpustakaan Mandiri 2 Lantai',
+      gedung: 'Gedung Perpustakaan Mandiri 2 Lantai (Pasar Minggu)',
       luasM2: 520,
       kapasitas: 140,
       kondisi: 'Baik',
@@ -60,6 +64,7 @@
     {
       id: 'TFA-AUP-01',
       satdikId: 'poltek-aup',
+      kampus: 'Kampus Jakarta',
       category: 'tefa',
       name: 'TEFA Mini Retort & Canning Processing Plant',
       gedung: 'Gedung Workshop TPHP Pasar Minggu',
@@ -70,14 +75,15 @@
       spesifikasi: 'Mesin Seamer Kaleng Otomatis, Autoclave Retort Pouch Sterilization 200L, De-boner Fish Meat Separator, Cold Storage -20°C Kapasitas 5 Ton',
       sertifikasi: 'Sertifikat Kelayakan Pengolahan (SKP) & Halal BPJPH',
       tahunPengadaan: 2022,
-      keterangan: 'Memproduksi olahan bandeng duri lunak kaleng, tuna pouch, dan abon ikan kemasan komersial.'
+      keterangan: 'Memproduksi olahan bandeng duri lunak kaleng, tuna pouch, dan abon ikan kemasan komersial di Kampus Jakarta.'
     },
     {
       id: 'TFA-AUP-02',
       satdikId: 'poltek-aup',
+      kampus: 'Kampus Bogor',
       category: 'tefa',
       name: 'TEFA Hatchery Ikan Hias & Koi Center',
-      gedung: 'Unit Pelaksana Teknis Budidaya AUP',
+      gedung: 'Unit Pelaksana Teknis Budidaya AUP Cikaret',
       luasM2: 450,
       kapasitas: 30,
       kondisi: 'Baik',
@@ -85,14 +91,15 @@
       spesifikasi: '24 Akuarium Kaca Riset, 8 Kolam Fiber Induk Koi & Maskoki, Sistem RAS Filtrasi Biologis, Lab Pakan Alami Chlorella & Artemia',
       sertifikasi: 'Cara Pembenihan Ikan yang Baik (CPIB) Bintang 2',
       tahunPengadaan: 2021,
-      keterangan: 'Unit inkubator bisnis taruna prodi Teknologi Akuakultur.'
+      keterangan: 'Unit inkubator bisnis taruna prodi Teknologi Akuakultur & Penyuluhan di Kampus Bogor Cikaret.'
     },
     {
       id: 'SIM-AUP-01',
       satdikId: 'poltek-aup',
+      kampus: 'Kampus Jakarta',
       category: 'simulator',
       name: 'Full Mission Bridge Simulator (FMBS) 360° Visual',
-      gedung: 'Gedung Simulator Lt. 2',
+      gedung: 'Gedung Simulator Lt. 2 (Pasar Minggu)',
       luasM2: 180,
       kapasitas: 25,
       kondisi: 'Baik',
@@ -100,14 +107,15 @@
       spesifikasi: 'Transas Navi-Trainer Pro 5000, 360° Cylindrical Projection, Konsol Kemudi Asli Kapal Penangkap Ikan, Radar/ARPA Furuno Integrasi, ECDIS, Weather Simulation Engine',
       sertifikasi: 'Approval STCW 1978 amdt 2010 Ditjen Hubla & DNV-GL Class A',
       tahunPengadaan: 2022,
-      keterangan: 'Ujian keahlian pelaut ANKPIN-I dan sertifikasi simulator resmi taruna Nautika.'
+      keterangan: 'Ujian keahlian pelaut ANKPIN-I dan sertifikasi simulator resmi taruna Nautika Kampus Jakarta.'
     },
     {
       id: 'SIM-AUP-02',
       satdikId: 'poltek-aup',
+      kampus: 'Kampus Jakarta',
       category: 'simulator',
       name: 'Engine Room Simulator (ERS) Diesel Propulsion',
-      gedung: 'Gedung Simulator Lt. 1',
+      gedung: 'Gedung Simulator Lt. 1 (Pasar Minggu)',
       luasM2: 160,
       kapasitas: 20,
       kondisi: 'Baik',
@@ -115,7 +123,55 @@
       spesifikasi: 'Kongsberg K-Sim Engine Low/Medium Speed Diesel, 3D Virtual Engine Room, Main Switchboard, Pumping System, Alarm & Emergency Shutdown Control',
       sertifikasi: 'Approval STCW ATKPIN-I Ditjen Hubla',
       tahunPengadaan: 2021,
-      keterangan: 'Pelatihan operasional kamar mesin, troubleshooting boiler & sistem refrigerasi kapal ikan.'
+      keterangan: 'Pelatihan operasional kamar mesin, troubleshooting boiler & sistem refrigerasi kapal ikan di Kampus Jakarta.'
+    },
+    {
+      id: 'TFA-AUP-03',
+      satdikId: 'poltek-aup',
+      kampus: 'Kampus Serang',
+      category: 'tefa',
+      name: 'TEFA Tambak Budidaya Udang & Ikan Payau Serang',
+      gedung: 'Instalasi Praktik Tambak Banten (Kasemen, Serang)',
+      luasM2: 600,
+      kapasitas: 40,
+      kondisi: 'Baik',
+      statusOp: 'Aktif Digunakan',
+      spesifikasi: 'Tambak Intensif HDPE 4 Petak, Kincir Aerasi 1HP, Genset Cadangan 16 KVA, Laboratorium Kualitas Air & Salinitas',
+      sertifikasi: 'Cara Budidaya Ikan yang Baik (CBIB) Bintang 3',
+      tahunPengadaan: 2022,
+      keterangan: 'Sentra TEFA praktikum taruna budidaya air payau dan udang vannamei di Kampus Serang.'
+    },
+    {
+      id: 'KLS-AUP-03',
+      satdikId: 'poltek-aup',
+      kampus: 'Kampus Serang',
+      category: 'kelas',
+      name: 'Ruang Perkuliahan Vokasi Akuakultur Kampus Serang',
+      gedung: 'Gedung Kuliah Kampus Serang Lt. 1',
+      luasM2: 120,
+      kapasitas: 60,
+      kondisi: 'Baik',
+      statusOp: 'Aktif Digunakan',
+      spesifikasi: 'LCD Projector 3500 Lumens, Sound System, AC Split 2 PK, Whiteboard Magnetik, 60 Kursi Kuliah',
+      sertifikasi: 'Standard Akademik KKP',
+      tahunPengadaan: 2021,
+      keterangan: 'Ruang kuliah taruna program studi budidaya perikanan air payau & laut di Kampus Serang Banten.'
+    },
+    {
+      id: 'KLS-AUP-04',
+      satdikId: 'poltek-aup',
+      kampus: 'Kampus Bogor',
+      category: 'kelas',
+      name: 'Ruang Perkuliahan & Studio Penyuluhan Kampus Bogor',
+      gedung: 'Gedung Cikaret Lt. 2 (Bogor Selatan)',
+      luasM2: 110,
+      kapasitas: 50,
+      kondisi: 'Baik',
+      statusOp: 'Aktif Digunakan',
+      spesifikasi: 'Studio Mini Audio-Visual Penyuluhan, Smart TV 75", Sound System Konferensi, AC Split, Wi-Fi 50 Mbps',
+      sertifikasi: 'Standard Akademik KKP',
+      tahunPengadaan: 2022,
+      keterangan: 'Perkuliahan prodi Penyuluhan Perikanan dan praktikum komunikasi massa di Kampus Bogor.'
     },
 
     // 2. POLITEKNIK KP SIDOARJO
@@ -1206,6 +1262,7 @@
   function loadFacilities() {
     try {
       if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem(LEGACY_STORAGE_KEY);
         const raw = localStorage.getItem(STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
