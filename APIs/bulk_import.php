@@ -58,6 +58,37 @@ function formatBulkAsramaRekapOutput(array $r, callable $toNullableFloat): array
     ];
 }
 
+function formatBulkTanahOutput(array $r, array $satdikNameMap): array {
+    $sid = $r['satdik_id'];
+    $sName = $satdikNameMap[$sid] ?? $sid;
+    $luasM2 = (float)($r['luas_m2'] ?? 0);
+    $luasHa = !empty($r['luas_ha']) ? (float)$r['luas_ha'] : round($luasM2 / 10000, 4);
+
+    return [
+        'id' => $r['id'],
+        'satdikId' => $sid,
+        'satdikName' => $sName,
+        'satdikShortName' => $sName,
+        'namaBidang' => $r['nama_bidang'],
+        'kodeBmn' => $r['kode_bmn'] ?? '2.01.01.01.001.0001',
+        'nup' => (int)($r['nup'] ?? 1),
+        'luasM2' => $luasM2,
+        'luasHa' => $luasHa,
+        'statusSertifikat' => $r['status_sertifikat'] ?? 'Sertifikat Hak Pakai (SHP)',
+        'noSertifikat' => $r['no_sertifikat'] ?? '-',
+        'tanggalSertifikat' => $r['tanggal_sertifikat'] ?? '-',
+        'atasNama' => $r['atas_nama'] ?? 'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan',
+        'peruntukan' => $r['peruntukan'] ?? 'Kampus & Fasilitas Akademik',
+        'statusPemanfaatan' => $r['status_pemanfaatan'] ?? 'Digunakan Sendiri (Operasional)',
+        'alamat' => $r['alamat'] ?? '',
+        'kota' => $r['kota'] ?? '',
+        'provinsi' => $r['provinsi'] ?? '',
+        'tahunPerolehan' => (int)($r['tahun_perolehan'] ?? 2020),
+        'asalPerolehan' => $r['asal_perolehan'] ?? 'APBN',
+        'keterangan' => $r['keterangan'] ?? '',
+    ];
+}
+
 function recalculateBulkAsramaRekap(PDO $pdo, string $satdikId, callable $toNullableFloat): ?array {
     $stmt = $pdo->prepare("
         SELECT 
@@ -372,8 +403,9 @@ if (!is_array($payload)) {
 
 $inBuildings = isset($payload['buildings']) && is_array($payload['buildings']) ? $payload['buildings'] : [];
 $inStandar = isset($payload['standarItems']) && is_array($payload['standarItems']) ? $payload['standarItems'] : [];
+$inTanah = isset($payload['tanahParcels']) && is_array($payload['tanahParcels']) ? $payload['tanahParcels'] : [];
 
-if (empty($inBuildings) && empty($inStandar)) {
+if (empty($inBuildings) && empty($inStandar) && empty($inTanah)) {
     jsonResponse([
         'status' => 'error',
         'message' => 'Tidak ada baris data valid untuk diimpor.'
@@ -393,6 +425,7 @@ try {
 
 $createdBuildings = [];
 $createdStandarItems = [];
+$createdTanahParcels = [];
 $affectedAsramaSatdik = [];
 $affectedStandarBidang = [];
 
@@ -615,9 +648,90 @@ try {
         }
     }
 
+    // ---------------------------------------------------------
+    // 3. BATCH INSERT: BIDANG TANAH & LAHAN (KIB A BMN)
+    // ---------------------------------------------------------
+    if (!empty($inTanah)) {
+        $stmtCheckTnhId = $pdo->prepare("SELECT COUNT(*) FROM tanah_bidang WHERE id = :id");
+        $stmtInsTnh = $pdo->prepare("
+            INSERT INTO tanah_bidang (
+                id, satdik_id, nama_bidang, kode_bmn, nup,
+                luas_m2, luas_ha, status_sertifikat, no_sertifikat,
+                tanggal_sertifikat, atas_nama, peruntukan, status_pemanfaatan,
+                alamat, kota, provinsi, tahun_perolehan, asal_perolehan, keterangan
+            ) VALUES (
+                :id, :satdik_id, :nama_bidang, :kode_bmn, :nup,
+                :luas_m2, :luas_ha, :status_sertifikat, :no_sertifikat,
+                :tanggal_sertifikat, :atas_nama, :peruntukan, :status_pemanfaatan,
+                :alamat, :kota, :provinsi, :tahun_perolehan, :asal_perolehan, :keterangan
+            )
+        ");
+        $stmtGetTnh = $pdo->prepare("SELECT * FROM tanah_bidang WHERE id = :id");
+
+        foreach ($inTanah as $idx => $t) {
+            $sid = trim($t['satdikId'] ?? '');
+            $nama = trim($t['namaBidang'] ?? ($t['nama'] ?? ''));
+            if (!$sid || !$nama) continue;
+
+            $prefix = strtoupper(substr(preg_replace('/[^a-zA-Z0-9]/', '', $sid), -3));
+            $tId = !empty($t['id']) ? trim($t['id']) : ('TNH-' . $prefix . '-' . time() . '-' . ($idx + 1) . '-' . rand(10, 99));
+
+            // Pastikan ID unik
+            $stmtCheckTnhId->execute([':id' => $tId]);
+            if ($stmtCheckTnhId->fetchColumn() > 0) {
+                $tId = 'TNH-' . $prefix . '-' . time() . '-' . ($idx + 1) . '-' . rand(100, 999);
+            }
+
+            $kodeBmn = !empty($t['kodeBmn']) ? trim($t['kodeBmn']) : '2.01.01.01.001.0001';
+            $nup = isset($t['nup']) ? max(1, (int)$t['nup']) : ($idx + 1);
+            $luasM2 = isset($t['luasM2']) ? max(0, (float)$t['luasM2']) : 0;
+            $luasHa = isset($t['luasHa']) && $t['luasHa'] > 0 ? (float)$t['luasHa'] : round($luasM2 / 10000, 4);
+            $statusSertifikat = !empty($t['statusSertifikat']) ? trim($t['statusSertifikat']) : 'Sertifikat Hak Pakai (SHP)';
+            $noSertifikat = isset($t['noSertifikat']) ? trim($t['noSertifikat']) : '-';
+            $tanggalSertifikat = isset($t['tanggalSertifikat']) ? trim($t['tanggalSertifikat']) : '-';
+            $atasNama = !empty($t['atasNama']) ? trim($t['atasNama']) : 'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan';
+            $peruntukan = !empty($t['peruntukan']) ? trim($t['peruntukan']) : 'Kampus & Fasilitas Akademik';
+            $statusPemanfaatan = !empty($t['statusPemanfaatan']) ? trim($t['statusPemanfaatan']) : 'Digunakan Sendiri (Operasional)';
+            $alamat = isset($t['alamat']) ? trim($t['alamat']) : '';
+            $kota = isset($t['kota']) ? trim($t['kota']) : '';
+            $provinsi = isset($t['provinsi']) ? trim($t['provinsi']) : '';
+            $tahunPerolehan = isset($t['tahunPerolehan']) ? max(1950, (int)$t['tahunPerolehan']) : 2020;
+            $asalPerolehan = !empty($t['asalPerolehan']) ? trim($t['asalPerolehan']) : 'APBN';
+            $keterangan = isset($t['keterangan']) ? trim($t['keterangan']) : '';
+
+            $stmtInsTnh->execute([
+                ':id' => $tId,
+                ':satdik_id' => $sid,
+                ':nama_bidang' => $nama,
+                ':kode_bmn' => $kodeBmn,
+                ':nup' => $nup,
+                ':luas_m2' => $luasM2,
+                ':luas_ha' => $luasHa,
+                ':status_sertifikat' => $statusSertifikat,
+                ':no_sertifikat' => $noSertifikat,
+                ':tanggal_sertifikat' => $tanggalSertifikat,
+                ':atas_nama' => $atasNama,
+                ':peruntukan' => $peruntukan,
+                ':status_pemanfaatan' => $statusPemanfaatan,
+                ':alamat' => $alamat,
+                ':kota' => $kota,
+                ':provinsi' => $provinsi,
+                ':tahun_perolehan' => $tahunPerolehan,
+                ':asal_perolehan' => $asalPerolehan,
+                ':keterangan' => $keterangan,
+            ]);
+
+            $stmtGetTnh->execute([':id' => $tId]);
+            $inserted = $stmtGetTnh->fetch();
+            if ($inserted) {
+                $createdTanahParcels[] = formatBulkTanahOutput($inserted, $satdikNameMap);
+            }
+        }
+    }
+
     $pdo->commit();
 
-    $totalInserted = count($createdBuildings) + count($createdStandarItems);
+    $totalInserted = count($createdBuildings) + count($createdStandarItems) + count($createdTanahParcels);
 
     jsonResponse([
         'status' => 'success',
@@ -625,6 +739,7 @@ try {
         'counts' => [
             'buildings' => count($createdBuildings),
             'standarItems' => count($createdStandarItems),
+            'tanahParcels' => count($createdTanahParcels),
             'total' => $totalInserted,
         ],
         'buildings' => $createdBuildings,
@@ -632,6 +747,7 @@ try {
         'standarItems' => $createdStandarItems,
         'standarBidang' => $updatedStandarBidang,
         'standarRekap' => $updatedStandarRekap,
+        'tanahParcels' => $createdTanahParcels,
     ], 201);
 } catch (Throwable $e) {
     if ($pdo->inTransaction()) {

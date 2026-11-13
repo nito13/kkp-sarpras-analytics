@@ -241,3 +241,32 @@ CREATE TABLE IF NOT EXISTS `tambak_unit` (
     INDEX `idx_tambak_unit_kondisi` (`kondisi`),
     CONSTRAINT `fk_tambak_unit_satdik` FOREIGN KEY (`satdik_id`) REFERENCES `satdik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 11. Detail Bidang Tanah dan Lahan Satuan Pendidikan (KIB A BMN)
+CREATE TABLE IF NOT EXISTS `tanah_bidang` (
+    `id` VARCHAR(64) NOT NULL PRIMARY KEY,
+    `satdik_id` VARCHAR(50) NOT NULL,
+    `nama_bidang` VARCHAR(255) NOT NULL,
+    `kode_bmn` VARCHAR(100) DEFAULT '2.01.01.01.001.0001',
+    `nup` INT DEFAULT 1,
+    `luas_m2` DECIMAL(14, 2) NOT NULL DEFAULT 0.00,
+    `luas_ha` DECIMAL(10, 4) NOT NULL DEFAULT 0.0000,
+    `status_sertifikat` VARCHAR(150) DEFAULT 'Sertifikat Hak Pakai (SHP)',
+    `no_sertifikat` VARCHAR(200) DEFAULT '-',
+    `tanggal_sertifikat` VARCHAR(50) DEFAULT '-',
+    `atas_nama` VARCHAR(255) DEFAULT 'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan',
+    `peruntukan` VARCHAR(150) DEFAULT 'Kampus & Fasilitas Akademik',
+    `status_pemanfaatan` VARCHAR(150) DEFAULT 'Digunakan Sendiri (Operasional)',
+    `alamat` TEXT NULL,
+    `kota` VARCHAR(100) DEFAULT '',
+    `provinsi` VARCHAR(100) DEFAULT '',
+    `tahun_perolehan` INT DEFAULT 2020,
+    `asal_perolehan` VARCHAR(100) DEFAULT 'APBN',
+    `keterangan` TEXT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX `idx_tanah_satdik` (`satdik_id`),
+    INDEX `idx_tanah_sertifikat` (`status_sertifikat`),
+    INDEX `idx_tanah_peruntukan` (`peruntukan`),
+    CONSTRAINT `fk_tanah_bidang_satdik` FOREIGN KEY (`satdik_id`) REFERENCES `satdik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

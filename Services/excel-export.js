@@ -153,7 +153,7 @@ function createCell(val, style = {}, type = null) {
     const bgRowColor = isEven ? 'F8FAFC' : 'FFFFFF';
     const base = { font: { name: 'Calibri', sz: 10 }, border: borderThin, fill: { fgColor: { rgb: bgRowColor } } };
 
-    const centerStyle = { ...base, alignment: { horizontal: 'center' } };
+    const centerP1 = { ...base, alignment: { horizontal: 'center' } };
     const leftBold = { ...base, font: { ...base.font, bold: true }, alignment: { horizontal: 'left' } };
     const left = { ...base, alignment: { horizontal: 'left' } };
     const condStyle = { ...base, font: { ...base.font, bold: true, color: { rgb: '991B1B' } }, fill: { fgColor: { rgb: 'FEE2E2' } }, alignment: { horizontal: 'center' } };
@@ -161,8 +161,8 @@ function createCell(val, style = {}, type = null) {
     const approvedStyle = { ...base, font: { ...base.font, bold: true, color: { rgb: '166534' } }, fill: { fgColor: { rgb: 'DCFCE7' } }, alignment: { horizontal: 'center' } };
 
     const cells = [
-      createCell(idx + 1, centerStyle),
-      createCell(a.id, centerStyle, 's'),
+      createCell(idx + 1, centerP1),
+      createCell(a.id, centerP1, 's'),
       createCell(a.name, leftBold),
       createCell(a.satdikName || '-', left),
       createCell(a.category || '-', left),
@@ -699,6 +699,8 @@ function exportComprehensiveToExcel(params = {}) {
     asramaData = {},
     tambakData = {},
     standarData = {},
+    pembelajaranData = [],
+    tanahData = [],
     satdikList = [],
     currentUser = null,
     options = {}
@@ -744,6 +746,16 @@ function exportComprehensiveToExcel(params = {}) {
   const itemsStandar = (Array.isArray(standarData?.items) && standarData.items.length > 0)
     ? standarData.items
     : (Array.isArray(window.SARPRAS_STANDAR?.items) ? window.SARPRAS_STANDAR.items : []);
+
+  const effectivePembelajaran = (Array.isArray(params.pembelajaranData) && params.pembelajaranData.length > 0)
+    ? params.pembelajaranData
+    : (Array.isArray(window.SARPRAS_PEMBELAJARAN?.getAll ? window.SARPRAS_PEMBELAJARAN.getAll() : [])
+       ? window.SARPRAS_PEMBELAJARAN.getAll()
+       : (window.SARPRAS_PEMBELAJARAN?.initialData || []));
+
+  const effectiveTanahData = Array.isArray(params.tanahData)
+    ? params.tanahData
+    : (window.SARPRAS_TANAH?.getAll ? window.SARPRAS_TANAH.getAll() : []);
 
   const bidangMap = {};
   bidangStandar.forEach(b => { bidangMap[b.id] = b; });
@@ -1421,6 +1433,346 @@ function exportComprehensiveToExcel(params = {}) {
   ws6['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: row6, c: 11 } });
   XLSX.utils.book_append_sheet(wb, ws6, 'Rincian Item Standar');
 
+  // =========================================================================
+  // SHEET 8: REKAPITULASI SARPRAS PEMBELAJARAN (18 SATDIK)
+  // =========================================================================
+  const wsPemb1 = {};
+  wsPemb1['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', kopStyleKemen);
+  wsPemb1['A2'] = createCell('BADAN PENYULUHAN DAN PENGEMBANGAN SDM KELAUTAN DAN PERIKANAN (BPPSDM KP)', kopStyleBadan);
+  wsPemb1['A3'] = createCell('PUSAT PENDIDIKAN KELAUTAN DAN PERIKANAN (PUSDIK KP)', kopStylePusat);
+  wsPemb1['A4'] = createCell('Sistem Informasi & Analitik Sarana dan Prasarana Satuan Pendidikan KP', kopStyleApp);
+  wsPemb1['A6'] = createCell('REKAPITULASI SARPRAS PEMBELAJARAN (RUANG KELAS, PERPUSTAKAAN, TEFA & SIMULATOR)', titleStyle);
+  wsPemb1['A7'] = createCell(`Cakupan: ${filterSatdikName} | Waktu Ekspor: ${printedAt} WIB | Pengguna: ${userName} (${userRole})`, kopStyleApp);
+
+  const pembRekapHeaders = [
+    'No', 'Kode Satdik', 'Nama Satuan Pendidikan', 'Jenjang', 'Kota / Lokasi',
+    'R. Kelas (Unit)', 'Kapasitas Kelas (Kursi)', 'Perpustakaan (Unit)', 'Kapasitas Perpus (Orang)',
+    'TEFA (Unit)', 'Simulator (Unit)', 'Total Fasilitas', 'Total Luas (m²)', 'Kondisi Baik', 'Rusak Ringan', 'Rusak Berat'
+  ];
+
+  pembRekapHeaders.forEach((h, c) => {
+    wsPemb1[XLSX.utils.encode_cell({ r: 8, c })] = createCell(h, tableHeaderStyle);
+  });
+
+  const baseP1 = { font: { name: 'Calibri', sz: 10, color: { rgb: '0F172A' } }, border: borderThin, alignment: { vertical: 'center' } };
+  const centerP1 = { ...baseP1, alignment: { horizontal: 'center', vertical: 'center' } };
+  const leftP1 = { ...baseP1, alignment: { horizontal: 'left', vertical: 'center' } };
+  const leftBoldP1 = { ...leftP1, font: { ...baseP1.font, bold: true } };
+  const numIntP1 = { ...baseP1, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0' };
+  const numDecP1 = { ...baseP1, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0.00' };
+
+  let rowPemb1 = 9;
+  let totKelasU = 0, totKelasK = 0, totLibU = 0, totLibK = 0, totTefaU = 0, totSimU = 0, totAllU = 0, totAllL = 0, totB = 0, totRR = 0, totRB = 0;
+
+  effectiveSatdikList.forEach((sat, idx) => {
+    const satFac = effectivePembelajaran.filter(f => f.satdikId === sat.id);
+    const kelasList = satFac.filter(f => f.category === 'kelas');
+    const libList = satFac.filter(f => f.category === 'perpustakaan');
+    const tefaList = satFac.filter(f => f.category === 'tefa');
+    const simList = satFac.filter(f => f.category === 'simulator');
+
+    const kU = kelasList.length;
+    const kK = kelasList.reduce((s, f) => s + (Number(f.kapasitas) || 0), 0);
+    const lU = libList.length;
+    const lK = libList.reduce((s, f) => s + (Number(f.kapasitas) || 0), 0);
+    const tU = tefaList.length;
+    const sU = simList.length;
+    const totalU = satFac.length;
+    const totalL = satFac.reduce((s, f) => s + (Number(f.luasM2) || 0), 0);
+    const bCount = satFac.filter(f => f.kondisi === 'Baik').length;
+    const rrCount = satFac.filter(f => f.kondisi === 'Rusak Ringan').length;
+    const rbCount = satFac.filter(f => f.kondisi === 'Rusak Berat').length;
+
+    totKelasU += kU; totKelasK += kK; totLibU += lU; totLibK += lK;
+    totTefaU += tU; totSimU += sU; totAllU += totalU; totAllL += totalL;
+    totB += bCount; totRR += rrCount; totRB += rbCount;
+
+    const rowVals = [
+      [idx + 1, centerP1, 'n'],
+      [sat.id, centerP1, 's'],
+      [sat.name, leftBoldP1, 's'],
+      [sat.type || 'Politeknik', centerP1, 's'],
+      [sat.kota || sat.province || '-', leftP1, 's'],
+      [kU, numIntP1, 'n'],
+      [kK, numIntP1, 'n'],
+      [lU, numIntP1, 'n'],
+      [lK, numIntP1, 'n'],
+      [tU, numIntP1, 'n'],
+      [sU, numIntP1, 'n'],
+      [totalU, numIntP1, 'n'],
+      [totalL, numDecP1, 'n'],
+      [bCount, centerP1, 'n'],
+      [rrCount, centerP1, 'n'],
+      [rbCount, centerP1, 'n']
+    ];
+
+    rowVals.forEach(([v, st, t], c) => {
+      wsPemb1[XLSX.utils.encode_cell({ r: rowPemb1, c })] = createCell(v, st, t);
+    });
+    rowPemb1++;
+  });
+
+  // Baris Total Rekap Pembelajaran
+  const totalPembRow = [
+    ['TOTAL NASIONAL', { ...leftBoldP1, fill: { fgColor: { rgb: 'E2E8F0' } } }, 's'],
+    ['', null, 's'], ['', null, 's'], ['', null, 's'], ['', null, 's'],
+    [totKelasU, { ...numIntP1, font: { bold: true }, fill: { fgColor: { rgb: 'E2E8F0' } } }, 'n'],
+    [totKelasK, { ...numIntP1, font: { bold: true }, fill: { fgColor: { rgb: 'E2E8F0' } } }, 'n'],
+    [totLibU, { ...numIntP1, font: { bold: true }, fill: { fgColor: { rgb: 'E2E8F0' } } }, 'n'],
+    [totLibK, { ...numIntP1, font: { bold: true }, fill: { fgColor: { rgb: 'E2E8F0' } } }, 'n'],
+    [totTefaU, { ...numIntP1, font: { bold: true }, fill: { fgColor: { rgb: 'E2E8F0' } } }, 'n'],
+    [totSimU, { ...numIntP1, font: { bold: true }, fill: { fgColor: { rgb: 'E2E8F0' } } }, 'n'],
+    [totAllU, { ...numIntP1, font: { bold: true }, fill: { fgColor: { rgb: 'E2E8F0' } } }, 'n'],
+    [totAllL, { ...numDecP1, font: { bold: true }, fill: { fgColor: { rgb: 'E2E8F0' } } }, 'n'],
+    [totB, { ...centerP1, font: { bold: true }, fill: { fgColor: { rgb: 'E2E8F0' } } }, 'n'],
+    [totRR, { ...centerP1, font: { bold: true }, fill: { fgColor: { rgb: 'E2E8F0' } } }, 'n'],
+    [totRB, { ...centerP1, font: { bold: true }, fill: { fgColor: { rgb: 'E2E8F0' } } }, 'n']
+  ];
+  totalPembRow.forEach(([v, st, t], c) => {
+    if (st) wsPemb1[XLSX.utils.encode_cell({ r: rowPemb1, c })] = createCell(v, st, t);
+  });
+
+  wsPemb1['!merges'] = [
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 15 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 15 } },
+    { s: { r: 2, c: 0 }, e: { r: 2, c: 15 } },
+    { s: { r: 3, c: 0 }, e: { r: 3, c: 15 } },
+    { s: { r: 5, c: 0 }, e: { r: 5, c: 15 } },
+    { s: { r: 6, c: 0 }, e: { r: 6, c: 15 } },
+    { s: { r: rowPemb1, c: 0 }, e: { r: rowPemb1, c: 4 } }
+  ];
+  wsPemb1['!cols'] = [
+    { wch: 6 }, { wch: 14 }, { wch: 34 }, { wch: 12 }, { wch: 20 },
+    { wch: 14 }, { wch: 20 }, { wch: 16 }, { wch: 22 },
+    { wch: 12 }, { wch: 14 }, { wch: 14 }, { wch: 16 }, { wch: 13 }, { wch: 13 }, { wch: 13 }
+  ];
+  wsPemb1['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: rowPemb1 + 1, c: 15 } });
+  XLSX.utils.book_append_sheet(wb, wsPemb1, 'Rekap Pembelajaran');
+
+  // =========================================================================
+  // SHEET 9: DETAIL SARPRAS PEMBELAJARAN (KELAS, PERPUS, TEFA, SIMULATOR)
+  // =========================================================================
+  const wsPemb2 = {};
+  wsPemb2['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', kopStyleKemen);
+  wsPemb2['A2'] = createCell('BADAN PENYULUHAN DAN PENGEMBANGAN SDM KELAUTAN DAN PERIKANAN (BPPSDM KP)', kopStyleBadan);
+  wsPemb2['A3'] = createCell('PUSAT PENDIDIKAN KELAUTAN DAN PERIKANAN (PUSDIK KP)', kopStylePusat);
+  wsPemb2['A4'] = createCell('Sistem Informasi & Analitik Sarana dan Prasarana Satuan Pendidikan KP', kopStyleApp);
+  wsPemb2['A6'] = createCell('DETAIL INVENTARIS FASILITAS PEMBELAJARAN SATUAN PENDIDIKAN KP', titleStyle);
+  wsPemb2['A7'] = createCell(`Cakupan: ${filterSatdikName} | Waktu Ekspor: ${printedAt} WIB | Pengguna: ${userName} (${userRole})`, kopStyleApp);
+
+  const pembDetailHeaders = [
+    'No', 'ID Fasilitas', 'Satuan Pendidikan', 'Kategori', 'Nama Fasilitas',
+    'Gedung / Lokasi', 'Luas (m²)', 'Kapasitas (Taruna)', 'Kondisi Fisik',
+    'Status Operasional', 'Sertifikasi / Akreditasi', 'Tahun', 'Spesifikasi & Fasilitas Penunjang', 'Keterangan'
+  ];
+
+  pembDetailHeaders.forEach((h, c) => {
+    wsPemb2[XLSX.utils.encode_cell({ r: 8, c })] = createCell(h, tableHeaderStyle);
+  });
+
+  const categoryNameMap = {
+    kelas: 'Ruang Kelas',
+    perpustakaan: 'Perpustakaan',
+    tefa: 'Teaching Factory (TEFA)',
+    simulator: 'Simulator Maritim'
+  };
+
+  const baseP2 = { font: { name: 'Calibri', sz: 10, color: { rgb: '0F172A' } }, border: borderThin, alignment: { vertical: 'center' } };
+  const centerP2 = { ...baseP2, alignment: { horizontal: 'center', vertical: 'center' } };
+  const leftP2 = { ...baseP2, alignment: { horizontal: 'left', vertical: 'center' } };
+  const leftBoldP2 = { ...leftP2, font: { ...baseP2.font, bold: true } };
+  const numIntP2 = { ...baseP2, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0' };
+  const numDecP2 = { ...baseP2, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0.00' };
+
+  let rowPemb2 = 9;
+  effectivePembelajaran.forEach((f, idx) => {
+    const sat = satdikMap[f.satdikId] || {};
+    const satName = sat.name || f.satdikName || f.satdikId;
+    const catLabel = categoryNameMap[f.category] || f.category;
+
+    const rowVals = [
+      [idx + 1, centerP2, 'n'],
+      [f.id || '-', centerP2, 's'],
+      [satName, leftBoldP2, 's'],
+      [catLabel, centerP2, 's'],
+      [f.name || '-', leftBoldP2, 's'],
+      [f.gedung || '-', leftP2, 's'],
+      [Number(f.luasM2) || 0, numDecP2, 'n'],
+      [Number(f.kapasitas) || 0, numIntP2, 'n'],
+      [f.kondisi || 'Baik', centerP2, 's'],
+      [f.statusOp || 'Aktif Digunakan', centerP2, 's'],
+      [f.sertifikasi || '-', leftP2, 's'],
+      [f.tahunPengadaan ? String(f.tahunPengadaan) : '-', centerP2, 's'],
+      [f.spesifikasi || '-', leftP2, 's'],
+      [f.keterangan || '-', leftP2, 's']
+    ];
+
+    rowVals.forEach(([v, st, t], c) => {
+      wsPemb2[XLSX.utils.encode_cell({ r: rowPemb2, c })] = createCell(v, st, t);
+    });
+    rowPemb2++;
+  });
+
+  wsPemb2['!merges'] = [
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 13 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 13 } },
+    { s: { r: 2, c: 0 }, e: { r: 2, c: 13 } },
+    { s: { r: 3, c: 0 }, e: { r: 3, c: 13 } },
+    { s: { r: 5, c: 0 }, e: { r: 5, c: 13 } },
+    { s: { r: 6, c: 0 }, e: { r: 6, c: 13 } }
+  ];
+  wsPemb2['!cols'] = [
+    { wch: 6 }, { wch: 18 }, { wch: 34 }, { wch: 22 }, { wch: 36 },
+    { wch: 26 }, { wch: 14 }, { wch: 16 }, { wch: 14 }, { wch: 18 },
+    { wch: 30 }, { wch: 10 }, { wch: 40 }, { wch: 32 }
+  ];
+  wsPemb2['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: rowPemb2, c: 13 } });
+  XLSX.utils.book_append_sheet(wb, wsPemb2, 'Detail Sarpras Pembelajaran');
+
+  // =========================================================================
+  // SHEET 10: REKAPITULASI DATA TANAH & LAHAN PER SATDIK (KIB A BMN)
+  // =========================================================================
+  const wsTanah1 = {};
+  wsTanah1['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', kopStyleKemen);
+  wsTanah1['A2'] = createCell('BADAN PENYULUHAN DAN PENGEMBANGAN SDM KELAUTAN DAN PERIKANAN (BPPSDM KP)', kopStyleBadan);
+  wsTanah1['A3'] = createCell('REKAPITULASI INVENTARIS ASET TANAH DAN LAHAN SATUAN PENDIDIKAN KP (KIB A BMN)', titleStyle);
+  wsTanah1['A4'] = createCell('Cakupan Data: Seluruh 18 Satuan Pendidikan Vokasi KKP | Dicetak: ' + printedAt, kopStyleApp);
+
+  const tnhHeaders1 = [
+    'No', 'Kode Satdik', 'Nama Satuan Pendidikan', 'Jenjang', 'Kota / Wilayah',
+    'Jumlah Bidang', 'Total Luas (m²)', 'Total Luas (Ha)', 'Bidang Bersertifikat (SHP)',
+    '% Bersertifikat'
+  ];
+  tnhHeaders1.forEach((h, c) => {
+    wsTanah1[XLSX.utils.encode_cell({ r: 5, c })] = createCell(h, tableHeaderStyle);
+  });
+
+  let rowTnh1 = 6;
+  let totBidangAll = 0;
+  let totLuasM2All = 0;
+  let totShpAll = 0;
+
+  effectiveSatdikList.forEach((sat, idx) => {
+    const parcels = effectiveTanahData.filter(p => p.satdikId === sat.id);
+    const countBidang = parcels.length;
+    const luasM2 = parcels.reduce((s, p) => s + (Number(p.luasM2) || 0), 0);
+    const luasHa = Number((luasM2 / 10000).toFixed(2));
+    const shpCount = parcels.filter(p => (p.statusSertifikat || '').includes('SHP') || (p.statusSertifikat || '').includes('Sertifikat')).length;
+    const shpPct = countBidang > 0 ? Number(((shpCount / countBidang) * 100).toFixed(1)) : 0;
+
+    totBidangAll += countBidang;
+    totLuasM2All += luasM2;
+    totShpAll += shpCount;
+
+    const rowData = [
+      [idx + 1, centerP1, 'n'],
+      [sat.id, centerP1, 's'],
+      [sat.name, leftBoldP1, 's'],
+      [sat.jenjang || sat.type, centerP1, 's'],
+      [sat.kota || '-', leftP1, 's'],
+      [countBidang, numIntP1, 'n'],
+      [luasM2, numIntP1, 'n'],
+      [luasHa, numDecP1, 'n'],
+      [shpCount, numIntP1, 'n'],
+      [shpPct / 100, numDecP1, 'n']
+    ];
+
+    rowData.forEach(([val, st, type], col) => {
+      wsTanah1[XLSX.utils.encode_cell({ r: rowTnh1, c: col })] = createCell(val, st, type);
+    });
+    rowTnh1++;
+  });
+
+  // Total Row
+  wsTanah1[XLSX.utils.encode_cell({ r: rowTnh1, c: 0 })] = createCell('TOTAL NASIONAL', leftBoldP1);
+  wsTanah1[XLSX.utils.encode_cell({ r: rowTnh1, c: 5 })] = createCell(totBidangAll, numIntP1, 'n');
+  wsTanah1[XLSX.utils.encode_cell({ r: rowTnh1, c: 6 })] = createCell(totLuasM2All, numIntP1, 'n');
+  wsTanah1[XLSX.utils.encode_cell({ r: rowTnh1, c: 7 })] = createCell(Number((totLuasM2All / 10000).toFixed(2)), numDecP1, 'n');
+  wsTanah1[XLSX.utils.encode_cell({ r: rowTnh1, c: 8 })] = createCell(totShpAll, numIntP1, 'n');
+  wsTanah1[XLSX.utils.encode_cell({ r: rowTnh1, c: 9 })] = createCell(totBidangAll > 0 ? (totShpAll / totBidangAll) : 0, numDecP1, 'n');
+
+  wsTanah1['!merges'] = [
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 9 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 9 } },
+    { s: { r: 2, c: 0 }, e: { r: 2, c: 9 } },
+    { s: { r: 3, c: 0 }, e: { r: 3, c: 9 } },
+    { s: { r: rowTnh1, c: 0 }, e: { r: rowTnh1, c: 4 } }
+  ];
+  wsTanah1['!cols'] = [
+    { wch: 6 }, { wch: 18 }, { wch: 38 }, { wch: 18 }, { wch: 22 },
+    { wch: 14 }, { wch: 16 }, { wch: 14 }, { wch: 16 }, { wch: 14 }
+  ];
+  wsTanah1['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: rowTnh1, c: 9 } });
+  XLSX.utils.book_append_sheet(wb, wsTanah1, 'Rekapitulasi Tanah');
+
+  // =========================================================================
+  // SHEET 11: KIB A - DETAIL INVENTARIS TANAH BMN SATDIK KP
+  // =========================================================================
+  const wsTanah2 = {};
+  wsTanah2['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', kopStyleKemen);
+  wsTanah2['A2'] = createCell('BADAN PENYULUHAN DAN PENGEMBANGAN SDM KELAUTAN DAN PERIKANAN (BPPSDM KP)', kopStyleBadan);
+  wsTanah2['A3'] = createCell('KARTU INVENTARIS BARANG (KIB A) — RINCIAN TANAH BMN SATUAN PENDIDIKAN KP', titleStyle);
+  wsTanah2['A4'] = createCell('Cakupan Data: Seluruh Bidang Tanah BMN Satdik | Dicetak: ' + printedAt, kopStyleApp);
+
+  const tnhHeaders2 = [
+    'No', 'ID Bidang', 'Kode BMN', 'NUP', 'Satuan Pendidikan', 'Nama Bidang / Lokasi',
+    'Luas (m²)', 'Luas (Ha)', 'Status Hak / Sertifikat', 'Nomor Sertifikat', 'Tanggal Terbit',
+    'Atas Nama', 'Peruntukan Utama', 'Status Pemanfaatan',
+    'Alamat Lengkap', 'Kota / Kab', 'Provinsi', 'Tahun Perolehan', 'Asal Perolehan', 'Keterangan'
+  ];
+  tnhHeaders2.forEach((h, c) => {
+    wsTanah2[XLSX.utils.encode_cell({ r: 5, c })] = createCell(h, tableHeaderStyle);
+  });
+
+  let rowTnh2 = 6;
+  effectiveTanahData.forEach((p, idx) => {
+    const sat = satdikMap[p.satdikId] || {};
+    const satName = sat.shortName || sat.name || p.satdikName || p.satdikId;
+
+    const rowData = [
+      [idx + 1, centerP1, 'n'],
+      [p.id, centerP1, 's'],
+      [p.kodeBmn || '-', centerP1, 's'],
+      [p.nup || 1, centerP1, 'n'],
+      [satName, leftP1, 's'],
+      [p.namaBidang, leftBoldP1, 's'],
+      [Number(p.luasM2) || 0, numIntP1, 'n'],
+      [Number(p.luasHa) || Number(((Number(p.luasM2) || 0) / 10000).toFixed(2)), numDecP1, 'n'],
+      [p.statusSertifikat || 'Sertifikat Hak Pakai (SHP)', centerP1, 's'],
+      [p.noSertifikat || '-', leftP1, 's'],
+      [p.tanggalSertifikat || '-', centerP1, 's'],
+      [p.atasNama || 'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan', leftP1, 's'],
+      [p.peruntukan || 'Kampus & Fasilitas Akademik', leftP1, 's'],
+      [p.statusPemanfaatan || 'Digunakan Sendiri (Operasional)', centerP1, 's'],
+      [p.alamat || '-', leftP1, 's'],
+      [p.kota || '-', leftP1, 's'],
+      [p.provinsi || '-', leftP1, 's'],
+      [p.tahunPerolehan || '-', centerP1, 's'],
+      [p.asalPerolehan || 'APBN', centerP1, 's'],
+      [p.keterangan || '-', leftP1, 's']
+    ];
+
+    rowData.forEach(([val, st, type], col) => {
+      wsTanah2[XLSX.utils.encode_cell({ r: rowTnh2, c: col })] = createCell(val, st, type);
+    });
+    rowTnh2++;
+  });
+
+  wsTanah2['!merges'] = [
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 19 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 19 } },
+    { s: { r: 2, c: 0 }, e: { r: 2, c: 19 } },
+    { s: { r: 3, c: 0 }, e: { r: 3, c: 19 } }
+  ];
+  wsTanah2['!cols'] = [
+    { wch: 6 }, { wch: 14 }, { wch: 20 }, { wch: 8 }, { wch: 28 }, { wch: 34 },
+    { wch: 14 }, { wch: 12 }, { wch: 24 }, { wch: 30 }, { wch: 14 },
+    { wch: 36 }, { wch: 28 }, { wch: 26 },
+    { wch: 36 }, { wch: 18 }, { wch: 18 }, { wch: 12 }, { wch: 16 }, { wch: 35 }
+  ];
+  wsTanah2['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: rowTnh2, c: 19 } });
+  XLSX.utils.book_append_sheet(wb, wsTanah2, 'KIB A - Detail Tanah BMN');
+
   // SIMPAN FILE WORKBOOK
   const filename = filenamePrefix + '_' + new Date().toISOString().slice(0, 10) + '.xlsx';
   XLSX.writeFile(wb, filename);
@@ -1530,7 +1882,7 @@ function buildImportTemplateWorkbook(options = {}) {
 
   const steps = [
     ['No.', 'Tahapan / Aturan Pengisian', 'Penjelasan Lengkap'],
-    ['1', 'Pilih Sheet Sesuai Jenis Data', 'Template ini memuat 3 lembar kerja input: INPUT_GEDUNG_ASRAMA (Asrama Taruna), INPUT_TAMBAK_KOLAM (Tambak & Kolam Budidaya), dan INPUT_STANDAR_PRODI (Standar Minimal Prodi). Anda dapat mengisi salah satu saja atau ketiganya sekaligus dalam satu kali unggah.'],
+    ['1', 'Pilih Sheet Sesuai Jenis Data', 'Template ini memuat 5 lembar kerja input: INPUT_GEDUNG_ASRAMA (Asrama Taruna), INPUT_TAMBAK_KOLAM (Tambak & Kolam Budidaya), INPUT_SARPRAS_PEMBELAJARAN (Kelas, Perpustakaan, TEFA, Simulator), INPUT_DATA_TANAH (Data Tanah & Lahan KIB A), dan INPUT_STANDAR_PRODI (Standar Minimal Prodi). Anda dapat mengisi salah satu saja atau seluruhnya sekaligus dalam satu kali unggah.'],
     ['2', 'Mulai Mengisi di Baris ke-9', 'Isi data baru Anda mulai pada Baris ke-9 (sel berwarna putih bergaris). Baris ke-6 [PETUNJUK] dan Baris ke-7 s.d. ke-8 [CONTOH] akan otomatis dilewati oleh sistem saat proses import sehingga tidak perlu dihapus.'],
     ['3', 'Kolom Bertanda Bintang (*)', 'Kolom dengan tanda (*) pada judul tabel adalah KOLOM WAJIB. Jika dikosongkan pada baris yang terisi, sistem akan menampilkan peringatan validasi sebelum data disimpan.'],
     ['4', 'Kemudahan Penulisan Kode Satdik', 'Pada kolom Satdik, Anda bebas mengetik Kode Satdik (contoh: poltek-aup, supm-tegal) ATAU Nama Kampus / Kota (contoh: Politeknik AUP, Poltek KP Sidoarjo, Sorong, Tegal). Daftar resmi tersedia di sheet REFERENSI_KODE.'],
@@ -1749,11 +2101,209 @@ function buildImportTemplateWorkbook(options = {}) {
     );
   }
 
-  // ================= SHEET 4: INPUT_STANDAR_PRODI =================
+  // ================= SHEET: INPUT_SARPRAS_PEMBELAJARAN =================
+  if (templateType === 'all' || templateType === 'pembelajaran') {
+    appendInputSheet(
+      'INPUT_SARPRAS_PEMBELAJARAN',
+      '3. TABEL INPUT DATA FASILITAS SARPRAS PEMBELAJARAN (KELAS, PERPUSTAKAAN, TEFA & SIMULATOR)',
+      [
+        'Status Baris',
+        'Kode / Nama Satdik *',
+        'Kategori Fasilitas *',
+        'Nama Fasilitas / Ruang *',
+        'Gedung / Lokasi Penempatan',
+        'Luas (m²)',
+        'Daya Tampung / Kapasitas (Orang)',
+        'Kondisi Fisik',
+        'Status Operasional',
+        'Spesifikasi Teknis / Alat Utama',
+        'Sertifikasi / Lisensi',
+        'Tahun Pengadaan',
+        'Keterangan Tambahan'
+      ],
+      [1, 2, 3],
+      [
+        '[PETUNJUK]',
+        'Wajib. Contoh: poltek-aup atau SUPM Tegal',
+        'Wajib. Pilih: kelas / perpustakaan / tefa / simulator',
+        'Wajib. Nama ruang kelas / lab / perpustakaan / simulator',
+        'Contoh: Gedung Kuliah Terpadu Lt. 2 / Hanggar TEFA',
+        'Luas ruangan/bangunan dalam meter persegi (m²)',
+        'Daya tampung taruna/mahasiswa dalam satu sesi',
+        'Baik / Rusak Ringan / Rusak Berat',
+        'Aktif Digunakan / Pemeliharaan Terjadwal / Perlu Perbaikan',
+        'Contoh: Interactive Smartboard 75 inch, Sound System, AC',
+        'Contoh: Approval STCW-F Ditjen Hubla, Sertifikasi ISO',
+        'Angka tahun pengadaan (contoh: 2022)',
+        'Catatan pemanfaatan atau jadwal praktikum taruna'
+      ],
+      [
+        [
+          '[CONTOH]',
+          sampleSatdik1,
+          'simulator',
+          'Full Mission Bridge Simulator Navigasi Laut',
+          'Gedung Simulator & Lab Bahari Lt. 2',
+          140,
+          25,
+          'Baik',
+          'Aktif Digunakan',
+          'Visual 240 derajat, konsol kemudi ARPA radar, ECDIS',
+          'Approval STCW-F Ditjen Hubla & DNV-GL',
+          2022,
+          'Simulator uji kompetensi pelaut ANKPIN-I taruna tingkat akhir'
+        ],
+        [
+          '[CONTOH]',
+          sampleSatdik2,
+          'tefa',
+          'Teaching Factory Pengolahan Surimi & Fish Jelly',
+          'Gedung Workshop TEFA Pengolahan',
+          350,
+          60,
+          'Baik',
+          'Aktif Digunakan',
+          'Silent cutter, meat separator, blast freezer, packaging line',
+          'Sertifikasi Kelayakan Pengolahan (SKP) & Halal',
+          2021,
+          'Unit produksi produk olahan perikanan komersial taruna'
+        ],
+        [
+          '[CONTOH]',
+          sampleSatdik1,
+          'kelas',
+          'Ruang Kuliah Teori Smart Class A-101',
+          'Gedung Kuliah Bersama Lt. 1',
+          72,
+          36,
+          'Baik',
+          'Aktif Digunakan',
+          'Interactive display 75 inch, meja taruna ergonomis, AC 2 PK',
+          '-',
+          2023,
+          'Digunakan untuk perkuliahan multimedia prodi vokasi'
+        ],
+        [
+          '[CONTOH]',
+          sampleSatdik2,
+          'perpustakaan',
+          'Perpustakaan Maritim & E-Library Center',
+          'Gedung Rektorat Sayap Timur Lt. 2',
+          220,
+          75,
+          'Baik',
+          'Aktif Digunakan',
+          '15 PC e-library, koleksi 4.500 buku kelautan, barcode scanner',
+          'Akreditasi Perpustakaan Nasional RI',
+          2020,
+          'Ruang baca digital dan referensi taruna serta dosen'
+        ]
+      ],
+      [14, 24, 22, 36, 30, 14, 16, 16, 22, 36, 26, 16, 36]
+    );
+  }
+
+  // ================= SHEET 4: INPUT_DATA_TANAH =================
+  if (templateType === 'all' || templateType === 'tanah') {
+    appendInputSheet(
+      'INPUT_DATA_TANAH',
+      '4. TABEL INPUT DATA TANAH & LAHAN SATDIK KP (KIB A BMN)',
+      [
+        'Status Baris',
+        'Kode / Nama Satdik *',
+        'Nama Bidang / Peruntukan Lahan *',
+        'Kode BMN',
+        'NUP',
+        'Luas Tanah (m²) *',
+        'Status Sertifikat *',
+        'Nomor Sertifikat',
+        'Tanggal Terbit (YYYY-MM-DD)',
+        'Atas Nama',
+        'Peruntukan Utama',
+        'Status Pemanfaatan',
+        'Alamat Lengkap Lahan',
+        'Kota / Kabupaten',
+        'Provinsi',
+        'Nilai Aset BMN (Rp)',
+        'Tahun Perolehan',
+        'Asal Perolehan',
+        'Keterangan Tambahan'
+      ],
+      [1, 2, 5, 6],
+      [
+        '[PETUNJUK]',
+        'Wajib. Contoh: poltek-aup atau SUPM Tegal',
+        'Wajib. Contoh: Kampus Utama Sedati / Tambak Pesisir',
+        'Kode BMN KIB A (contoh: 2.01.01.01.001.0001)',
+        'Nomor Urut Pendaftaran BMN (contoh: 1)',
+        'Wajib. Luas tanah dalam meter persegi (m²)',
+        'Wajib. Sertifikat Hak Pakai (SHP) / Dalam Proses BPN / Hibah Pemda',
+        'Nomor register SHP dari BPN',
+        'Format tanggal: YYYY-MM-DD (contoh: 2018-05-20)',
+        'Default: Pemerintah RI c.q. Kementerian Kelautan dan Perikanan',
+        'Kampus & Fasilitas Akademik / Tambak & Budidaya Praktik / Workshop / Lahan Cadangan',
+        'Digunakan Sendiri (Operasional) / KSP / Pinjam Pakai',
+        'Alamat fisik lokasi bidang tanah',
+        'Kota atau Kabupaten lokasi tanah',
+        'Provinsi lokasi tanah',
+        'Nilai perolehan / estimasi aset BMN dalam Rupiah',
+        'Tahun perolehan tanah (contoh: 2012)',
+        'APBN / Hibah Pemda / Pemberian Hak',
+        'Catatan batas tanah, riwayat perolehan, atau rencana pemanfaatan'
+      ],
+      [
+        [
+          '[CONTOH]',
+          sampleSatdik1,
+          'Kampus Utama & Kompleks Akademik',
+          '2.01.01.01.001.0001',
+          1,
+          120000,
+          'Sertifikat Hak Pakai (SHP)',
+          'SHP No. 00014/Pasar Minggu 2012',
+          '2012-07-18',
+          'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan',
+          'Kampus & Fasilitas Akademik',
+          'Digunakan Sendiri (Operasional)',
+          'Jl. AUP No. 1, Pasar Minggu',
+          'Jakarta Selatan',
+          'DKI Jakarta',
+          420000000000,
+          1962,
+          'APBN',
+          'Kawasan kampus terpadu, rektorat, dan asrama taruna'
+        ],
+        [
+          '[CONTOH]',
+          sampleSatdik2,
+          'Kawasan Tambak Percobaan Budidaya',
+          '2.01.01.01.002.0002',
+          2,
+          120000,
+          'Sertifikat Hak Pakai (SHP)',
+          'SHP No. 00089/Sedati 2010',
+          '2010-09-15',
+          'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan',
+          'Tambak & Budidaya Praktik',
+          'Digunakan Sendiri (Operasional)',
+          'Desa Buncitan, Sedati',
+          'Kab. Sidoarjo',
+          'Jawa Timur',
+          96000000000,
+          1982,
+          'APBN',
+          '46 petak tambak pembesaran bandeng dan udang'
+        ]
+      ],
+      [14, 24, 32, 22, 8, 16, 26, 30, 16, 36, 28, 24, 30, 32, 18, 18, 22, 14, 16, 36]
+    );
+  }
+
+  // ================= SHEET 5: INPUT_STANDAR_PRODI =================
   if (templateType === 'all' || templateType === 'standar') {
     appendInputSheet(
       'INPUT_STANDAR_PRODI',
-      '3. TABEL INPUT ITEM STANDAR MINIMAL & REALISASI SARPRAS PROGRAM STUDI',
+      '4. TABEL INPUT ITEM STANDAR MINIMAL & REALISASI SARPRAS PROGRAM STUDI',
       [
         'Status Baris',
         'Kode / Nama Rumpun Prodi *',
@@ -1873,6 +2423,7 @@ function downloadImportTemplateExcel(options = {}) {
     all: 'Template_Import_Lengkap_SARPRAS_KKP',
     asrama: 'Template_Import_Gedung_Asrama_SARPRAS_KKP',
     tambak: 'Template_Import_Tambak_Kolam_SARPRAS_KKP',
+    pembelajaran: 'Template_Import_Sarpras_Pembelajaran_SARPRAS_KKP',
     standar: 'Template_Import_Standar_Prodi_SARPRAS_KKP'
   };
   const prefix = options.filenamePrefix || typeMap[options.templateType || 'all'] || typeMap.all;
@@ -2029,7 +2580,9 @@ function parseImportExcelWorkbook(arrayBuffer, context = {}) {
   const wb = XLSX.read(arrayBuffer, { type: 'array' });
   const buildings = [];
   const tambakUnits = [];
+  const pembelajaranFacilities = [];
   const standarItems = [];
+  const tanahParcels = [];
   const warnings = [];
 
   (wb.SheetNames || []).forEach((sheetName) => {
@@ -2053,7 +2606,9 @@ function parseImportExcelWorkbook(arrayBuffer, context = {}) {
 
     if (upperName.indexOf('INPUT_GEDUNG') !== -1 || upperName.indexOf('INPUT_ASRAMA') !== -1) sheetCategory = 'asrama';
     else if (upperName.indexOf('INPUT_TAMBAK') !== -1 || upperName.indexOf('INPUT_KOLAM') !== -1) sheetCategory = 'tambak';
+    else if (upperName.indexOf('INPUT_PEMBELAJARAN') !== -1 || upperName.indexOf('SARPRAS_PEMBELAJARAN') !== -1) sheetCategory = 'pembelajaran';
     else if (upperName.indexOf('INPUT_STANDAR') !== -1) sheetCategory = 'standar';
+    else if (upperName.indexOf('INPUT_DATA_TANAH') !== -1 || upperName.indexOf('INPUT_TANAH') !== -1 || upperName.indexOf('DATA_TANAH') !== -1 || upperName.indexOf('TANAH') !== -1 || upperName.indexOf('KIB A') !== -1 || upperName.indexOf('KIB_A') !== -1) sheetCategory = 'tanah';
 
     for (let r = 0; r < Math.min(rows.length, 15); r++) {
       const rowStrs = (rows[r] || []).map(c => cleanStr(c).toLowerCase());
@@ -2074,6 +2629,16 @@ function parseImportExcelWorkbook(arrayBuffer, context = {}) {
       if (joined.indexOf('rumpun prodi') !== -1 || joined.indexOf('item standar') !== -1 || joined.indexOf('volume standar') !== -1) {
         headerRowIdx = r;
         if (!sheetCategory) sheetCategory = 'standar';
+        break;
+      }
+      if (joined.indexOf('fasilitas') !== -1 && (joined.indexOf('kategori') !== -1 || joined.indexOf('simulator') !== -1 || joined.indexOf('ruang kelas') !== -1 || joined.indexOf('perpustakaan') !== -1 || joined.indexOf('tefa') !== -1)) {
+        headerRowIdx = r;
+        if (!sheetCategory) sheetCategory = 'pembelajaran';
+        break;
+      }
+      if (joined.indexOf('bidang tanah') !== -1 || joined.indexOf('nama bidang') !== -1 || joined.indexOf('luas tanah') !== -1 || (joined.indexOf('tanah') !== -1 && joined.indexOf('sertifikat') !== -1)) {
+        headerRowIdx = r;
+        if (!sheetCategory) sheetCategory = 'tanah';
         break;
       }
     }
@@ -2213,6 +2778,138 @@ function parseImportExcelWorkbook(arrayBuffer, context = {}) {
           keterangan: cleanStr(row[cKet])
         });
       }
+    } else if (sheetCategory === 'pembelajaran') {
+      const cSatdik = findCol(headerLower, ['satdik', 'satuan pendidikan', 'kampus'], 1);
+      const cCat = findCol(headerLower, ['kategori fasilitas', 'kategori', 'jenis'], 2);
+      const cNama = findCol(headerLower, ['nama fasilitas', 'nama ruang', 'nama sarpras', 'nama'], 3);
+      const cGedung = findCol(headerLower, ['gedung', 'lokasi penempatan', 'lokasi'], 4);
+      const cLuas = findCol(headerLower, ['luas', 'luas ruangan'], 5);
+      const cKap = findCol(headerLower, ['daya tampung', 'kapasitas', 'daya tampung / kapasitas'], 6);
+      const cKondisi = findCol(headerLower, ['kondisi fisik', 'kondisi'], 7);
+      const cStatus = findCol(headerLower, ['status operasional', 'status'], 8);
+      const cSpesifikasi = findCol(headerLower, ['spesifikasi teknis', 'spesifikasi', 'alat utama'], 9);
+      const cSertifikasi = findCol(headerLower, ['sertifikasi', 'lisensi'], 10);
+      const cTahun = findCol(headerLower, ['tahun pengadaan', 'tahun'], 11);
+      const cKet = findCol(headerLower, ['keterangan tambahan', 'keterangan', 'catatan'], 12);
+
+      const resolvePembCategory = (rawVal, nameVal) => {
+        const s = (cleanStr(rawVal) + ' ' + cleanStr(nameVal)).toLowerCase();
+        if (s.indexOf('simulat') !== -1 || s.indexOf('bridge') !== -1 || s.indexOf('engine room') !== -1 || s.indexOf('ecdis') !== -1 || s.indexOf('gmdss') !== -1) return 'simulator';
+        if (s.indexOf('tefa') !== -1 || s.indexOf('factory') !== -1 || s.indexOf('pabrik') !== -1 || s.indexOf('surimi') !== -1) return 'tefa';
+        if (s.indexOf('perpus') !== -1 || s.indexOf('library') !== -1 || s.indexOf('baca') !== -1 || s.indexOf('pustaka') !== -1) return 'perpustakaan';
+        return 'kelas';
+      };
+
+      for (let r = headerRowIdx + 1; r < rows.length; r++) {
+        const row = rows[r];
+        if (isSkippableRow(row)) continue;
+        const excelRow = r + 1;
+
+        const rawSatdik = cleanStr(row[cSatdik]);
+        const nama = cleanStr(row[cNama]);
+        if (!rawSatdik && !nama) continue;
+
+        if (!nama) {
+          warnings.push({ sheet: sheetName, row: excelRow, message: 'Nama Fasilitas Pembelajaran kosong — baris dilewati.' });
+          continue;
+        }
+        const satObj = resolveSatdik(rawSatdik);
+        if (!satObj) {
+          warnings.push({ sheet: sheetName, row: excelRow, message: 'Kode/Nama Satdik "' + (rawSatdik || '-') + '" tidak dikenali untuk fasilitas "' + nama + '".' });
+          continue;
+        }
+
+        const category = resolvePembCategory(row[cCat], nama);
+        const luasM2 = Math.max(0, parseNum(row[cLuas], 0));
+        const kapasitas = Math.max(0, Math.round(parseNum(row[cKap], 0)));
+        const tahunPengadaan = Math.max(1980, Math.round(parseNum(row[cTahun], new Date().getFullYear())));
+
+        pembelajaranFacilities.push({
+          satdikId: satObj.id,
+          satdikName: satObj.shortName || satObj.name,
+          category,
+          name: nama,
+          gedung: cleanStr(row[cGedung]) || 'Gedung Kuliah & Praktik Bersama',
+          luasM2,
+          kapasitas,
+          kondisi: normalizeCondition(row[cKondisi]),
+          statusOp: cleanStr(row[cStatus]) || 'Aktif Digunakan',
+          spesifikasi: cleanStr(row[cSpesifikasi]),
+          sertifikasi: cleanStr(row[cSertifikasi]),
+          tahunPengadaan,
+          keterangan: cleanStr(row[cKet])
+        });
+      }
+    } else if (sheetCategory === 'tanah') {
+      const cSatdik = findCol(headerLower, ['satdik', 'kampus', 'unit kerja'], 1);
+      const cNama = findCol(headerLower, ['nama bidang', 'nama tanah', 'bidang tanah', 'peruntukan'], 2);
+      const cKodeBmn = findCol(headerLower, ['kode bmn', 'bmn'], 3);
+      const cNup = findCol(headerLower, ['nup', 'no urut'], 4);
+      const cLuas = findCol(headerLower, ['luas', 'luas tanah', 'luas (m2)', 'luas m2'], 5);
+      const cStatusSertifikat = findCol(headerLower, ['status sertifikat', 'sertifikat', 'status hak'], 6);
+      const cNoSertifikat = findCol(headerLower, ['nomor sertifikat', 'no sertifikat', 'no. sertifikat'], 7);
+      const cTglSertifikat = findCol(headerLower, ['tanggal terbit', 'tanggal', 'tgl sertifikat'], 8);
+      const cAtasNama = findCol(headerLower, ['atas nama', 'pemegang hak'], 9);
+      const cPeruntukan = findCol(headerLower, ['peruntukan', 'penggunaan utama'], 10);
+      const cStatusManfaat = findCol(headerLower, ['status pemanfaatan', 'pemanfaatan'], 11);
+      const cKeamanan = findCol(headerLower, ['keamanan', 'kondisi keamanan', 'patok'], 12);
+      const cAlamat = findCol(headerLower, ['alamat', 'lokasi'], 13);
+      const cKota = findCol(headerLower, ['kota', 'kabupaten'], 14);
+      const cProv = findCol(headerLower, ['provinsi'], 15);
+      const cNilai = findCol(headerLower, ['nilai aset', 'nilai bmn', 'nilai'], 16);
+      const cTahun = findCol(headerLower, ['tahun', 'tahun perolehan'], 17);
+      const cAsal = findCol(headerLower, ['asal', 'asal perolehan'], 18);
+      const cKet = findCol(headerLower, ['keterangan', 'catatan'], 19);
+
+      for (let r = headerRowIdx + 1; r < rows.length; r++) {
+        const row = rows[r];
+        if (isSkippableRow(row)) continue;
+        const excelRow = r + 1;
+
+        const rawSatdik = cleanStr(row[cSatdik]);
+        const nama = cleanStr(row[cNama]);
+        if (!rawSatdik && !nama) continue;
+
+        if (!nama) {
+          warnings.push({ sheet: sheetName, row: excelRow, message: 'Nama Bidang Tanah kosong — baris dilewati.' });
+          continue;
+        }
+        const satObj = resolveSatdik(rawSatdik);
+        if (!satObj) {
+          warnings.push({ sheet: sheetName, row: excelRow, message: 'Kode/Nama Satdik "' + (rawSatdik || '-') + '" tidak dikenali untuk bidang tanah "' + nama + '".' });
+          continue;
+        }
+
+        const luasM2 = Math.max(0, parseNum(row[cLuas], 0));
+        const luasHa = Number((luasM2 / 10000).toFixed(2));
+        const nup = Math.max(1, Math.round(parseNum(row[cNup], 1)));
+        const nilaiAsetRp = Math.max(0, parseNum(row[cNilai], 0));
+        const tahunPerolehan = Math.max(1950, Math.round(parseNum(row[cTahun], new Date().getFullYear())));
+
+        tanahParcels.push({
+          satdikId: satObj.id,
+          satdikName: satObj.shortName || satObj.name,
+          namaBidang: nama,
+          kodeBmn: cleanStr(row[cKodeBmn]) || '2.01.01.01.001.0001',
+          nup,
+          luasM2,
+          luasHa,
+          statusSertifikat: cleanStr(row[cStatusSertifikat]) || 'Sertifikat Hak Pakai (SHP)',
+          noSertifikat: cleanStr(row[cNoSertifikat]) || '-',
+          tanggalSertifikat: cleanStr(row[cTglSertifikat]) || '-',
+          atasNama: cleanStr(row[cAtasNama]) || 'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan',
+          peruntukan: cleanStr(row[cPeruntukan]) || 'Kampus & Fasilitas Akademik',
+          statusPemanfaatan: cleanStr(row[cStatusManfaat]) || 'Digunakan Sendiri (Operasional)',
+          kondisiKeamanan: cleanStr(row[cKeamanan]) || 'Aman (Patok & Plang BMN Terpasang)',
+          alamat: cleanStr(row[cAlamat]) || satObj.alamat || '',
+          kota: cleanStr(row[cKota]) || satObj.kota || '',
+          provinsi: cleanStr(row[cProv]) || satObj.provinsi || '',
+          nilaiAsetRp,
+          tahunPerolehan,
+          asalPerolehan: cleanStr(row[cAsal]) || 'APBN',
+          keterangan: cleanStr(row[cKet])
+        });
+      }
     } else if (sheetCategory === 'standar') {
       const cBidang = findCol(headerLower, ['rumpun', 'bidang prodi'], 1);
       const cSec = findCol(headerLower, ['klasifikasi', 'kategori (a/b)'], 2);
@@ -2286,9 +2983,11 @@ function parseImportExcelWorkbook(arrayBuffer, context = {}) {
   return {
     buildings,
     tambakUnits,
+    pembelajaranFacilities,
     standarItems,
+    tanahParcels,
     warnings,
-    totalValid: buildings.length + tambakUnits.length + standarItems.length
+    totalValid: buildings.length + tambakUnits.length + pembelajaranFacilities.length + standarItems.length + tanahParcels.length
   };
 }
 
@@ -2522,11 +3221,202 @@ function exportTambakToExcel(tambakData, satdikList = [], options = {}) {
   XLSX.writeFile(wb, filename);
 }
 
+/**
+ * Ekspor Laporan Fasilitas Pembelajaran (Ruang Kelas, Perpustakaan, TEFA, Simulator) ke Excel
+ */
+function exportPembelajaranToExcel(facilities, satdikList, options = {}) {
+  const {
+    currentUser = null,
+    filterScopeLabel = 'Seluruh Satuan Pendidikan (18 Satdik)',
+    filenamePrefix = 'Sarana_Prasarana_Satdik_KP_Fasilitas_Pembelajaran'
+  } = options;
+
+  const wb = XLSX.utils.book_new();
+  const satdikMap = {};
+  (satdikList || []).forEach(s => { satdikMap[s.id] = s; });
+
+  const items = Array.isArray(facilities) ? facilities : [];
+
+  const ws = {};
+  const fontTitle = { name: 'Arial', sz: 12, bold: true, color: { rgb: '0F172A' } };
+  const fontHeader = { name: 'Arial', sz: 10, bold: true, color: { rgb: 'FFFFFF' } };
+  const headerStyle = {
+    fill: { fgColor: { rgb: '0B3D60' } },
+    font: fontHeader,
+    alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+    border: borderThin
+  };
+  const base = { font: { name: 'Arial', sz: 9 }, border: borderThin, alignment: { vertical: 'center' } };
+  const center = { ...base, alignment: { horizontal: 'center', vertical: 'center' } };
+  const left = { ...base, alignment: { horizontal: 'left', vertical: 'center' } };
+  const leftBold = { ...left, font: { ...base.font, bold: true } };
+  const numInt = { ...base, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0' };
+  const numDec = { ...base, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0.00' };
+
+  // Kop Dinas
+  ws['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', { font: fontTitle });
+  ws['A2'] = createCell('BADAN PENYULUHAN DAN PENGEMBANGAN SDM KELAUTAN DAN PERIKANAN (BPPSDM KP)', { font: { name: 'Arial', sz: 10, bold: true } });
+  ws['A3'] = createCell('LAPORAN INVENTARIS SARPRAS PEMBELAJARAN (KELAS, PERPUSTAKAAN, TEFA & SIMULATOR)', { font: { name: 'Arial', sz: 11, bold: true, color: { rgb: '0284C7' } } });
+  ws['A4'] = createCell(`Cakupan Data: ${filterScopeLabel} | Dicetak: ${getFormattedDateTime()}`, { font: { name: 'Arial', sz: 9, italic: true } });
+
+  const headers = [
+    'No', 'ID Fasilitas', 'Satuan Pendidikan', 'Kategori', 'Nama Fasilitas',
+    'Gedung / Lokasi', 'Luas (m²)', 'Kapasitas Taruna', 'Kondisi Fisik',
+    'Status Operasional', 'Sertifikasi / Akreditasi', 'Tahun', 'Spesifikasi & Fasilitas Penunjang', 'Keterangan'
+  ];
+
+  const categoryLabels = {
+    kelas: 'Ruang Kelas',
+    perpustakaan: 'Perpustakaan',
+    tefa: 'Teaching Factory (TEFA)',
+    simulator: 'Simulator'
+  };
+
+  headers.forEach((h, c) => {
+    ws[XLSX.utils.encode_cell({ r: 5, c })] = createCell(h, headerStyle);
+  });
+
+  let row = 6;
+  items.forEach((item, idx) => {
+    const sat = satdikMap[item.satdikId] || {};
+    const satName = sat.shortName || sat.name || item.satdikName || item.satdikId;
+    const catLabel = categoryLabels[item.category] || item.category;
+
+    const rowData = [
+      [idx + 1, center, 'n'],
+      [item.id, center, 's'],
+      [satName, left, 's'],
+      [catLabel, center, 's'],
+      [item.name, leftBold, 's'],
+      [item.gedung || '-', left, 's'],
+      [Number(item.luasM2) || 0, numDec, 'n'],
+      [Number(item.kapasitas) || 0, numInt, 'n'],
+      [item.kondisi || 'Baik', center, 's'],
+      [item.statusOp || 'Aktif Digunakan', center, 's'],
+      [item.sertifikasi || '-', left, 's'],
+      [item.tahunPengadaan || '-', center, 's'],
+      [item.spesifikasi || '-', left, 's'],
+      [item.keterangan || '-', left, 's']
+    ];
+
+    rowData.forEach(([val, st, type], col) => {
+      ws[XLSX.utils.encode_cell({ r: row, c: col })] = createCell(val, st, type);
+    });
+    row++;
+  });
+
+  ws['!cols'] = [
+    { wch: 5 }, { wch: 14 }, { wch: 25 }, { wch: 22 }, { wch: 36 },
+    { wch: 26 }, { wch: 12 }, { wch: 16 }, { wch: 14 },
+    { wch: 20 }, { wch: 28 }, { wch: 10 }, { wch: 45 }, { wch: 35 }
+  ];
+  ws['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: row, c: 13 } });
+  XLSX.utils.book_append_sheet(wb, ws, 'Fasilitas Pembelajaran');
+
+  const filename = `${filenamePrefix}_${new Date().toISOString().slice(0, 10)}.xlsx`;
+  XLSX.writeFile(wb, filename);
+}
+
+
+function exportTanahToExcel(parcels, satdikList, options = {}) {
+  const {
+    currentUser = null,
+    filterScopeLabel = 'Seluruh Satuan Pendidikan Vokasi KKP (18 Satdik)',
+    filenamePrefix = 'Sarana_Prasarana_Satdik_KP_KIB_A_Tanah_BMN'
+  } = options;
+
+  const wb = XLSX.utils.book_new();
+  const satdikMap = {};
+  (satdikList || []).forEach(s => { satdikMap[s.id] = s; });
+
+  const items = Array.isArray(parcels) ? parcels : [];
+
+  const ws = {};
+  const fontTitle = { name: 'Arial', sz: 12, bold: true, color: { rgb: '0F172A' } };
+  const fontHeader = { name: 'Arial', sz: 10, bold: true, color: { rgb: 'FFFFFF' } };
+  const headerStyle = {
+    fill: { fgColor: { rgb: '0B3D60' } },
+    font: fontHeader,
+    alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+    border: borderThin
+  };
+  const base = { font: { name: 'Arial', sz: 9 }, border: borderThin, alignment: { vertical: 'center' } };
+  const center = { ...base, alignment: { horizontal: 'center', vertical: 'center' } };
+  const left = { ...base, alignment: { horizontal: 'left', vertical: 'center' } };
+  const leftBold = { ...left, font: { ...base.font, bold: true } };
+  const numInt = { ...base, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0' };
+  const numDec = { ...base, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0.00' };
+
+  ws['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', { font: fontTitle });
+  ws['A2'] = createCell('BADAN PENYULUHAN DAN PENGEMBANGAN SDM KELAUTAN DAN PERIKANAN (BPPSDM KP)', { font: { name: 'Arial', sz: 10, bold: true } });
+  ws['A3'] = createCell('KARTU INVENTARIS BARANG (KIB A) — TANAH DAN LAHAN SATUAN PENDIDIKAN KP', { font: { name: 'Arial', sz: 11, bold: true, color: { rgb: '0284C7' } } });
+  ws['A4'] = createCell('Cakupan Data: ' + filterScopeLabel + ' | Dicetak: ' + getFormattedDateTime(), { font: { name: 'Arial', sz: 9, italic: true } });
+
+  const headers = [
+    'No', 'ID Bidang', 'Kode BMN', 'NUP', 'Satuan Pendidikan', 'Nama Bidang / Peruntukan',
+    'Luas (m²)', 'Luas (Ha)', 'Status Hak / Sertifikat', 'Nomor Sertifikat', 'Tanggal Terbit',
+    'Atas Nama', 'Peruntukan Utama', 'Status Pemanfaatan',
+    'Alamat Lengkap', 'Kota / Kab', 'Provinsi', 'Tahun Perolehan', 'Asal Perolehan', 'Keterangan'
+  ];
+
+  headers.forEach((h, c) => {
+    ws[XLSX.utils.encode_cell({ r: 5, c })] = createCell(h, headerStyle);
+  });
+
+  let row = 6;
+  items.forEach((item, idx) => {
+    const sat = satdikMap[item.satdikId] || {};
+    const satName = sat.shortName || sat.name || item.satdikName || item.satdikId;
+
+    const rowData = [
+      [idx + 1, center, 'n'],
+      [item.id, center, 's'],
+      [item.kodeBmn || '-', center, 's'],
+      [item.nup || 1, center, 'n'],
+      [satName, left, 's'],
+      [item.namaBidang, leftBold, 's'],
+      [Number(item.luasM2) || 0, numInt, 'n'],
+      [Number(item.luasHa) || Number(((Number(item.luasM2) || 0) / 10000).toFixed(2)), numDec, 'n'],
+      [item.statusSertifikat || 'Sertifikat Hak Pakai (SHP)', center, 's'],
+      [item.noSertifikat || '-', left, 's'],
+      [item.tanggalSertifikat || '-', center, 's'],
+      [item.atasNama || 'Pemerintah RI c.q. Kementerian Kelautan dan Perikanan', left, 's'],
+      [item.peruntukan || 'Kampus & Fasilitas Akademik', left, 's'],
+      [item.statusPemanfaatan || 'Digunakan Sendiri (Operasional)', center, 's'],
+      [item.alamat || '-', left, 's'],
+      [item.kota || '-', left, 's'],
+      [item.provinsi || '-', left, 's'],
+      [item.tahunPerolehan || '-', center, 's'],
+      [item.asalPerolehan || 'APBN', center, 's'],
+      [item.keterangan || '-', left, 's']
+    ];
+
+    rowData.forEach(([val, st, type], col) => {
+      ws[XLSX.utils.encode_cell({ r: row, c: col })] = createCell(val, st, type);
+    });
+    row++;
+  });
+
+  ws['!cols'] = [
+    { wch: 6 }, { wch: 14 }, { wch: 20 }, { wch: 8 }, { wch: 28 }, { wch: 34 },
+    { wch: 14 }, { wch: 12 }, { wch: 24 }, { wch: 30 }, { wch: 14 },
+    { wch: 36 }, { wch: 28 }, { wch: 26 },
+    { wch: 36 }, { wch: 18 }, { wch: 18 }, { wch: 12 }, { wch: 16 }, { wch: 35 }
+  ];
+  ws['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: row, c: 19 } });
+  XLSX.utils.book_append_sheet(wb, ws, 'KIB A - Tanah BMN');
+
+  const filename = filenamePrefix + '_' + new Date().toISOString().slice(0, 10) + '.xlsx';
+  XLSX.writeFile(wb, filename);
+}
+
   window.SARPRAS_EXCEL = {
     exportRKAToExcel: exportRKAToExcel,
     exportAsramaToExcel: exportAsramaToExcel,
     exportStandarToExcel: exportStandarToExcel,
     exportTambakToExcel: exportTambakToExcel,
+    exportPembelajaranToExcel: exportPembelajaranToExcel,
+    exportTanahToExcel: exportTanahToExcel,
     exportComprehensiveToExcel: exportComprehensiveToExcel,
     buildImportTemplateWorkbook: buildImportTemplateWorkbook,
     downloadImportTemplateExcel: downloadImportTemplateExcel,

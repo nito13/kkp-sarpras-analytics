@@ -64,7 +64,7 @@ const useTheme = window.__useTheme;
 // MODULE: src/components/Navbar.jsx
 // ============================================================================
 (() => {
-	const { Anchor, BarChart3, MapPin, Layers, Bed, GraduationCap, Fish, AlertTriangle, PlusCircle, Download, Ship, Sparkles, Activity, User, LogOut, Sun, Moon, ChevronRight, X } = window.__VENDOR__.Lucide;
+	const { Anchor, BarChart3, MapPin, Layers, Bed, GraduationCap, Fish, AlertTriangle, PlusCircle, Download, Ship, Sparkles, Activity, User, LogOut, Sun, Moon, ChevronRight, X, School, Map: MapIcon } = window.__VENDOR__.Lucide;
 	const logoKkp = window.__LOGO_KKP || "Frontend/assets/logo-kkp.png";
 
 	const NAV_MENU_ITEMS = [
@@ -95,6 +95,20 @@ const useTheme = window.__useTheme;
 			shortLabel: "Tambak",
 			section: "vokasi",
 			icon: Fish
+		},
+		{
+			id: "pembelajaran",
+			label: "Sarpras Pembelajaran",
+			shortLabel: "Pembelajaran",
+			section: "vokasi",
+			icon: School
+		},
+		{
+			id: "tanah",
+			label: "Data Tanah & Lahan",
+			shortLabel: "Tanah",
+			section: "vokasi",
+			icon: MapIcon
 		},
 		{
 			id: "standar",
@@ -173,11 +187,11 @@ const useTheme = window.__useTheme;
 		})), /* @__PURE__ */ React.createElement("div", { className: "min-w-0" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-center gap-2" }, /* @__PURE__ */ React.createElement("h1", { className: "text-sm sm:text-lg font-bold text-white tracking-tight leading-tight truncate" }, "Sarana dan Prasarana ", /* @__PURE__ */ React.createElement("span", { className: "text-cyan-400 font-extrabold" }, "Satuan Pendidikan KP")), /* @__PURE__ */ React.createElement("span", { className: "hidden lg:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-800 text-cyan-300 border border-slate-700" }, /* @__PURE__ */ React.createElement(activeItemObj.icon, { className: "w-3.5 h-3.5 text-cyan-400" }), /* @__PURE__ */ React.createElement("span", null, activeItemObj.label))), /* @__PURE__ */ React.createElement("p", { className: "text-[11px] text-slate-400 hidden sm:block truncate" }, "Dashboard Analitik Sarana & Prasarana Vokasi Kelautan & Perikanan")))), /* @__PURE__ */ React.createElement("div", { className: "flex items-center space-x-1.5 sm:space-x-2" }, currentUser?.permissions?.includes("edit_all") || currentUser?.permissions?.includes("edit_own") ? /* @__PURE__ */ React.createElement("button", {
 			onClick: () => onOpenAddModal && onOpenAddModal(activeTab),
 			className: "hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs shadow-md shadow-cyan-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]",
-			title: "Input data aset BMN, gedung asrama, atau item standar prodi baru"
+			title: "Input data aset BMN, gedung asrama, data tanah & lahan (KIB A), fasilitas pembelajaran, atau standar prodi baru"
 		}, /* @__PURE__ */ React.createElement(PlusCircle, { className: "w-4 h-4" }), /* @__PURE__ */ React.createElement("span", null, "Tambah Sarpras")) : null, /* @__PURE__ */ React.createElement("button", {
 			onClick: onExportExcel || onExportCSV,
 			className: "hidden md:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-200 border border-emerald-700/60 text-xs font-semibold shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]",
-			title: "Ekspor laporan komprehensif seluruh data (BMN, Asrama, & Standar Prodi) ke Microsoft Excel (.xlsx)"
+			title: "Ekspor laporan komprehensif seluruh data (BMN, Asrama, Tambak, Belajar, Tanah & Lahan, & Standar) ke Microsoft Excel (.xlsx)"
 		}, /* @__PURE__ */ React.createElement(Download, { className: "w-4 h-4 text-emerald-400" }), /* @__PURE__ */ React.createElement("span", null, "Ekspor Excel (Lengkap)")), /* @__PURE__ */ React.createElement("button", {
 			onClick: toggleTheme,
 			className: "p-1.5 sm:p-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all hover:scale-105 active:scale-95 flex items-center justify-center shadow-sm flex-shrink-0",
@@ -412,7 +426,7 @@ const YouTubeSidebar = window.__YouTubeSidebar;
 // ============================================================================
 (() => {
 	// src/components/MobileBottomNav.jsx
-	const { BarChart3, MapPin, Layers, Bed, Fish, GraduationCap, AlertTriangle, PlusCircle } = window.__VENDOR__.Lucide;
+	const { BarChart3, MapPin, Layers, Bed, Fish, GraduationCap, AlertTriangle, PlusCircle, School, Map: MapIcon } = window.__VENDOR__.Lucide;
 	window.__MobileBottomNav = function MobileBottomNav({ activeTab, setActiveTab, criticalCount, onOpenAddModal, canAddAsset }) {
 		const tabs = [
 			{
@@ -434,6 +448,16 @@ const YouTubeSidebar = window.__YouTubeSidebar;
 				id: "tambak",
 				label: "Tambak",
 				icon: Fish
+			},
+			{
+				id: "pembelajaran",
+				label: "Belajar",
+				icon: School
+			},
+			{
+				id: "tanah",
+				label: "Tanah",
+				icon: MapIcon
 			},
 			{
 				id: "standar",
@@ -644,10 +668,9 @@ const LoginScreen = window.__LoginScreen;
 // ============================================================================
 (() => {
 	const { useState, useMemo } = React;
-	const { Building2, CheckCircle2, AlertTriangle, Users, ArrowUpRight, TrendingUp, Ship, Fish, Boxes, Compass, Factory, Briefcase, Wrench, ShieldAlert, ChevronRight, Filter, Bed, GraduationCap, Layers } = window.__VENDOR__.Lucide;
+	const { Building2, CheckCircle2, AlertTriangle, Users, ArrowUpRight, TrendingUp, Ship, Fish, Boxes, Compass, Factory, Briefcase, Wrench, ShieldAlert, ChevronRight, Filter, Bed, GraduationCap, Layers, BarChart3 } = window.__VENDOR__.Lucide;
 	const { Doughnut, Bar, Radar } = window.__VENDOR__.ReactChartJS2;
 	const { NATIONAL_SARPRAS_TARGETS, SARPRAS_CATEGORIES, SATDIK_LIST: DEFAULT_SATDIK_LIST, calculateSarprasKPIs } = window.SARPRAS_DATA;
-	const logoKkp = window.__LOGO_KKP || "Frontend/assets/logo-kkp.png";
 	window.__ExecutiveDashboard = function ExecutiveDashboard({ kpis, assets, asramaData, standarData, tambakData, satdikList, currentUser, onNavigateTab, onFilterCategory, onSelectSatdik }) {
 		const { isDark } = useTheme();
 		const [jenjangFilter, setJenjangFilter] = useState("ALL");
@@ -1196,15 +1219,7 @@ const LoginScreen = window.__LoginScreen;
 		};
 		// Determine readiness status badge
 		const isTargetAchieved = avgConditionScore >= NATIONAL_SARPRAS_TARGETS.targetIndeksKelayakan;
-		return /* @__PURE__ */ React.createElement("div", { className: "space-y-6" }, /* @__PURE__ */ React.createElement("div", { className: "flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-800/90 via-slate-800/70 to-slate-900/90 p-4 sm:p-5 rounded-2xl border border-slate-700/80 shadow-lg relative overflow-hidden" }, /* @__PURE__ */ React.createElement("div", { className: "absolute right-0 top-0 bottom-0 opacity-5 pointer-events-none flex items-center pr-6" }, /* @__PURE__ */ React.createElement("img", {
-			src: logoKkp,
-			alt: "KKP Watermark",
-			className: "w-56 h-56 object-contain"
-		})), /* @__PURE__ */ React.createElement("div", { className: "flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-3.5 sm:gap-4 relative z-10 w-full sm:w-auto" }, /* @__PURE__ */ React.createElement("div", { className: "w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white p-1.5 shadow-md border border-cyan-500/30 flex items-center justify-center flex-shrink-0" }, /* @__PURE__ */ React.createElement("img", {
-			src: logoKkp,
-			alt: "Logo KKP",
-			className: "w-full h-full object-contain"
-		})), /* @__PURE__ */ React.createElement("div", { className: "flex flex-col items-center sm:items-start w-full sm:w-auto" }, /* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center justify-center sm:justify-start gap-1.5 sm:gap-2" }, /* @__PURE__ */ React.createElement("span", { className: "px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-center" }, "National Sarpras Overview")), /* @__PURE__ */ React.createElement("h2", { className: "text-lg sm:text-xl md:text-2xl font-bold text-white tracking-tight mt-1.5 sm:mt-1 text-center sm:text-left" }, "Dasbor Analitik Sarana & Prasarana Vokasi KKP"), /* @__PURE__ */ React.createElement("p", { className: "text-slate-400 text-xs sm:text-sm mt-1 sm:mt-0.5 max-w-2xl text-center sm:text-left" }, "Monitoring kondisi fisik, kelayakan operasi armada kapal latih, tambak, laboratorium, dan sarpras pada 18 Satuan Pendidikan Kelautan dan Perikanan se-Indonesia."))), /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-center gap-1.5 bg-slate-900/90 p-1.5 rounded-xl border border-slate-700/60 self-center md:self-center overflow-x-auto max-w-full" }, /* @__PURE__ */ React.createElement(Filter, { className: "w-3.5 h-3.5 text-slate-400 ml-2" }), /* @__PURE__ */ React.createElement("button", {
+		return /* @__PURE__ */ React.createElement("div", { className: "space-y-6" }, /* @__PURE__ */ React.createElement("div", { className: "flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-800/90 via-slate-800/70 to-slate-900/90 p-4 sm:p-5 rounded-2xl border border-slate-700/80 shadow-lg relative overflow-hidden" }, /* @__PURE__ */ React.createElement("div", { className: "flex flex-col items-center sm:items-start text-center sm:text-left relative z-10 w-full sm:w-auto" }, /* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center justify-center sm:justify-start gap-1.5 sm:gap-2" }, /* @__PURE__ */ React.createElement("span", { className: "px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-center" }, "National Sarpras Overview")), /* @__PURE__ */ React.createElement("h2", { className: "text-lg sm:text-xl md:text-2xl font-bold text-white tracking-tight mt-1.5 sm:mt-1 text-center sm:text-left flex items-center justify-center sm:justify-start gap-2" }, /* @__PURE__ */ React.createElement(BarChart3, { className: "w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 flex-shrink-0" }), /* @__PURE__ */ React.createElement("span", null, "Dasbor Analitik Sarana & Prasarana Vokasi KKP")), /* @__PURE__ */ React.createElement("p", { className: "text-slate-400 text-xs sm:text-sm mt-1 sm:mt-0.5 max-w-2xl text-center sm:text-left" }, "Monitoring kondisi fisik, kelayakan operasi armada kapal latih, tambak, laboratorium, dan sarpras pada 18 Satuan Pendidikan Kelautan dan Perikanan se-Indonesia.")), /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-center gap-1.5 bg-slate-900/90 p-1.5 rounded-xl border border-slate-700/60 self-center md:self-center overflow-x-auto max-w-full" }, /* @__PURE__ */ React.createElement(Filter, { className: "w-3.5 h-3.5 text-slate-400 ml-2" }), /* @__PURE__ */ React.createElement("button", {
 			onClick: () => setJenjangFilter("ALL"),
 			className: `px-3 py-1 text-xs font-semibold rounded-lg transition-colors ${jenjangFilter === "ALL" ? "bg-cyan-600 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"}`
 		}, "Semua (18)"), /* @__PURE__ */ React.createElement("button", {
@@ -1406,7 +1421,7 @@ const ExecutiveDashboard = window.__ExecutiveDashboard;
 				? `
           <div style="margin-bottom: 10px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 7px 8px;">
             <div style="display: flex; align-items: center; justify-content: space-between; font-size: 9.5px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 5px;">
-              <span>Sumber Kalibrasi 3 Pilar:</span>
+              <span>Kalibrasi 3 Pilar:</span>
               <span style="font-size: 8.5px; color: #94a3b8; font-weight: 600;">BPPSDM KP</span>
             </div>
             <div style="display: flex; flex-direction: column; gap: 3.5px;">
@@ -1506,7 +1521,7 @@ const ExecutiveDashboard = window.__ExecutiveDashboard;
             type="button" 
             data-satdik-calib-modal="true"
             style="padding: 7px 10px; font-size: 11px; font-weight: 700; background: rgba(30, 41, 59, 0.95); color: #38bdf8; border: 1.5px solid rgba(56, 189, 248, 0.5); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;"
-            title="Buka panduan lengkap sumber data 3 pilar dan rumus kalibrasi persentase"
+            title="Buka panduan lengkap 3 pilar dan rumus kalibrasi persentase"
           >
             ℹ️ Rumus %
           </button>
@@ -1735,7 +1750,7 @@ const ExecutiveDashboard = window.__ExecutiveDashboard;
 				className: "flex items-center gap-2 mb-1"
 			}, /* @__PURE__ */ React.createElement("span", {
 				className: "px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30"
-			}, "Metodologi & Sumber Data"), /* @__PURE__ */ React.createElement("span", {
+			}, "Metodologi & Kalibrasi Data"), /* @__PURE__ */ React.createElement("span", {
 				className: "text-xs text-slate-400"
 			}, "• BPPSDM KP 2026")), /* @__PURE__ */ React.createElement("h3", {
 				className: "text-base sm:text-lg font-bold text-white flex items-center gap-2"
@@ -1758,7 +1773,7 @@ const ExecutiveDashboard = window.__ExecutiveDashboard;
 				className: "space-y-3"
 			}, /* @__PURE__ */ React.createElement("h4", {
 				className: "text-xs font-bold text-white uppercase tracking-wider"
-			}, "3 Pilar Resmi Sumber Persentase (%)"), /* @__PURE__ */ React.createElement("div", {
+			}, "3 Pilar Resmi Persentase (%)"), /* @__PURE__ */ React.createElement("div", {
 				className: "bg-slate-800/60 p-3.5 rounded-xl border border-slate-700/60 space-y-2"
 			}, /* @__PURE__ */ React.createElement("div", {
 				className: "flex items-center justify-between"
@@ -1865,8 +1880,8 @@ const ExecutiveDashboard = window.__ExecutiveDashboard;
 			type: "button",
 			onClick: () => setIsCalibrationModalOpen(true),
 			className: "px-2.5 py-0.5 rounded-lg bg-cyan-950 hover:bg-cyan-900 text-cyan-300 hover:text-white border border-cyan-800 text-[11px] font-semibold flex items-center gap-1.5 transition-all shadow-2xs",
-			title: "Lihat penjelasan sumber 3 pilar dan rumus kalibrasi persentase"
-		}, /* @__PURE__ */ React.createElement(Layers, { className: "w-3 h-3 text-cyan-400" }), /* @__PURE__ */ React.createElement("span", null, "Sumber & Rumus Kalibrasi (%)")))), /* @__PURE__ */ React.createElement("div", { className: "relative w-full flex-1 min-h-[380px] xs:min-h-[440px] sm:min-h-[500px] rounded-xl border border-slate-700/80 overflow-hidden shadow-inner" }, /* @__PURE__ */ React.createElement("div", {
+			title: "Lihat penjelasan 3 pilar dan rumus kalibrasi persentase"
+		}, /* @__PURE__ */ React.createElement(Layers, { className: "w-3 h-3 text-cyan-400" }), /* @__PURE__ */ React.createElement("span", null, "Rumus & Kalibrasi (%)")))), /* @__PURE__ */ React.createElement("div", { className: "relative w-full flex-1 min-h-[380px] xs:min-h-[440px] sm:min-h-[500px] rounded-xl border border-slate-700/80 overflow-hidden shadow-inner" }, /* @__PURE__ */ React.createElement("div", {
 			ref: mapContainerRef,
 			className: "w-full h-full min-h-[380px] xs:min-h-[440px] sm:min-h-[500px]"
 		}), /* @__PURE__ */ React.createElement("div", { className: "absolute top-3 left-3 z-10 flex items-center gap-2 bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-700/80 text-[11px] text-cyan-300 font-medium shadow-lg pointer-events-none" }, /* @__PURE__ */ React.createElement(Compass, { className: "w-3.5 h-3.5 text-cyan-400" }), /* @__PURE__ */ React.createElement("span", null, "Peta Asli Terkalibrasi GPS"), /* @__PURE__ */ React.createElement("span", { className: "text-slate-500" }, "•"), /* @__PURE__ */ React.createElement("span", { className: "font-mono text-white text-[10px]" }, "WPP-NRI")), /* @__PURE__ */ React.createElement("div", { className: "absolute top-3 right-3 z-10 flex flex-col items-center bg-slate-900/90 backdrop-blur-md rounded-xl border border-slate-700/80 shadow-2xl p-1 gap-1" }, /* @__PURE__ */ React.createElement("button", {
@@ -1929,7 +1944,7 @@ const ExecutiveDashboard = window.__ExecutiveDashboard;
 		}, prodiName))))), /* @__PURE__ */ React.createElement("div", { className: "bg-gradient-to-br from-slate-900 to-slate-950 p-4 rounded-xl border border-slate-700/80 mb-3.5 shadow-xs" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between mb-2" }, /* @__PURE__ */ React.createElement("span", { className: "text-xs font-semibold text-slate-300" }, "Ringkasan Sarpras Kampus"), /* @__PURE__ */ React.createElement("span", { className: "text-xs font-bold text-cyan-400" }, selectedMetrics.count, " Sarpras Terdata")), /* @__PURE__ */ React.createElement("div", { className: "space-y-1 mb-3" }, /* @__PURE__ */ React.createElement("div", { className: "flex justify-between text-xs" }, /* @__PURE__ */ React.createElement("span", { className: "text-slate-400" }, "Indeks Kelayakan Kampus"), /* @__PURE__ */ React.createElement("span", { className: "font-bold text-white" }, Math.round(selectedMetrics.avgScore), "%")), /* @__PURE__ */ React.createElement("div", { className: "w-full h-2 bg-slate-800 rounded-full overflow-hidden" }, /* @__PURE__ */ React.createElement("div", {
 			className: `h-full rounded-full transition-all duration-500 ${selectedMetrics.avgScore >= 85 ? "bg-emerald-500" : selectedMetrics.avgScore >= 75 ? "bg-sky-500" : "bg-rose-500"}`,
 			style: { width: `${selectedMetrics.avgScore}%` }
-		}))), /* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-3 gap-2 text-center text-[10px]" }, /* @__PURE__ */ React.createElement("div", { className: "bg-slate-800/80 p-1.5 rounded-lg border border-slate-700" }, /* @__PURE__ */ React.createElement("span", { className: "text-slate-400 block" }, "Baik"), /* @__PURE__ */ React.createElement("span", { className: "font-bold text-emerald-400 text-xs" }, selectedMetrics.baik)), /* @__PURE__ */ React.createElement("div", { className: "bg-slate-800/80 p-1.5 rounded-lg border border-slate-700" }, /* @__PURE__ */ React.createElement("span", { className: "text-slate-400 block" }, "R. Ringan"), /* @__PURE__ */ React.createElement("span", { className: "font-bold text-sky-400 text-xs" }, selectedMetrics.rusakRingan)), /* @__PURE__ */ React.createElement("div", { className: "bg-slate-800/80 p-1.5 rounded-lg border border-slate-700" }, /* @__PURE__ */ React.createElement("span", { className: "text-slate-400 block" }, "R. Berat"), /* @__PURE__ */ React.createElement("span", { className: "font-bold text-rose-400 text-xs" }, selectedMetrics.rusakBerat)))), selectedMetrics.calibration && /* @__PURE__ */ React.createElement("div", { className: "bg-slate-900/85 p-3.5 rounded-xl border border-cyan-800/50 mb-3.5 space-y-2.5 shadow-sm" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-center gap-1.5" }, /* @__PURE__ */ React.createElement(Layers, { className: "w-3.5 h-3.5 text-cyan-400" }), /* @__PURE__ */ React.createElement("span", { className: "text-[11px] font-bold text-white tracking-wide" }, "Transparansi Sumber Persentase (%)")), /* @__PURE__ */ React.createElement("button", {
+		}))), /* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-3 gap-2 text-center text-[10px]" }, /* @__PURE__ */ React.createElement("div", { className: "bg-slate-800/80 p-1.5 rounded-lg border border-slate-700" }, /* @__PURE__ */ React.createElement("span", { className: "text-slate-400 block" }, "Baik"), /* @__PURE__ */ React.createElement("span", { className: "font-bold text-emerald-400 text-xs" }, selectedMetrics.baik)), /* @__PURE__ */ React.createElement("div", { className: "bg-slate-800/80 p-1.5 rounded-lg border border-slate-700" }, /* @__PURE__ */ React.createElement("span", { className: "text-slate-400 block" }, "R. Ringan"), /* @__PURE__ */ React.createElement("span", { className: "font-bold text-sky-400 text-xs" }, selectedMetrics.rusakRingan)), /* @__PURE__ */ React.createElement("div", { className: "bg-slate-800/80 p-1.5 rounded-lg border border-slate-700" }, /* @__PURE__ */ React.createElement("span", { className: "text-slate-400 block" }, "R. Berat"), /* @__PURE__ */ React.createElement("span", { className: "font-bold text-rose-400 text-xs" }, selectedMetrics.rusakBerat)))), selectedMetrics.calibration && /* @__PURE__ */ React.createElement("div", { className: "bg-slate-900/85 p-3.5 rounded-xl border border-cyan-800/50 mb-3.5 space-y-2.5 shadow-sm" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-center gap-1.5" }, /* @__PURE__ */ React.createElement(Layers, { className: "w-3.5 h-3.5 text-cyan-400" }), /* @__PURE__ */ React.createElement("span", { className: "text-[11px] font-bold text-white tracking-wide" }, "Transparansi Persentase (%)")), /* @__PURE__ */ React.createElement("button", {
 			type: "button",
 			onClick: () => setIsCalibrationModalOpen(true),
 			className: "text-[10px] text-cyan-400 hover:text-cyan-300 font-semibold underline"
@@ -1939,7 +1954,7 @@ const ExecutiveDashboard = window.__ExecutiveDashboard;
 			return /* @__PURE__ */ React.createElement("div", {
 				key: c.id,
 				className: "bg-slate-950/70 p-2 rounded-lg border border-slate-800 text-[11px] space-y-1"
-			}, /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React.createElement("span", { className: "font-semibold text-slate-200 flex items-center gap-1.5" }, /* @__PURE__ */ React.createElement(IconComp, { className: "w-3 h-3 text-cyan-400 flex-shrink-0" }), c.name, /* @__PURE__ */ React.createElement("span", { className: "text-[9px] text-slate-400 font-mono font-normal" }, `(Bobot ${c.weightPercent}%)`)), /* @__PURE__ */ React.createElement("span", { className: `px-1.5 py-0.5 rounded text-[10px] font-mono font-bold border ${pillColor}` }, `${c.score}%`)), /* @__PURE__ */ React.createElement("p", { className: "text-[10px] text-slate-400 leading-tight pl-4.5" }, c.desc), /* @__PURE__ */ React.createElement("span", { className: "text-[9px] text-slate-400 block pl-4.5 italic truncate" }, `Sumber: ${c.source}`));
+			}, /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React.createElement("span", { className: "font-semibold text-slate-200 flex items-center gap-1.5" }, /* @__PURE__ */ React.createElement(IconComp, { className: "w-3 h-3 text-cyan-400 flex-shrink-0" }), c.name, /* @__PURE__ */ React.createElement("span", { className: "text-[9px] text-slate-400 font-mono font-normal" }, `(Bobot ${c.weightPercent}%)`)), /* @__PURE__ */ React.createElement("span", { className: `px-1.5 py-0.5 rounded text-[10px] font-mono font-bold border ${pillColor}` }, `${c.score}%`)), /* @__PURE__ */ React.createElement("p", { className: "text-[10px] text-slate-400 leading-tight pl-4.5" }, c.desc), /* @__PURE__ */ React.createElement("span", { className: "text-[9px] text-slate-400 block pl-4.5 italic truncate" }, c.source));
 		})), /* @__PURE__ */ React.createElement("div", { className: "pt-1.5 border-t border-slate-800 flex items-center justify-between text-[10px] text-slate-400" }, /* @__PURE__ */ React.createElement("span", null, "Formula: ∑(Skor Pilar × Bobot)"), /* @__PURE__ */ React.createElement("strong", { className: "text-white font-mono" }, `IKSP = ${Math.round(selectedMetrics.avgScore)}%`))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h4", { className: "text-xs font-bold text-slate-300 uppercase tracking-wider mb-2" }, "Fasilitas Unggulan Kampus Ini"), /* @__PURE__ */ React.createElement("div", { className: "space-y-1.5 max-h-36 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-700 text-xs" }, selectedMetrics.assets.length > 0 ? selectedMetrics.assets.map((asset) => /* @__PURE__ */ React.createElement("div", {
 			key: asset.id,
 			className: "bg-slate-900/50 p-2 rounded-lg border border-slate-800/80 flex items-center justify-between shadow-2xs"
@@ -1954,6 +1969,11 @@ const ExecutiveDashboard = window.__ExecutiveDashboard;
 			className: "flex-1 min-w-[95px] px-2 py-1.5 rounded-lg bg-slate-900 hover:bg-cyan-950 text-slate-300 hover:text-cyan-300 border border-slate-800 hover:border-cyan-700 text-[10.5px] font-semibold flex items-center justify-center gap-1 transition-all shadow-2xs",
 			title: `Buka Tab Tambak & Kolam untuk ${selectedSatdik.shortName}`
 		}, /* @__PURE__ */ React.createElement(Fish, { className: "w-3 h-3 text-cyan-400" }), "Tab Tambak"), /* @__PURE__ */ React.createElement("button", {
+			type: "button",
+			onClick: () => onNavigateTab("pembelajaran"),
+			className: "flex-1 min-w-[95px] px-2 py-1.5 rounded-lg bg-slate-900 hover:bg-cyan-950 text-slate-300 hover:text-cyan-300 border border-slate-800 hover:border-cyan-700 text-[10.5px] font-semibold flex items-center justify-center gap-1 transition-all shadow-2xs",
+			title: `Buka Tab Sarpras Pembelajaran untuk ${selectedSatdik.shortName}`
+		}, /* @__PURE__ */ React.createElement(School, { className: "w-3 h-3 text-cyan-400" }), "Pembelajaran"), /* @__PURE__ */ React.createElement("button", {
 			type: "button",
 			onClick: () => onNavigateTab("standar"),
 			className: "flex-1 min-w-[95px] px-2 py-1.5 rounded-lg bg-slate-900 hover:bg-cyan-950 text-slate-300 hover:text-cyan-300 border border-slate-800 hover:border-cyan-700 text-[10.5px] font-semibold flex items-center justify-center gap-1 transition-all shadow-2xs",
@@ -2017,7 +2037,7 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 	const {
 		X, PlusCircle, Building2, FileText, Coins, ShieldCheck, Wrench,
 		Check, AlertCircle, AlertTriangle, GraduationCap, Bed, Fish, Layers,
-		Sparkles, CheckCircle2, Download, RotateCcw, ArrowUpRight, Info
+		Sparkles, CheckCircle2, Download, RotateCcw, ArrowUpRight, Info, School, Map: MapIcon
 	} = window.__VENDOR__.Lucide;
 	const { SATDIK_LIST, SARPRAS_CATEGORIES, PRODI_LIST, getCategoryForProdi, getProdisForCategory } = window.SARPRAS_DATA;
 
@@ -2027,6 +2047,8 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 		onAddBuilding,
 		onAddTambakUnit,
 		onAddItem,
+		onAddPembelajaranFacility,
+		onAddTanahParcel,
 		onBulkImport,
 		initialType = "asrama",
 		standarBidangList = [],
@@ -2056,14 +2078,14 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 		];
 		const effectiveBidangList = standarBidangList.length > 0 ? standarBidangList : fallbackBidangList;
 
-		// Active tab in modal: "asrama" | "tambak" | "standar" | "import"
+		// Active tab in modal: "asrama" | "tambak" | "pembelajaran" | "standar" | "import"
 		const [activeTab, setActiveTab] = useState(() => {
-			if (initialType === "asrama" || initialType === "tambak" || initialType === "standar" || initialType === "import") return initialType;
+			if (initialType === "asrama" || initialType === "tambak" || initialType === "pembelajaran" || initialType === "tanah" || initialType === "standar" || initialType === "import") return initialType;
 			return "asrama";
 		});
 
 		useEffect(() => {
-			if (initialType === "asrama" || initialType === "tambak" || initialType === "standar" || initialType === "import") {
+			if (initialType === "asrama" || initialType === "tambak" || initialType === "pembelajaran" || initialType === "tanah" || initialType === "standar" || initialType === "import") {
 				setActiveTab(initialType);
 			} else {
 				setActiveTab("asrama");
@@ -2157,6 +2179,61 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 		const handleStandarChange = (e) => {
 			const { name, value, type } = e.target;
 			setStandarForm((prev) => ({
+				...prev,
+				[name]: type === "number" ? (value === "" ? 0 : Number(value)) : value
+			}));
+		};
+
+		// -------------------------------------------------------------
+		// TAB 3 STATE: Sarpras Pembelajaran (Kelas, Perpus, TEFA, Simulator)
+		// -------------------------------------------------------------
+		const [pembelajaranForm, setPembelajaranForm] = useState({
+			satdikId: defaultSatdikId,
+			category: "kelas", // "kelas" | "perpustakaan" | "tefa" | "simulator"
+			name: "",
+			gedung: "Gedung Kuliah & Praktik Bersama",
+			luasM2: 72,
+			kapasitas: 35,
+			kondisi: "Baik",
+			statusOp: "Aktif Digunakan",
+			spesifikasi: "",
+			sertifikasi: "",
+			tahunPengadaan: new Date().getFullYear(),
+			keterangan: ""
+		});
+
+		const handlePembelajaranChange = (e) => {
+			const { name, value, type } = e.target;
+			setPembelajaranForm((prev) => ({
+				...prev,
+				[name]: type === "number" ? (value === "" ? 0 : Number(value)) : value
+			}));
+		};
+
+		// -------------------------------------------------------------
+		// TAB 4 STATE: Data Tanah & Lahan (KIB A BMN)
+		// -------------------------------------------------------------
+		const [tanahForm, setTanahForm] = useState({
+			satdikId: defaultSatdikId,
+			namaBidang: "",
+			kodeBmn: "2.01.01.01.001.0001",
+			nup: 1,
+			luasM2: 10000,
+			statusSertifikat: "Sertifikat Hak Pakai (SHP)",
+			noSertifikat: "",
+			tanggalSertifikat: new Date().toISOString().slice(0, 10),
+			atasNama: "Pemerintah RI c.q. Kementerian Kelautan dan Perikanan",
+			peruntukan: "Kampus & Fasilitas Akademik",
+			statusPemanfaatan: "Digunakan Sendiri (Operasional)",
+			tahunPerolehan: new Date().getFullYear(),
+			asalPerolehan: "APBN",
+			alamat: "",
+			keterangan: ""
+		});
+
+		const handleTanahChange = (e) => {
+			const { name, value, type } = e.target;
+			setTanahForm((prev) => ({
 				...prev,
 				[name]: type === "number" ? (value === "" ? 0 : Number(value)) : value
 			}));
@@ -2281,6 +2358,16 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 					detail: tb.jenis + " • " + tb.luasM2 + " m² • " + tb.kondisi + " (" + tb.statusOperasional + ")"
 				});
 			});
+			(importPreview.pembelajaranFacilities || []).forEach((pf) => {
+				const catLabel = pf.category === 'kelas' ? 'Ruang Kelas' : pf.category === 'perpustakaan' ? 'Perpustakaan' : pf.category === 'tefa' ? 'TEFA' : 'Simulator';
+				combinedPreviewRows.push({
+					badge: "Pembelajaran",
+					badgeClass: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30",
+					lokasi: pf.satdikName || pf.satdikId,
+					nama: pf.name,
+					detail: catLabel + " • " + pf.luasM2 + " m² • Kapasitas " + pf.kapasitas + " Org (" + pf.kondisi + ")"
+				});
+			});
 			(importPreview.standarItems || []).forEach((st) => {
 				combinedPreviewRows.push({
 					badge: "Standar Prodi",
@@ -2288,6 +2375,15 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 					lokasi: st.bidangNama || st.bidangId,
 					nama: st.nama,
 					detail: "Sek. " + st.sec + " • Standar: " + st.stdVol + " " + st.satuan + (st.realPreview ? " • Riil " + st.realPreview : "")
+				});
+			});
+			(importPreview.tanahParcels || []).forEach((tp) => {
+				combinedPreviewRows.push({
+					badge: "Tanah (KIB A)",
+					badgeClass: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30",
+					lokasi: tp.satdikName || tp.satdikId,
+					nama: tp.namaBidang,
+					detail: (tp.luasM2 || 0).toLocaleString("id-ID") + " m² (" + (tp.luasHa || ((tp.luasM2 || 0) / 10000).toFixed(2)) + " Ha) • " + (tp.statusSertifikat || "SHP") + " • NUP " + (tp.nup || 1)
 				});
 			});
 		}
@@ -2338,6 +2434,46 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 					}
 					setSuccessMsg("Unit prasarana/sarana tambak & kolam berhasil disimpan ke database!");
 					setTimeout(() => onClose(), 800);
+				} else if (activeTab === "pembelajaran") {
+					if (!pembelajaranForm.name.trim()) {
+						setErrorMsg("Nama fasilitas / ruang pembelajaran wajib diisi.");
+						setIsSubmitting(false);
+						return;
+					}
+					const pembPayload = {
+						...pembelajaranForm,
+						luasM2: Number(pembelajaranForm.luasM2) || 0,
+						kapasitas: Number(pembelajaranForm.kapasitas) || 0,
+						tahunPengadaan: Number(pembelajaranForm.tahunPengadaan) || new Date().getFullYear()
+					};
+					if (onAddPembelajaranFacility) {
+						await onAddPembelajaranFacility(pembPayload);
+					}
+					setSuccessMsg("Fasilitas sarpras pembelajaran berhasil disimpan ke database!");
+					setTimeout(() => onClose(), 800);
+				} else if (activeTab === "tanah") {
+					if (!tanahForm.namaBidang.trim()) {
+						setErrorMsg("Nama bidang tanah / peruntukan lahan wajib diisi.");
+						setIsSubmitting(false);
+						return;
+					}
+					if (Number(tanahForm.luasM2) <= 0) {
+						setErrorMsg("Luas tanah (m²) harus lebih besar dari 0.");
+						setIsSubmitting(false);
+						return;
+					}
+					const tanahPayload = {
+						...tanahForm,
+						luasM2: Number(tanahForm.luasM2) || 0,
+						luasHa: Number(((Number(tanahForm.luasM2) || 0) / 10000).toFixed(2)),
+						nup: Number(tanahForm.nup) || 1,
+						tahunPerolehan: Number(tanahForm.tahunPerolehan) || new Date().getFullYear()
+					};
+					if (onAddTanahParcel) {
+						await onAddTanahParcel(tanahPayload);
+					}
+					setSuccessMsg("Data bidang tanah (" + tanahForm.namaBidang + ") berhasil disimpan ke inventaris BMN!");
+					setTimeout(() => onClose(), 800);
 				} else if (activeTab === "standar") {
 					if (!standarForm.nama.trim()) {
 						setErrorMsg("Nama item standar sarpras wajib diisi.");
@@ -2376,7 +2512,9 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 						const res = await onBulkImport({
 							buildings: importPreview.buildings || [],
 							tambakUnits: importPreview.tambakUnits || [],
-							standarItems: importPreview.standarItems || []
+							pembelajaranFacilities: importPreview.pembelajaranFacilities || [],
+							standarItems: importPreview.standarItems || [],
+							tanahParcels: importPreview.tanahParcels || []
 						});
 						const totalSaved = res?.counts?.total || importPreview.totalValid;
 						setSuccessMsg("Berhasil mengimpor " + totalSaved + " baris data Excel ke sistem & database!");
@@ -2386,6 +2524,12 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 						}
 						for (const tb of (importPreview.tambakUnits || [])) {
 							if (onAddTambakUnit) await onAddTambakUnit(tb);
+						}
+						for (const pf of (importPreview.pembelajaranFacilities || [])) {
+							if (onAddPembelajaranFacility) await onAddPembelajaranFacility(pf);
+						}
+						for (const tp of (importPreview.tanahParcels || [])) {
+							if (onAddTanahParcel) await onAddTanahParcel(tp);
 						}
 						for (const st of (importPreview.standarItems || [])) {
 							if (onAddItem) await onAddItem(st);
@@ -2404,8 +2548,10 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 		const headerTitles = {
 			asrama: { title: "Tambah Gedung Asrama Taruna", sub: "Pencatatan fisik gedung & kapasitas standar 4 m²/orang", icon: Bed },
 			tambak: { title: "Tambah Unit Tambak & Kolam Budidaya", sub: "Pencatatan petak tambak, kolam, hatchery & sarana penunjang budidaya", icon: Fish },
+			pembelajaran: { title: "Tambah Fasilitas Sarpras Pembelajaran", sub: "Pencatatan ruang kelas terpadu, perpustakaan, TEFA produksi & simulator navigasi", icon: School },
+			tanah: { title: "Tambah Bidang Tanah & Lahan (KIB A BMN)", sub: "Pencatatan inventaris bidang tanah, legalitas sertifikat, dan luas lahan Satdik", icon: MapIcon },
 			standar: { title: "Tambah Item Standar Minimal Prodi", sub: "Pencatatan item kurikulum standar 12 rumpun vokasi KKP", icon: GraduationCap },
-			import: { title: "Import Massal Data Sarpras via Excel (.xlsx)", sub: "Unggah banyak data Gedung Asrama, Tambak/Kolam & Standar Prodi sekaligus menggunakan template resmi", icon: FileText }
+			import: { title: "Import Massal Data Sarpras via Excel (.xlsx)", sub: "Unggah banyak data Gedung Asrama, Tambak/Kolam, Pembelajaran & Standar Prodi sekaligus menggunakan template resmi", icon: FileText }
 		};
 		const ActiveHeaderIcon = headerTitles[activeTab]?.icon || PlusCircle;
 
@@ -2452,11 +2598,27 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 						),
 						/* @__PURE__ */ React.createElement("button", {
 							type: "button",
+							onClick: () => { setActiveTab("pembelajaran"); setErrorMsg(""); setSuccessMsg(""); },
+							className: "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all " + (activeTab === "pembelajaran" ? "bg-cyan-600 text-white shadow-md shadow-cyan-900/40" : "bg-slate-800/80 text-slate-300 hover:bg-slate-800 hover:text-white")
+						},
+							/* @__PURE__ */ React.createElement(School, { className: "w-3.5 h-3.5" }),
+							/* @__PURE__ */ React.createElement("span", null, "3. Sarpras Pembelajaran")
+						),
+						/* @__PURE__ */ React.createElement("button", {
+							type: "button",
+							onClick: () => { setActiveTab("tanah"); setErrorMsg(""); setSuccessMsg(""); },
+							className: "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all " + (activeTab === "tanah" ? "bg-cyan-600 text-white shadow-md shadow-cyan-900/40" : "bg-slate-800/80 text-slate-300 hover:bg-slate-800 hover:text-white")
+						},
+							/* @__PURE__ */ React.createElement(MapIcon, { className: "w-3.5 h-3.5" }),
+							/* @__PURE__ */ React.createElement("span", null, "4. Data Tanah (KIB A)")
+						),
+						/* @__PURE__ */ React.createElement("button", {
+							type: "button",
 							onClick: () => { setActiveTab("standar"); setErrorMsg(""); setSuccessMsg(""); },
 							className: "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all " + (activeTab === "standar" ? "bg-cyan-600 text-white shadow-md shadow-cyan-900/40" : "bg-slate-800/80 text-slate-300 hover:bg-slate-800 hover:text-white")
 						},
 							/* @__PURE__ */ React.createElement(GraduationCap, { className: "w-3.5 h-3.5" }),
-							/* @__PURE__ */ React.createElement("span", null, "3. Standar Prodi")
+							/* @__PURE__ */ React.createElement("span", null, "5. Standar Prodi")
 						)
 					),
 					/* @__PURE__ */ React.createElement("button", {
@@ -2465,7 +2627,7 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 						className: "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all border " + (activeTab === "import" ? "bg-emerald-600 border-emerald-400 text-white shadow-md shadow-emerald-900/40" : "bg-emerald-950/50 border-emerald-600/40 text-emerald-300 hover:bg-emerald-900/50 hover:text-white")
 					},
 						/* @__PURE__ */ React.createElement(FileText, { className: "w-3.5 h-3.5" }),
-						/* @__PURE__ */ React.createElement("span", null, "4. Import Excel (.xlsx)")
+						/* @__PURE__ */ React.createElement("span", null, "6. Import Excel (.xlsx)")
 					)
 				),
 
@@ -2811,7 +2973,366 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 						)
 					),
 
+					/* =================== FORM TAB 3: SARPRAS PEMBELAJARAN =================== */
+					activeTab === "pembelajaran" && /* @__PURE__ */ React.createElement(React.Fragment, null,
+						/* Satdik & Kategori Fasilitas */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
+							/* Satdik */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "text-slate-300 font-semibold block mb-1" }, "Satuan Pendidikan KP *"),
+								/* @__PURE__ */ React.createElement("select", {
+									name: "satdikId",
+									value: pembelajaranForm.satdikId,
+									disabled: Boolean(lockedSatdik),
+									onChange: handlePembelajaranChange,
+									className: "w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+								}, effectiveSatdikList.map((s) => /* @__PURE__ */ React.createElement("option", { key: s.id, value: s.id }, s.shortName ? (s.shortName + " — " + s.name) : s.name)))
+							),
+							/* Kategori Pembelajaran */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "text-slate-300 font-semibold block mb-1" }, "Kategori Fasilitas Pembelajaran *"),
+								/* @__PURE__ */ React.createElement("select", {
+									name: "category",
+									value: pembelajaranForm.category,
+									onChange: handlePembelajaranChange,
+									className: "w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+								},
+									/* @__PURE__ */ React.createElement("option", { value: "kelas" }, "1. Ruang Kelas Teori / Kuliah Terpadu"),
+									/* @__PURE__ */ React.createElement("option", { value: "perpustakaan" }, "2. Perpustakaan & E-Library"),
+									/* @__PURE__ */ React.createElement("option", { value: "tefa" }, "3. Teaching Factory (TEFA) Produksi & Pengolahan"),
+									/* @__PURE__ */ React.createElement("option", { value: "simulator" }, "4. Simulator Navigasi, Permesinan & Lab Praktik")
+								)
+							)
+						),
+
+						/* Nama Fasilitas & Gedung Penempatan */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "text-slate-300 font-semibold block mb-1" }, "Nama Sarpras / Fasilitas *"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "text",
+									name: "name",
+									value: pembelajaranForm.name,
+									onChange: handlePembelajaranChange,
+									placeholder: "Contoh: Ruang Smart Class A-102 / Bridge Simulator Full Mission",
+									className: "w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+								})
+							),
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "text-slate-300 font-semibold block mb-1" }, "Gedung / Lokasi Penempatan"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "text",
+									name: "gedung",
+									value: pembelajaranForm.gedung,
+									onChange: handlePembelajaranChange,
+									placeholder: "Contoh: Gedung Kuliah Bersama Lt. 2 / Hanggar TEFA",
+									className: "w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+								})
+							)
+						),
+
+						/* Dimensi: Luas m² & Kapasitas Orang */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "text-slate-300 font-semibold block mb-1" }, "Luas Bangunan / Ruangan (m²)"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "number",
+									min: 0,
+									step: "0.1",
+									name: "luasM2",
+									value: pembelajaranForm.luasM2,
+									onChange: handlePembelajaranChange,
+									className: "w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+								})
+							),
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "text-slate-300 font-semibold block mb-1" }, "Daya Tampung / Kapasitas (Taruna/Orang)"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "number",
+									min: 0,
+									step: 1,
+									name: "kapasitas",
+									value: pembelajaranForm.kapasitas,
+									onChange: handlePembelajaranChange,
+									className: "w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+								})
+							)
+						),
+
+						/* Kondisi & Status Operasional */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "text-slate-300 font-semibold block mb-1" }, "Kondisi Fisik"),
+								/* @__PURE__ */ React.createElement("select", {
+									name: "kondisi",
+									value: pembelajaranForm.kondisi,
+									onChange: handlePembelajaranChange,
+									className: "w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+								},
+									/* @__PURE__ */ React.createElement("option", { value: "Baik" }, "Baik (Berfungsi Normal)"),
+									/* @__PURE__ */ React.createElement("option", { value: "Rusak Ringan" }, "Rusak Ringan (Perlu Servis Minor)"),
+									/* @__PURE__ */ React.createElement("option", { value: "Rusak Berat" }, "Rusak Berat (Tidak Berfungsi / Perlu Renovasi)")
+								)
+							),
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "text-slate-300 font-semibold block mb-1" }, "Status Operasional"),
+								/* @__PURE__ */ React.createElement("select", {
+									name: "statusOp",
+									value: pembelajaranForm.statusOp,
+									onChange: handlePembelajaranChange,
+									className: "w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+								},
+									/* @__PURE__ */ React.createElement("option", { value: "Aktif Digunakan" }, "Aktif Digunakan untuk Pembelajaran"),
+									/* @__PURE__ */ React.createElement("option", { value: "Pemeliharaan Terjadwal" }, "Pemeliharaan Terjadwal"),
+									/* @__PURE__ */ React.createElement("option", { value: "Perlu Perbaikan" }, "Perlu Perbaikan / Kalibrasi Alat")
+								)
+							)
+						),
+
+						/* Spesifikasi & Sertifikasi */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "text-slate-300 font-semibold block mb-1" }, "Spesifikasi Teknis / Alat Utama"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "text",
+									name: "spesifikasi",
+									value: pembelajaranForm.spesifikasi,
+									onChange: handlePembelajaranChange,
+									placeholder: "Contoh: Interactive Smartboard 75 inch, sound system terpadu, AC 2 PK",
+									className: "w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+								})
+							),
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "text-slate-300 font-semibold block mb-1" }, "Sertifikasi / Lisensi (Jika Ada)"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "text",
+									name: "sertifikasi",
+									value: pembelajaranForm.sertifikasi,
+									onChange: handlePembelajaranChange,
+									placeholder: "Contoh: Approval STCW-F Ditjen Hubla, HACCP Grade A",
+									className: "w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+								})
+							)
+						),
+
+						/* Tahun Pengadaan & Keterangan */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-4" },
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "text-slate-300 font-semibold block mb-1" }, "Tahun Pengadaan"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "number",
+									min: 1980,
+									max: 2040,
+									name: "tahunPengadaan",
+									value: pembelajaranForm.tahunPengadaan,
+									onChange: handlePembelajaranChange,
+									className: "w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+								})
+							),
+							/* @__PURE__ */ React.createElement("div", { className: "sm:col-span-2" },
+								/* @__PURE__ */ React.createElement("label", { className: "text-slate-300 font-semibold block mb-1" }, "Keterangan Tambahan"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "text",
+									name: "keterangan",
+									value: pembelajaranForm.keterangan,
+									onChange: handlePembelajaranChange,
+									placeholder: "Catatan penunjang kegiatan belajar mengajar / praktikum taruna",
+									className: "w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+								})
+							)
+						)
+					),
+
 					/* =================== FORM TAB 4: STANDAR PRODI =================== */
+					activeTab === "tanah" && /* @__PURE__ */ React.createElement(React.Fragment, null,
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
+							/* Satuan Pendidikan */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Satuan Pendidikan KP *"),
+								/* @__PURE__ */ React.createElement("select", {
+									name: "satdikId",
+									value: tanahForm.satdikId,
+									disabled: Boolean(lockedSatdik),
+									onChange: handleTanahChange,
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								}, effectiveSatdikList.map((s) => /* @__PURE__ */ React.createElement("option", { key: s.id, value: s.id }, s.shortName || s.name)))
+							),
+							/* Nama Bidang / Peruntukan */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Nama Bidang / Peruntukan Lahan *"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "text",
+									name: "namaBidang",
+									value: tanahForm.namaBidang,
+									onChange: handleTanahChange,
+									placeholder: "Contoh: Kampus Utama Sedati / Tambak Pesisir",
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								})
+							)
+						),
+						/* Kode BMN, NUP, Luas M2 */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-4" },
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Kode Barang BMN (KIB A)"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "text",
+									name: "kodeBmn",
+									value: tanahForm.kodeBmn,
+									onChange: handleTanahChange,
+									placeholder: "2.01.01.01.001.0001",
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500 font-mono text-xs"
+								})
+							),
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "NUP BMN"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "number",
+									name: "nup",
+									min: "1",
+									value: tanahForm.nup,
+									onChange: handleTanahChange,
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500 font-mono"
+								})
+							),
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Luas Tanah (m²) *"),
+								/* @__PURE__ */ React.createElement("div", { className: "relative" },
+									/* @__PURE__ */ React.createElement("input", {
+										type: "number",
+										name: "luasM2",
+										min: "1",
+										value: tanahForm.luasM2,
+										onChange: handleTanahChange,
+										className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500 font-mono"
+									}),
+									/* @__PURE__ */ React.createElement("span", { className: "absolute right-3 top-2 text-cyan-400 font-semibold text-xs" }, (Number(tanahForm.luasM2 || 0) / 10000).toFixed(2), " Ha")
+								)
+							)
+						),
+						/* Status Sertifikat, No Sertifikat, Tanggal */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-4" },
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Status Hak / Sertifikat *"),
+								/* @__PURE__ */ React.createElement("select", {
+									name: "statusSertifikat",
+									value: tanahForm.statusSertifikat,
+									onChange: handleTanahChange,
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								},
+									/* @__PURE__ */ React.createElement("option", { value: "Sertifikat Hak Pakai (SHP)" }, "Sertifikat Hak Pakai (SHP)"),
+									/* @__PURE__ */ React.createElement("option", { value: "Dalam Proses BPN" }, "Dalam Proses BPN"),
+									/* @__PURE__ */ React.createElement("option", { value: "Hibah Pemda (Naskah Hibah)" }, "Hibah Pemda (Naskah Hibah)"),
+									/* @__PURE__ */ React.createElement("option", { value: "Girik / Adat / Pelepasan" }, "Girik / Adat / Pelepasan")
+								)
+							),
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Nomor Sertifikat"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "text",
+									name: "noSertifikat",
+									value: tanahForm.noSertifikat,
+									onChange: handleTanahChange,
+									placeholder: "SHP No. 00012/Pasar Minggu 2012",
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500 font-mono text-xs"
+								})
+							),
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Tanggal Sertifikat"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "date",
+									name: "tanggalSertifikat",
+									value: tanahForm.tanggalSertifikat,
+									onChange: handleTanahChange,
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								})
+							)
+						),
+						/* Peruntukan & Status Pemanfaatan */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Peruntukan Lahan"),
+								/* @__PURE__ */ React.createElement("select", {
+									name: "peruntukan",
+									value: tanahForm.peruntukan,
+									onChange: handleTanahChange,
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								},
+									/* @__PURE__ */ React.createElement("option", { value: "Kampus & Fasilitas Akademik" }, "Kampus & Fasilitas Akademik"),
+									/* @__PURE__ */ React.createElement("option", { value: "Tambak & Budidaya Praktik" }, "Tambak & Budidaya Praktik"),
+									/* @__PURE__ */ React.createElement("option", { value: "Workshop & Laboratorium Lapangan" }, "Workshop & Laboratorium"),
+									/* @__PURE__ */ React.createElement("option", { value: "Asrama & Fasilitas Penunjang" }, "Asrama & Fasilitas Penunjang"),
+									/* @__PURE__ */ React.createElement("option", { value: "Lahan Cadangan Pengembangan" }, "Lahan Cadangan Pengembangan")
+								)
+							),
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Status Pemanfaatan"),
+								/* @__PURE__ */ React.createElement("select", {
+									name: "statusPemanfaatan",
+									value: tanahForm.statusPemanfaatan,
+									onChange: handleTanahChange,
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								},
+									/* @__PURE__ */ React.createElement("option", { value: "Digunakan Sendiri (Operasional)" }, "Digunakan Sendiri (Operasional)"),
+									/* @__PURE__ */ React.createElement("option", { value: "KSP / Kerjasama Mitra" }, "KSP / Kerjasama Mitra"),
+									/* @__PURE__ */ React.createElement("option", { value: "Pinjam Pakai" }, "Pinjam Pakai"),
+									/* @__PURE__ */ React.createElement("option", { value: "Lahan Cadangan" }, "Lahan Cadangan")
+								)
+							)
+						),
+						/* Tahun Perolehan & Asal Perolehan */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Tahun Perolehan"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "number",
+									name: "tahunPerolehan",
+									min: "1950",
+									max: "2030",
+									value: tanahForm.tahunPerolehan,
+									onChange: handleTanahChange,
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500 font-mono"
+								})
+							),
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Asal Perolehan"),
+								/* @__PURE__ */ React.createElement("select", {
+									name: "asalPerolehan",
+									value: tanahForm.asalPerolehan,
+									onChange: handleTanahChange,
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								},
+									/* @__PURE__ */ React.createElement("option", { value: "APBN" }, "APBN"),
+									/* @__PURE__ */ React.createElement("option", { value: "Hibah Pemda" }, "Hibah Pemda"),
+									/* @__PURE__ */ React.createElement("option", { value: "Pemberian Hak" }, "Pemberian Hak")
+								)
+							)
+						),
+						/* Alamat, Kota, Keterangan */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Alamat Lengkap Bidang Tanah"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "text",
+									name: "alamat",
+									value: tanahForm.alamat,
+									onChange: handleTanahChange,
+									placeholder: "Jl. Raya ..., Kelurahan, Kecamatan",
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								})
+							),
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Catatan / Keterangan"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "text",
+									name: "keterangan",
+									value: tanahForm.keterangan,
+									onChange: handleTanahChange,
+									placeholder: "Batas bidang, kondisi topografi, rencana pengembangan",
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								})
+							)
+						)
+					),
 					activeTab === "standar" && /* @__PURE__ */ React.createElement(React.Fragment, null,
 						/* @__PURE__ */ React.createElement("div", null,
 							/* @__PURE__ */ React.createElement("label", { className: "text-slate-300 font-semibold block mb-1" }, "Rumpun Program Studi Vokasi *"),
@@ -2995,11 +3516,27 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 								),
 								/* @__PURE__ */ React.createElement("button", {
 									type: "button",
+									onClick: () => handleDownloadTemplate("pembelajaran"),
+									className: "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[11px] font-medium transition"
+								},
+									/* @__PURE__ */ React.createElement(Download, { className: "w-3 h-3 text-cyan-400" }),
+									/* @__PURE__ */ React.createElement("span", null, "Khusus Sarpras Pembelajaran")
+								),
+								/* @__PURE__ */ React.createElement("button", {
+									type: "button",
 									onClick: () => handleDownloadTemplate("standar"),
 									className: "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[11px] font-medium transition"
 								},
 									/* @__PURE__ */ React.createElement(Download, { className: "w-3 h-3 text-emerald-400" }),
 									/* @__PURE__ */ React.createElement("span", null, "Khusus Standar Prodi")
+								),
+								/* @__PURE__ */ React.createElement("button", {
+									type: "button",
+									onClick: () => handleDownloadTemplate("tanah"),
+									className: "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[11px] font-medium transition"
+								},
+									/* @__PURE__ */ React.createElement(Download, { className: "w-3 h-3 text-amber-400" }),
+									/* @__PURE__ */ React.createElement("span", null, "Khusus Data Tanah (KIB A)")
 								),
 								/* @__PURE__ */ React.createElement("a", {
 									href: "Templates/Template_Import_SARPRAS_KKP.xlsx",
@@ -3071,9 +3608,9 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 							),
 
 							/* SUMMARY BADGES */
-							/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-2.5" },
+							/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5" },
 								/* @__PURE__ */ React.createElement("div", { className: "bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-center" },
-									/* @__PURE__ */ React.createElement("div", { className: "text-lg font-black text-indigo-400" }, importPreview.buildings.length),
+									/* @__PURE__ */ React.createElement("div", { className: "text-lg font-black text-indigo-400" }, (importPreview.buildings || []).length),
 									/* @__PURE__ */ React.createElement("div", { className: "text-[10px] text-slate-400 font-medium" }, "Gedung Asrama")
 								),
 								/* @__PURE__ */ React.createElement("div", { className: "bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-center" },
@@ -3081,8 +3618,16 @@ const EarlyWarningMaintenance = window.__EarlyWarningMaintenance;
 									/* @__PURE__ */ React.createElement("div", { className: "text-[10px] text-slate-400 font-medium" }, "Tambak & Kolam")
 								),
 								/* @__PURE__ */ React.createElement("div", { className: "bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-center" },
-									/* @__PURE__ */ React.createElement("div", { className: "text-lg font-black text-emerald-400" }, importPreview.standarItems.length),
+									/* @__PURE__ */ React.createElement("div", { className: "text-lg font-black text-cyan-400" }, (importPreview.pembelajaranFacilities || []).length),
+									/* @__PURE__ */ React.createElement("div", { className: "text-[10px] text-slate-400 font-medium" }, "Sarpras Pembelajaran")
+								),
+								/* @__PURE__ */ React.createElement("div", { className: "bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-center" },
+									/* @__PURE__ */ React.createElement("div", { className: "text-lg font-black text-emerald-400" }, (importPreview.standarItems || []).length),
 									/* @__PURE__ */ React.createElement("div", { className: "text-[10px] text-slate-400 font-medium" }, "Item Standar Prodi")
+								),
+								/* @__PURE__ */ React.createElement("div", { className: "bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-center col-span-2 sm:col-span-1" },
+									/* @__PURE__ */ React.createElement("div", { className: "text-lg font-black text-amber-400" }, (importPreview.tanahParcels || []).length),
+									/* @__PURE__ */ React.createElement("div", { className: "text-[10px] text-slate-400 font-medium" }, "Tanah (KIB A)")
 								)
 							),
 
@@ -3196,7 +3741,6 @@ const UserProfileModal = window.__UserProfileModal;
 		PlusCircle, Edit3, X, Save
 	} = window.__VENDOR__.Lucide;
 	const { Bar } = window.__VENDOR__.ReactChartJS2;
-	const logoKkp = window.__LOGO_KKP || "Frontend/assets/logo-kkp.png";
 
 	function fmtInt(n) {
 		return Math.round(Number(n) || 0).toLocaleString("id-ID");
@@ -3722,25 +4266,17 @@ const UserProfileModal = window.__UserProfileModal;
 		return /* @__PURE__ */ React.createElement("div", { className: "space-y-6" },
 			/* 1. HERO HEADER */
 			/* @__PURE__ */ React.createElement("div", { className: "flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-gradient-to-r from-slate-800/90 via-slate-800/70 to-slate-900/90 p-4 sm:p-5 rounded-2xl border border-slate-700/80 shadow-lg relative overflow-hidden" },
-				/* @__PURE__ */ React.createElement("div", { className: "absolute right-0 top-0 bottom-0 opacity-5 pointer-events-none flex items-center pr-6" },
-					/* @__PURE__ */ React.createElement("img", { src: logoKkp, alt: "KKP Watermark", className: "w-56 h-56 object-contain" })
-				),
-				/* @__PURE__ */ React.createElement("div", { className: "flex flex-col sm:flex-row items-center text-center sm:text-left gap-3.5 sm:gap-4 relative z-10" },
-					/* @__PURE__ */ React.createElement("div", { className: "w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white p-1.5 shadow-md border border-cyan-500/30 flex items-center justify-center flex-shrink-0" },
-						/* @__PURE__ */ React.createElement("img", { src: logoKkp, alt: "Logo KKP", className: "w-full h-full object-contain" })
+				/* @__PURE__ */ React.createElement("div", { className: "relative z-10" },
+					/* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center justify-center sm:justify-start gap-2" },
+						/* @__PURE__ */ React.createElement("span", { className: "px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30" }, "Survei Resmi Asrama Taruna KKP"),
+						/* @__PURE__ */ React.createElement("span", { className: "text-xs text-slate-400" }, "• Standar Ruang 4 m² / Taruna")
 					),
-					/* @__PURE__ */ React.createElement("div", null,
-						/* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center justify-center sm:justify-start gap-2" },
-							/* @__PURE__ */ React.createElement("span", { className: "px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30" }, "Survei Resmi Asrama Taruna KKP"),
-							/* @__PURE__ */ React.createElement("span", { className: "text-xs text-slate-400" }, "• Standar Ruang 4 m² / Taruna")
-						),
-						/* @__PURE__ */ React.createElement("h2", { className: "text-lg sm:text-xl md:text-2xl font-bold text-white tracking-tight mt-1 flex items-center justify-center sm:justify-start gap-2" },
-							/* @__PURE__ */ React.createElement(Bed, { className: "w-5 h-5 text-cyan-400 flex-shrink-0" }),
-							/* @__PURE__ */ React.createElement("span", null, "Analitik Kapasitas & Ketersediaan Asrama")
-						),
-						/* @__PURE__ */ React.createElement("p", { className: "text-slate-400 text-xs sm:text-sm mt-0.5 max-w-2xl" },
-							"Perbandingan daya tampung riil asrama terhadap jumlah taruna aktif, rasio ketercukupan per Satdik, rincian dimensi 104 gedung, dan tautan dokumen Google Drive."
-						)
+					/* @__PURE__ */ React.createElement("h2", { className: "text-lg sm:text-xl md:text-2xl font-bold text-white tracking-tight mt-1 flex items-center justify-center sm:justify-start gap-2" },
+						/* @__PURE__ */ React.createElement(Bed, { className: "w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 flex-shrink-0" }),
+						/* @__PURE__ */ React.createElement("span", null, "Analitik Kapasitas & Ketersediaan Asrama")
+					),
+					/* @__PURE__ */ React.createElement("p", { className: "text-slate-400 text-xs sm:text-sm mt-0.5 max-w-2xl text-center sm:text-left" },
+						"Perbandingan daya tampung riil asrama terhadap jumlah taruna aktif, rasio ketercukupan per Satdik, rincian dimensi 104 gedung, dan tautan dokumen Google Drive."
 					)
 				),
 				/* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center justify-center gap-2 relative z-10" },
@@ -3792,8 +4328,7 @@ const UserProfileModal = window.__UserProfileModal;
 						)
 					)
 				),
-				/* @__PURE__ */ React.createElement("div", { className: "flex items-center gap-2 text-xs text-slate-400" },
-					/* @__PURE__ */ React.createElement("span", null, "Sumber: ", /* @__PURE__ */ React.createElement("strong", { className: "text-slate-200 font-mono" }, asramaData?.meta?.sumber || "05072025_Rekap Asrama_Adjustmen.xlsx")),
+				(selectedSatdik !== (lockedSatdik || "ALL") || jenjangFilter !== "ALL" || basisMode !== "standar" || buildingSearch || statusFilter !== "ALL" || genderFilter !== "ALL") && /* @__PURE__ */ React.createElement("div", { className: "flex items-center gap-2 text-xs text-slate-400" },
 					(selectedSatdik !== (lockedSatdik || "ALL") || jenjangFilter !== "ALL" || basisMode !== "standar" || buildingSearch || statusFilter !== "ALL" || genderFilter !== "ALL") && /* @__PURE__ */ React.createElement("button", {
 						onClick: handleResetAll,
 						className: "inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 text-xs transition-colors"
@@ -3812,8 +4347,7 @@ const UserProfileModal = window.__UserProfileModal;
 				/* @__PURE__ */ React.createElement("div", null,
 					/* @__PURE__ */ React.createElement("h4", { className: "font-bold text-white text-sm" }, "Data Survei Asrama Belum Tersedia untuk ", selectedUnsurveyed.name),
 					/* @__PURE__ */ React.createElement("p", { className: "text-xs text-slate-400 mt-1" },
-						"Satuan pendidikan ini memiliki ", fmtInt(selectedUnsurveyed.tarunaCount), " taruna aktif pada master data, namun belum memiliki lembar rincian pada file Excel ",
-						asramaData?.meta?.sumber || "Rekap Asrama", ". Tambahkan sheet kampus pada file Excel lalu jalankan skrip import_asrama.py untuk memperbarui otomatis."
+						"Satuan pendidikan ini memiliki ", fmtInt(selectedUnsurveyed.tarunaCount), " taruna aktif pada master data, namun belum memiliki lembar rincian data survei asrama. Tambahkan data kampus lalu perbarui otomatis."
 					)
 				)
 			),
@@ -4329,7 +4863,6 @@ const AsramaCapacityView = window.__AsramaCapacityView;
 		Edit3, X, Save, Check
 	} = window.__VENDOR__.Lucide;
 	const { Bar } = window.__VENDOR__.ReactChartJS2;
-	const logoKkp = window.__LOGO_KKP || "Frontend/assets/logo-kkp.png";
 
 	function fmtInt(n) {
 		return Math.round(Number(n) || 0).toLocaleString("id-ID");
@@ -4965,21 +5498,16 @@ const AsramaCapacityView = window.__AsramaCapacityView;
 		return /* @__PURE__ */ React.createElement("div", { className: "space-y-6" },
 			/* 1. HERO HEADER */
 			/* @__PURE__ */ React.createElement("div", { className: "flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-gradient-to-r from-slate-800/90 via-slate-800/70 to-slate-900/90 p-4 sm:p-5 rounded-2xl border border-slate-700/80 shadow-lg relative overflow-hidden" },
-				/* @__PURE__ */ React.createElement("div", { className: "absolute right-0 top-0 bottom-0 opacity-5 pointer-events-none flex items-center pr-6" },
-					/* @__PURE__ */ React.createElement("img", { src: logoKkp, alt: "KKP Watermark", className: "w-56 h-56 object-contain" })
-				),
-				/* @__PURE__ */ React.createElement("div", { className: "flex flex-col sm:flex-row items-center text-center sm:text-left gap-3.5 sm:gap-4 relative z-10" },
-					/* @__PURE__ */ React.createElement("div", { className: "w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white p-1.5 shadow-md border border-cyan-500/30 flex items-center justify-center flex-shrink-0" },
-						/* @__PURE__ */ React.createElement("img", { src: logoKkp, alt: "Logo KKP", className: "w-full h-full object-contain" })
+				/* @__PURE__ */ React.createElement("div", { className: "relative z-10" },
+					/* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center justify-center sm:justify-start gap-2" },
+						/* @__PURE__ */ React.createElement("span", { className: "px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30" }, "Evaluasi Kurikulum Vokasi KKP"),
+						/* @__PURE__ */ React.createElement("span", { className: "text-xs text-slate-400" }, "• 12 Rumpun Prodi • 11 Satdik Pendidikan Tinggi")
 					),
-					/* @__PURE__ */ React.createElement("div", null,
-						/* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center justify-center sm:justify-start gap-2" },
-							/* @__PURE__ */ React.createElement("span", { className: "px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30" }, "Evaluasi Kurikulum Vokasi KKP"),
-							/* @__PURE__ */ React.createElement("span", { className: "text-xs text-slate-400" }, "• 12 Rumpun Prodi • 11 Satdik Pendidikan Tinggi")
-						),
-						/* @__PURE__ */ React.createElement("h2", { className: "text-lg sm:text-2xl font-extrabold text-white tracking-tight mt-1" }, "Standar Minimal & Gap Sarpras Program Studi"),
-						/* @__PURE__ */ React.createElement("p", { className: "text-xs sm:text-sm text-slate-300 max-w-2xl mt-0.5" }, "Pemetaan pemenuhan standar minimal Prasarana (Ruang Lab/Workshop/Kapal Latih) dan Sarana (Peralatan & Perabot Praktik) antar-kampus tanpa mencampuri KPI valuasi aset BMN utama.")
-					)
+					/* @__PURE__ */ React.createElement("h2", { className: "text-lg sm:text-2xl font-extrabold text-white tracking-tight mt-1 flex items-center justify-center sm:justify-start gap-2" },
+						/* @__PURE__ */ React.createElement(GraduationCap, { className: "w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 flex-shrink-0" }),
+						/* @__PURE__ */ React.createElement("span", null, "Standar Minimal & Gap Sarpras Program Studi")
+					),
+					/* @__PURE__ */ React.createElement("p", { className: "text-xs sm:text-sm text-slate-300 max-w-2xl mt-0.5 text-center sm:text-left" }, "Pemetaan pemenuhan standar minimal Prasarana (Ruang Lab/Workshop/Kapal Latih) dan Sarana (Peralatan & Perabot Praktik) antar-kampus tanpa mencampuri KPI valuasi aset BMN utama.")
 				)
 			),
 
@@ -5017,8 +5545,7 @@ const AsramaCapacityView = window.__AsramaCapacityView;
 						)
 					)
 				),
-				/* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center gap-2 text-xs text-slate-400" },
-					/* @__PURE__ */ React.createElement("span", null, "Sumber: ", /* @__PURE__ */ React.createElement("strong", { className: "text-slate-200 font-mono" }, standarData?.meta?.sumber || "Data Contoh.xlsx")),
+				(selectedBidang !== "ALL" || selectedSatdik !== (lockedSatdik || "ALL") || secFilter !== "ALL" || gapFilter !== "ALL" || itemSearch) && /* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center gap-2 text-xs text-slate-400" },
 					(selectedBidang !== "ALL" || selectedSatdik !== (lockedSatdik || "ALL") || secFilter !== "ALL" || gapFilter !== "ALL" || itemSearch) && /* @__PURE__ */ React.createElement("button", {
 						onClick: handleResetAll,
 						className: "inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 text-xs transition-colors"
@@ -5037,8 +5564,7 @@ const AsramaCapacityView = window.__AsramaCapacityView;
 				/* @__PURE__ */ React.createElement("div", null,
 					/* @__PURE__ */ React.createElement("h4", { className: "font-bold text-white text-sm" }, "Matriks Standar Sarpras Prodi Belum Tersedia untuk ", selectedUnsurveyed.name),
 					/* @__PURE__ */ React.createElement("p", { className: "text-xs text-slate-400 mt-1" },
-						"Berkas ", standarData?.meta?.sumber || "Data Contoh.xlsx", " saat ini memuat matriks standar minimal untuk 11 Satdik Pendidikan Tinggi (Politeknik KP & AK-KP Wakatobi). Untuk menambahkan jenjang SUPM, tambahkan kolom kampus pada lembar Excel lalu jalankan ",
-						/* @__PURE__ */ React.createElement("span", { className: "font-mono text-cyan-400" }, "python Database/import_standar_sarpras.py"), "."
+						"Matriks standar minimal saat ini memuat data untuk 11 Satdik Pendidikan Tinggi (Politeknik KP & AK-KP Wakatobi). Untuk menambahkan jenjang SUPM, tambahkan data kampus pada matriks standar lalu jalankan ", /* @__PURE__ */ React.createElement("span", { className: "font-mono text-cyan-400" }, "python Database/import_standar_sarpras.py"), "."
 					)
 				)
 			),
@@ -5086,7 +5612,7 @@ const AsramaCapacityView = window.__AsramaCapacityView;
 					/* @__PURE__ */ React.createElement("div", { className: "mt-3" },
 						/* @__PURE__ */ React.createElement("div", { className: "text-2xl font-black text-emerald-400" }, fmtPct(kpiSummary.pctSarana), "%"),
 						/* @__PURE__ */ React.createElement("div", { className: "text-[11px] text-slate-400 mt-0.5" },
-							fmtInt(kpiSummary.sFull), " terpenuhi • ", fmtInt(kpiSummary.sPart), " kurang vol"
+							fmtInt(kpiSummary.sFull), " terpenuhi • ", fmtInt(kpiSummary.sPart), " belum terpenuhi"
 						)
 					)
 				),
@@ -5216,7 +5742,7 @@ const AsramaCapacityView = window.__AsramaCapacityView;
 									/* @__PURE__ */ React.createElement("td", { className: "p-3.5" },
 										/* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap gap-1" },
 											row.totalKosong > 0 && /* @__PURE__ */ React.createElement("span", { className: "px-1.5 py-0.5 rounded text-[10px] font-semibold bg-rose-500/15 text-rose-400" }, row.totalKosong, " belum ada"),
-											row.totalSebagian > 0 && /* @__PURE__ */ React.createElement("span", { className: "px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-500/20 text-amber-300" }, row.totalSebagian, " kurang vol"),
+											row.totalSebagian > 0 && /* @__PURE__ */ React.createElement("span", { className: "px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-500/20 text-amber-300" }, row.totalSebagian, " belum terpenuhi"),
 											row.totalKosong === 0 && row.totalSebagian === 0 && /* @__PURE__ */ React.createElement("span", { className: "px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/15 text-emerald-400" }, "Lengkap 100%")
 										)
 									),
@@ -5253,8 +5779,7 @@ const AsramaCapacityView = window.__AsramaCapacityView;
 				),
 				selectedSatdik === "ALL" && unsurveyedSatdikList.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "px-4 py-3 bg-slate-900/60 border-t border-slate-800 text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2" },
 					/* @__PURE__ */ React.createElement("span", null,
-						"Cakupan Matriks: 11 Satdik Pendidikan Tinggi (Politeknik KP & AK-KP Wakatobi) telah terpetakan; 7 Satdik jenjang SUPM belum tercantum pada ",
-						/* @__PURE__ */ React.createElement("strong", { className: "text-slate-200 font-mono" }, standarData?.meta?.sumber || "Data Contoh.xlsx"), "."
+						"Cakupan Matriks: 11 Satdik Pendidikan Tinggi (Politeknik KP & AK-KP Wakatobi) telah terpetakan; 7 Satdik jenjang SUPM belum tercantum pada berkas matriks standar."
 					),
 					/* @__PURE__ */ React.createElement("span", { className: "text-cyan-400 font-medium" }, "KPI 48 Aset Strategis Utama Tetap Terpisah & Terjaga")
 				)
@@ -6251,64 +6776,43 @@ const StandarProdiView = window.__StandarProdiView;
 				"div",
 				{
 					className:
-						"bg-gradient-to-r from-slate-800/95 via-cyan-950/60 to-slate-900/95 rounded-2xl p-5 sm:p-6 border border-cyan-500/30 shadow-xl relative overflow-hidden"
+						"flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-gradient-to-r from-slate-800/90 via-slate-800/70 to-slate-900/90 p-4 sm:p-5 rounded-2xl border border-slate-700/80 shadow-lg relative overflow-hidden"
 				},
 				/* @__PURE__ */ React.createElement(
 					"div",
-					{ className: "flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10" },
+					{ className: "relative z-10" },
 					/* @__PURE__ */ React.createElement(
 						"div",
-						{ className: "space-y-1.5 max-w-3xl" },
+						{ className: "flex flex-wrap items-center justify-center sm:justify-start gap-2" },
 						/* @__PURE__ */ React.createElement(
-							"div",
-							{ className: "flex flex-wrap items-center gap-2" },
-							/* @__PURE__ */ React.createElement(
-								"span",
-								{
-									className:
-										"inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
-								},
-								/* @__PURE__ */ React.createElement(Fish, { className: "w-3.5 h-3.5" }),
-								"Prasarana & Sarana Budidaya Perikanan"
-							),
-							/* @__PURE__ */ React.createElement(
-								"span",
-								{
-									className:
-										"px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30"
-								},
-								"Data Audit Tahun 2025 · 18 Satdik KKP"
-							)
+							"span",
+							{
+								className:
+									"px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30"
+							},
+							"Prasarana & Sarana Budidaya"
 						),
 						/* @__PURE__ */ React.createElement(
-							"h2",
-							{ className: "text-xl sm:text-2xl font-extrabold text-white tracking-tight" },
-							"Inventaris & Analitik Tambak dan Kolam Satuan Pendidikan"
-						),
-						/* @__PURE__ */ React.createElement(
-							"p",
-							{ className: "text-xs sm:text-sm text-slate-300 leading-relaxed" },
-							"Pemetaan menyeluruh prasarana ",
-							/* @__PURE__ */ React.createElement("strong", { className: "text-cyan-300" }, "Tambak, Kolam Air Tawar/Payau, Tandon, dan Bak Pembenihan/Biofloc"),
-							" beserta spesifikasi konstruksi pelataran (HDPE, Beton, Tanah, Fiber), daya listrik, jumlah kincir air, dan titik koordinat Google Maps/Earth pada 18 Satuan Pendidikan Vokasi KKP."
+							"span",
+							{ className: "text-xs text-slate-400" },
+							"• Data Audit Tahun 2025 • 18 Satdik KKP"
 						)
 					),
 					/* @__PURE__ */ React.createElement(
-						"div",
-						{ className: "flex flex-wrap items-center gap-2.5 self-start lg:self-center" },
-						/* @__PURE__ */ React.createElement(
-							"a",
-							{
-								href: "Excel/1c-Data%20Tambak%20dan%20Kolam%20Satuan%20Pendidikan.pdf",
-								target: "_blank",
-								rel: "noopener noreferrer",
-								className:
-									"inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 text-xs font-semibold transition-all shadow-sm"
-							},
-							/* @__PURE__ */ React.createElement(FileText, { className: "w-4 h-4 text-cyan-400" }),
-							/* @__PURE__ */ React.createElement("span", null, "Dokumen PDF Asli (26 Hal)"),
-							/* @__PURE__ */ React.createElement(ExternalLink, { className: "w-3.5 h-3.5 opacity-75" })
-						)
+						"h2",
+						{
+							className:
+								"text-lg sm:text-xl md:text-2xl font-bold text-white tracking-tight mt-1 flex items-center justify-center sm:justify-start gap-2"
+						},
+						/* @__PURE__ */ React.createElement(Fish, { className: "w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 flex-shrink-0" }),
+						/* @__PURE__ */ React.createElement("span", null, "Inventaris & Analitik Tambak dan Kolam Satuan Pendidikan")
+					),
+					/* @__PURE__ */ React.createElement(
+						"p",
+						{ className: "text-slate-400 text-xs sm:text-sm mt-0.5 max-w-2xl text-center sm:text-left leading-relaxed" },
+						"Pemetaan menyeluruh prasarana ",
+						/* @__PURE__ */ React.createElement("strong", { className: "text-cyan-300 font-semibold" }, "Tambak, Kolam Air Tawar/Payau, Tandon, dan Bak Biofloc"),
+						" beserta spesifikasi pelataran, daya listrik, kincir air, dan titik koordinat GPS pada 18 Satuan Pendidikan Vokasi KKP."
 					)
 				)
 			),
@@ -7932,6 +8436,3062 @@ const StandarProdiView = window.__StandarProdiView;
 	};
 })();
 const TambakKolamView = window.__TambakKolamView;
+
+// ============================================================================
+// MODULE: src/views/PembelajaranView.jsx
+(() => {
+	const { useState, useMemo, useRef } = React;
+	const {
+		School,
+		Building2,
+		FileText,
+		Factory,
+		Compass,
+		Search,
+		Filter,
+		PlusCircle,
+		Edit3,
+		Save,
+		RotateCcw,
+		Download,
+		CheckCircle2,
+		AlertTriangle,
+		Layers,
+		BadgeCheck,
+		ExternalLink,
+		X,
+		ChevronRight,
+		ChevronLeft,
+		LayoutGrid,
+		List,
+		ArrowUpDown,
+		Activity
+	} = window.__VENDOR__.Lucide;
+
+	function TrashIcon({ className = "w-4 h-4" }) {
+		return React.createElement(
+			"svg",
+			{
+				className,
+				viewBox: "0 0 24 24",
+				fill: "none",
+				stroke: "currentColor",
+				strokeWidth: "2",
+				strokeLinecap: "round",
+				strokeLinejoin: "round"
+			},
+			React.createElement("polyline", { points: "3 6 5 6 21 6" }),
+			React.createElement("path", { d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" }),
+			React.createElement("line", { x1: "10", y1: "11", x2: "10", y2: "17" }),
+			React.createElement("line", { x1: "14", y1: "11", x2: "14", y2: "17" })
+		);
+	}
+
+	const CATEGORY_META = {
+		kelas: {
+			id: "kelas",
+			label: "Ruang Kelas",
+			shortLabel: "Kelas",
+			icon: Building2,
+			badgeClass: "bg-blue-500/15 text-blue-300 border-blue-500/30",
+			btnClass: "bg-blue-600 text-white shadow",
+			color: "text-blue-400",
+			desc: "Smart Classroom, Ruang Teori, & Ruang Kuliah Hybrid"
+		},
+		perpustakaan: {
+			id: "perpustakaan",
+			label: "Perpustakaan",
+			shortLabel: "Perpustakaan",
+			icon: FileText,
+			badgeClass: "bg-amber-500/15 text-amber-300 border-amber-500/30",
+			btnClass: "bg-amber-600 text-white shadow",
+			color: "text-amber-400",
+			desc: "Gedung Perpus, E-Library, & Koleksi Maritim"
+		},
+		tefa: {
+			id: "tefa",
+			label: "Teaching Factory (TEFA)",
+			shortLabel: "TEFA",
+			icon: Factory,
+			badgeClass: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
+			btnClass: "bg-emerald-600 text-white shadow",
+			color: "text-emerald-400",
+			desc: "Unit Produksi Pengolahan Ikan, Hatchery, & Biofloc"
+		},
+		simulator: {
+			id: "simulator",
+			label: "Simulator Maritim",
+			shortLabel: "Simulator",
+			icon: Compass,
+			badgeClass: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30",
+			btnClass: "bg-cyan-600 text-white shadow",
+			color: "text-cyan-400",
+			desc: "Bridge Simulator, Radar ARPA, ECDIS & GMDSS"
+		}
+	};
+
+	window.__PembelajaranView = function PembelajaranView({
+		pembelajaranData,
+		satdikList,
+		currentUser,
+		onAddFacility,
+		onUpdateFacility,
+		onDeleteFacility,
+		onExportExcel
+	}) {
+		const { isDark } = useTheme();
+		const tableRef = useRef(null);
+
+		const masterSatdik = useMemo(
+			() => (Array.isArray(satdikList) && satdikList.length > 0 ? satdikList : window.SARPRAS_DATA?.SATDIK_LIST || []),
+			[satdikList]
+		);
+		const satdikMap = useMemo(() => {
+			const m = {};
+			masterSatdik.forEach((s) => {
+				m[s.id] = s;
+			});
+			return m;
+		}, [masterSatdik]);
+
+		const lockedSatdik = currentUser?.accessibleSatdik && currentUser.accessibleSatdik !== "ALL"
+			? currentUser.accessibleSatdik
+			: null;
+
+		const [jenjangFilter, setJenjangFilter] = useState("ALL"); // "ALL" | "Politeknik" | "SUPM"
+		const [selectedSatdik, setSelectedSatdik] = useState(() => lockedSatdik || "ALL");
+		const [categoryFilter, setCategoryFilter] = useState("ALL"); // "ALL" | "kelas" | "perpustakaan" | "tefa" | "simulator"
+		const [kondisiFilter, setKondisiFilter] = useState("ALL"); // "ALL" | "Baik" | "Rusak Ringan" | "Rusak Berat"
+		const [searchQuery, setSearchQuery] = useState("");
+		const [viewMode, setViewMode] = useState("table"); // "table" | "rekap" | "grid"
+		const [sortField, setSortField] = useState("category");
+		const [sortOrder, setSortOrder] = useState("asc");
+		const [currentPage, setCurrentPage] = useState(1);
+		const [pageSize, setPageSize] = useState(25);
+
+		// Modal state
+		const [editingFacility, setEditingFacility] = useState(null); // null | { mode: 'add' | 'edit', data: { ... } }
+		const [isSaving, setIsSaving] = useState(false);
+
+		const canEdit = Boolean(
+			currentUser?.permissions?.includes("edit_all") || currentUser?.permissions?.includes("edit_own")
+		);
+		const canEditSatdik = (satdikId) => {
+			if (!canEdit) return false;
+			if (currentUser?.permissions?.includes("edit_all")) return true;
+			return currentUser?.accessibleSatdik === satdikId;
+		};
+
+		const facilities = useMemo(() => {
+			return Array.isArray(pembelajaranData) ? pembelajaranData : [];
+		}, [pembelajaranData]);
+
+		// Filtered facilities
+		const filteredFacilities = useMemo(() => {
+			const q = searchQuery.trim().toLowerCase();
+			return facilities.filter((f) => {
+				if (lockedSatdik && f.satdikId !== lockedSatdik) return false;
+				if (selectedSatdik !== "ALL" && f.satdikId !== selectedSatdik) return false;
+
+				const sat = satdikMap[f.satdikId] || {};
+				if (jenjangFilter === "Politeknik" && sat.type === "SUPM") return false;
+				if (jenjangFilter === "SUPM" && sat.type !== "SUPM") return false;
+
+				if (categoryFilter !== "ALL" && f.category !== categoryFilter) return false;
+				if (kondisiFilter !== "ALL" && f.kondisi !== kondisiFilter) return false;
+
+				if (q) {
+					const hay = [
+						f.id,
+						f.name,
+						f.satdikId,
+						sat.name,
+						sat.shortName,
+						f.gedung,
+						f.spesifikasi,
+						f.sertifikasi,
+						f.statusOp,
+						f.keterangan
+					]
+						.filter(Boolean)
+						.join(" ")
+						.toLowerCase();
+					if (!hay.includes(q)) return false;
+				}
+				return true;
+			});
+		}, [facilities, lockedSatdik, selectedSatdik, jenjangFilter, categoryFilter, kondisiFilter, searchQuery, satdikMap]);
+
+		// Sort filtered facilities
+		const sortedFacilities = useMemo(() => {
+			const arr = [...filteredFacilities];
+			arr.sort((a, b) => {
+				let va = a[sortField];
+				let vb = b[sortField];
+				if (sortField === "luasM2" || sortField === "kapasitas" || sortField === "tahunPengadaan") {
+					va = Number(va) || 0;
+					vb = Number(vb) || 0;
+					return sortOrder === "asc" ? va - vb : vb - va;
+				}
+				va = String(va || "").toLowerCase();
+				vb = String(vb || "").toLowerCase();
+				return sortOrder === "asc" ? va.localeCompare(vb, "id") : vb.localeCompare(va, "id");
+			});
+			return arr;
+		}, [filteredFacilities, sortField, sortOrder]);
+
+		// KPI Aggregates
+		const stats = useMemo(() => {
+			let totalKelas = 0, totalPerpus = 0, totalTefa = 0, totalSim = 0;
+			let kapKelas = 0, kapPerpus = 0, kapTefa = 0, kapSim = 0;
+			let luasKelas = 0, luasPerpus = 0, luasTefa = 0, luasSim = 0;
+			let baik = 0, rr = 0, rb = 0;
+
+			filteredFacilities.forEach((f) => {
+				const cap = Number(f.kapasitas) || 0;
+				const luas = Number(f.luasM2) || 0;
+				if (f.category === "kelas") {
+					totalKelas++;
+					kapKelas += cap;
+					luasKelas += luas;
+				} else if (f.category === "perpustakaan") {
+					totalPerpus++;
+					kapPerpus += cap;
+					luasPerpus += luas;
+				} else if (f.category === "tefa") {
+					totalTefa++;
+					kapTefa += cap;
+					luasTefa += luas;
+				} else if (f.category === "simulator") {
+					totalSim++;
+					kapSim += cap;
+					luasSim += luas;
+				}
+
+				if (f.kondisi === "Baik") baik++;
+				else if (f.kondisi === "Rusak Ringan") rr++;
+				else if (f.kondisi === "Rusak Berat") rb++;
+				else baik++;
+			});
+
+			const total = filteredFacilities.length;
+			const totalLuas = luasKelas + luasPerpus + luasTefa + luasSim;
+			const totalKapasitas = kapKelas + kapPerpus + kapTefa + kapSim;
+			const pctBaik = total > 0 ? Math.round((baik / total) * 1000) / 10 : 0;
+			const pctRR = total > 0 ? Math.round((rr / total) * 1000) / 10 : 0;
+			const pctRB = total > 0 ? Math.round((rb / total) * 1000) / 10 : 0;
+
+			return {
+				total,
+				totalKelas,
+				totalPerpus,
+				totalTefa,
+				totalSim,
+				kapKelas,
+				kapPerpus,
+				kapTefa,
+				kapSim,
+				luasKelas,
+				luasPerpus,
+				luasTefa,
+				luasSim,
+				totalLuas,
+				totalKapasitas,
+				baik,
+				rr,
+				rb,
+				pctBaik,
+				pctRR,
+				pctRB
+			};
+		}, [filteredFacilities]);
+
+		// Rekapitulasi per Satdik
+		const rekapPerSatdik = useMemo(() => {
+			const activeSatdikList = masterSatdik.filter((s) => {
+				if (lockedSatdik && s.id !== lockedSatdik) return false;
+				if (selectedSatdik !== "ALL" && s.id !== selectedSatdik) return false;
+				if (jenjangFilter === "Politeknik" && s.type === "SUPM") return false;
+				if (jenjangFilter === "SUPM" && s.type !== "SUPM") return false;
+				return true;
+			});
+
+			return activeSatdikList.map((sat) => {
+				const satFacilities = facilities.filter((f) => f.satdikId === sat.id);
+				const kelasList = satFacilities.filter((f) => f.category === "kelas");
+				const perpusList = satFacilities.filter((f) => f.category === "perpustakaan");
+				const tefaList = satFacilities.filter((f) => f.category === "tefa");
+				const simList = satFacilities.filter((f) => f.category === "simulator");
+
+				const totalLuas = satFacilities.reduce((sum, f) => sum + (Number(f.luasM2) || 0), 0);
+				const totalKap = satFacilities.reduce((sum, f) => sum + (Number(f.kapasitas) || 0), 0);
+				const baikCount = satFacilities.filter((f) => f.kondisi === "Baik").length;
+				const rrCount = satFacilities.filter((f) => f.kondisi === "Rusak Ringan").length;
+				const rbCount = satFacilities.filter((f) => f.kondisi === "Rusak Berat").length;
+
+				return {
+					satdikId: sat.id,
+					name: sat.name,
+					shortName: sat.shortName || sat.name,
+					type: sat.type,
+					kota: sat.kota || sat.province,
+					kelasCount: kelasList.length,
+					kelasKap: kelasList.reduce((s, f) => s + (Number(f.kapasitas) || 0), 0),
+					perpusCount: perpusList.length,
+					perpusKap: perpusList.reduce((s, f) => s + (Number(f.kapasitas) || 0), 0),
+					tefaCount: tefaList.length,
+					simCount: simList.length,
+					totalCount: satFacilities.length,
+					totalLuas,
+					totalKap,
+					baikCount,
+					rrCount,
+					rbCount,
+					isComplete: kelasList.length > 0 && perpusList.length > 0 && tefaList.length > 0 && simList.length > 0
+				};
+			});
+		}, [masterSatdik, facilities, lockedSatdik, selectedSatdik, jenjangFilter]);
+
+		// Pagination
+		const totalPages = pageSize === "ALL" ? 1 : Math.max(1, Math.ceil(sortedFacilities.length / Number(pageSize)));
+		const paginatedFacilities = useMemo(() => {
+			if (pageSize === "ALL") return sortedFacilities;
+			const sz = Number(pageSize) || 25;
+			const start = (currentPage - 1) * sz;
+			return sortedFacilities.slice(start, start + sz);
+		}, [sortedFacilities, currentPage, pageSize]);
+
+		const handleSort = (field) => {
+			if (sortField === field) {
+				setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+			} else {
+				setSortField(field);
+				setSortOrder(field === "luasM2" || field === "kapasitas" ? "desc" : "asc");
+			}
+			setCurrentPage(1);
+		};
+
+		const handleResetFilters = () => {
+			if (!lockedSatdik) setSelectedSatdik("ALL");
+			setJenjangFilter("ALL");
+			setCategoryFilter("ALL");
+			setKondisiFilter("ALL");
+			setSearchQuery("");
+			setCurrentPage(1);
+		};
+
+		const handleSelectSatdikDrilldown = (satdikId) => {
+			setSelectedSatdik(satdikId);
+			setViewMode("table");
+			setCurrentPage(1);
+			if (tableRef.current) {
+				tableRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+			}
+		};
+
+		const openAddModal = () => {
+			const defSatdik = lockedSatdik || (selectedSatdik !== "ALL" ? selectedSatdik : "poltek-aup");
+			const defCat = categoryFilter !== "ALL" ? categoryFilter : "kelas";
+			setEditingFacility({
+				mode: "add",
+				data: {
+					satdikId: defSatdik,
+					category: defCat,
+					name: "",
+					gedung: "",
+					luasM2: 80,
+					kapasitas: 35,
+					kondisi: "Baik",
+					statusOp: "Aktif Digunakan",
+					spesifikasi: "",
+					sertifikasi: "",
+					tahunPengadaan: new Date().getFullYear(),
+					keterangan: ""
+				}
+			});
+		};
+
+		const openEditModal = (fac) => {
+			setEditingFacility({
+				mode: "edit",
+				data: { ...fac }
+			});
+		};
+
+		const handleSaveFacility = async (e) => {
+			e.preventDefault();
+			if (!editingFacility?.data?.name || !editingFacility?.data?.satdikId) {
+				alert("Nama Fasilitas dan Satuan Pendidikan wajib diisi.");
+				return;
+			}
+			setIsSaving(true);
+			try {
+				const d = editingFacility.data;
+				const payload = {
+					...d,
+					luasM2: Number(d.luasM2) || 0,
+					kapasitas: Number(d.kapasitas) || 0,
+					tahunPengadaan: Number(d.tahunPengadaan) || new Date().getFullYear()
+				};
+				if (editingFacility.mode === "add" && onAddFacility) {
+					await onAddFacility(payload);
+				} else if (editingFacility.mode === "edit" && onUpdateFacility) {
+					await onUpdateFacility(d.id, payload);
+				}
+				setEditingFacility(null);
+			} catch (err) {
+				alert("Gagal menyimpan data fasilitas: " + (err?.message || "Kesalahan jaringan"));
+			} finally {
+				setIsSaving(false);
+			}
+		};
+
+		const handleDeleteClick = async (fac) => {
+			if (!canEditSatdik(fac.satdikId)) {
+				alert("Anda tidak memiliki hak untuk menghapus data fasilitas satuan pendidikan ini.");
+				return;
+			}
+			const confirmed = window.confirm(`Apakah Anda yakin ingin menghapus fasilitas "${fac.name}" (${fac.id})?`);
+			if (!confirmed) return;
+			try {
+				if (onDeleteFacility) {
+					await onDeleteFacility(fac.id);
+				}
+			} catch (err) {
+				alert("Gagal menghapus data: " + (err?.message || "Kesalahan sistem"));
+			}
+		};
+
+		const handleExportClick = () => {
+			if (onExportExcel) {
+				onExportExcel();
+			} else if (typeof window.SARPRAS_EXCEL?.exportPembelajaranToExcel === "function") {
+				window.SARPRAS_EXCEL.exportPembelajaranToExcel(filteredFacilities, masterSatdik, {
+					currentUser,
+					filterScopeLabel: selectedSatdik !== "ALL" ? satdikMap[selectedSatdik]?.name || selectedSatdik : "Seluruh Satuan Pendidikan (18 Satdik)"
+				});
+			}
+		};
+
+		const isFiltered =
+			(!lockedSatdik && selectedSatdik !== "ALL") ||
+			jenjangFilter !== "ALL" ||
+			categoryFilter !== "ALL" ||
+			kondisiFilter !== "ALL" ||
+			searchQuery.trim() !== "";
+
+		return React.createElement(
+			"div",
+			{ className: "space-y-6" },
+
+			// 1. HERO HEADER (No KKP Logo, standard design matching Tambak & Kolam and Asrama)
+			React.createElement(
+				"div",
+				{
+					className:
+						"flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-gradient-to-r from-slate-800/90 via-slate-800/70 to-slate-900/90 p-4 sm:p-5 rounded-2xl border border-slate-700/80 shadow-lg relative overflow-hidden"
+				},
+				React.createElement(
+					"div",
+					{ className: "relative z-10" },
+					React.createElement(
+						"div",
+						{ className: "flex flex-wrap items-center justify-center sm:justify-start gap-2" },
+						React.createElement(
+							"span",
+							{
+								className:
+									"px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30"
+							},
+							"Fasilitas & Sarana Akademik"
+						),
+						React.createElement(
+							"span",
+							{ className: "text-xs text-slate-400" },
+							"• 18 Satdik KKP • Kelas, Perpustakaan, TEFA & Simulator"
+						)
+					),
+					React.createElement(
+						"h2",
+						{
+							className:
+								"text-lg sm:text-xl md:text-2xl font-bold text-white tracking-tight mt-1 flex items-center justify-center sm:justify-start gap-2"
+						},
+						React.createElement(School, { className: "w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 flex-shrink-0" }),
+						React.createElement("span", null, "Sarana & Prasarana Pembelajaran Satuan Pendidikan")
+					),
+					React.createElement(
+						"p",
+						{ className: "text-slate-400 text-xs sm:text-sm mt-0.5 max-w-3xl text-center sm:text-left leading-relaxed" },
+						"Pemetaan komprehensif sarana & prasarana pembelajaran vokasi KKP: ",
+						React.createElement("strong", { className: "text-cyan-300 font-semibold" }, "Ruang Kelas Terpadu"),
+						", ",
+						React.createElement("strong", { className: "text-amber-300 font-semibold" }, "Perpustakaan Maritim"),
+						", ",
+						React.createElement("strong", { className: "text-emerald-300 font-semibold" }, "Teaching Factory (TEFA)"),
+						", dan ",
+						React.createElement("strong", { className: "text-sky-300 font-semibold" }, "Simulator Navigasi / Permesinan"),
+						" pada 18 Satuan Pendidikan KP se-Indonesia."
+					)
+				),
+
+			),
+
+			// 2. 4 EXECUTIVE KPI CARDS (Kelas, Perpus, TEFA, Simulator)
+			React.createElement(
+				"div",
+				{ className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" },
+
+				// Card 1: Ruang Kelas
+				React.createElement(
+					"div",
+					{
+						onClick: () => {
+							setCategoryFilter((prev) => (prev === "kelas" ? "ALL" : "kelas"));
+							setCurrentPage(1);
+						},
+						className: `bg-slate-800/90 rounded-2xl p-4 border transition-all shadow-md flex flex-col justify-between cursor-pointer group ${
+							categoryFilter === "kelas"
+								? "border-blue-500 ring-2 ring-blue-500/30 bg-blue-950/20"
+								: "border-slate-700/70 hover:border-blue-500/50"
+						}`
+					},
+					React.createElement(
+						"div",
+						{ className: "flex items-center justify-between" },
+						React.createElement(
+							"span",
+							{ className: "text-xs font-bold uppercase tracking-wider text-slate-400 group-hover:text-blue-300" },
+							"Ruang Kelas & Teori"
+						),
+						React.createElement(
+							"div",
+							{ className: "w-9 h-9 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform" },
+							React.createElement(Building2, { className: "w-5 h-5" })
+						)
+					),
+					React.createElement(
+						"div",
+						{ className: "my-2.5" },
+						React.createElement(
+							"div",
+							{ className: "flex items-baseline gap-2" },
+							React.createElement("span", { className: "text-2xl sm:text-3xl font-black text-white" }, stats.totalKelas),
+							React.createElement("span", { className: "text-xs text-blue-400 font-semibold" }, "Unit Ruang")
+						),
+						React.createElement(
+							"div",
+							{ className: "text-xs text-slate-400 mt-1" },
+							`Kapasitas: ${stats.kapKelas.toLocaleString("id-ID")} Kursi · Luas: ${Math.round(stats.luasKelas).toLocaleString("id-ID")} m²`
+						)
+					),
+					React.createElement(
+						"div",
+						{ className: "pt-2 border-t border-slate-700/60 flex items-center justify-between text-[11px]" },
+						React.createElement("span", { className: "text-slate-400" }, "Smart Class & Reguler"),
+						React.createElement(
+							"span",
+							{ className: "font-semibold text-blue-400" },
+							categoryFilter === "kelas" ? "Filter Aktif ✓" : "Klik untuk filter"
+						)
+					)
+				),
+
+				// Card 2: Perpustakaan
+				React.createElement(
+					"div",
+					{
+						onClick: () => {
+							setCategoryFilter((prev) => (prev === "perpustakaan" ? "ALL" : "perpustakaan"));
+							setCurrentPage(1);
+						},
+						className: `bg-slate-800/90 rounded-2xl p-4 border transition-all shadow-md flex flex-col justify-between cursor-pointer group ${
+							categoryFilter === "perpustakaan"
+								? "border-amber-500 ring-2 ring-amber-500/30 bg-amber-950/20"
+								: "border-slate-700/70 hover:border-amber-500/50"
+						}`
+					},
+					React.createElement(
+						"div",
+						{ className: "flex items-center justify-between" },
+						React.createElement(
+							"span",
+							{ className: "text-xs font-bold uppercase tracking-wider text-slate-400 group-hover:text-amber-300" },
+							"Perpustakaan Akademik"
+						),
+						React.createElement(
+							"div",
+							{ className: "w-9 h-9 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform" },
+							React.createElement(FileText, { className: "w-5 h-5" })
+						)
+					),
+					React.createElement(
+						"div",
+						{ className: "my-2.5" },
+						React.createElement(
+							"div",
+							{ className: "flex items-baseline gap-2" },
+							React.createElement("span", { className: "text-2xl sm:text-3xl font-black text-amber-400" }, stats.totalPerpus),
+							React.createElement("span", { className: "text-xs text-slate-300 font-semibold" }, "Unit Fasilitas")
+						),
+						React.createElement(
+							"div",
+							{ className: "text-xs text-slate-400 mt-1" },
+							`Kapasitas: ${stats.kapPerpus.toLocaleString("id-ID")} Orang · Luas: ${Math.round(stats.luasPerpus).toLocaleString("id-ID")} m²`
+						)
+					),
+					React.createElement(
+						"div",
+						{ className: "pt-2 border-t border-slate-700/60 flex items-center justify-between text-[11px]" },
+						React.createElement("span", { className: "text-slate-400" }, "Koleksi & E-Library"),
+						React.createElement(
+							"span",
+							{ className: "font-semibold text-amber-400" },
+							categoryFilter === "perpustakaan" ? "Filter Aktif ✓" : "Klik untuk filter"
+						)
+					)
+				),
+
+				// Card 3: Teaching Factory (TEFA)
+				React.createElement(
+					"div",
+					{
+						onClick: () => {
+							setCategoryFilter((prev) => (prev === "tefa" ? "ALL" : "tefa"));
+							setCurrentPage(1);
+						},
+						className: `bg-slate-800/90 rounded-2xl p-4 border transition-all shadow-md flex flex-col justify-between cursor-pointer group ${
+							categoryFilter === "tefa"
+								? "border-emerald-500 ring-2 ring-emerald-500/30 bg-emerald-950/20"
+								: "border-slate-700/70 hover:border-emerald-500/50"
+						}`
+					},
+					React.createElement(
+						"div",
+						{ className: "flex items-center justify-between" },
+						React.createElement(
+							"span",
+							{ className: "text-xs font-bold uppercase tracking-wider text-slate-400 group-hover:text-emerald-300" },
+							"Teaching Factory (TEFA)"
+						),
+						React.createElement(
+							"div",
+							{ className: "w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform" },
+							React.createElement(Factory, { className: "w-5 h-5" })
+						)
+					),
+					React.createElement(
+						"div",
+						{ className: "my-2.5" },
+						React.createElement(
+							"div",
+							{ className: "flex items-baseline gap-2" },
+							React.createElement("span", { className: "text-2xl sm:text-3xl font-black text-emerald-400" }, stats.totalTefa),
+							React.createElement("span", { className: "text-xs text-slate-300 font-semibold" }, "Workshop Produksi")
+						),
+						React.createElement(
+							"div",
+							{ className: "text-xs text-slate-400 mt-1" },
+							`Kapasitas: ${stats.kapTefa.toLocaleString("id-ID")} Taruna · Luas: ${Math.round(stats.luasTefa).toLocaleString("id-ID")} m²`
+						)
+					),
+					React.createElement(
+						"div",
+						{ className: "pt-2 border-t border-slate-700/60 flex items-center justify-between text-[11px]" },
+						React.createElement("span", { className: "text-slate-400" }, "HACCP, SKP & Halal"),
+						React.createElement(
+							"span",
+							{ className: "font-semibold text-emerald-400" },
+							categoryFilter === "tefa" ? "Filter Aktif ✓" : "Klik untuk filter"
+						)
+					)
+				),
+
+				// Card 4: Simulator Maritim
+				React.createElement(
+					"div",
+					{
+						onClick: () => {
+							setCategoryFilter((prev) => (prev === "simulator" ? "ALL" : "simulator"));
+							setCurrentPage(1);
+						},
+						className: `bg-slate-800/90 rounded-2xl p-4 border transition-all shadow-md flex flex-col justify-between cursor-pointer group ${
+							categoryFilter === "simulator"
+								? "border-cyan-500 ring-2 ring-cyan-500/30 bg-cyan-950/20"
+								: "border-slate-700/70 hover:border-cyan-500/50"
+						}`
+					},
+					React.createElement(
+						"div",
+						{ className: "flex items-center justify-between" },
+						React.createElement(
+							"span",
+							{ className: "text-xs font-bold uppercase tracking-wider text-slate-400 group-hover:text-cyan-300" },
+							"Simulator Maritim"
+						),
+						React.createElement(
+							"div",
+							{ className: "w-9 h-9 rounded-xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform" },
+							React.createElement(Compass, { className: "w-5 h-5" })
+						)
+					),
+					React.createElement(
+						"div",
+						{ className: "my-2.5" },
+						React.createElement(
+							"div",
+							{ className: "flex items-baseline gap-2" },
+							React.createElement("span", { className: "text-2xl sm:text-3xl font-black text-cyan-400" }, stats.totalSim),
+							React.createElement("span", { className: "text-xs text-slate-300 font-semibold" }, "Lab Simulator")
+						),
+						React.createElement(
+							"div",
+							{ className: "text-xs text-slate-400 mt-1" },
+							`Kapasitas: ${stats.kapSim.toLocaleString("id-ID")} Taruna · Luas: ${Math.round(stats.luasSim).toLocaleString("id-ID")} m²`
+						)
+					),
+					React.createElement(
+						"div",
+						{ className: "pt-2 border-t border-slate-700/60 flex items-center justify-between text-[11px]" },
+						React.createElement("span", { className: "text-slate-400" }, "Approval STCW & Ditjen Hubla"),
+						React.createElement(
+							"span",
+							{ className: "font-semibold text-cyan-400" },
+							categoryFilter === "simulator" ? "Filter Aktif ✓" : "Klik untuk filter"
+						)
+					)
+				)
+			),
+
+			// 3. AGGREGATE SUMMARY STRIP
+			React.createElement(
+				"div",
+				{
+					className:
+						"bg-slate-900/80 rounded-xl p-3 border border-slate-800 text-xs flex flex-wrap items-center justify-between gap-3"
+				},
+				React.createElement(
+					"div",
+					{ className: "flex items-center gap-3 sm:gap-6 flex-wrap" },
+					React.createElement(
+						"div",
+						null,
+						React.createElement("span", { className: "text-slate-400" }, "Total Fasilitas: "),
+						React.createElement("strong", { className: "text-white font-mono" }, stats.total, " Unit")
+					),
+					React.createElement(
+						"div",
+						null,
+						React.createElement("span", { className: "text-slate-400" }, "Total Luas Sarpras: "),
+						React.createElement("strong", { className: "text-cyan-400 font-mono" }, Math.round(stats.totalLuas).toLocaleString("id-ID"), " m²")
+					),
+					React.createElement(
+						"div",
+						null,
+						React.createElement("span", { className: "text-slate-400" }, "Total Daya Tampung: "),
+						React.createElement("strong", { className: "text-emerald-400 font-mono" }, stats.totalKapasitas.toLocaleString("id-ID"), " Taruna")
+					)
+				),
+				React.createElement(
+					"div",
+					{ className: "flex items-center gap-2" },
+					React.createElement("span", { className: "text-slate-400" }, "Kondisi Fisik:"),
+					React.createElement("span", { className: "px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" }, `Baik: ${stats.baik} (${stats.pctBaik}%)`),
+					stats.rr > 0 &&
+						React.createElement("span", { className: "px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30" }, `RR: ${stats.rr} (${stats.pctRR}%)`),
+					stats.rb > 0 &&
+						React.createElement("span", { className: "px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30" }, `RB: ${stats.rb} (${stats.pctRB}%)`)
+				)
+			),
+
+			// 4. GLOBAL FILTER & VIEW SWITCH BAR
+			React.createElement(
+				"div",
+				{
+					className:
+						"bg-slate-800/90 rounded-2xl p-4 border border-slate-700/70 shadow-md flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3"
+				},
+				React.createElement(
+					"div",
+					{ className: "flex flex-wrap items-center gap-2" },
+
+					// Jenjang Filter Pills
+					React.createElement(
+						"div",
+						{ className: "flex items-center bg-slate-900/90 p-1 rounded-xl border border-slate-700/70" },
+						React.createElement(
+							"button",
+							{
+								onClick: () => {
+									setJenjangFilter("ALL");
+									setCurrentPage(1);
+								},
+								className: `px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
+									jenjangFilter === "ALL" ? "bg-cyan-600 text-white shadow" : "text-slate-400 hover:text-slate-200"
+								}`
+							},
+							"Semua (18)"
+						),
+						React.createElement(
+							"button",
+							{
+								onClick: () => {
+									setJenjangFilter("Politeknik");
+									setCurrentPage(1);
+								},
+								className: `px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
+									jenjangFilter === "Politeknik" ? "bg-cyan-600 text-white shadow" : "text-slate-400 hover:text-slate-200"
+								}`
+							},
+							"Politeknik (11)"
+						),
+						React.createElement(
+							"button",
+							{
+								onClick: () => {
+									setJenjangFilter("SUPM");
+									setCurrentPage(1);
+								},
+								className: `px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
+									jenjangFilter === "SUPM" ? "bg-cyan-600 text-white shadow" : "text-slate-400 hover:text-slate-200"
+								}`
+							},
+							"SUPM (7)"
+						)
+					),
+
+					// Satdik Dropdown
+					React.createElement(
+						"div",
+						{ className: "relative min-w-[190px]" },
+						React.createElement(
+							"select",
+							{
+								value: selectedSatdik,
+								onChange: (e) => {
+									setSelectedSatdik(e.target.value);
+									setCurrentPage(1);
+								},
+								disabled: Boolean(lockedSatdik),
+								className:
+									"w-full bg-slate-900/90 border border-slate-700 text-slate-200 rounded-xl px-3 py-1.5 text-xs font-semibold focus:outline-none focus:border-cyan-500 disabled:opacity-60 cursor-pointer"
+							},
+							!lockedSatdik && React.createElement("option", { value: "ALL" }, "Seluruh Satuan Pendidikan (18)"),
+							masterSatdik.map((s) =>
+								React.createElement(
+									"option",
+									{ key: s.id, value: s.id },
+									`${s.shortName || s.name} (${s.type})`
+								)
+							)
+						)
+					),
+
+					// Kategori Filter Selector
+					React.createElement(
+						"div",
+						{ className: "relative min-w-[150px]" },
+						React.createElement(
+							"select",
+							{
+								value: categoryFilter,
+								onChange: (e) => {
+									setCategoryFilter(e.target.value);
+									setCurrentPage(1);
+								},
+								className:
+									"w-full bg-slate-900/90 border border-slate-700 text-slate-200 rounded-xl px-3 py-1.5 text-xs font-semibold focus:outline-none focus:border-cyan-500 cursor-pointer"
+							},
+							React.createElement("option", { value: "ALL" }, "Semua Kategori (4)"),
+							React.createElement("option", { value: "kelas" }, "Ruang Kelas & Kuliah"),
+							React.createElement("option", { value: "perpustakaan" }, "Perpustakaan Akademik"),
+							React.createElement("option", { value: "tefa" }, "Teaching Factory (TEFA)"),
+							React.createElement("option", { value: "simulator" }, "Simulator Maritim")
+						)
+					),
+
+					// Kondisi Filter
+					React.createElement(
+						"div",
+						{ className: "relative min-w-[120px]" },
+						React.createElement(
+							"select",
+							{
+								value: kondisiFilter,
+								onChange: (e) => {
+									setKondisiFilter(e.target.value);
+									setCurrentPage(1);
+								},
+								className:
+									"w-full bg-slate-900/90 border border-slate-700 text-slate-200 rounded-xl px-3 py-1.5 text-xs font-semibold focus:outline-none focus:border-cyan-500 cursor-pointer"
+							},
+							React.createElement("option", { value: "ALL" }, "Semua Kondisi"),
+							React.createElement("option", { value: "Baik" }, "Baik"),
+							React.createElement("option", { value: "Rusak Ringan" }, "Rusak Ringan"),
+							React.createElement("option", { value: "Rusak Berat" }, "Rusak Berat")
+						)
+					),
+
+					isFiltered &&
+						React.createElement(
+							"button",
+							{
+								onClick: handleResetFilters,
+								className:
+									"inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-xs font-semibold transition-all"
+							},
+							React.createElement(RotateCcw, { className: "w-3.5 h-3.5" }),
+							"Reset"
+						)
+				),
+
+				// Search Query & View Switch
+				React.createElement(
+					"div",
+					{ className: "flex items-center gap-2 justify-between lg:justify-end" },
+					React.createElement(
+						"div",
+						{ className: "relative flex-1 sm:w-60" },
+						React.createElement(Search, {
+							className: "w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"
+						}),
+						React.createElement("input", {
+							type: "text",
+							value: searchQuery,
+							onChange: (e) => {
+								setSearchQuery(e.target.value);
+								setCurrentPage(1);
+							},
+							placeholder: "Cari nama, gedung, sertifikasi...",
+							className:
+								"w-full bg-slate-900/90 border border-slate-700 text-slate-200 rounded-xl pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:border-cyan-500"
+						})
+					),
+
+					// View mode toggle
+					React.createElement(
+						"div",
+						{ className: "flex items-center bg-slate-900 p-1 rounded-xl border border-slate-700/70" },
+						React.createElement(
+							"button",
+							{
+								onClick: () => setViewMode("table"),
+								title: "Tampilan Tabel Detail",
+								className: `p-1.5 rounded-lg text-xs font-semibold transition-all ${
+									viewMode === "table" ? "bg-cyan-600 text-white shadow" : "text-slate-400 hover:text-slate-200"
+								}`
+							},
+							React.createElement(List, { className: "w-4 h-4" })
+						),
+						React.createElement(
+							"button",
+							{
+								onClick: () => setViewMode("grid"),
+								title: "Tampilan Kartu Grid",
+								className: `p-1.5 rounded-lg text-xs font-semibold transition-all ${
+									viewMode === "grid" ? "bg-cyan-600 text-white shadow" : "text-slate-400 hover:text-slate-200"
+								}`
+							},
+							React.createElement(LayoutGrid, { className: "w-4 h-4" })
+						),
+						React.createElement(
+							"button",
+							{
+								onClick: () => setViewMode("rekap"),
+								title: "Tampilan Rekapitulasi per Satdik",
+								className: `px-2 py-1 rounded-lg text-xs font-semibold transition-all ${
+									viewMode === "rekap" ? "bg-cyan-600 text-white shadow" : "text-slate-400 hover:text-slate-200"
+								}`
+							},
+							"Rekap 18 Satdik"
+						)
+					)
+				)
+			),
+
+			// 5. MAIN CONTENT ACCORDING TO VIEW MODE
+			viewMode === "rekap" &&
+				// TAMPILAN REKAPITULASI PER SATDIK
+				React.createElement(
+					"div",
+					{
+						className:
+							"bg-slate-800/90 rounded-2xl border border-slate-700/70 shadow-lg overflow-hidden"
+					},
+					React.createElement(
+						"div",
+						{ className: "p-4 sm:p-5 border-b border-slate-700/80 flex items-center justify-between" },
+						React.createElement(
+							"div",
+							null,
+							React.createElement("h3", { className: "text-base font-bold text-white tracking-tight" }, "Rekapitulasi Sarpras Pembelajaran 18 Satuan Pendidikan"),
+							React.createElement("p", { className: "text-xs text-slate-400" }, "Kelengkapan 4 pilar fasilitas: Ruang Kelas, Perpustakaan, TEFA, dan Simulator maritim.")
+						),
+						React.createElement(
+							"span",
+							{ className: "text-xs text-cyan-400 font-semibold" },
+							`${rekapPerSatdik.length} Satdik Ditampilkan`
+						)
+					),
+					React.createElement(
+						"div",
+						{ className: "overflow-x-auto" },
+						React.createElement(
+							"table",
+							{ className: "w-full text-left border-collapse text-xs" },
+							React.createElement(
+								"thead",
+								null,
+								React.createElement(
+									"tr",
+									{ className: "bg-slate-900/90 text-slate-300 border-b border-slate-700/80 uppercase text-[10px] tracking-wider" },
+									React.createElement("th", { className: "py-3 px-3 text-center" }, "No"),
+									React.createElement("th", { className: "py-3 px-4" }, "Satuan Pendidikan"),
+									React.createElement("th", { className: "py-3 px-3 text-center text-blue-300" }, "Ruang Kelas"),
+									React.createElement("th", { className: "py-3 px-3 text-center text-amber-300" }, "Perpustakaan"),
+									React.createElement("th", { className: "py-3 px-3 text-center text-emerald-300" }, "Teaching Factory"),
+									React.createElement("th", { className: "py-3 px-3 text-center text-cyan-300" }, "Simulator"),
+									React.createElement("th", { className: "py-3 px-3 text-right" }, "Total Luas (m²)"),
+									React.createElement("th", { className: "py-3 px-3 text-center" }, "Status Fasilitas"),
+									React.createElement("th", { className: "py-3 px-3 text-center" }, "Aksi")
+								)
+							),
+							React.createElement(
+								"tbody",
+								{ className: "divide-y divide-slate-700/50" },
+								rekapPerSatdik.map((r, idx) => {
+									return React.createElement(
+										"tr",
+										{ key: r.satdikId, className: "hover:bg-slate-700/35 transition-colors" },
+										React.createElement("td", { className: "py-3 px-3 text-center font-mono text-slate-400" }, idx + 1),
+										React.createElement(
+											"td",
+											{ className: "py-3 px-4" },
+											React.createElement("div", { className: "font-bold text-white text-sm" }, r.shortName),
+											React.createElement(
+												"div",
+												{ className: "flex items-center gap-1.5 mt-0.5" },
+												React.createElement(
+													"span",
+													{
+														className: `px-1.5 py-0.2 rounded text-[9px] font-semibold ${
+															r.type === "SUPM"
+																? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+																: "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30"
+														}`
+													},
+													r.type
+												),
+												React.createElement("span", { className: "text-[10px] text-slate-400" }, r.kota)
+											)
+										),
+										React.createElement(
+											"td",
+											{ className: "py-3 px-3 text-center" },
+											React.createElement("span", { className: "font-bold text-blue-400 text-sm" }, r.kelasCount),
+											React.createElement("span", { className: "text-[10px] text-slate-400 block" }, `${r.kelasKap} kursi`)
+										),
+										React.createElement(
+											"td",
+											{ className: "py-3 px-3 text-center" },
+											React.createElement("span", { className: "font-bold text-amber-400 text-sm" }, r.perpusCount),
+											React.createElement("span", { className: "text-[10px] text-slate-400 block" }, `${r.perpusKap} orang`)
+										),
+										React.createElement(
+											"td",
+											{ className: "py-3 px-3 text-center" },
+											React.createElement("span", { className: "font-bold text-emerald-400 text-sm" }, r.tefaCount),
+											React.createElement("span", { className: "text-[10px] text-slate-400 block" }, "Unit Lab")
+										),
+										React.createElement(
+											"td",
+											{ className: "py-3 px-3 text-center" },
+											React.createElement("span", { className: "font-bold text-cyan-400 text-sm" }, r.simCount),
+											React.createElement("span", { className: "text-[10px] text-slate-400 block" }, "Simulator")
+										),
+										React.createElement(
+											"td",
+											{ className: "py-3 px-3 text-right font-mono font-bold text-slate-200" },
+											r.totalLuas.toLocaleString("id-ID")
+										),
+										React.createElement(
+											"td",
+											{ className: "py-3 px-3 text-center" },
+											r.isComplete
+												? React.createElement(
+														"span",
+														{
+															className:
+																"px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 inline-flex items-center gap-1"
+														},
+														React.createElement(CheckCircle2, { className: "w-3 h-3 text-emerald-400" }),
+														"4 Fasilitas Lengkap"
+												  )
+												: React.createElement(
+														"span",
+														{
+															className:
+																"px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30"
+														},
+														`${r.totalCount} Terdata`
+												  )
+										),
+										React.createElement(
+											"td",
+											{ className: "py-3 px-3 text-center" },
+											React.createElement(
+												"button",
+												{
+													onClick: () => handleSelectSatdikDrilldown(r.satdikId),
+													className:
+														"px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-900/60 text-cyan-300 border border-slate-700 hover:border-cyan-500/50 text-[11px] font-semibold transition-all inline-flex items-center gap-1"
+												},
+												"Detail",
+												React.createElement(ChevronRight, { className: "w-3 h-3" })
+											)
+										)
+									);
+								})
+							)
+						)
+					)
+				),
+
+			viewMode === "grid" &&
+				// TAMPILAN KARTU GRID
+				React.createElement(
+					"div",
+					{ className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" },
+					paginatedFacilities.length > 0
+						? paginatedFacilities.map((f) => {
+								const catMeta = CATEGORY_META[f.category] || CATEGORY_META.kelas;
+								const CatIcon = catMeta.icon;
+								const sat = satdikMap[f.satdikId] || {};
+								return React.createElement(
+									"div",
+									{
+										key: f.id,
+										className:
+											"bg-slate-800/90 rounded-2xl p-4 border border-slate-700/70 hover:border-cyan-500/50 transition-all shadow-md flex flex-col justify-between group"
+									},
+									React.createElement(
+										"div",
+										null,
+										React.createElement(
+											"div",
+											{ className: "flex items-start justify-between gap-2" },
+											React.createElement(
+												"span",
+												{
+													className: `px-2 py-0.5 rounded-full text-[10px] font-bold border ${catMeta.badgeClass} flex items-center gap-1`
+												},
+												React.createElement(CatIcon, { className: "w-3 h-3" }),
+												catMeta.label
+											),
+											React.createElement(
+												"span",
+												{
+													className: `px-2 py-0.5 rounded-full text-[10px] font-bold ${
+														f.kondisi === "Baik"
+															? "bg-emerald-500/15 text-emerald-300 border border-emerald-500/30"
+															: "bg-amber-500/15 text-amber-300 border border-amber-500/30"
+													}`
+												},
+												f.kondisi
+											)
+										),
+										React.createElement(
+											"h4",
+											{ className: "text-sm font-bold text-white mt-2 group-hover:text-cyan-300 transition-colors" },
+											f.name
+										),
+										React.createElement(
+											"p",
+											{ className: "text-xs text-slate-400 mt-0.5" },
+											sat.shortName || sat.name,
+											f.gedung ? ` • ${f.gedung}` : ""
+										),
+										React.createElement(
+											"div",
+											{ className: "grid grid-cols-2 gap-2 my-3 text-xs bg-slate-900/60 p-2.5 rounded-xl border border-slate-800" },
+											React.createElement(
+												"div",
+												null,
+												React.createElement("span", { className: "text-slate-400 text-[10px] block" }, "Luas Area"),
+												React.createElement("span", { className: "font-mono font-bold text-cyan-400" }, Number(f.luasM2).toLocaleString("id-ID"), " m²")
+											),
+											React.createElement(
+												"div",
+												null,
+												React.createElement("span", { className: "text-slate-400 text-[10px] block" }, "Kapasitas"),
+												React.createElement("span", { className: "font-mono font-bold text-emerald-400" }, Number(f.kapasitas).toLocaleString("id-ID"), " Taruna")
+											)
+										),
+										f.spesifikasi &&
+											React.createElement(
+												"div",
+												{ className: "text-[11px] text-slate-300 line-clamp-2 leading-relaxed mb-2" },
+												React.createElement("span", { className: "text-slate-400" }, "Spek: "),
+												f.spesifikasi
+											),
+										f.sertifikasi &&
+											React.createElement(
+												"div",
+												{ className: "text-[10px] text-cyan-300 font-medium truncate" },
+												"✓ ",
+												f.sertifikasi
+											)
+									),
+									React.createElement(
+										"div",
+										{ className: "pt-3 mt-3 border-t border-slate-700/60 flex items-center justify-between text-xs" },
+										React.createElement(
+											"span",
+											{ className: "text-[10px] text-slate-400 font-mono" },
+											`Thn: ${f.tahunPengadaan || "-"} • ID: ${f.id}`
+										),
+										canEditSatdik(f.satdikId) &&
+											React.createElement(
+												"div",
+												{ className: "flex items-center gap-1.5" },
+												React.createElement(
+													"button",
+													{
+														onClick: () => openEditModal(f),
+														className: "p-1 rounded-lg text-slate-400 hover:text-cyan-400 hover:bg-slate-700 transition-colors",
+														title: "Ubah Data"
+													},
+													React.createElement(Edit3, { className: "w-3.5 h-3.5" })
+												),
+												React.createElement(
+													"button",
+													{
+														onClick: () => handleDeleteClick(f),
+														className: "p-1 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-700 transition-colors",
+														title: "Hapus Data"
+													},
+													React.createElement(TrashIcon, { className: "w-3.5 h-3.5" })
+												)
+											)
+									)
+								);
+						  })
+						: React.createElement(
+								"div",
+								{ className: "col-span-full py-12 text-center text-slate-400" },
+								"Tidak ditemukan fasilitas pembelajaran yang sesuai dengan kriteria filter."
+						  )
+				),
+
+			viewMode === "table" &&
+				// TAMPILAN TABEL RINCIAN DETAIL (Default)
+				React.createElement(
+					"div",
+					{
+						ref: tableRef,
+						className:
+							"bg-slate-800/90 rounded-2xl border border-slate-700/70 shadow-lg overflow-hidden"
+					},
+					React.createElement(
+						"div",
+						{ className: "p-4 sm:p-5 border-b border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2" },
+						React.createElement(
+							"div",
+							null,
+							React.createElement(
+								"h3",
+								{ className: "text-base font-bold text-white tracking-tight flex items-center gap-2" },
+								React.createElement("span", null, "Daftar Detail Sarpras Pembelajaran"),
+								React.createElement(
+									"span",
+									{ className: "px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30" },
+									`${sortedFacilities.length} Fasilitas`
+								)
+							),
+							React.createElement(
+								"p",
+								{ className: "text-xs text-slate-400" },
+								"Inventaris fasilitas ruang kelas, perpustakaan, unit workshop TEFA, dan simulator maritim vokasi KKP."
+							)
+						),
+						React.createElement(
+							"div",
+							{ className: "flex items-center gap-2" },
+							React.createElement("span", { className: "text-xs text-slate-400" }, "Tampilkan:"),
+							React.createElement(
+								"select",
+								{
+									value: pageSize,
+									onChange: (e) => {
+										setPageSize(e.target.value);
+										setCurrentPage(1);
+									},
+									className:
+										"bg-slate-900/90 border border-slate-700 text-slate-200 rounded-lg px-2 py-1 text-xs font-semibold focus:outline-none"
+								},
+								React.createElement("option", { value: 10 }, "10"),
+								React.createElement("option", { value: 25 }, "25"),
+								React.createElement("option", { value: 50 }, "50"),
+								React.createElement("option", { value: "ALL" }, "Semua")
+							)
+						)
+					),
+
+					// Tabel Rincian
+					React.createElement(
+						"div",
+						{ className: "overflow-x-auto" },
+						React.createElement(
+							"table",
+							{ className: "w-full text-left border-collapse text-xs" },
+							React.createElement(
+								"thead",
+								null,
+								React.createElement(
+									"tr",
+									{ className: "bg-slate-900/90 text-slate-300 border-b border-slate-700/80 uppercase text-[10px] tracking-wider" },
+									React.createElement("th", { className: "py-3 px-3 text-center" }, "No"),
+									React.createElement(
+										"th",
+										{
+											onClick: () => handleSort("satdikId"),
+											className: "py-3 px-3 cursor-pointer hover:text-cyan-400"
+										},
+										"Satuan Pendidikan"
+									),
+									React.createElement(
+										"th",
+										{
+											onClick: () => handleSort("category"),
+											className: "py-3 px-3 text-center cursor-pointer hover:text-cyan-400"
+										},
+										"Kategori"
+									),
+									React.createElement(
+										"th",
+										{
+											onClick: () => handleSort("name"),
+											className: "py-3 px-3 cursor-pointer hover:text-cyan-400"
+										},
+										"Nama Fasilitas & Gedung"
+									),
+									React.createElement(
+										"th",
+										{
+											onClick: () => handleSort("luasM2"),
+											className: "py-3 px-3 text-right cursor-pointer hover:text-cyan-400"
+										},
+										React.createElement(
+											"span",
+											{ className: "inline-flex items-center gap-1" },
+											"Luas (m²)",
+											React.createElement(ArrowUpDown, { className: "w-3 h-3" })
+										)
+									),
+									React.createElement(
+										"th",
+										{
+											onClick: () => handleSort("kapasitas"),
+											className: "py-3 px-3 text-right cursor-pointer hover:text-cyan-400"
+										},
+										React.createElement(
+											"span",
+											{ className: "inline-flex items-center gap-1" },
+											"Kapasitas",
+											React.createElement(ArrowUpDown, { className: "w-3 h-3" })
+										)
+									),
+									React.createElement(
+										"th",
+										{
+											onClick: () => handleSort("kondisi"),
+											className: "py-3 px-3 text-center cursor-pointer hover:text-cyan-400"
+										},
+										"Kondisi"
+									),
+									React.createElement("th", { className: "py-3 px-3" }, "Spesifikasi & Standar Mutu"),
+									React.createElement("th", { className: "py-3 px-3 text-center" }, "Thn"),
+									canEdit && React.createElement("th", { className: "py-3 px-3 text-center" }, "Aksi")
+								)
+							),
+							React.createElement(
+								"tbody",
+								{ className: "divide-y divide-slate-700/50" },
+								paginatedFacilities.length > 0
+									? paginatedFacilities.map((f, idx) => {
+											const rowNum =
+												pageSize === "ALL"
+													? idx + 1
+													: (currentPage - 1) * (Number(pageSize) || 25) + idx + 1;
+											const catMeta = CATEGORY_META[f.category] || CATEGORY_META.kelas;
+											const CatIcon = catMeta.icon;
+											const sat = satdikMap[f.satdikId] || {};
+											const kondBadge =
+												f.kondisi === "Baik"
+													? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
+													: f.kondisi === "Rusak Ringan"
+													? "bg-amber-500/15 text-amber-300 border-amber-500/30"
+													: "bg-rose-500/15 text-rose-300 border-rose-500/30";
+
+											return React.createElement(
+												"tr",
+												{ key: f.id, className: "hover:bg-slate-700/35 transition-colors" },
+												React.createElement(
+													"td",
+													{ className: "py-3 px-3 text-center font-mono text-slate-400" },
+													rowNum
+												),
+												React.createElement(
+													"td",
+													{ className: "py-3 px-3" },
+													React.createElement(
+														"div",
+														{ className: "font-bold text-white text-xs" },
+														sat.shortName || f.satdikName || f.satdikId
+													),
+													React.createElement(
+														"div",
+														{ className: "text-[10px] text-slate-400" },
+														sat.type || "Politeknik"
+													)
+												),
+												React.createElement(
+													"td",
+													{ className: "py-3 px-3 text-center whitespace-nowrap" },
+													React.createElement(
+														"span",
+														{
+															className: `px-2 py-0.5 rounded-full text-[10px] font-semibold border ${catMeta.badgeClass} inline-flex items-center gap-1`
+														},
+														React.createElement(CatIcon, { className: "w-3 h-3" }),
+														catMeta.shortLabel
+													)
+												),
+												React.createElement(
+													"td",
+													{ className: "py-3 px-3 max-w-[240px]" },
+													React.createElement("div", { className: "font-bold text-slate-100 leading-tight" }, f.name),
+													React.createElement(
+														"div",
+														{ className: "text-[10px] text-slate-400 mt-0.5 truncate" },
+														f.gedung || "-"
+													)
+												),
+												React.createElement(
+													"td",
+													{ className: "py-3 px-3 text-right font-mono font-bold text-cyan-400" },
+													Number(f.luasM2) > 0 ? `${Number(f.luasM2).toLocaleString("id-ID")} m²` : "-"
+												),
+												React.createElement(
+													"td",
+													{ className: "py-3 px-3 text-right font-mono text-slate-200" },
+													Number(f.kapasitas) > 0 ? `${Number(f.kapasitas).toLocaleString("id-ID")} Taruna` : "-"
+												),
+												React.createElement(
+													"td",
+													{ className: "py-3 px-3 text-center" },
+													React.createElement(
+														"span",
+														{ className: `px-2 py-0.5 rounded-full text-[10px] font-bold border ${kondBadge}` },
+														f.kondisi || "Baik"
+													),
+													f.statusOp &&
+														React.createElement(
+															"div",
+															{ className: "text-[9px] text-slate-400 mt-0.5" },
+															f.statusOp
+														)
+												),
+												React.createElement(
+													"td",
+													{ className: "py-3 px-3 max-w-[280px]" },
+													React.createElement(
+														"div",
+														{ className: "text-[11px] text-slate-300 line-clamp-2 leading-tight" },
+														f.spesifikasi || "-"
+													),
+													f.sertifikasi &&
+														React.createElement(
+															"div",
+															{ className: "text-[10px] text-emerald-400 font-medium mt-0.5 truncate" },
+															"✓ ",
+															f.sertifikasi
+														)
+												),
+												React.createElement(
+													"td",
+													{ className: "py-3 px-3 text-center font-mono text-slate-400 text-[11px]" },
+													f.tahunPengadaan || "-"
+												),
+												canEdit &&
+													React.createElement(
+														"td",
+														{ className: "py-3 px-3 text-center whitespace-nowrap" },
+														canEditSatdik(f.satdikId)
+															? React.createElement(
+																	"div",
+																	{ className: "flex items-center justify-center gap-1" },
+																	React.createElement(
+																		"button",
+																		{
+																			onClick: () => openEditModal(f),
+																			className:
+																				"p-1.5 rounded-lg text-slate-300 hover:text-cyan-400 hover:bg-slate-700 transition-colors",
+																			title: "Ubah Fasilitas"
+																		},
+																		React.createElement(Edit3, { className: "w-3.5 h-3.5" })
+																	),
+																	React.createElement(
+																		"button",
+																		{
+																			onClick: () => handleDeleteClick(f),
+																			className:
+																				"p-1.5 rounded-lg text-slate-300 hover:text-rose-400 hover:bg-slate-700 transition-colors",
+																			title: "Hapus Fasilitas"
+																		},
+																		React.createElement(TrashIcon, { className: "w-3.5 h-3.5" })
+																	)
+															  )
+															: React.createElement("span", { className: "text-[10px] text-slate-500 italic" }, "Lihat")
+													)
+											);
+									  })
+									: React.createElement(
+											"tr",
+											null,
+											React.createElement(
+												"td",
+												{ colSpan: 10, className: "py-10 text-center text-slate-400" },
+												"Tidak ada data fasilitas pembelajaran yang cocok dengan filter."
+											)
+									  )
+							)
+						)
+					),
+
+					// Pagination Controls
+					pageSize !== "ALL" &&
+						totalPages > 1 &&
+						React.createElement(
+							"div",
+							{ className: "p-3 sm:p-4 border-t border-slate-700/80 flex items-center justify-between text-xs" },
+							React.createElement(
+								"span",
+								{ className: "text-slate-400 text-[11px]" },
+								`Menampilkan ${(currentPage - 1) * Number(pageSize) + 1} - ${Math.min(
+									currentPage * Number(pageSize),
+									sortedFacilities.length
+								)} dari total ${sortedFacilities.length} fasilitas`
+							),
+							React.createElement(
+								"div",
+								{ className: "flex items-center gap-1" },
+								React.createElement(
+									"button",
+									{
+										onClick: () => setCurrentPage((p) => Math.max(1, p - 1)),
+										disabled: currentPage === 1,
+										className:
+											"px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-800"
+									},
+									React.createElement(ChevronLeft, { className: "w-3.5 h-3.5" })
+								),
+								Array.from({ length: totalPages }).map((_, i) => {
+									const p = i + 1;
+									if (p === 1 || p === totalPages || (p >= currentPage - 1 && p <= currentPage + 1)) {
+										return React.createElement(
+											"button",
+											{
+												key: p,
+												onClick: () => setCurrentPage(p),
+												className: `px-2.5 py-1 rounded-lg text-xs font-semibold ${
+													currentPage === p
+														? "bg-cyan-600 text-white"
+														: "bg-slate-900 border border-slate-700 text-slate-300 hover:bg-slate-800"
+												}`
+											},
+											p
+										);
+									}
+									if (p === currentPage - 2 || p === currentPage + 2) {
+										return React.createElement("span", { key: p, className: "px-1 text-slate-500" }, "...");
+									}
+									return null;
+								}),
+								React.createElement(
+									"button",
+									{
+										onClick: () => setCurrentPage((p) => Math.min(totalPages, p + 1)),
+										disabled: currentPage === totalPages,
+										className:
+											"px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-800"
+									},
+									React.createElement(ChevronRight, { className: "w-3.5 h-3.5" })
+								)
+							)
+						)
+				),
+
+			// 6. MODAL TAMBAH / UBAH FASILITAS PEMBELAJARAN
+			editingFacility &&
+				React.createElement(
+					"div",
+					{
+						className:
+							"fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto"
+					},
+					React.createElement(
+						"div",
+						{
+							className:
+								"bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl max-w-2xl w-full p-5 sm:p-6 text-slate-200 relative my-8"
+						},
+						React.createElement(
+							"div",
+							{ className: "flex items-center justify-between pb-4 border-b border-slate-700" },
+							React.createElement(
+								"div",
+								null,
+								React.createElement(
+									"h3",
+									{ className: "text-lg font-bold text-white flex items-center gap-2" },
+									React.createElement(School, { className: "w-5 h-5 text-cyan-400" }),
+									editingFacility.mode === "add" ? "Tambah Fasilitas Pembelajaran" : "Ubah Data Fasilitas"
+								),
+								React.createElement(
+									"p",
+									{ className: "text-xs text-slate-400 mt-0.5" },
+									"Input data sarpras ruang kelas, perpustakaan, TEFA, atau simulator maritim."
+								)
+							),
+							React.createElement(
+								"button",
+								{
+									onClick: () => setEditingFacility(null),
+									className: "p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+								},
+								React.createElement(X, { className: "w-5 h-5" })
+							)
+						),
+						React.createElement(
+							"form",
+							{ onSubmit: handleSaveFacility, className: "mt-4 space-y-4" },
+							React.createElement(
+								"div",
+								{ className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
+
+								// Satuan Pendidikan
+								React.createElement(
+									"div",
+									null,
+									React.createElement("label", { className: "block text-xs font-semibold text-slate-300 mb-1" }, "Satuan Pendidikan *"),
+									React.createElement(
+										"select",
+										{
+											value: editingFacility.data.satdikId,
+											onChange: (e) =>
+												setEditingFacility({
+													...editingFacility,
+													data: { ...editingFacility.data, satdikId: e.target.value }
+												}),
+											disabled: Boolean(lockedSatdik),
+											className:
+												"w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+										},
+										masterSatdik.map((s) =>
+											React.createElement(
+												"option",
+												{ key: s.id, value: s.id },
+												`${s.shortName || s.name} (${s.type})`
+											)
+										)
+									)
+								),
+
+								// Kategori
+								React.createElement(
+									"div",
+									null,
+									React.createElement("label", { className: "block text-xs font-semibold text-slate-300 mb-1" }, "Kategori Fasilitas *"),
+									React.createElement(
+										"select",
+										{
+											value: editingFacility.data.category,
+											onChange: (e) =>
+												setEditingFacility({
+													...editingFacility,
+													data: { ...editingFacility.data, category: e.target.value }
+												}),
+											className:
+												"w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+										},
+										React.createElement("option", { value: "kelas" }, "Ruang Kelas & Kuliah"),
+										React.createElement("option", { value: "perpustakaan" }, "Perpustakaan Akademik"),
+										React.createElement("option", { value: "tefa" }, "Teaching Factory (TEFA)"),
+										React.createElement("option", { value: "simulator" }, "Simulator Maritim / Kelautan")
+									)
+								)
+							),
+
+							// Nama Fasilitas
+							React.createElement(
+								"div",
+								null,
+								React.createElement("label", { className: "block text-xs font-semibold text-slate-300 mb-1" }, "Nama Fasilitas Pembelajaran *"),
+								React.createElement("input", {
+									type: "text",
+									required: true,
+									value: editingFacility.data.name,
+									onChange: (e) =>
+										setEditingFacility({
+											...editingFacility,
+											data: { ...editingFacility.data, name: e.target.value }
+										}),
+									placeholder: "Contoh: Smart Classroom Pascasarjana / Lab Bridge Simulator",
+									className:
+										"w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+								})
+							),
+
+							// Gedung / Lokasi
+							React.createElement(
+								"div",
+								null,
+								React.createElement("label", { className: "block text-xs font-semibold text-slate-300 mb-1" }, "Gedung / Lokasi Kampus"),
+								React.createElement("input", {
+									type: "text",
+									value: editingFacility.data.gedung || "",
+									onChange: (e) =>
+										setEditingFacility({
+											...editingFacility,
+											data: { ...editingFacility.data, gedung: e.target.value }
+										}),
+									placeholder: "Contoh: Gedung Rektorat Lt. 3 / Workshop Pengolahan Hasil Laut",
+									className:
+										"w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+								})
+							),
+
+							// Luas, Kapasitas, Tahun
+							React.createElement(
+								"div",
+								{ className: "grid grid-cols-1 sm:grid-cols-3 gap-3" },
+								React.createElement(
+									"div",
+									null,
+									React.createElement("label", { className: "block text-xs font-semibold text-slate-300 mb-1" }, "Luas (m²)"),
+									React.createElement("input", {
+										type: "number",
+										min: 0,
+										value: editingFacility.data.luasM2 || "",
+										onChange: (e) =>
+											setEditingFacility({
+												...editingFacility,
+												data: { ...editingFacility.data, luasM2: Number(e.target.value) || 0 }
+											}),
+										className:
+											"w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+									})
+								),
+								React.createElement(
+									"div",
+									null,
+									React.createElement("label", { className: "block text-xs font-semibold text-slate-300 mb-1" }, "Kapasitas (Taruna)"),
+									React.createElement("input", {
+										type: "number",
+										min: 0,
+										value: editingFacility.data.kapasitas || "",
+										onChange: (e) =>
+											setEditingFacility({
+												...editingFacility,
+												data: { ...editingFacility.data, kapasitas: Number(e.target.value) || 0 }
+											}),
+										className:
+											"w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+									})
+								),
+								React.createElement(
+									"div",
+									null,
+									React.createElement("label", { className: "block text-xs font-semibold text-slate-300 mb-1" }, "Tahun Pengadaan"),
+									React.createElement("input", {
+										type: "number",
+										min: 1990,
+										max: 2030,
+										value: editingFacility.data.tahunPengadaan || new Date().getFullYear(),
+										onChange: (e) =>
+											setEditingFacility({
+												...editingFacility,
+												data: { ...editingFacility.data, tahunPengadaan: Number(e.target.value) || 2024 }
+											}),
+										className:
+											"w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+									})
+								)
+							),
+
+							// Kondisi & Status Operasional
+							React.createElement(
+								"div",
+								{ className: "grid grid-cols-1 sm:grid-cols-2 gap-3" },
+								React.createElement(
+									"div",
+									null,
+									React.createElement("label", { className: "block text-xs font-semibold text-slate-300 mb-1" }, "Kondisi Fisik"),
+									React.createElement(
+										"select",
+										{
+											value: editingFacility.data.kondisi,
+											onChange: (e) =>
+												setEditingFacility({
+													...editingFacility,
+													data: { ...editingFacility.data, kondisi: e.target.value }
+												}),
+											className:
+												"w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+										},
+										React.createElement("option", { value: "Baik" }, "Baik (Layak Fungsi Penuh)"),
+										React.createElement("option", { value: "Rusak Ringan" }, "Rusak Ringan (Perlu Perawatan)"),
+										React.createElement("option", { value: "Rusak Berat" }, "Rusak Berat (Stop Operasional)")
+									)
+								),
+								React.createElement(
+									"div",
+									null,
+									React.createElement("label", { className: "block text-xs font-semibold text-slate-300 mb-1" }, "Status Operasional"),
+									React.createElement(
+										"select",
+										{
+											value: editingFacility.data.statusOp || "Aktif Digunakan",
+											onChange: (e) =>
+												setEditingFacility({
+													...editingFacility,
+													data: { ...editingFacility.data, statusOp: e.target.value }
+												}),
+											className:
+												"w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+										},
+										React.createElement("option", { value: "Aktif Digunakan" }, "Aktif Digunakan"),
+										React.createElement("option", { value: "Dalam Perawatan" }, "Dalam Perawatan / Maintenance"),
+										React.createElement("option", { value: "Non-Aktif" }, "Non-Aktif / Cadangan")
+									)
+								)
+							),
+
+							// Sertifikasi / Akreditasi
+							React.createElement(
+								"div",
+								null,
+								React.createElement("label", { className: "block text-xs font-semibold text-slate-300 mb-1" }, "Sertifikasi / Standar / Akreditasi"),
+								React.createElement("input", {
+									type: "text",
+									value: editingFacility.data.sertifikasi || "",
+									onChange: (e) =>
+										setEditingFacility({
+											...editingFacility,
+											data: { ...editingFacility.data, sertifikasi: e.target.value }
+										}),
+									placeholder: "Contoh: Approval STCW-F Ditjen Hubla & DNV-GL / HACCP & Sertifikat Halal",
+									className:
+										"w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+								})
+							),
+
+							// Spesifikasi Peralatan
+							React.createElement(
+								"div",
+								null,
+								React.createElement("label", { className: "block text-xs font-semibold text-slate-300 mb-1" }, "Spesifikasi & Peralatan Penunjang"),
+								React.createElement("textarea", {
+									rows: 2,
+									value: editingFacility.data.spesifikasi || "",
+									onChange: (e) =>
+										setEditingFacility({
+											...editingFacility,
+											data: { ...editingFacility.data, spesifikasi: e.target.value }
+										}),
+									placeholder: "Sebutkan peralatan utama, brand/model, kapasitas visual, kelengkapan audio, perabot, dll.",
+									className:
+										"w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+								})
+							),
+
+							// Keterangan
+							React.createElement(
+								"div",
+								null,
+								React.createElement("label", { className: "block text-xs font-semibold text-slate-300 mb-1" }, "Keterangan Operasional / Catatan"),
+								React.createElement("textarea", {
+									rows: 2,
+									value: editingFacility.data.keterangan || "",
+									onChange: (e) =>
+										setEditingFacility({
+											...editingFacility,
+											data: { ...editingFacility.data, keterangan: e.target.value }
+										}),
+									placeholder: "Catatan utilisasi, peruntukan program studi, rencana upgrade, dll.",
+									className:
+										"w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500"
+								})
+							),
+
+							// Tombol Simpan & Batal
+							React.createElement(
+								"div",
+								{ className: "flex items-center justify-end gap-2 pt-4 border-t border-slate-700" },
+								React.createElement(
+									"button",
+									{
+										type: "button",
+										onClick: () => setEditingFacility(null),
+										className:
+											"px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors"
+									},
+									"Batal"
+								),
+								React.createElement(
+									"button",
+									{
+										type: "submit",
+										disabled: isSaving,
+										className:
+											"inline-flex items-center gap-1.5 px-5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shadow-md shadow-cyan-900/40 transition-colors disabled:opacity-50"
+									},
+									React.createElement(Save, { className: "w-4 h-4" }),
+									isSaving ? "Menyimpan..." : "Simpan Fasilitas"
+								)
+							)
+						)
+					)
+				)
+		);
+	};
+})();
+const PembelajaranView = window.__PembelajaranView;
+
+// ============================================================================
+// MODULE: src/views/TanahView.jsx (Data Master Tanah & Lahan KIB A BMN)
+// ============================================================================
+(() => {
+	const { useState, useMemo, useRef } = React;
+	const {
+		Map: MapIcon,
+		MapPin,
+		Building2,
+		Layers,
+		ShieldCheck,
+		Scale,
+		Compass,
+		Globe,
+		FileText,
+		CheckCircle2,
+		AlertTriangle,
+		PlusCircle,
+		Download,
+		Edit3,
+		Search,
+		Filter,
+		RotateCcw,
+		ExternalLink,
+		ChevronLeft,
+		ChevronRight,
+		Info,
+		Calendar,
+		X,
+		LayoutGrid,
+		List,
+		Activity
+	} = window.__VENDOR__.Lucide;
+
+	function TrashIcon({ className = "w-4 h-4" }) {
+		return React.createElement(
+			"svg",
+			{
+				className,
+				viewBox: "0 0 24 24",
+				fill: "none",
+				stroke: "currentColor",
+				strokeWidth: "2",
+				strokeLinecap: "round",
+				strokeLinejoin: "round"
+			},
+			React.createElement("polyline", { points: "3 6 5 6 21 6" }),
+			React.createElement("path", { d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" }),
+			React.createElement("line", { x1: "10", y1: "11", x2: "10", y2: "17" }),
+			React.createElement("line", { x1: "14", y1: "11", x2: "14", y2: "17" })
+		);
+	}
+
+	function fmtInt(n) {
+		const num = Number(n) || 0;
+		return num.toLocaleString("id-ID");
+	}
+
+	function fmtDec(n, d = 2) {
+		const num = Number(n) || 0;
+		return num.toLocaleString("id-ID", { minimumFractionDigits: d, maximumFractionDigits: d });
+	}
+
+	function fmtRp(n) {
+		const num = Number(n) || 0;
+		if (num >= 1e12) return "Rp " + (num / 1e12).toFixed(2).replace(".", ",") + " Triliun";
+		if (num >= 1e9) return "Rp " + (num / 1e9).toFixed(1).replace(".", ",") + " Miliar";
+		if (num >= 1e6) return "Rp " + (num / 1e6).toFixed(0).replace(".", ",") + " Juta";
+		return "Rp " + num.toLocaleString("id-ID");
+	}
+
+	window.__TanahView = function TanahView({
+		tanahData,
+		satdikList,
+		currentUser,
+		onAddParcel,
+		onUpdateParcel,
+		onDeleteParcel,
+		onExportExcel,
+		onOpenAddModal
+	}) {
+		const { isDark } = useTheme();
+		const tableRef = useRef(null);
+
+		const masterSatdik = useMemo(
+			() => (Array.isArray(satdikList) && satdikList.length > 0 ? satdikList : window.SARPRAS_DATA?.SATDIK_LIST || []),
+			[satdikList]
+		);
+		const satdikMap = useMemo(() => {
+			const m = {};
+			masterSatdik.forEach((s) => {
+				m[s.id] = s;
+			});
+			return m;
+		}, [masterSatdik]);
+
+		const lockedSatdik = currentUser?.accessibleSatdik && currentUser.accessibleSatdik !== "ALL"
+			? currentUser.accessibleSatdik
+			: null;
+
+		const [jenjangFilter, setJenjangFilter] = useState("ALL");
+		const [selectedSatdik, setSelectedSatdik] = useState(() => lockedSatdik || "ALL");
+		const [sertifikatFilter, setSertifikatFilter] = useState("ALL");
+		const [peruntukanFilter, setPeruntukanFilter] = useState("ALL");
+		const [searchQuery, setSearchQuery] = useState("");
+		const [viewMode, setViewMode] = useState("table"); // "table" | "rekap" | "status"
+		const [sortField, setSortField] = useState("satdikId");
+		const [sortOrder, setSortOrder] = useState("asc");
+		const [currentPage, setCurrentPage] = useState(1);
+		const [pageSize, setPageSize] = useState(25);
+
+		// Modal edit state
+		const [editingParcel, setEditingParcel] = useState(null); // null | { mode: 'add' | 'edit', data: { ... } }
+		const [isSaving, setIsSaving] = useState(false);
+
+		const canEdit = Boolean(
+			currentUser?.permissions?.includes("edit_all") || currentUser?.permissions?.includes("edit_own")
+		);
+		const canEditSatdik = (satdikId) => {
+			if (!canEdit) return false;
+			if (currentUser?.permissions?.includes("edit_all")) return true;
+			return currentUser?.accessibleSatdik === satdikId;
+		};
+
+		const parcels = useMemo(() => {
+			return Array.isArray(tanahData) ? tanahData : [];
+		}, [tanahData]);
+
+		// Filtered parcels
+		const filteredParcels = useMemo(() => {
+			const q = searchQuery.trim().toLowerCase();
+			return parcels.filter((p) => {
+				if (lockedSatdik && p.satdikId !== lockedSatdik) return false;
+				if (selectedSatdik !== "ALL" && p.satdikId !== selectedSatdik) return false;
+
+				const sat = satdikMap[p.satdikId] || {};
+				if (jenjangFilter === "Politeknik" && sat.type === "SUPM") return false;
+				if (jenjangFilter === "SUPM" && sat.type !== "SUPM") return false;
+
+				if (sertifikatFilter !== "ALL") {
+					if (sertifikatFilter === "SHP" && !(p.statusSertifikat || "").includes("SHP")) return false;
+					if (sertifikatFilter === "BPN" && !(p.statusSertifikat || "").includes("BPN")) return false;
+					if (sertifikatFilter === "Hibah" && !(p.statusSertifikat || "").includes("Hibah")) return false;
+				}
+
+				if (peruntukanFilter !== "ALL" && p.peruntukan !== peruntukanFilter) return false;
+
+				if (q) {
+					const hay = [
+						p.id,
+						p.namaBidang,
+						p.kodeBmn,
+						p.noSertifikat,
+						p.satdikId,
+						sat.name,
+						sat.shortName,
+						p.kota,
+						p.provinsi,
+						p.peruntukan,
+						p.alamat
+					].join(" ").toLowerCase();
+					if (!hay.includes(q)) return false;
+				}
+
+				return true;
+			});
+		}, [parcels, lockedSatdik, selectedSatdik, jenjangFilter, sertifikatFilter, peruntukanFilter, searchQuery, satdikMap]);
+
+		// Sorted parcels
+		const sortedParcels = useMemo(() => {
+			const list = [...filteredParcels];
+			list.sort((a, b) => {
+				let valA = a[sortField];
+				let valB = b[sortField];
+				if (sortField === "luasM2" || sortField === "tahunPerolehan") {
+					valA = Number(valA) || 0;
+					valB = Number(valB) || 0;
+				} else {
+					valA = String(valA || "").toLowerCase();
+					valB = String(valB || "").toLowerCase();
+				}
+				if (valA < valB) return sortOrder === "asc" ? -1 : 1;
+				if (valA > valB) return sortOrder === "asc" ? 1 : -1;
+				return 0;
+			});
+			return list;
+		}, [filteredParcels, sortField, sortOrder]);
+
+		// Pagination
+		const totalPages = Math.ceil(sortedParcels.length / pageSize) || 1;
+		const paginatedParcels = useMemo(() => {
+			const start = (currentPage - 1) * pageSize;
+			return sortedParcels.slice(start, start + pageSize);
+		}, [sortedParcels, currentPage, pageSize]);
+
+		// KPI Calculations
+		const kpiSummary = useMemo(() => {
+			const list = filteredParcels;
+			const totalBidang = list.length;
+			const totalLuasM2 = list.reduce((s, p) => s + (Number(p.luasM2) || 0), 0);
+			const totalLuasHa = Number((totalLuasM2 / 10000).toFixed(2));
+			const shpCount = list.filter((p) => (p.statusSertifikat || "").includes("SHP") || (p.statusSertifikat || "").includes("Sertifikat")).length;
+			const shpPct = totalBidang > 0 ? Number(((shpCount / totalBidang) * 100).toFixed(1)) : 0;
+			const operasionalCount = list.filter((p) => (p.statusPemanfaatan || "").includes("Operasional") || (p.statusPemanfaatan || "").includes("Sendiri")).length;
+			const operasionalPct = totalBidang > 0 ? Number(((operasionalCount / totalBidang) * 100).toFixed(1)) : 0;
+
+			return {
+				totalBidang,
+				totalLuasM2,
+				totalLuasHa,
+				shpCount,
+				shpPct,
+				operasionalCount,
+				operasionalPct
+			};
+		}, [filteredParcels]);
+
+		// Rekapitulasi per Satdik
+		const rekapSatdik = useMemo(() => {
+			return masterSatdik.map((s) => {
+				const campusParcels = parcels.filter((p) => p.satdikId === s.id);
+				const count = campusParcels.length;
+				const luasM2 = campusParcels.reduce((sum, p) => sum + (Number(p.luasM2) || 0), 0);
+				const luasHa = Number((luasM2 / 10000).toFixed(2));
+				const shpCount = campusParcels.filter((p) => (p.statusSertifikat || "").includes("SHP") || (p.statusSertifikat || "").includes("Sertifikat")).length;
+				const shpPct = count > 0 ? Math.round((shpCount / count) * 100) : 0;
+
+				return {
+					satdik: s,
+					count,
+					luasM2,
+					luasHa,
+					shpCount,
+					shpPct,
+					parcels: campusParcels
+				};
+			});
+		}, [masterSatdik, parcels]);
+
+		const handleSort = (field) => {
+			if (sortField === field) {
+				setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+			} else {
+				setSortField(field);
+				setSortOrder("asc");
+			}
+		};
+
+		const handleResetFilter = () => {
+			setJenjangFilter("ALL");
+			setSelectedSatdik(lockedSatdik || "ALL");
+			setSertifikatFilter("ALL");
+			setPeruntukanFilter("ALL");
+			setSearchQuery("");
+			setCurrentPage(1);
+		};
+
+		const hasActiveFilter =
+			jenjangFilter !== "ALL" ||
+			selectedSatdik !== (lockedSatdik || "ALL") ||
+			sertifikatFilter !== "ALL" ||
+			peruntukanFilter !== "ALL" ||
+			searchQuery.trim() !== "";
+
+		// Handlers CRUD
+		const openAddModal = () => {
+			if (typeof onOpenAddModal === "function") {
+				onOpenAddModal("tanah");
+				return;
+			}
+			const defSatdik = lockedSatdik || (selectedSatdik !== "ALL" ? selectedSatdik : "poltek-aup");
+			setEditingParcel({
+				mode: "add",
+				data: {
+					satdikId: defSatdik,
+					namaBidang: "",
+					kodeBmn: "2.01.01.01.001.0001",
+					nup: 1,
+					luasM2: 10000,
+					luasHa: 1.0,
+					statusSertifikat: "Sertifikat Hak Pakai (SHP)",
+					noSertifikat: "",
+					atasNama: "Pemerintah RI c.q. Kementerian Kelautan dan Perikanan",
+					tanggalSertifikat: new Date().toISOString().slice(0, 10),
+					peruntukan: "Kampus & Fasilitas Akademik",
+					statusPemanfaatan: "Digunakan Sendiri (Operasional)",
+					alamat: "",
+					kota: "",
+					provinsi: "",
+					tahunPerolehan: new Date().getFullYear(),
+					asalPerolehan: "APBN",
+					keterangan: ""
+				}
+			});
+		};
+
+		const openEditModal = (parcel) => {
+			setEditingParcel({
+				mode: "edit",
+				data: { ...parcel }
+			});
+		};
+
+		const handleSaveParcel = async (e) => {
+			e.preventDefault();
+			if (!editingParcel?.data?.namaBidang || !editingParcel?.data?.satdikId) {
+				alert("Nama Bidang dan Satuan Pendidikan wajib diisi.");
+				return;
+			}
+			setIsSaving(true);
+			try {
+				const payload = {
+					...editingParcel.data,
+					luasM2: Number(editingParcel.data.luasM2) || 0,
+					luasHa: Number(((Number(editingParcel.data.luasM2) || 0) / 10000).toFixed(2)),
+					nup: Number(editingParcel.data.nup) || 1,
+					tahunPerolehan: Number(editingParcel.data.tahunPerolehan) || new Date().getFullYear()
+				};
+				if (editingParcel.mode === "add") {
+					await onAddParcel(payload);
+				} else {
+					await onUpdateParcel(payload.id, payload);
+				}
+				setEditingParcel(null);
+			} catch (err) {
+				alert("Gagal menyimpan data bidang tanah: " + (err.message || err));
+			} finally {
+				setIsSaving(false);
+			}
+		};
+
+		const handleDelete = async (id, nama) => {
+			if (window.confirm(`Yakin ingin menghapus data bidang tanah "${nama}" (${id})?\nData yang dihapus tidak dapat dikembalikan.`)) {
+				await onDeleteParcel(id);
+			}
+		};
+
+		return /* @__PURE__ */ React.createElement("div", { className: "space-y-6 animate-fadeIn pb-12" },
+			/* 1. HERO BANNER */
+			/* @__PURE__ */ React.createElement("div", {
+				className: "flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-gradient-to-r from-slate-800/90 via-slate-800/70 to-slate-900/90 p-4 sm:p-5 rounded-2xl border border-slate-700/80 shadow-lg relative overflow-hidden"
+			},
+				/* @__PURE__ */ React.createElement("div", { className: "relative z-10 space-y-1 max-w-3xl" },
+					/* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center gap-2" },
+						/* @__PURE__ */ React.createElement("span", { className: "px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30" }, "KIB A BMN"),
+						/* @__PURE__ */ React.createElement("span", { className: "text-xs text-slate-400" }, "• Legalitas & Inventaris Tanah Satdik KP")
+					),
+					/* @__PURE__ */ React.createElement("h2", { className: "text-lg sm:text-xl md:text-2xl font-bold text-white tracking-tight mt-1 flex items-center gap-2" },
+						/* @__PURE__ */ React.createElement(MapIcon, { className: "w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 flex-shrink-0" }),
+						/* @__PURE__ */ React.createElement("span", null, "Data Tanah & Lahan Satuan Pendidikan KP")
+					),
+					/* @__PURE__ */ React.createElement("p", { className: "text-slate-400 text-xs sm:text-sm mt-0.5 max-w-3xl leading-relaxed" },
+						"Inventarisasi Aset Barang Milik Negara (KIB A) ",
+						/* @__PURE__ */ React.createElement("strong", { className: "text-cyan-300 font-semibold" }, "Tanah Kampus Utama, Kawasan Tambak Praktik, Stasiun Lapangan & Lahan Pengembangan"),
+						" beserta status hak sertifikat BPN, luas bidang, dan pemanfaatan aset pada 18 Satuan Pendidikan Vokasi KKP."
+					)
+				)
+			),
+
+			/* 2. EMPAT KARTU KPI EKSEKUTIF TANAH */
+			/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4" },
+				/* KPI 1: Total Luas Lahan Ha */
+				/* @__PURE__ */ React.createElement("div", { className: "bg-slate-800/90 rounded-2xl p-4 border border-slate-700/70 hover:border-cyan-500/50 transition-all shadow-md" },
+					/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between text-slate-400" },
+						/* @__PURE__ */ React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider" }, "Total Luas Lahan"),
+						/* @__PURE__ */ React.createElement("div", { className: "w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center" },
+							/* @__PURE__ */ React.createElement(Globe, { className: "w-4 h-4" })
+						)
+					),
+					/* @__PURE__ */ React.createElement("div", { className: "mt-3" },
+						/* @__PURE__ */ React.createElement("div", { className: "text-2xl font-black text-white" }, fmtDec(kpiSummary.totalLuasHa), " ", /* @__PURE__ */ React.createElement("span", { className: "text-xs font-normal text-slate-400" }, "Ha")),
+						/* @__PURE__ */ React.createElement("div", { className: "text-[11px] text-cyan-400 mt-0.5" }, fmtInt(kpiSummary.totalLuasM2), " m² tercatat")
+					)
+				),
+				/* KPI 2: Total Bidang BMN */
+				/* @__PURE__ */ React.createElement("div", { className: "bg-slate-800/90 rounded-2xl p-4 border border-slate-700/70 hover:border-cyan-500/50 transition-all shadow-md" },
+					/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between text-slate-400" },
+						/* @__PURE__ */ React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider" }, "Total Bidang BMN"),
+						/* @__PURE__ */ React.createElement("div", { className: "w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center" },
+							/* @__PURE__ */ React.createElement(Layers, { className: "w-4 h-4" })
+						)
+					),
+					/* @__PURE__ */ React.createElement("div", { className: "mt-3" },
+						/* @__PURE__ */ React.createElement("div", { className: "text-2xl font-black text-white" }, fmtInt(kpiSummary.totalBidang), " ", /* @__PURE__ */ React.createElement("span", { className: "text-xs font-normal text-slate-400" }, "Bidang")),
+						/* @__PURE__ */ React.createElement("div", { className: "text-[11px] text-cyan-400 mt-0.5" }, "Tersebar di 18 Satdik Vokasi")
+					)
+				),
+				/* KPI 3: Status Sertifikat SHP KKP */
+				/* @__PURE__ */ React.createElement("div", { className: "bg-slate-800/90 rounded-2xl p-4 border border-slate-700/70 hover:border-emerald-500/50 transition-all shadow-md" },
+					/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between text-slate-400" },
+						/* @__PURE__ */ React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider" }, "Sertifikasi SHP (Clean & Clear)"),
+						/* @__PURE__ */ React.createElement("div", { className: "w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center" },
+							/* @__PURE__ */ React.createElement(ShieldCheck, { className: "w-4 h-4" })
+						)
+					),
+					/* @__PURE__ */ React.createElement("div", { className: "mt-3" },
+						/* @__PURE__ */ React.createElement("div", { className: "text-2xl font-black text-emerald-400" }, fmtDec(kpiSummary.shpPct, 1), "%"),
+						/* @__PURE__ */ React.createElement("div", { className: "text-[11px] text-slate-400 mt-0.5" }, kpiSummary.shpCount, " dari ", kpiSummary.totalBidang, " bidang bersertifikat")
+					)
+				),
+				/* KPI 4: Pemanfaatan Operasional */
+				/* @__PURE__ */ React.createElement("div", { className: "bg-slate-800/90 rounded-2xl p-4 border border-slate-700/70 hover:border-cyan-500/50 transition-all shadow-md" },
+					/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between text-slate-400" },
+						/* @__PURE__ */ React.createElement("span", { className: "text-xs font-medium uppercase tracking-wider" }, "Pemanfaatan Operasional"),
+						/* @__PURE__ */ React.createElement("div", { className: "w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center" },
+							/* @__PURE__ */ React.createElement(Building2, { className: "w-4 h-4" })
+						)
+					),
+					/* @__PURE__ */ React.createElement("div", { className: "mt-3" },
+						/* @__PURE__ */ React.createElement("div", { className: "text-2xl font-black text-white" }, fmtDec(kpiSummary.operasionalPct, 1), "%"),
+						/* @__PURE__ */ React.createElement("div", { className: "text-[11px] text-cyan-400 mt-0.5" }, kpiSummary.operasionalCount, " dari ", kpiSummary.totalBidang, " bidang operasional aktif")
+					)
+				)
+			),
+
+			/* 3. FILTER & SEARCH BAR */
+			/* @__PURE__ */ React.createElement("div", {
+				className: "bg-slate-800/90 rounded-2xl p-4 border border-slate-700/70 shadow-md space-y-3"
+			},
+				/* Row 1: Dropdown Filters */
+				/* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center justify-between gap-3" },
+					/* Left: Filters */
+					/* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center gap-2" },
+						/* Jenjang Filter */
+						/* @__PURE__ */ React.createElement("select", {
+							value: jenjangFilter,
+							onChange: (e) => { setJenjangFilter(e.target.value); setCurrentPage(1); },
+							className: "py-2 px-3 bg-slate-900 text-slate-200 text-xs rounded-xl border border-slate-700 focus:outline-none focus:border-cyan-500"
+						},
+							/* @__PURE__ */ React.createElement("option", { value: "ALL" }, "Semua Jenjang (Tinggi & SUPM)"),
+							/* @__PURE__ */ React.createElement("option", { value: "Politeknik" }, "Pendidikan Tinggi (11 Satdik)"),
+							/* @__PURE__ */ React.createElement("option", { value: "SUPM" }, "Menengah SUPM (7 Satdik)")
+						),
+						/* Satdik Filter */
+						/* @__PURE__ */ React.createElement("select", {
+							value: selectedSatdik,
+							disabled: Boolean(lockedSatdik),
+							onChange: (e) => { setSelectedSatdik(e.target.value); setCurrentPage(1); },
+							className: "py-2 px-3 bg-slate-900 text-slate-200 text-xs rounded-xl border border-slate-700 focus:outline-none focus:border-cyan-500 max-w-[240px] truncate"
+						},
+							/* @__PURE__ */ React.createElement("option", { value: "ALL" }, "Semua Satdik (18 Kampus)"),
+							masterSatdik.map((s) => /* @__PURE__ */ React.createElement("option", { key: s.id, value: s.id }, s.shortName || s.name))
+						),
+						/* Status Sertifikat Filter */
+						/* @__PURE__ */ React.createElement("select", {
+							value: sertifikatFilter,
+							onChange: (e) => { setSertifikatFilter(e.target.value); setCurrentPage(1); },
+							className: "py-2 px-3 bg-slate-900 text-slate-200 text-xs rounded-xl border border-slate-700 focus:outline-none focus:border-cyan-500"
+						},
+							/* @__PURE__ */ React.createElement("option", { value: "ALL" }, "Semua Status Sertifikat"),
+							/* @__PURE__ */ React.createElement("option", { value: "SHP" }, "Sertifikat Hak Pakai (SHP KKP)"),
+							/* @__PURE__ */ React.createElement("option", { value: "BPN" }, "Dalam Proses BPN"),
+							/* @__PURE__ */ React.createElement("option", { value: "Hibah" }, "Hibah Pemda / Naskah Perjanjian")
+						),
+						/* Peruntukan Filter */
+						/* @__PURE__ */ React.createElement("select", {
+							value: peruntukanFilter,
+							onChange: (e) => { setPeruntukanFilter(e.target.value); setCurrentPage(1); },
+							className: "py-2 px-3 bg-slate-900 text-slate-200 text-xs rounded-xl border border-slate-700 focus:outline-none focus:border-cyan-500 max-w-[200px] truncate"
+						},
+							/* @__PURE__ */ React.createElement("option", { value: "ALL" }, "Semua Peruntukan Lahan"),
+							/* @__PURE__ */ React.createElement("option", { value: "Kampus & Fasilitas Akademik" }, "Kampus & Ruang Akademik"),
+							/* @__PURE__ */ React.createElement("option", { value: "Tambak & Budidaya Praktik" }, "Tambak & Kolam Praktik"),
+							/* @__PURE__ */ React.createElement("option", { value: "Workshop & Laboratorium Lapangan" }, "Workshop & Lab"),
+							/* @__PURE__ */ React.createElement("option", { value: "Lahan Cadangan Pengembangan" }, "Lahan Cadangan")
+						)
+					),
+					/* Right: Reset Button (conditional) */
+					hasActiveFilter && /* @__PURE__ */ React.createElement("button", {
+						type: "button",
+						onClick: handleResetFilter,
+						className: "inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 text-xs transition"
+					},
+						/* @__PURE__ */ React.createElement(RotateCcw, { className: "w-3.5 h-3.5 text-cyan-400" }),
+						/* @__PURE__ */ React.createElement("span", null, "Reset Filter")
+					)
+				),
+				/* Row 2: Search input + View Mode switcher */
+				/* @__PURE__ */ React.createElement("div", { className: "flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-slate-700/60" },
+					/* Search */
+					/* @__PURE__ */ React.createElement("div", { className: "relative flex-1 max-w-md" },
+						/* @__PURE__ */ React.createElement(Search, { className: "w-4 h-4 text-slate-400 absolute left-3 top-2.5" }),
+						/* @__PURE__ */ React.createElement("input", {
+							type: "text",
+							value: searchQuery,
+							onChange: (e) => { setSearchQuery(e.target.value); setCurrentPage(1); },
+							placeholder: "Cari nama bidang, kode BMN, nomor sertifikat, kota...",
+							className: "w-full pl-9 pr-3 py-2 bg-slate-900 text-slate-200 text-xs rounded-xl border border-slate-700 focus:outline-none focus:border-cyan-500"
+						})
+					),
+					/* View mode switcher */
+					/* @__PURE__ */ React.createElement("div", { className: "flex items-center gap-1.5 self-end sm:self-auto bg-slate-900 p-1 rounded-xl border border-slate-700" },
+						/* @__PURE__ */ React.createElement("button", {
+							type: "button",
+							onClick: () => setViewMode("table"),
+							className: "inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition " + (viewMode === "table" ? "bg-cyan-600 text-white font-semibold shadow-sm" : "text-slate-400 hover:text-slate-200")
+						},
+							/* @__PURE__ */ React.createElement(List, { className: "w-3.5 h-3.5" }),
+							/* @__PURE__ */ React.createElement("span", null, "Katalog Bidang (Tabel)")
+						),
+						/* @__PURE__ */ React.createElement("button", {
+							type: "button",
+							onClick: () => setViewMode("rekap"),
+							className: "inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition " + (viewMode === "rekap" ? "bg-cyan-600 text-white font-semibold shadow-sm" : "text-slate-400 hover:text-slate-200")
+						},
+							/* @__PURE__ */ React.createElement(LayoutGrid, { className: "w-3.5 h-3.5" }),
+							/* @__PURE__ */ React.createElement("span", null, "Rekap 18 Satdik")
+						),
+						/* @__PURE__ */ React.createElement("button", {
+							type: "button",
+							onClick: () => setViewMode("status"),
+							className: "inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition " + (viewMode === "status" ? "bg-cyan-600 text-white font-semibold shadow-sm" : "text-slate-400 hover:text-slate-200")
+						},
+							/* @__PURE__ */ React.createElement(ShieldCheck, { className: "w-3.5 h-3.5" }),
+							/* @__PURE__ */ React.createElement("span", null, "Legalitas Sertifikat")
+						)
+					)
+				)
+			),
+
+			/* 4. CONTENT VIEW MODE */
+			viewMode === "table" && /* @__PURE__ */ React.createElement("div", {
+				ref: tableRef,
+				className: "bg-slate-800/90 rounded-2xl border border-slate-700/70 shadow-lg overflow-hidden"
+			},
+				/* Table Header info */
+				/* @__PURE__ */ React.createElement("div", { className: "p-4 sm:px-6 border-b border-slate-700/70 flex items-center justify-between flex-wrap gap-2" },
+					/* @__PURE__ */ React.createElement("div", { className: "flex items-center gap-2" },
+						/* @__PURE__ */ React.createElement("h3", { className: "text-sm sm:text-base font-bold text-white tracking-tight" }, "Daftar Inventaris Tanah BMN (KIB A)"),
+						/* @__PURE__ */ React.createElement("span", { className: "px-2 py-0.5 rounded-full text-[11px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30" }, sortedParcels.length, " Bidang")
+					),
+					/* @__PURE__ */ React.createElement("span", { className: "text-xs text-slate-400" },
+						"Menampilkan ", (currentPage - 1) * pageSize + 1, " - ", Math.min(currentPage * pageSize, sortedParcels.length), " dari ", sortedParcels.length, " bidang tanah"
+					)
+				),
+
+				/* Table wrapper */
+				/* @__PURE__ */ React.createElement("div", { className: "overflow-x-auto" },
+					/* @__PURE__ */ React.createElement("table", { className: "w-full text-left text-xs text-slate-300 divide-y divide-slate-700/70" },
+						/* @__PURE__ */ React.createElement("thead", { className: "bg-slate-900/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider" },
+							/* @__PURE__ */ React.createElement("tr", null,
+								/* @__PURE__ */ React.createElement("th", { className: "py-3 px-3.5 text-center w-12" }, "No"),
+								/* @__PURE__ */ React.createElement("th", { className: "py-3 px-4 cursor-pointer hover:text-white transition", onClick: () => handleSort("namaBidang") },
+									"Nama Bidang / Lokasi",
+									sortField === "namaBidang" && (sortOrder === "asc" ? " ▲" : " ▼")
+								),
+								/* @__PURE__ */ React.createElement("th", { className: "py-3 px-3 cursor-pointer hover:text-white transition", onClick: () => handleSort("satdikId") },
+									"Satuan Pendidikan",
+									sortField === "satdikId" && (sortOrder === "asc" ? " ▲" : " ▼")
+								),
+								/* @__PURE__ */ React.createElement("th", { className: "py-3 px-3 text-right cursor-pointer hover:text-white transition", onClick: () => handleSort("luasM2") },
+									"Luas (Ha / m²)",
+									sortField === "luasM2" && (sortOrder === "asc" ? " ▲" : " ▼")
+								),
+								/* @__PURE__ */ React.createElement("th", { className: "py-3 px-3" }, "Legalitas Sertifikat"),
+								/* @__PURE__ */ React.createElement("th", { className: "py-3 px-3" }, "Peruntukan & Pemanfaatan"),
+								/* @__PURE__ */ React.createElement("th", { className: "py-3 px-3 text-center cursor-pointer hover:text-white transition", onClick: () => handleSort("tahunPerolehan") },
+									"Tahun & Asal",
+									sortField === "tahunPerolehan" && (sortOrder === "asc" ? " ▲" : " ▼")
+								),
+								canEdit && /* @__PURE__ */ React.createElement("th", { className: "py-3 px-3 text-center w-20" }, "Aksi")
+							)
+						),
+						/* @__PURE__ */ React.createElement("tbody", { className: "divide-y divide-slate-800" },
+							paginatedParcels.length > 0 ? (
+								paginatedParcels.map((p, idx) => {
+									const sat = satdikMap[p.satdikId] || {};
+									const rowNum = (currentPage - 1) * pageSize + idx + 1;
+									const isShp = (p.statusSertifikat || "").includes("SHP") || (p.statusSertifikat || "").includes("Sertifikat");
+
+									return /* @__PURE__ */ React.createElement("tr", {
+										key: p.id,
+										className: "hover:bg-slate-700/30 transition-colors"
+									},
+										/* No */
+										/* @__PURE__ */ React.createElement("td", { className: "py-3 px-3.5 text-center text-slate-400 font-mono text-[11px]" }, rowNum),
+										/* Nama Bidang & Kode BMN */
+										/* @__PURE__ */ React.createElement("td", { className: "py-3 px-4 max-w-xs" },
+											/* @__PURE__ */ React.createElement("div", { className: "font-bold text-white leading-snug" }, p.namaBidang),
+											/* @__PURE__ */ React.createElement("div", { className: "text-[10.5px] text-slate-400 flex items-center gap-2 mt-0.5" },
+												/* @__PURE__ */ React.createElement("span", { className: "font-mono text-cyan-300" }, p.kodeBmn || "2.01.01.01"),
+												/* @__PURE__ */ React.createElement("span", null, "• NUP ", p.nup || 1)
+											),
+											p.alamat && /* @__PURE__ */ React.createElement("div", { className: "text-[10px] text-slate-400 truncate mt-0.5 italic" }, p.alamat)
+										),
+										/* Satuan Pendidikan */
+										/* @__PURE__ */ React.createElement("td", { className: "py-3 px-3" },
+											/* @__PURE__ */ React.createElement("span", { className: "font-semibold text-slate-200 block" }, sat.shortName || sat.name || p.satdikId),
+											/* @__PURE__ */ React.createElement("span", { className: "text-[10px] text-slate-400 block" }, sat.kota || p.kota || "-", " (", sat.jenjang || sat.type || "Vokasi", ")")
+										),
+										/* Luas */
+										/* @__PURE__ */ React.createElement("td", { className: "py-3 px-3 text-right" },
+											/* @__PURE__ */ React.createElement("span", { className: "font-bold text-cyan-300 font-mono text-sm block" }, fmtDec(p.luasHa || (p.luasM2 / 10000)), " Ha"),
+											/* @__PURE__ */ React.createElement("span", { className: "text-[10px] text-slate-400 font-mono" }, fmtInt(p.luasM2), " m²")
+										),
+										/* Legalitas Sertifikat */
+										/* @__PURE__ */ React.createElement("td", { className: "py-3 px-3 max-w-[200px]" },
+											/* @__PURE__ */ React.createElement("span", {
+												className: `inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${isShp ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" : "bg-amber-500/15 text-amber-300 border-amber-500/30"}`
+											},
+												/* @__PURE__ */ React.createElement(ShieldCheck, { className: "w-3 h-3 flex-shrink-0" }),
+												p.statusSertifikat || "SHP"
+											),
+											p.noSertifikat && p.noSertifikat !== "-" && /* @__PURE__ */ React.createElement("div", { className: "text-[10px] text-slate-300 font-mono truncate mt-1" }, p.noSertifikat),
+											p.tanggalSertifikat && p.tanggalSertifikat !== "-" && /* @__PURE__ */ React.createElement("div", { className: "text-[9.5px] text-slate-400" }, "Terbit: ", p.tanggalSertifikat)
+										),
+										/* Peruntukan & Pemanfaatan */
+										/* @__PURE__ */ React.createElement("td", { className: "py-3 px-3 max-w-[180px]" },
+											/* @__PURE__ */ React.createElement("span", { className: "font-medium text-slate-200 block text-[11px]" }, p.peruntukan || "Kampus & Akademik"),
+											/* @__PURE__ */ React.createElement("span", { className: "text-[10px] text-cyan-400/90 block mt-0.5" }, p.statusPemanfaatan || "Digunakan Sendiri")
+										),
+										/* Tahun & Asal Perolehan */
+										/* @__PURE__ */ React.createElement("td", { className: "py-3 px-3 text-center" },
+											/* @__PURE__ */ React.createElement("span", { className: "font-semibold text-slate-200 font-mono text-[11px] block" }, p.tahunPerolehan || "-"),
+											/* @__PURE__ */ React.createElement("span", { className: "text-[10px] text-slate-400" }, p.asalPerolehan || "APBN")
+										),
+										/* Aksi */
+										canEdit && /* @__PURE__ */ React.createElement("td", { className: "py-3 px-3 text-center" },
+											canEditSatdik(p.satdikId) ? (
+												/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-center gap-1.5" },
+													/* Edit Button */
+													/* @__PURE__ */ React.createElement("button", {
+														type: "button",
+														onClick: () => openEditModal(p),
+														className: "p-1.5 rounded-lg bg-slate-800 hover:bg-cyan-600 text-slate-300 hover:text-white transition shadow-sm",
+														title: "Ubah Data Bidang Tanah"
+													},
+														/* @__PURE__ */ React.createElement(Edit3, { className: "w-3.5 h-3.5" })
+													),
+													/* Delete Button */
+													/* @__PURE__ */ React.createElement("button", {
+														type: "button",
+														onClick: () => handleDelete(p.id, p.namaBidang),
+														className: "p-1.5 rounded-lg bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white transition shadow-sm",
+														title: "Hapus Bidang Tanah"
+													},
+														/* @__PURE__ */ React.createElement(TrashIcon, { className: "w-3.5 h-3.5" })
+													)
+												)
+											) : (
+												/* @__PURE__ */ React.createElement("span", { className: "text-[10px] text-slate-500 italic" }, "Terkunci")
+											)
+										)
+									);
+								})
+							) : (
+								/* @__PURE__ */ React.createElement("tr", null,
+									/* @__PURE__ */ React.createElement("td", { colSpan: canEdit ? 8 : 7, className: "py-10 text-center text-slate-400" },
+										/* @__PURE__ */ React.createElement(Info, { className: "w-8 h-8 text-slate-500 mx-auto mb-2" }),
+										/* @__PURE__ */ React.createElement("p", { className: "font-semibold text-slate-300" }, "Tidak ada data bidang tanah yang cocok dengan kriteria filter."),
+										/* @__PURE__ */ React.createElement("p", { className: "text-[11px] text-slate-500 mt-1" }, "Coba ubah kata kunci pencarian atau reset filter untuk menampilkan kembali data.")
+									)
+								)
+							)
+						)
+					)
+				),
+
+				/* Pagination Controls */
+				totalPages > 1 && /* @__PURE__ */ React.createElement("div", { className: "p-4 border-t border-slate-700/70 flex items-center justify-between text-xs text-slate-400" },
+					/* @__PURE__ */ React.createElement("span", null,
+						"Halaman ", /* @__PURE__ */ React.createElement("strong", { className: "text-white" }, currentPage), " dari ", /* @__PURE__ */ React.createElement("strong", { className: "text-white" }, totalPages)
+					),
+					/* @__PURE__ */ React.createElement("div", { className: "flex items-center gap-1.5" },
+						/* @__PURE__ */ React.createElement("button", {
+							type: "button",
+							disabled: currentPage === 1,
+							onClick: () => setCurrentPage((p) => Math.max(1, p - 1)),
+							className: "px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition"
+						},
+							/* @__PURE__ */ React.createElement(ChevronLeft, { className: "w-4 h-4" })
+						),
+						Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => (
+							/* @__PURE__ */ React.createElement("button", {
+								key: pg,
+								type: "button",
+								onClick: () => setCurrentPage(pg),
+								className: `px-2.5 py-1 rounded-lg border text-xs font-semibold transition ${currentPage === pg ? "bg-cyan-600 border-cyan-500 text-white font-semibold shadow-sm" : "bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800"}`
+							}, pg)
+						)),
+						/* @__PURE__ */ React.createElement("button", {
+							type: "button",
+							disabled: currentPage === totalPages,
+							onClick: () => setCurrentPage((p) => Math.min(totalPages, p + 1)),
+							className: "px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition"
+						},
+							/* @__PURE__ */ React.createElement(ChevronRight, { className: "w-4 h-4" })
+						)
+					)
+				)
+			),
+
+			/* View mode REKAPITULASI 18 SATDIK */
+			viewMode === "rekap" && /* @__PURE__ */ React.createElement("div", {
+				className: "bg-slate-800/90 rounded-2xl border border-slate-700/70 shadow-lg overflow-hidden p-5 space-y-4"
+			},
+				/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between flex-wrap gap-2" },
+					/* @__PURE__ */ React.createElement("div", null,
+						/* @__PURE__ */ React.createElement("h3", { className: "text-base font-bold text-white tracking-tight flex items-center gap-2" },
+							/* @__PURE__ */ React.createElement(LayoutGrid, { className: "w-4 h-4 text-cyan-400" }),
+							"Rekapitulasi Luas Lahan & Sertifikasi per Satdik (18 Kampus)"
+						),
+						/* @__PURE__ */ React.createElement("p", { className: "text-xs text-slate-400 mt-0.5" }, "Perbandingan luas tanah total, jumlah bidang BMN, dan rasio kepemilikan sertifikat resmi KKP.")
+					)
+				),
+
+				/* Grid of 18 campus cards */
+				/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5" },
+					rekapSatdik.map(({ satdik: s, count, luasHa, luasM2, shpCount, shpPct }) => {
+						return /* @__PURE__ */ React.createElement("div", {
+							key: s.id,
+							className: "bg-slate-900/80 rounded-xl p-4 border border-slate-700/80 hover:border-cyan-500/50 transition-all flex flex-col justify-between space-y-3"
+						},
+							/* Header */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("div", { className: "flex items-start justify-between gap-2" },
+									/* @__PURE__ */ React.createElement("span", { className: "text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-slate-800 text-cyan-300 border border-slate-700" }, s.jenjang || s.type),
+									/* @__PURE__ */ React.createElement("span", { className: "text-xs font-mono font-bold text-cyan-400" }, fmtDec(luasHa), " Ha")
+								),
+								/* @__PURE__ */ React.createElement("h4", { className: "font-bold text-white text-sm mt-1.5 leading-snug" }, s.name),
+								/* @__PURE__ */ React.createElement("p", { className: "text-[11px] text-slate-400 flex items-center gap-1 mt-0.5" },
+									/* @__PURE__ */ React.createElement(MapPin, { className: "w-3 h-3 text-cyan-400 flex-shrink-0" }),
+									s.kota, ", ", s.provinsi
+								)
+							),
+
+							/* Metrics bar */
+							/* @__PURE__ */ React.createElement("div", { className: "bg-slate-950/60 p-2.5 rounded-lg border border-slate-800 space-y-1.5 text-[11px]" },
+								/* Row 1: Bidang & Luas */
+								/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between text-slate-300" },
+									/* @__PURE__ */ React.createElement("span", { className: "text-slate-400" }, "Jumlah Bidang BMN:"),
+									/* @__PURE__ */ React.createElement("span", { className: "font-bold text-white font-mono" }, count, " Bidang")
+								),
+								/* Row 2: Status SHP */
+								/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between text-slate-300" },
+									/* @__PURE__ */ React.createElement("span", { className: "text-slate-400" }, "Sertifikasi SHP:"),
+									/* @__PURE__ */ React.createElement("span", { className: `font-bold font-mono ${shpPct >= 100 ? "text-emerald-400" : "text-amber-400"}` }, shpPct, "% (", shpCount, "/", count, ")")
+								)
+							),
+
+							/* Action button */
+							/* @__PURE__ */ React.createElement("button", {
+								type: "button",
+								onClick: () => {
+									setSelectedSatdik(s.id);
+									setViewMode("table");
+									setCurrentPage(1);
+								},
+								className: "w-full py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-cyan-600 hover:text-white text-slate-300 text-xs font-semibold transition text-center"
+							}, "Lihat Detail ", count, " Bidang ➔")
+						);
+					})
+				)
+			),
+
+			/* View mode STATUS LEGALITAS & PEMANFAATAN */
+			viewMode === "status" && /* @__PURE__ */ React.createElement("div", {
+				className: "bg-slate-800/90 rounded-2xl border border-slate-700/70 shadow-lg overflow-hidden p-5 space-y-5"
+			},
+				/* @__PURE__ */ React.createElement("div", null,
+					/* @__PURE__ */ React.createElement("h3", { className: "text-base font-bold text-white tracking-tight flex items-center gap-2" },
+						/* @__PURE__ */ React.createElement(ShieldCheck, { className: "w-4 h-4 text-emerald-400" }),
+						"Analisis Yuridis Legalitas Sertifikat & Pemanfaatan Lahan BMN"
+					),
+					/* @__PURE__ */ React.createElement("p", { className: "text-xs text-slate-400 mt-0.5" }, "Pemantauan berkala terhadap perlindungan aset BMN tanah dan optimalisasi peruntukan operasional kampus vokasi KP.")
+				),
+
+				/* Cards 2 Kolom */
+				/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4" },
+					/* Card 1: Status Sertifikat */
+					/* @__PURE__ */ React.createElement("div", { className: "bg-slate-900/80 rounded-xl p-4 border border-slate-800 space-y-3" },
+						/* @__PURE__ */ React.createElement("h4", { className: "text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5" },
+							/* @__PURE__ */ React.createElement(FileText, { className: "w-3.5 h-3.5 text-cyan-400" }),
+							"Komposisi Legalitas Kepemilikan"
+						),
+						/* Breakdown */
+						/* @__PURE__ */ React.createElement("div", { className: "space-y-2 text-xs" },
+							/* SHP */
+							/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between p-2 rounded-lg bg-emerald-950/30 border border-emerald-800/40" },
+								/* @__PURE__ */ React.createElement("span", { className: "text-slate-200 flex items-center gap-2" },
+									/* @__PURE__ */ React.createElement("span", { className: "w-2 h-2 rounded-full bg-emerald-400" }),
+									"Sertifikat Hak Pakai (SHP KKP)"
+								),
+								/* @__PURE__ */ React.createElement("strong", { className: "text-emerald-400 font-mono" }, kpiSummary.shpCount, " Bidang (", kpiSummary.shpPct, "%)")
+							),
+							/* Dalam Proses */
+							/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between p-2 rounded-lg bg-amber-950/30 border border-amber-800/40" },
+								/* @__PURE__ */ React.createElement("span", { className: "text-slate-200 flex items-center gap-2" },
+									/* @__PURE__ */ React.createElement("span", { className: "w-2 h-2 rounded-full bg-amber-400" }),
+									"Dalam Proses Pendaftaran BPN"
+								),
+								/* @__PURE__ */ React.createElement("strong", { className: "text-amber-400 font-mono" },
+									parcels.filter((p) => (p.statusSertifikat || "").includes("BPN")).length, " Bidang"
+								)
+							),
+							/* Hibah */
+							/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between p-2 rounded-lg bg-blue-950/30 border border-blue-800/40" },
+								/* @__PURE__ */ React.createElement("span", { className: "text-slate-200 flex items-center gap-2" },
+									/* @__PURE__ */ React.createElement("span", { className: "w-2 h-2 rounded-full bg-blue-400" }),
+									"Hibah Pemda (Naskah Perjanjian)"
+								),
+								/* @__PURE__ */ React.createElement("strong", { className: "text-blue-400 font-mono" },
+									parcels.filter((p) => (p.statusSertifikat || "").includes("Hibah")).length, " Bidang"
+								)
+							)
+						)
+					),
+					/* Card 2: Komposisi Peruntukan & Pemanfaatan Lahan */
+					/* @__PURE__ */ React.createElement("div", { className: "bg-slate-900/80 rounded-xl p-4 border border-slate-800 space-y-3" },
+						/* @__PURE__ */ React.createElement("h4", { className: "text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5" },
+							/* @__PURE__ */ React.createElement(Building2, { className: "w-3.5 h-3.5 text-cyan-400" }),
+							"Komposisi Peruntukan & Pemanfaatan Lahan"
+						),
+						/* Breakdown */
+						/* @__PURE__ */ React.createElement("div", { className: "space-y-2 text-xs" },
+							/* Kampus */
+							/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between p-2 rounded-lg bg-cyan-950/30 border border-cyan-800/40" },
+								/* @__PURE__ */ React.createElement("span", { className: "text-slate-200 flex items-center gap-2" },
+									/* @__PURE__ */ React.createElement("span", { className: "w-2 h-2 rounded-full bg-cyan-400" }),
+									"Kampus & Fasilitas Akademik"
+								),
+								/* @__PURE__ */ React.createElement("strong", { className: "text-cyan-400 font-mono" },
+									parcels.filter((p) => (p.peruntukan || "").includes("Kampus")).length, " Bidang"
+								)
+							),
+							/* Tambak */
+							/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between p-2 rounded-lg bg-teal-950/30 border border-teal-800/40" },
+								/* @__PURE__ */ React.createElement("span", { className: "text-slate-200 flex items-center gap-2" },
+									/* @__PURE__ */ React.createElement("span", { className: "w-2 h-2 rounded-full bg-teal-400" }),
+									"Tambak & Budidaya Praktik"
+								),
+								/* @__PURE__ */ React.createElement("strong", { className: "text-teal-400 font-mono" },
+									parcels.filter((p) => (p.peruntukan || "").includes("Tambak")).length, " Bidang"
+								)
+							),
+							/* Workshop / Lab */
+							/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between p-2 rounded-lg bg-indigo-950/30 border border-indigo-800/40" },
+								/* @__PURE__ */ React.createElement("span", { className: "text-slate-200 flex items-center gap-2" },
+									/* @__PURE__ */ React.createElement("span", { className: "w-2 h-2 rounded-full bg-indigo-400" }),
+									"Workshop & Laboratorium"
+								),
+								/* @__PURE__ */ React.createElement("strong", { className: "text-indigo-400 font-mono" },
+									parcels.filter((p) => (p.peruntukan || "").includes("Workshop") || (p.peruntukan || "").includes("Laboratorium")).length, " Bidang"
+								)
+							),
+							/* Cadangan / Lainnya */
+							/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between p-2 rounded-lg bg-purple-950/30 border border-purple-800/40" },
+								/* @__PURE__ */ React.createElement("span", { className: "text-slate-200 flex items-center gap-2" },
+									/* @__PURE__ */ React.createElement("span", { className: "w-2 h-2 rounded-full bg-purple-400" }),
+									"Lahan Cadangan Pengembangan"
+								),
+								/* @__PURE__ */ React.createElement("strong", { className: "text-purple-400 font-mono" },
+									parcels.filter((p) => (p.peruntukan || "").includes("Cadangan")).length, " Bidang"
+								)
+							)
+						),
+						/* Advice note */
+						/* @__PURE__ */ React.createElement("p", { className: "text-[11px] text-slate-400 leading-relaxed italic pt-1" },
+							"Catatan Pemanfaatan: Optimalisasi aset BMN tanah difokuskan untuk mendukung sarana teaching factory dan praktik vokasi taruna/i KP."
+						)
+					)
+				)
+			),
+
+			/* 5. MODAL EDIT / TAMBAH INLINE */
+			editingParcel && /* @__PURE__ */ React.createElement("div", {
+				className: "fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn",
+				onClick: () => !isSaving && setEditingParcel(null)
+			},
+				/* @__PURE__ */ React.createElement("div", {
+					className: "bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl max-h-[92vh] overflow-hidden flex flex-col shadow-2xl",
+					onClick: (e) => e.stopPropagation()
+				},
+					/* Header */
+					/* @__PURE__ */ React.createElement("div", { className: "bg-slate-800/90 px-5 sm:px-6 py-4 border-b border-slate-700/80 flex items-center justify-between" },
+						/* @__PURE__ */ React.createElement("div", { className: "flex items-center gap-2.5" },
+							/* @__PURE__ */ React.createElement("div", { className: "w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400" },
+								/* @__PURE__ */ React.createElement(MapIcon, { className: "w-5 h-5" })
+							),
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("h3", { className: "text-sm sm:text-base font-bold text-white" },
+									editingParcel.mode === "add" ? "Tambah Bidang Tanah Baru (KIB A)" : "Ubah Data Bidang Tanah"
+								),
+								/* @__PURE__ */ React.createElement("p", { className: "text-[11px] text-slate-400" }, "Pencatatan legalitas & fisik tanah BMN Satdik KKP")
+							)
+						),
+						/* @__PURE__ */ React.createElement("button", {
+							type: "button",
+							disabled: isSaving,
+							onClick: () => setEditingParcel(null),
+							className: "w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition"
+						}, /* @__PURE__ */ React.createElement(X, { className: "w-5 h-5" }))
+					),
+
+					/* Form */
+					/* @__PURE__ */ React.createElement("form", {
+						onSubmit: handleSaveParcel,
+						className: "overflow-y-auto p-5 sm:p-6 space-y-4 flex-1 scrollbar-thin scrollbar-thumb-slate-700 text-xs"
+					},
+						/* Satdik & Nama Bidang */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
+							/* Satdik */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Satuan Pendidikan KP *"),
+								/* @__PURE__ */ React.createElement("select", {
+									value: editingParcel.data.satdikId,
+									disabled: Boolean(lockedSatdik),
+									onChange: (e) => setEditingParcel((prev) => ({ ...prev, data: { ...prev.data, satdikId: e.target.value } })),
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								}, masterSatdik.map((s) => /* @__PURE__ */ React.createElement("option", { key: s.id, value: s.id }, s.shortName || s.name)))
+							),
+							/* Nama Bidang */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Nama Bidang / Peruntukan Lahan *"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "text",
+									required: true,
+									value: editingParcel.data.namaBidang,
+									onChange: (e) => setEditingParcel((prev) => ({ ...prev, data: { ...prev.data, namaBidang: e.target.value } })),
+									placeholder: "Contoh: Kampus Utama Sedati / Tambak Praktik",
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								})
+							)
+						),
+
+						/* Kode BMN, NUP, Luas M2 */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-4" },
+							/* Kode BMN */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Kode BMN"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "text",
+									value: editingParcel.data.kodeBmn || "",
+									onChange: (e) => setEditingParcel((prev) => ({ ...prev, data: { ...prev.data, kodeBmn: e.target.value } })),
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500 font-mono text-xs"
+								})
+							),
+							/* NUP */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "NUP"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "number",
+									min: "1",
+									value: editingParcel.data.nup || 1,
+									onChange: (e) => setEditingParcel((prev) => ({ ...prev, data: { ...prev.data, nup: Number(e.target.value) || 1 } })),
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500 font-mono"
+								})
+							),
+							/* Luas M2 */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Luas Tanah (m²) *"),
+								/* @__PURE__ */ React.createElement("div", { className: "relative" },
+									/* @__PURE__ */ React.createElement("input", {
+										type: "number",
+										min: "1",
+										required: true,
+										value: editingParcel.data.luasM2,
+										onChange: (e) => {
+											const m2 = Number(e.target.value) || 0;
+											setEditingParcel((prev) => ({
+												...prev,
+												data: {
+													...prev.data,
+													luasM2: m2,
+													luasHa: Number((m2 / 10000).toFixed(2))
+												}
+											}));
+										},
+										className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500 font-mono"
+									}),
+									/* @__PURE__ */ React.createElement("span", { className: "absolute right-3 top-2 text-cyan-400 font-semibold text-xs" }, (Number(editingParcel.data.luasM2 || 0) / 10000).toFixed(2), " Ha")
+								)
+							)
+						),
+
+						/* Status Sertifikat, No Sertifikat, Tanggal */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-4" },
+							/* Status */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Status Hak / Sertifikat"),
+								/* @__PURE__ */ React.createElement("select", {
+									value: editingParcel.data.statusSertifikat,
+									onChange: (e) => setEditingParcel((prev) => ({ ...prev, data: { ...prev.data, statusSertifikat: e.target.value } })),
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								},
+									/* @__PURE__ */ React.createElement("option", { value: "Sertifikat Hak Pakai (SHP)" }, "Sertifikat Hak Pakai (SHP)"),
+									/* @__PURE__ */ React.createElement("option", { value: "Dalam Proses BPN" }, "Dalam Proses BPN"),
+									/* @__PURE__ */ React.createElement("option", { value: "Hibah Pemda (Naskah Hibah)" }, "Hibah Pemda (Naskah Hibah)"),
+									/* @__PURE__ */ React.createElement("option", { value: "Girik / Adat / Pelepasan" }, "Girik / Adat / Pelepasan")
+								)
+							),
+							/* No Sertifikat */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Nomor Sertifikat"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "text",
+									value: editingParcel.data.noSertifikat || "",
+									onChange: (e) => setEditingParcel((prev) => ({ ...prev, data: { ...prev.data, noSertifikat: e.target.value } })),
+									placeholder: "SHP No. 00012/2015",
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500 font-mono text-xs"
+								})
+							),
+							/* Tanggal Terbit */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Tanggal Sertifikat"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "date",
+									value: editingParcel.data.tanggalSertifikat || "",
+									onChange: (e) => setEditingParcel((prev) => ({ ...prev, data: { ...prev.data, tanggalSertifikat: e.target.value } })),
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								})
+							)
+						),
+
+						/* Peruntukan & Pemanfaatan */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
+							/* Peruntukan */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Peruntukan Lahan"),
+								/* @__PURE__ */ React.createElement("select", {
+									value: editingParcel.data.peruntukan,
+									onChange: (e) => setEditingParcel((prev) => ({ ...prev, data: { ...prev.data, peruntukan: e.target.value } })),
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								},
+									/* @__PURE__ */ React.createElement("option", { value: "Kampus & Fasilitas Akademik" }, "Kampus & Fasilitas Akademik"),
+									/* @__PURE__ */ React.createElement("option", { value: "Tambak & Budidaya Praktik" }, "Tambak & Budidaya Praktik"),
+									/* @__PURE__ */ React.createElement("option", { value: "Workshop & Laboratorium Lapangan" }, "Workshop & Laboratorium"),
+									/* @__PURE__ */ React.createElement("option", { value: "Asrama & Fasilitas Penunjang" }, "Asrama & Fasilitas Penunjang"),
+									/* @__PURE__ */ React.createElement("option", { value: "Lahan Cadangan Pengembangan" }, "Lahan Cadangan Pengembangan")
+								)
+							),
+							/* Pemanfaatan */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Status Pemanfaatan"),
+								/* @__PURE__ */ React.createElement("select", {
+									value: editingParcel.data.statusPemanfaatan,
+									onChange: (e) => setEditingParcel((prev) => ({ ...prev, data: { ...prev.data, statusPemanfaatan: e.target.value } })),
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								},
+									/* @__PURE__ */ React.createElement("option", { value: "Digunakan Sendiri (Operasional)" }, "Digunakan Sendiri (Operasional)"),
+									/* @__PURE__ */ React.createElement("option", { value: "KSP / Kerjasama Mitra" }, "KSP / Kerjasama Mitra"),
+									/* @__PURE__ */ React.createElement("option", { value: "Pinjam Pakai" }, "Pinjam Pakai"),
+									/* @__PURE__ */ React.createElement("option", { value: "Lahan Cadangan" }, "Lahan Cadangan")
+								)
+							)
+						),
+
+						/* Tahun Perolehan & Asal Perolehan */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Tahun Perolehan"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "number",
+									min: "1950",
+									max: "2030",
+									value: editingParcel.data.tahunPerolehan || 2020,
+									onChange: (e) => setEditingParcel((prev) => ({ ...prev, data: { ...prev.data, tahunPerolehan: Number(e.target.value) || 2020 } })),
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500 font-mono"
+								})
+							),
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Asal Perolehan"),
+								/* @__PURE__ */ React.createElement("select", {
+									value: editingParcel.data.asalPerolehan || "APBN",
+									onChange: (e) => setEditingParcel((prev) => ({ ...prev, data: { ...prev.data, asalPerolehan: e.target.value } })),
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								},
+									/* @__PURE__ */ React.createElement("option", { value: "APBN" }, "APBN"),
+									/* @__PURE__ */ React.createElement("option", { value: "Hibah Pemda" }, "Hibah Pemda"),
+									/* @__PURE__ */ React.createElement("option", { value: "Pemberian Hak" }, "Pemberian Hak")
+								)
+							)
+						),
+
+						/* Alamat & Catatan */
+						/* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
+							/* Alamat */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Alamat Lengkap Lokasi Lahan"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "text",
+									value: editingParcel.data.alamat || "",
+									onChange: (e) => setEditingParcel((prev) => ({ ...prev, data: { ...prev.data, alamat: e.target.value } })),
+									placeholder: "Jl. ..., Desa/Kel., Kec.",
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								})
+							),
+							/* Catatan */
+							/* @__PURE__ */ React.createElement("div", null,
+								/* @__PURE__ */ React.createElement("label", { className: "block text-slate-300 font-semibold mb-1" }, "Keterangan / Batas Bidang"),
+								/* @__PURE__ */ React.createElement("input", {
+									type: "text",
+									value: editingParcel.data.keterangan || "",
+									onChange: (e) => setEditingParcel((prev) => ({ ...prev, data: { ...prev.data, keterangan: e.target.value } })),
+									placeholder: "Catatan operasional atau batas fisik",
+									className: "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-cyan-500"
+								})
+							)
+						),
+
+						/* Buttons */
+						/* @__PURE__ */ React.createElement("div", { className: "pt-3 border-t border-slate-800 flex items-center justify-end gap-2" },
+							/* @__PURE__ */ React.createElement("button", {
+								type: "button",
+								disabled: isSaving,
+								onClick: () => setEditingParcel(null),
+								className: "px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold transition"
+							}, "Batal"),
+							/* @__PURE__ */ React.createElement("button", {
+								type: "submit",
+								disabled: isSaving,
+								className: "px-5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold transition shadow-md shadow-cyan-900/40"
+							}, isSaving ? "Menyimpan..." : (editingParcel.mode === "add" ? "Simpan Bidang Baru" : "Simpan Perubahan"))
+						)
+					)
+				)
+			)
+		);
+	};
+})();
+const TanahView = window.__TanahView;
+
+
 // ============================================================================
 // MODULE: src/App.jsx
 // ============================================================================
@@ -7953,6 +11513,10 @@ const TambakKolamView = window.__TambakKolamView;
 		apiCreateTambakUnit,
 		apiUpdateTambakUnit,
 		apiDeleteTambakUnit,
+		apiFetchTanah,
+		apiCreateTanahParcel,
+		apiUpdateTanahParcel,
+		apiDeleteTanahParcel,
 		apiBulkImport
 	} = window.SARPRAS_API;
 	const { exportAsramaToExcel, exportStandarToExcel, exportTambakToExcel, exportComprehensiveToExcel } = window.SARPRAS_EXCEL;
@@ -7981,9 +11545,24 @@ const TambakKolamView = window.__TambakKolamView;
 		const [standarData, setStandarData] = useState(() => window.SARPRAS_STANDAR || { meta: null, bidang: [], rekap: [], items: [] });
 		// Dataset prasarana & sarana tambak dan kolam (Zero-Build fallback dari Services/tambak-data.js + sinkron MySQL)
 		const [tambakData, setTambakData] = useState(() => window.SARPRAS_TAMBAK || { meta: null, summary: [], units: [] });
+		// Dataset sarpras pembelajaran (Kelas, Perpustakaan, TEFA, Simulator) dari Services/pembelajaran-data.js
+		const [pembelajaranData, setPembelajaranData] = useState(() => {
+			if (window.SARPRAS_PEMBELAJARAN?.getAll) {
+				return window.SARPRAS_PEMBELAJARAN.getAll();
+			}
+			return [];
+		});
+		// Dataset tanah & lahan (KIB A BMN) dari Services/tanah-data.js
+		const [tanahData, setTanahData] = useState(() => {
+			if (window.SARPRAS_TANAH?.getAll) {
+				return window.SARPRAS_TANAH.getAll();
+			}
+			return [];
+		});
 		// Purging legacy catalog cache keys from localStorage
 		useEffect(() => {
 			try {
+				localStorage.removeItem("kkp_sarpras_tanah_v1");
 				localStorage.removeItem("kkp_sarpras_database_v2");
 				localStorage.removeItem("kkp_sarpras_database_v3");
 				localStorage.removeItem("kkp_sarpras_database_v4");
@@ -8040,6 +11619,8 @@ const TambakKolamView = window.__TambakKolamView;
 				if (activeTab === "asrama") targetType = "asrama";
 				else if (activeTab === "tambak") targetType = "tambak";
 				else if (activeTab === "standar") targetType = "standar";
+				else if (activeTab === "pembelajaran") targetType = "pembelajaran";
+				else if (activeTab === "tanah") targetType = "tanah";
 				else targetType = "asrama";
 			}
 			setAddModalInitialType(targetType);
@@ -8088,6 +11669,17 @@ const TambakKolamView = window.__TambakKolamView;
 										summary: tbk.summary,
 										units: tbk.units || []
 									});
+								}
+							} catch {}
+						}
+						if (typeof apiFetchTanah === "function") {
+							try {
+								const tnh = await apiFetchTanah();
+								if (isMounted && tnh.success && Array.isArray(tnh.data)) {
+									setTanahData(tnh.data);
+									if (window.SARPRAS_TANAH?.saveAll) {
+										window.SARPRAS_TANAH.saveAll(tnh.data);
+									}
 								}
 							} catch {}
 						}
@@ -8517,17 +12109,23 @@ const TambakKolamView = window.__TambakKolamView;
 		// =========================================================================
 		// Batch Import Handler: Gedung Asrama + Tambak/Kolam + Standar Prodi (Excel)
 		// =========================================================================
-		const handleBulkImport = async ({ buildings: inBuildings = [], tambakUnits: inTambak = [], standarItems: inStandar = [] }) => {
+		const handleBulkImport = async ({ buildings: inBuildings = [], tambakUnits: inTambak = [], standarItems: inStandar = [], pembelajaranFacilities: inPemb = [], tanahParcels: inTanah = [] }) => {
+			if (inPemb.length > 0) {
+				for (const pf of inPemb) {
+					await handleAddPembelajaranFacility(pf);
+				}
+			}
 			if (inTambak.length > 0) {
 				for (const tb of inTambak) {
 					await handleAddTambakUnit(tb);
 				}
 			}
 
-			if (dbStatus.connected && typeof apiBulkImport === "function" && (inBuildings.length > 0 || inStandar.length > 0)) {
+			if (dbStatus.connected && typeof apiBulkImport === "function" && (inBuildings.length > 0 || inStandar.length > 0 || inTanah.length > 0)) {
 				const res = await apiBulkImport({
 					buildings: inBuildings,
-					standarItems: inStandar
+					standarItems: inStandar,
+					tanahParcels: inTanah
 				});
 
 				if ((Array.isArray(res.buildings) && res.buildings.length > 0) || (Array.isArray(res.asramaSummary) && res.asramaSummary.length > 0)) {
@@ -8561,18 +12159,53 @@ const TambakKolamView = window.__TambakKolamView;
 					});
 				}
 
+				if (Array.isArray(res.tanahParcels) && res.tanahParcels.length > 0) {
+					setTanahData((prev) => {
+						const next = [...res.tanahParcels, ...(prev || [])];
+						if (window.SARPRAS_TANAH?.saveAll) {
+							window.SARPRAS_TANAH.saveAll(next);
+						}
+						return next;
+					});
+				}
+
 				return {
 					...res,
 					counts: {
 						...(res.counts || {}),
 						tambakUnits: inTambak.length,
-						total: (res.counts?.total || 0) + inTambak.length
+						pembelajaranFacilities: inPemb.length,
+						tanahParcels: (res.tanahParcels || []).length || inTanah.length,
+						total: (res.counts?.total || 0) + inTambak.length + inPemb.length
 					}
 				};
 			}
 
 			// Fallback Mode Offline (Local State)
 			const nowTs = Date.now();
+
+			if (inTanah.length > 0) {
+				const localParcels = inTanah.map((tp, idx) => {
+					const satObj = satdikMap[tp.satdikId];
+					return {
+						id: tp.id || ("TNH-" + Date.now() + "-" + (idx + 1) + "-" + Math.random().toString(36).substr(2, 4).toUpperCase()),
+						satdikName: satObj?.name || tp.satdikName || tp.satdikId,
+						satdikShortName: satObj?.shortName || satObj?.name || tp.satdikId,
+						...tp,
+						luasM2: Number(tp.luasM2) || 0,
+						luasHa: Number(((Number(tp.luasM2) || 0) / 10000).toFixed(2)),
+						nup: Number(tp.nup) || (idx + 1),
+						tahunPerolehan: Number(tp.tahunPerolehan) || new Date().getFullYear()
+					};
+				});
+				setTanahData((prev) => {
+					const next = [...(prev || []), ...localParcels];
+					if (window.SARPRAS_TANAH?.saveAll) {
+						window.SARPRAS_TANAH.saveAll(next);
+					}
+					return next;
+				});
+			}
 
 			if (inBuildings.length > 0) {
 				const localBuildings = inBuildings.map((b, idx) => ({
@@ -8624,8 +12257,10 @@ const TambakKolamView = window.__TambakKolamView;
 				counts: {
 					buildings: inBuildings.length,
 					tambakUnits: inTambak.length,
+					pembelajaranFacilities: inPemb.length,
 					standarItems: inStandar.length,
-					total: inBuildings.length + inTambak.length + inStandar.length
+					tanahParcels: inTanah.length,
+					total: inBuildings.length + inTambak.length + inPemb.length + inStandar.length + inTanah.length
 				}
 			};
 		};
@@ -8736,6 +12371,157 @@ const TambakKolamView = window.__TambakKolamView;
 			return true;
 		};
 
+		// Handlers CRUD Sarpras Pembelajaran (Kelas, Perpustakaan, TEFA, Simulator)
+		const handleAddPembelajaranFacility = async (payload) => {
+			const satObj = SATDIK_LIST.find((s) => s.id === payload.satdikId);
+			const prefixMap = { kelas: 'KLS', perpustakaan: 'LIB', tefa: 'TFA', simulator: 'SIM' };
+			const prefix = prefixMap[payload.category] || 'FAS';
+			const satdikCode = satObj?.shortName ? satObj.shortName.replace(/[^A-Za-z0-9]/g, '').slice(0, 3).toUpperCase() : 'KKP';
+			const newFacility = {
+				id: payload.id || `${prefix}-${satdikCode}-${Date.now().toString().slice(-4)}`,
+				satdikName: satObj?.name || payload.satdikId,
+				...payload,
+				luasM2: Number(payload.luasM2) || 0,
+				kapasitas: Number(payload.kapasitas) || 0,
+				tahunPengadaan: Number(payload.tahunPengadaan) || new Date().getFullYear()
+			};
+			setPembelajaranData((prev) => {
+				const next = [newFacility, ...(prev || [])];
+				if (window.SARPRAS_PEMBELAJARAN?.saveAll) {
+					window.SARPRAS_PEMBELAJARAN.saveAll(next);
+				}
+				return next;
+			});
+			return newFacility;
+		};
+
+		const handleUpdatePembelajaranFacility = async (id, payload) => {
+			setPembelajaranData((prev) => {
+				const next = (prev || []).map((f) => (f.id === id ? { ...f, ...payload, luasM2: Number(payload.luasM2) || 0, kapasitas: Number(payload.kapasitas) || 0 } : f));
+				if (window.SARPRAS_PEMBELAJARAN?.saveAll) {
+					window.SARPRAS_PEMBELAJARAN.saveAll(next);
+				}
+				return next;
+			});
+		};
+
+		const handleDeletePembelajaranFacility = async (id) => {
+			setPembelajaranData((prev) => {
+				const next = (prev || []).filter((f) => f.id !== id);
+				if (window.SARPRAS_PEMBELAJARAN?.saveAll) {
+					window.SARPRAS_PEMBELAJARAN.saveAll(next);
+				}
+				return next;
+			});
+			return true;
+		};
+
+		const handleExportPembelajaran = () => {
+			if (typeof exportPembelajaranToExcel === 'function') {
+				exportPembelajaranToExcel(pembelajaranData, SATDIK_LIST, {
+					currentUser,
+					filterScopeLabel: 'Seluruh Satuan Pendidikan Vokasi KKP (18 Satdik)'
+				});
+			} else if (typeof window.SARPRAS_EXCEL?.exportPembelajaranToExcel === 'function') {
+				window.SARPRAS_EXCEL.exportPembelajaranToExcel(pembelajaranData, SATDIK_LIST, {
+					currentUser,
+					filterScopeLabel: 'Seluruh Satuan Pendidikan Vokasi KKP (18 Satdik)'
+				});
+			}
+		};
+
+		// Handlers CRUD Data Tanah & Lahan Satdik KKP (KIB A BMN)
+		const handleAddTanahParcel = async (payload) => {
+			let result = null;
+			if (dbStatus.connected && typeof apiCreateTanahParcel === 'function') {
+				try {
+					result = await apiCreateTanahParcel(payload);
+				} catch (err) {
+					console.error('Failed to create tanah parcel in API:', err);
+				}
+			}
+			const satObj = SATDIK_LIST.find((s) => s.id === payload.satdikId);
+			const satdikCode = satObj?.shortName ? satObj.shortName.replace(/[^A-Za-z0-9]/g, '').slice(0, 3).toUpperCase() : 'KKP';
+			const createdParcel = result?.parcel || {
+				id: payload.id || `TNH-${satdikCode}-${Date.now().toString().slice(-4)}`,
+				satdikId: payload.satdikId,
+				satdikName: satObj?.name || payload.satdikId,
+				satdikShortName: satObj?.shortName || satObj?.name || payload.satdikId,
+				...payload,
+				luasM2: Number(payload.luasM2) || 0,
+				luasHa: Number(((Number(payload.luasM2) || 0) / 10000).toFixed(2)),
+				nup: Number(payload.nup) || 1,
+				tahunPerolehan: Number(payload.tahunPerolehan) || new Date().getFullYear()
+			};
+			setTanahData((prev) => {
+				const next = [createdParcel, ...(prev || [])];
+				if (window.SARPRAS_TANAH?.saveAll) {
+					window.SARPRAS_TANAH.saveAll(next);
+				}
+				return next;
+			});
+			return createdParcel;
+		};
+
+		const handleUpdateTanahParcel = async (id, payload) => {
+			let result = null;
+			if (dbStatus.connected && typeof apiUpdateTanahParcel === 'function') {
+				try {
+					result = await apiUpdateTanahParcel(id, payload);
+				} catch (err) {
+					console.error('Failed to update tanah parcel in API:', err);
+				}
+			}
+			const updatedParcel = result?.parcel || payload;
+			setTanahData((prev) => {
+				const next = (prev || []).map((p) => (p.id === id ? {
+					...p,
+					...updatedParcel,
+					luasM2: Number(updatedParcel.luasM2 !== undefined ? updatedParcel.luasM2 : p.luasM2) || 0,
+					luasHa: Number(((Number(updatedParcel.luasM2 !== undefined ? updatedParcel.luasM2 : p.luasM2) || 0) / 10000).toFixed(2)),
+					nup: Number(updatedParcel.nup !== undefined ? updatedParcel.nup : p.nup) || 1
+				} : p));
+				if (window.SARPRAS_TANAH?.saveAll) {
+					window.SARPRAS_TANAH.saveAll(next);
+				}
+				return next;
+			});
+			return updatedParcel;
+		};
+
+		const handleDeleteTanahParcel = async (id) => {
+			if (dbStatus.connected && typeof apiDeleteTanahParcel === 'function') {
+				try {
+					await apiDeleteTanahParcel(id);
+				} catch (err) {
+					console.error('Failed to delete tanah parcel in API:', err);
+				}
+			}
+			setTanahData((prev) => {
+				const next = (prev || []).filter((p) => p.id !== id);
+				if (window.SARPRAS_TANAH?.saveAll) {
+					window.SARPRAS_TANAH.saveAll(next);
+				}
+				return next;
+			});
+			return true;
+		};
+
+		const handleExportTanah = () => {
+			if (typeof exportTanahToExcel === 'function') {
+				exportTanahToExcel(tanahData, SATDIK_LIST, {
+					currentUser,
+					filterScopeLabel: 'Seluruh Satuan Pendidikan Vokasi KKP (18 Satdik)'
+				});
+			} else if (typeof window.SARPRAS_EXCEL?.exportTanahToExcel === 'function') {
+				window.SARPRAS_EXCEL.exportTanahToExcel(tanahData, SATDIK_LIST, {
+					currentUser,
+					filterScopeLabel: 'Seluruh Satuan Pendidikan Vokasi KKP (18 Satdik)'
+				});
+			}
+		};
+
+
 		// Handler penyelesaian pemeliharaan mendesak (EarlyWarningMaintenance)
 		const handleResolveUrgentAsset = async (assetId, _newCondition, notes) => {
 			const matchingBuilding = (asramaData?.buildings || []).find((b) => b.id === assetId);
@@ -8763,6 +12549,8 @@ const TambakKolamView = window.__TambakKolamView;
 					asramaData,
 					tambakData,
 					standarData,
+					pembelajaranData,
+					tanahData,
 					satdikList: SATDIK_LIST,
 					currentUser,
 					options: {
@@ -8854,6 +12642,23 @@ const TambakKolamView = window.__TambakKolamView;
 			onUpdateUnit: handleUpdateTambakUnit,
 			onDeleteUnit: handleDeleteTambakUnit,
 			onOpenAddModal: handleOpenAddModal
+		}), activeTab === "pembelajaran" && /* @__PURE__ */ React.createElement(PembelajaranView, {
+			pembelajaranData,
+			satdikList: SATDIK_LIST,
+			currentUser,
+			onAddFacility: handleAddPembelajaranFacility,
+			onUpdateFacility: handleUpdatePembelajaranFacility,
+			onDeleteFacility: handleDeletePembelajaranFacility,
+			onExportExcel: handleExportPembelajaran
+		}), activeTab === "tanah" && /* @__PURE__ */ React.createElement(TanahView, {
+			tanahData,
+			satdikList: SATDIK_LIST,
+			currentUser,
+			onAddParcel: handleAddTanahParcel,
+			onUpdateParcel: handleUpdateTanahParcel,
+			onDeleteParcel: handleDeleteTanahParcel,
+			onExportExcel: handleExportExcel,
+			onOpenAddModal: handleOpenAddModal
 		}), activeTab === "standar" && /* @__PURE__ */ React.createElement(StandarProdiView, {
 			standarData,
 			satdikList: SATDIK_LIST,
@@ -8871,6 +12676,8 @@ const TambakKolamView = window.__TambakKolamView;
 			onAddBuilding: handleAddAsramaBuilding,
 			onAddTambakUnit: handleAddTambakUnit,
 			onAddItem: handleAddStandarItem,
+			onAddPembelajaranFacility: handleAddPembelajaranFacility,
+			onAddTanahParcel: handleAddTanahParcel,
 			onBulkImport: handleBulkImport,
 			initialType: addModalInitialType,
 			standarBidangList: standarData?.bidang || [],

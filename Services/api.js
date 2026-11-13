@@ -409,6 +409,104 @@
     };
   }
 
+  async function apiFetchTanah(satdikId) {
+    const query = satdikId && satdikId !== 'ALL' ? '?satdik_id=' + encodeURIComponent(satdikId) : '';
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/tanah.php' + query, {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/tanah.php' + query, {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memuat data tanah dan lahan.');
+    }
+    return {
+      success: true,
+      total: data.total || (Array.isArray(data.data) ? data.data.length : 0),
+      data: Array.isArray(data.data) ? data.data : []
+    };
+  }
+
+  async function apiCreateTanahParcel(payload) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/tanah.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      res = await fetch('api/tanah.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal menambahkan data bidang tanah.');
+    }
+    return {
+      success: true,
+      parcel: data.data || null
+    };
+  }
+
+  async function apiUpdateTanahParcel(id, updates) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/tanah.php?id=' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({ id: id }, updates))
+      });
+    } catch (e) {
+      res = await fetch('api/tanah.php?id=' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({ id: id }, updates))
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memperbarui data bidang tanah.');
+    }
+    return {
+      success: true,
+      parcel: data.data || null
+    };
+  }
+
+  async function apiDeleteTanahParcel(id) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/tanah.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/tanah.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal menghapus data bidang tanah.');
+    }
+    return {
+      success: true,
+      deletedId: id
+    };
+  }
+
   window.SARPRAS_API = {
     API_BASE_URL: API_BASE_URL,
     MONITORING_BASE_URL: MONITORING_BASE_URL,
@@ -428,6 +526,10 @@
     apiCreateTambakUnit: apiCreateTambakUnit,
     apiUpdateTambakUnit: apiUpdateTambakUnit,
     apiDeleteTambakUnit: apiDeleteTambakUnit,
+    apiFetchTanah: apiFetchTanah,
+    apiCreateTanahParcel: apiCreateTanahParcel,
+    apiUpdateTanahParcel: apiUpdateTanahParcel,
+    apiDeleteTanahParcel: apiDeleteTanahParcel,
     apiBulkImport: apiBulkImport
   };
 })(window);
