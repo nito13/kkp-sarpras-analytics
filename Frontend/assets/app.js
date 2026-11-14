@@ -608,6 +608,23 @@ const MobileBottomNav = window.__MobileBottomNav;
 	const { authenticateUser } = window.SARPRAS_AUTH;
 	const { apiLogin } = window.SARPRAS_API;
 	const logoKkp = window.__LOGO_KKP || "Frontend/assets/logo-kkp.png";
+	// Logo Ocean Institute of Indonesia untuk watermark latar login.
+	// Default: file "logo-oii.png" di folder yang sama dengan logo KKP. Bisa dioverride via window.__LOGO_OII.
+	const logoOii = window.__LOGO_OII || logoKkp.replace(/logo-kkp\.png$/, "logo-oii.png");
+
+	// Watermark latar: logo OII, otomatis kembali ke ikon jangkar bila file logo belum tersedia.
+	const LoginWatermark = ({ className }) => {
+		const [failed, setFailed] = useState(false);
+		if (failed) return /* @__PURE__ */ React.createElement(Anchor, { className: `${className} is-fallback`, "aria-hidden": "true" });
+		return /* @__PURE__ */ React.createElement("img", {
+			src: logoOii,
+			alt: "",
+			"aria-hidden": "true",
+			draggable: false,
+			className,
+			onError: () => setFailed(true)
+		});
+	};
 
 	// Statistik ringkas untuk panel hero (dihitung dari master data satdik)
 	const LOGIN_HERO_STATS = (() => {
@@ -641,7 +658,7 @@ const MobileBottomNav = window.__MobileBottomNav;
 			/* @__PURE__ */ React.createElement("path", { className: "lh-wave-1", d: "M0,192L60,186.7C120,181,240,171,360,181.3C480,192,600,224,720,229.3C840,235,960,213,1080,186.7C1200,160,1320,128,1380,112L1440,96L1440,320L0,320Z" }),
 			/* @__PURE__ */ React.createElement("path", { className: "lh-wave-2", d: "M0,256L80,245.3C160,235,320,213,480,218.7C640,224,800,256,960,261.3C1120,267,1280,245,1360,234.7L1440,224L1440,320L0,320Z" })
 		),
-		/* @__PURE__ */ React.createElement(Anchor, { className: "lh-watermark", "aria-hidden": "true" }),
+		/* @__PURE__ */ React.createElement(LoginWatermark, { className: "lh-watermark" }),
 
 		/* Header brand */
 		/* @__PURE__ */ React.createElement("div", { className: "lh-brand" },
@@ -677,6 +694,37 @@ const MobileBottomNav = window.__MobileBottomNav;
 		),
 
 		/* @__PURE__ */ React.createElement("div", { className: "lh-foot" }, "Mendukung pengelolaan sarpras pendidikan vokasi kelautan dan perikanan yang unggul.")
+	);
+
+	// Header hero ringkas khusus HP & tablet (< 1024px, lihat style.css "LOGIN MOBILE")
+	const LoginMobileHero = () => /* @__PURE__ */ React.createElement("header", { className: "login-mhero" },
+		/* @__PURE__ */ React.createElement("svg", { className: "lmh-contour", viewBox: "0 0 600 600", "aria-hidden": "true", focusable: "false" },
+			[60, 110, 160, 210, 260].map((r) => /* @__PURE__ */ React.createElement("circle", { key: r, cx: "520", cy: "80", r, fill: "none", stroke: "currentColor", strokeWidth: "1.5" }))
+		),
+		/* @__PURE__ */ React.createElement("svg", { className: "lmh-waves", viewBox: "0 0 1440 320", preserveAspectRatio: "none", "aria-hidden": "true", focusable: "false" },
+			/* @__PURE__ */ React.createElement("path", { className: "lmh-wave-1", d: "M0,192L60,186.7C120,181,240,171,360,181.3C480,192,600,224,720,229.3C840,235,960,213,1080,186.7C1200,160,1320,128,1380,112L1440,96L1440,320L0,320Z" }),
+			/* @__PURE__ */ React.createElement("path", { className: "lmh-wave-2", d: "M0,256L80,245.3C160,235,320,213,480,218.7C640,224,800,256,960,261.3C1120,267,1280,245,1360,234.7L1440,224L1440,320L0,320Z" })
+		),
+		/* @__PURE__ */ React.createElement(LoginWatermark, { className: "lmh-watermark" }),
+		/* @__PURE__ */ React.createElement("div", { className: "lmh-inner" },
+			/* @__PURE__ */ React.createElement("div", { className: "lmh-brand" },
+				/* @__PURE__ */ React.createElement("div", { className: "lmh-logo" },
+					/* @__PURE__ */ React.createElement("img", { src: logoKkp, alt: "Logo Kementerian Kelautan dan Perikanan" })
+				),
+				/* @__PURE__ */ React.createElement("div", { className: "lmh-brand-text" },
+					/* @__PURE__ */ React.createElement("div", { className: "lmh-brand-title" }, "Kementerian Kelautan dan Perikanan"),
+					/* @__PURE__ */ React.createElement("div", { className: "lmh-brand-sub" }, "BPPSDM KP · Pusdik KP")
+				)
+			),
+			/* @__PURE__ */ React.createElement("span", { className: "lmh-badge" }, "Sistem Informasi & Analitik Sarpras"),
+			/* @__PURE__ */ React.createElement("h1", { className: "lmh-title" }, "Sarana dan Prasarana ", /* @__PURE__ */ React.createElement("span", { className: "lmh-title-accent" }, "Satuan Pendidikan KP")),
+			LOGIN_HERO_STATS.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "lmh-stats" },
+				LOGIN_HERO_STATS.map((s) => /* @__PURE__ */ React.createElement("div", { key: s.label, className: "lmh-stat" },
+					/* @__PURE__ */ React.createElement("div", { className: "lmh-stat-value" }, s.value),
+					/* @__PURE__ */ React.createElement("div", { className: "lmh-stat-label" }, s.label)
+				))
+			)
+		)
 	);
 	window.__LoginScreen = function LoginScreen({ onLogin }) {
 		const { isDark, toggleTheme } = useTheme();
@@ -728,8 +776,11 @@ const MobileBottomNav = window.__MobileBottomNav;
 			/* @__PURE__ */ React.createElement("div", { className: "absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-cyan-600/10 blur-[120px] pointer-events-none" }),
 			/* @__PURE__ */ React.createElement("div", { className: "absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-blue-600/10 blur-[120px] pointer-events-none" }),
 
+			/* HERO RINGKAS (HP & tablet) */
+			/* @__PURE__ */ React.createElement(LoginMobileHero, null),
+
 			/* TOP BAR THEME TOGGLE */
-			/* @__PURE__ */ React.createElement("div", { className: "max-w-4xl mx-auto w-full flex items-center justify-end text-xs py-2 text-slate-400 relative z-10" },
+			/* @__PURE__ */ React.createElement("div", { className: "login-topbar max-w-4xl mx-auto w-full flex items-center justify-end text-xs py-2 text-slate-400 relative z-10" },
 				/* @__PURE__ */ React.createElement("button", {
 					type: "button",
 					onClick: toggleTheme,
@@ -744,26 +795,12 @@ const MobileBottomNav = window.__MobileBottomNav;
 			),
 
 			/* LOGIN CARD */
-			/* @__PURE__ */ React.createElement("div", { className: "max-w-md mx-auto w-full my-auto py-6 relative z-10" },
-				/* @__PURE__ */ React.createElement("div", { className: "bg-slate-900/95 backdrop-blur-xl border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-cyan-950/40 relative" },
-					/* Header ringkas khusus desktop (brand lengkap sudah ada di panel kiri) */
-					/* @__PURE__ */ React.createElement("div", { className: "login-card-header-compact pb-6 border-b border-slate-800" },
+			/* @__PURE__ */ React.createElement("div", { className: "login-card-wrap max-w-md mx-auto w-full my-auto py-6 relative z-10" },
+				/* @__PURE__ */ React.createElement("div", { className: "login-card bg-slate-900/95 backdrop-blur-xl border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-cyan-950/40 relative" },
+					/* Header ringkas (brand lengkap ada di panel hero desktop / header hero HP) */
+					/* @__PURE__ */ React.createElement("div", { className: "login-card-header-compact pb-5 border-b border-slate-800" },
 						/* @__PURE__ */ React.createElement("h2", { className: "text-xl font-black text-white tracking-tight" }, "Selamat Datang"),
 						/* @__PURE__ */ React.createElement("p", { className: "text-xs text-slate-400", style: { marginTop: "0.375rem", lineHeight: 1.6 } }, "Silakan masuk menggunakan akun kedinasan Anda untuk mengakses sistem.")
-					),
-					/* @__PURE__ */ React.createElement("div", { className: "login-card-header-full text-center space-y-3 pb-6 border-b border-slate-800" },
-						/* @__PURE__ */ React.createElement("div", { className: `login-logo-container w-20 h-20 mx-auto rounded-2xl bg-white p-2 shadow-xl flex items-center justify-center transform hover:scale-105 transition-transform duration-300 border-2 ${isDark ? "border-cyan-400/60 shadow-cyan-500/20" : "border-black shadow-slate-400/20"}` },
-							/* @__PURE__ */ React.createElement("img", {
-								src: logoKkp,
-								alt: "Logo Kementerian Kelautan dan Perikanan",
-								className: "w-full h-full object-contain"
-							})
-						),
-						/* @__PURE__ */ React.createElement("div", null,
-							/* @__PURE__ */ React.createElement("span", { className: "text-[11px] font-bold text-cyan-400 uppercase tracking-widest block" }, "Kementerian Kelautan dan Perikanan Republik Indonesia"),
-							/* @__PURE__ */ React.createElement("h1", { className: "text-lg sm:text-2xl font-black text-white tracking-tight mt-1" }, "Sarana dan Prasarana ", /* @__PURE__ */ React.createElement("span", { className: "text-cyan-400" }, "Satuan Pendidikan KP")),
-							/* @__PURE__ */ React.createElement("p", { className: "text-xs text-slate-400 mt-1 max-w-sm mx-auto" }, "Sistem Informasi & Analitik Sarana Prasarana Satuan Pendidikan Vokasi Kelautan dan Perikanan (BPPSDM KP)")
-						)
 					),
 
 					errorMessage && /* @__PURE__ */ React.createElement("div", { className: "mt-5 p-3.5 bg-rose-950/80 border border-rose-500/50 rounded-xl text-xs text-rose-300 flex items-start gap-2.5 animate-shake" },
@@ -783,6 +820,10 @@ const MobileBottomNav = window.__MobileBottomNav;
 									type: "text",
 									required: true,
 									autoComplete: "username",
+									inputMode: "email",
+									autoCapitalize: "none",
+									autoCorrect: "off",
+									spellCheck: false,
 									placeholder: "admin.pusdik@kkp.go.id",
 									value: identifier,
 									onChange: (e) => setIdentifier(e.target.value),
@@ -808,14 +849,15 @@ const MobileBottomNav = window.__MobileBottomNav;
 								/* @__PURE__ */ React.createElement("button", {
 									type: "button",
 									onClick: () => setShowPassword(!showPassword),
-									className: "absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200"
+									"aria-label": showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi",
+									className: "login-eye-btn absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200"
 								}, showPassword
 									? /* @__PURE__ */ React.createElement(EyeOff, { className: "w-4 h-4" })
 									: /* @__PURE__ */ React.createElement(Eye, { className: "w-4 h-4" })
 								)
 							)
 						),
-						/* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between text-xs pt-1" },
+						/* @__PURE__ */ React.createElement("div", { className: "login-remember-row flex flex-wrap items-center justify-between gap-2 text-xs pt-1" },
 							/* @__PURE__ */ React.createElement("label", { className: "flex items-center space-x-2 cursor-pointer text-slate-400 hover:text-slate-300" },
 								/* @__PURE__ */ React.createElement("input", {
 									type: "checkbox",
@@ -846,7 +888,7 @@ const MobileBottomNav = window.__MobileBottomNav;
 			),
 
 			/* FOOTER */
-			/* @__PURE__ */ React.createElement("div", { className: "text-center text-[11px] text-slate-500 py-2 relative z-10" },
+			/* @__PURE__ */ React.createElement("div", { className: "login-footer text-center text-[11px] text-slate-500 py-2 relative z-10" },
 				"© Pusat Pendidikan Kelautan dan Perikanan (Pusdik KP) — BPPSDM KP"
 			)
 			)
