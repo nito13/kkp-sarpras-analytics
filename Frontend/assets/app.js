@@ -11,28 +11,56 @@
 // ============================================================================
 (() => {
 	// src/context/ThemeContext.jsx
-	const { createContext, useContext, useState, useEffect } = React;
+	const { createContext, useContext, useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef } = React;
 	const ThemeContext = createContext();
-	const THEME_STORAGE_KEY = "kkp_theme_mode";
+	// Kunci v2: versi lama selalu menyimpan "dark" otomatis tiap halaman dibuka,
+	// sehingga pilihan lama tidak mencerminkan pilihan pengguna. Kunci baru
+	// memastikan semua pengguna mulai dari default (terang).
+	const THEME_STORAGE_KEY = "kkp_theme_mode_v2";
+	try { localStorage.removeItem("kkp_theme_mode"); } catch {}
+	const THEME_META_COLORS = { dark: "#0f172a", light: "#f1f5f9" };
+	const isValidTheme = (t) => t === "light" || t === "dark";
+
+	// Baca tema awal. Prioritas: class pada <html> (sudah dipasang oleh skrip
+	// anti-flash di index.html) -> localStorage -> default terang.
+	const readInitialTheme = () => {
+		const root = document.documentElement;
+		if (root.classList.contains("dark")) return "dark";
+		if (root.classList.contains("light")) return "light";
+		try {
+			const saved = localStorage.getItem(THEME_STORAGE_KEY);
+			if (isValidTheme(saved)) return saved;
+		} catch {}
+		// Default: mode terang
+		return "light";
+	};
+
+	// Terapkan tema ke DOM secara sinkron. Transisi CSS dimatikan sementara agar
+	// ratusan elemen dengan "transition-all" tidak beranimasi bersamaan (penyebab
+	// lag/kedip saat berganti mode), lalu diaktifkan lagi setelah 2 frame.
+	const applyThemeToDom = (theme) => {
+		const root = document.documentElement;
+		if (root.classList.contains(theme) && root.style.colorScheme === theme) return;
+		root.classList.add("theme-switching");
+		root.classList.toggle("light", theme === "light");
+		root.classList.toggle("dark", theme === "dark");
+		root.style.colorScheme = theme;
+		const meta = document.querySelector('meta[name="theme-color"]');
+		if (meta) meta.setAttribute("content", THEME_META_COLORS[theme]);
+		requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove("theme-switching")));
+	};
+
 	window.__ThemeProvider = function ThemeProvider({ children }) {
-		const [theme, setTheme] = useState(() => {
-			try {
-				const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-				if (savedTheme === "light" || savedTheme === "dark") {
-					return savedTheme;
-				}
-			} catch {}
-			// Default to dark theme for official operations room aesthetic
-			return "dark";
-		});
-		useEffect(() => {
-			const root = document.documentElement;
-			if (theme === "light") {
-				root.classList.remove("dark");
-				root.classList.add("light");
-			} else {
-				root.classList.remove("light");
-				root.classList.add("dark");
+		const [theme, setThemeState] = useState(readInitialTheme);
+		const isFirstRun = useRef(true);
+
+		// useLayoutEffect: kelas diterapkan sebelum browser melukis frame berikutnya,
+		// sehingga tidak ada frame "setengah tema" antara state React dan CSS.
+		useLayoutEffect(() => {
+			applyThemeToDom(theme);
+			if (isFirstRun.current) {
+				isFirstRun.current = false;
+				return;
 			}
 			try {
 				localStorage.setItem(THEME_STORAGE_KEY, theme);
@@ -40,15 +68,37 @@
 				console.warn("Failed to save theme to localStorage", e);
 			}
 		}, [theme]);
-		const toggleTheme = () => {
-			setTheme((prev) => prev === "dark" ? "light" : "dark");
-		};
-		return /* @__PURE__ */ React.createElement(ThemeContext.Provider, { value: {
+
+		// Sinkronisasi antar tab/jendela: ubah tema di satu tab, tab lain ikut.
+		useEffect(() => {
+			const onStorage = (e) => {
+				if (e.key === THEME_STORAGE_KEY && isValidTheme(e.newValue)) {
+					setThemeState(e.newValue);
+				}
+			};
+			window.addEventListener("storage", onStorage);
+			return () => window.removeEventListener("storage", onStorage);
+		}, []);
+
+		const setTheme = useCallback((next) => {
+			setThemeState((prev) => {
+				const value = typeof next === "function" ? next(prev) : next;
+				return isValidTheme(value) ? value : prev;
+			});
+		}, []);
+		const toggleTheme = useCallback(() => {
+			setThemeState((prev) => prev === "dark" ? "light" : "dark");
+		}, []);
+
+		// Memoize agar consumer useTheme() tidak re-render bila tema tidak berubah.
+		const value = useMemo(() => ({
 			theme,
 			setTheme,
 			toggleTheme,
 			isDark: theme === "dark"
-		} }, children);
+		}), [theme, setTheme, toggleTheme]);
+
+		return /* @__PURE__ */ React.createElement(ThemeContext.Provider, { value }, children);
 	};
 	window.__useTheme = function useTheme() {
 		const context = useContext(ThemeContext);
@@ -257,8 +307,9 @@ window.__AupCampusFilter = AupCampusFilter;
 			onClick: toggleTheme,
 			className: "p-1.5 sm:p-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all hover:scale-105 active:scale-95 flex items-center justify-center shadow-sm flex-shrink-0",
 			title: isDark ? "Beralih ke Mode Terang (Light Mode)" : "Beralih ke Mode Gelap (Dark Mode)",
-			"aria-label": "Toggle Theme Mode"
-		}, isDark ? /* @__PURE__ */ React.createElement(Sun, { className: "w-4 h-4 text-amber-400 animate-pulse" }) : /* @__PURE__ */ React.createElement(Moon, { className: "w-4 h-4 text-sky-500" })), /* @__PURE__ */ React.createElement("div", { className: "flex items-center space-x-1 sm:space-x-1.5 pl-1 sm:pl-2 border-l border-slate-700/80" }, /* @__PURE__ */ React.createElement("button", {
+			"aria-label": isDark ? "Beralih ke Mode Terang" : "Beralih ke Mode Gelap",
+			"aria-pressed": !isDark
+		}, isDark ? /* @__PURE__ */ React.createElement(Sun, { className: "w-4 h-4 text-amber-400" }) : /* @__PURE__ */ React.createElement(Moon, { className: "w-4 h-4 text-sky-500" })), /* @__PURE__ */ React.createElement("div", { className: "flex items-center space-x-1 sm:space-x-1.5 pl-1 sm:pl-2 border-l border-slate-700/80" }, /* @__PURE__ */ React.createElement("button", {
 			onClick: onOpenProfile,
 			className: "flex items-center gap-1.5 p-1 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-left transition-colors flex-shrink-0",
 			title: "Klik untuk melihat profil & hak akses akun"
@@ -553,10 +604,80 @@ const MobileBottomNav = window.__MobileBottomNav;
 // ============================================================================
 (() => {
 	const { useState } = React;
-	const { Lock, Mail, Eye, EyeOff, AlertCircle, KeyRound, Shield, Sun, Moon } = window.__VENDOR__.Lucide;
+	const { Lock, Mail, Eye, EyeOff, AlertCircle, KeyRound, Shield, Sun, Moon, Boxes, Bed, Fish, School, GraduationCap, Map: MapIcon, Anchor } = window.__VENDOR__.Lucide;
 	const { authenticateUser } = window.SARPRAS_AUTH;
 	const { apiLogin } = window.SARPRAS_API;
 	const logoKkp = window.__LOGO_KKP || "Frontend/assets/logo-kkp.png";
+
+	// Statistik ringkas untuk panel hero (dihitung dari master data satdik)
+	const LOGIN_HERO_STATS = (() => {
+		const list = (window.SARPRAS_DATA && window.SARPRAS_DATA.SATDIK_LIST) || [];
+		const tinggi = list.filter((s) => s.jenjang === "Pendidikan Tinggi").length;
+		const menengah = list.filter((s) => s.jenjang === "Pendidikan Menengah").length;
+		const provinsi = new Set(list.map((s) => s.provinsi).filter(Boolean)).size;
+		return [
+			{ value: list.length, label: "Satuan Pendidikan" },
+			{ value: tinggi, label: "Pendidikan Tinggi" },
+			{ value: menengah, label: "Pendidikan Menengah" },
+			{ value: provinsi, label: "Provinsi" }
+		].filter((s) => s.value > 0);
+	})();
+	const LOGIN_HERO_MODULES = [
+		{ icon: Boxes, label: "Aset BMN" },
+		{ icon: Bed, label: "Asrama" },
+		{ icon: Fish, label: "Tambak & Kolam" },
+		{ icon: School, label: "Pembelajaran" },
+		{ icon: MapIcon, label: "Tanah & Lahan" },
+		{ icon: GraduationCap, label: "Standar Sarpras" }
+	];
+
+	// Panel kiri (hanya tampil di layar desktop >= 1024px, lihat style.css "LOGIN SPLIT-SCREEN")
+	const LoginHeroPanel = () => /* @__PURE__ */ React.createElement("aside", { className: "login-hero" },
+		/* Dekorasi: kontur laut + gelombang */
+		/* @__PURE__ */ React.createElement("svg", { className: "lh-contour", viewBox: "0 0 600 600", "aria-hidden": "true", focusable: "false" },
+			[60, 110, 160, 210, 260, 310].map((r) => /* @__PURE__ */ React.createElement("circle", { key: r, cx: "520", cy: "80", r, fill: "none", stroke: "currentColor", strokeWidth: "1" }))
+		),
+		/* @__PURE__ */ React.createElement("svg", { className: "lh-waves", viewBox: "0 0 1440 320", preserveAspectRatio: "none", "aria-hidden": "true", focusable: "false" },
+			/* @__PURE__ */ React.createElement("path", { className: "lh-wave-1", d: "M0,192L60,186.7C120,181,240,171,360,181.3C480,192,600,224,720,229.3C840,235,960,213,1080,186.7C1200,160,1320,128,1380,112L1440,96L1440,320L0,320Z" }),
+			/* @__PURE__ */ React.createElement("path", { className: "lh-wave-2", d: "M0,256L80,245.3C160,235,320,213,480,218.7C640,224,800,256,960,261.3C1120,267,1280,245,1360,234.7L1440,224L1440,320L0,320Z" })
+		),
+		/* @__PURE__ */ React.createElement(Anchor, { className: "lh-watermark", "aria-hidden": "true" }),
+
+		/* Header brand */
+		/* @__PURE__ */ React.createElement("div", { className: "lh-brand" },
+			/* @__PURE__ */ React.createElement("div", { className: "lh-logo" },
+				/* @__PURE__ */ React.createElement("img", { src: logoKkp, alt: "Logo Kementerian Kelautan dan Perikanan" })
+			),
+			/* @__PURE__ */ React.createElement("div", null,
+				/* @__PURE__ */ React.createElement("div", { className: "lh-brand-title" }, "Kementerian Kelautan dan Perikanan"),
+				/* @__PURE__ */ React.createElement("div", { className: "lh-brand-sub" }, "BPPSDM KP · Pusat Pendidikan Kelautan dan Perikanan")
+			)
+		),
+
+		/* Konten utama */
+		/* @__PURE__ */ React.createElement("div", { className: "lh-main" },
+			/* @__PURE__ */ React.createElement("span", { className: "lh-badge" }, "Sistem Informasi & Analitik Sarpras"),
+			/* @__PURE__ */ React.createElement("h1", { className: "lh-title" }, "Sarana dan Prasarana ", /* @__PURE__ */ React.createElement("span", { className: "lh-title-accent" }, "Satuan Pendidikan KP")),
+			/* @__PURE__ */ React.createElement("p", { className: "lh-desc" }, "Satu pintu pemantauan kondisi, kapasitas, dan kebutuhan sarana prasarana Satuan Pendidikan Vokasi Kelautan dan Perikanan di seluruh Indonesia — akuntabel dan berbasis data."),
+			LOGIN_HERO_STATS.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "lh-stats" },
+				LOGIN_HERO_STATS.map((s) => /* @__PURE__ */ React.createElement("div", { key: s.label, className: "lh-stat" },
+					/* @__PURE__ */ React.createElement("div", { className: "lh-stat-value" }, s.value),
+					/* @__PURE__ */ React.createElement("div", { className: "lh-stat-label" }, s.label)
+				))
+			),
+			/* @__PURE__ */ React.createElement("div", { className: "lh-modules" },
+				LOGIN_HERO_MODULES.map((m) => {
+					const Icon = m.icon;
+					return /* @__PURE__ */ React.createElement("span", { key: m.label, className: "lh-chip" },
+						/* @__PURE__ */ React.createElement(Icon, { className: "lh-chip-icon" }),
+						m.label
+					);
+				})
+			)
+		),
+
+		/* @__PURE__ */ React.createElement("div", { className: "lh-foot" }, "Mendukung pengelolaan sarpras pendidikan vokasi kelautan dan perikanan yang unggul.")
+	);
 	window.__LoginScreen = function LoginScreen({ onLogin }) {
 		const { isDark, toggleTheme } = useTheme();
 		const [identifier, setIdentifier] = useState("");
@@ -594,7 +715,9 @@ const MobileBottomNav = window.__MobileBottomNav;
 			}
 		};
 
-		return /* @__PURE__ */ React.createElement("div", { className: "min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 flex flex-col justify-between p-4 sm:p-6 text-slate-100 relative overflow-hidden font-sans selection:bg-cyan-500 selection:text-white" },
+		return /* @__PURE__ */ React.createElement("div", { className: "login-split min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-slate-100 relative overflow-hidden font-sans selection:bg-cyan-500 selection:text-white" },
+			/* @__PURE__ */ React.createElement(LoginHeroPanel, null),
+			/* @__PURE__ */ React.createElement("div", { className: "login-form-panel flex flex-col justify-between p-4 sm:p-6 relative overflow-hidden" },
 			/* @__PURE__ */ React.createElement("div", {
 				className: "absolute inset-0 opacity-10 pointer-events-none",
 				style: {
@@ -612,7 +735,8 @@ const MobileBottomNav = window.__MobileBottomNav;
 					onClick: toggleTheme,
 					className: "p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center justify-center",
 					title: isDark ? "Beralih ke Mode Terang (Light Mode)" : "Beralih ke Mode Gelap (Dark Mode)",
-					"aria-label": "Toggle Theme"
+					"aria-label": isDark ? "Beralih ke Mode Terang" : "Beralih ke Mode Gelap",
+					"aria-pressed": !isDark
 				}, isDark
 					? /* @__PURE__ */ React.createElement(Sun, { className: "w-3.5 h-3.5 text-amber-400" })
 					: /* @__PURE__ */ React.createElement(Moon, { className: "w-3.5 h-3.5 text-sky-400" })
@@ -622,7 +746,12 @@ const MobileBottomNav = window.__MobileBottomNav;
 			/* LOGIN CARD */
 			/* @__PURE__ */ React.createElement("div", { className: "max-w-md mx-auto w-full my-auto py-6 relative z-10" },
 				/* @__PURE__ */ React.createElement("div", { className: "bg-slate-900/95 backdrop-blur-xl border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-cyan-950/40 relative" },
-					/* @__PURE__ */ React.createElement("div", { className: "text-center space-y-3 pb-6 border-b border-slate-800" },
+					/* Header ringkas khusus desktop (brand lengkap sudah ada di panel kiri) */
+					/* @__PURE__ */ React.createElement("div", { className: "login-card-header-compact pb-6 border-b border-slate-800" },
+						/* @__PURE__ */ React.createElement("h2", { className: "text-xl font-black text-white tracking-tight" }, "Selamat Datang"),
+						/* @__PURE__ */ React.createElement("p", { className: "text-xs text-slate-400", style: { marginTop: "0.375rem", lineHeight: 1.6 } }, "Silakan masuk menggunakan akun kedinasan Anda untuk mengakses sistem.")
+					),
+					/* @__PURE__ */ React.createElement("div", { className: "login-card-header-full text-center space-y-3 pb-6 border-b border-slate-800" },
 						/* @__PURE__ */ React.createElement("div", { className: `login-logo-container w-20 h-20 mx-auto rounded-2xl bg-white p-2 shadow-xl flex items-center justify-center transform hover:scale-105 transition-transform duration-300 border-2 ${isDark ? "border-cyan-400/60 shadow-cyan-500/20" : "border-black shadow-slate-400/20"}` },
 							/* @__PURE__ */ React.createElement("img", {
 								src: logoKkp,
@@ -719,6 +848,7 @@ const MobileBottomNav = window.__MobileBottomNav;
 			/* FOOTER */
 			/* @__PURE__ */ React.createElement("div", { className: "text-center text-[11px] text-slate-500 py-2 relative z-10" },
 				"© Pusat Pendidikan Kelautan dan Perikanan (Pusdik KP) — BPPSDM KP"
+			)
 			)
 		);
 	};

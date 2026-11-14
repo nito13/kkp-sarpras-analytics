@@ -1,9 +1,24 @@
 <!doctype html>
-<html lang="id" class="dark">
+<html lang="id" class="light">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="Frontend/assets/logo-kkp.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f1f5f9" />
+    <!-- Anti-flash: terapkan tema tersimpan SEBELUM halaman dilukis (mencegah kedip gelap saat mode terang) -->
+    <script>
+      (function () {
+        var t = "light";
+        try { var s = localStorage.getItem("kkp_theme_mode_v2"); if (s === "light" || s === "dark") t = s; } catch (e) {}
+        var r = document.documentElement;
+        r.classList.remove("light", "dark");
+        r.classList.add(t);
+        r.style.colorScheme = t;
+        var m = document.querySelector('meta[name="theme-color"]');
+        if (m) m.setAttribute("content", t === "light" ? "#f1f5f9" : "#0f172a");
+      })();
+    </script>
     <title>Sarana dan Prasarana Satuan Pendidikan KP | Analitik Data Sarana &amp; Prasarana Pendidikan Kelautan dan Perikanan</title>
     <meta name="description" content="Sistem Informasi &amp; Analitik Data Sarana dan Prasarana (Sarpras) pada Satuan Pendidikan Kementerian Kelautan dan Perikanan Republik Indonesia." />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -16,7 +31,7 @@
     <!-- Stylesheets: Tailwind CSS + Leaflet GIS + Custom Style -->
     <link rel="stylesheet" href="Frontend/assets/css/tailwind.min.css?v=20261109_12" />
     <link rel="stylesheet" href="Frontend/assets/css/leaflet.css?v=20261109_12" />
-    <link rel="stylesheet" href="Frontend/assets/css/style.css?v=20261111_05" />
+    <link rel="stylesheet" href="Frontend/assets/css/style.css?v=20261114_03" />
   </head>
   <body class="bg-slate-900 text-slate-100 antialiased selection:bg-cyan-500 selection:text-white">
     <div id="root"></div>
@@ -39,6 +54,6 @@
     <script src="Services/excel-export.js?v=20261113_11"></script>
 
     <!-- Komponen Utama Antarmuka Frontend (Views, Dashboard, GIS, Modal) -->
-    <script src="Frontend/assets/app.js?v=20261113_12"></script>
+    <script src="Frontend/assets/app.js?v=20261114_03"></script>
   </body>
 </html>
