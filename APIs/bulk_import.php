@@ -90,6 +90,47 @@ function formatBulkTanahOutput(array $r, array $satdikNameMap): array {
     ];
 }
 
+function formatBulkKapalOutput(array $r, array $satdikMap = []): array {
+    $sid = $r['satdik_id'];
+    $sName = $satdikMap[$sid] ?? $sid;
+
+    return [
+        'id' => $r['id'],
+        'satdikId' => $sid,
+        'satdikName' => $sName,
+        'satdikShortName' => $sName,
+        'namaKapal' => $r['nama_kapal'] ?? '',
+        'tahunPerolehan' => (int)($r['tahun_perolehan'] ?? 2020),
+        'tonageGt' => (float)($r['tonage_gt'] ?? 0),
+        'panjangKapal' => (float)($r['panjang_kapal'] ?? 0),
+        'jenisKapal' => $r['jenis_kapal'] ?? 'Kapal Latih Perikanan',
+        'kapasitasBbm' => (float)($r['kapasitas_bbm'] ?? 0),
+        'jumlahAbk' => (int)($r['jumlah_abk'] ?? 0),
+        'alatTangkap' => $r['alat_tangkap'] ?? '-',
+        'idTransmitter' => $r['id_transmitter'] ?? '-',
+        'statusBmn' => $r['status_bmn'] ?? 'Terdaftar BMN (Aktif Operasional)',
+        'keterangan' => $r['keterangan'] ?? '',
+    ];
+}
+
+function formatBulkGedungOutput(array $r, array $satdikMap = []): array {
+    $sid = $r['satdik_id'];
+    $sName = $satdikMap[$sid] ?? $sid;
+
+    return [
+        'id' => $r['id'],
+        'satdikId' => $sid,
+        'satdikName' => $sName,
+        'satdikShortName' => $sName,
+        'kampus' => $r['kampus'] ?? ($sid === 'poltek-aup' ? 'Kampus Jakarta' : 'Kampus Utama'),
+        'jenisGedung' => $r['jenis_gedung'] ?? 'Gedung Perkuliahan / Ruang Kelas',
+        'jumlah' => (int)($r['jumlah'] ?? 1),
+        'namaGedung' => $r['nama_gedung'] ?? '',
+        'jumlahLantai' => (int)($r['jumlah_lantai'] ?? 0),
+        'luasM2' => (float)($r['luas_m2'] ?? 0),
+    ];
+}
+
 function recalculateBulkAsramaRekap(PDO $pdo, string $satdikId, callable $toNullableFloat): ?array {
     $stmt = $pdo->prepare("
         SELECT 
@@ -405,8 +446,10 @@ if (!is_array($payload)) {
 $inBuildings = isset($payload['buildings']) && is_array($payload['buildings']) ? $payload['buildings'] : [];
 $inStandar = isset($payload['standarItems']) && is_array($payload['standarItems']) ? $payload['standarItems'] : [];
 $inTanah = isset($payload['tanahParcels']) && is_array($payload['tanahParcels']) ? $payload['tanahParcels'] : [];
+$inKapal = isset($payload['kapalVessels']) && is_array($payload['kapalVessels']) ? $payload['kapalVessels'] : [];
+$inGedung = isset($payload['gedungItems']) && is_array($payload['gedungItems']) ? $payload['gedungItems'] : [];
 
-if (empty($inBuildings) && empty($inStandar) && empty($inTanah)) {
+if (empty($inBuildings) && empty($inStandar) && empty($inTanah) && empty($inKapal) && empty($inGedung)) {
     jsonResponse([
         'status' => 'error',
         'message' => 'Tidak ada baris data valid untuk diimpor.'
@@ -427,8 +470,64 @@ try {
 $createdBuildings = [];
 $createdStandarItems = [];
 $createdTanahParcels = [];
+$createdKapalVessels = [];
+$createdGedungItems = [];
 $affectedAsramaSatdik = [];
 $affectedStandarBidang = [];
+
+// Pastikan tabel kapal_latih tersedia sebelum transaksi
+if (!empty($inKapal)) {
+    try {
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS `kapal_latih` (
+                `id` VARCHAR(64) NOT NULL PRIMARY KEY,
+                `satdik_id` VARCHAR(64) NOT NULL,
+                `nama_kapal` VARCHAR(200) NOT NULL,
+                `tahun_perolehan` INT DEFAULT 2020,
+                `tonage_gt` DECIMAL(12,2) DEFAULT 0,
+                `panjang_kapal` DECIMAL(12,2) DEFAULT 0,
+                `jenis_kapal` VARCHAR(150) DEFAULT 'Kapal Latih Perikanan',
+                `kapasitas_bbm` DECIMAL(14,2) DEFAULT 0,
+                `jumlah_abk` INT DEFAULT 0,
+                `alat_tangkap` VARCHAR(255) DEFAULT '-',
+                `id_transmitter` VARCHAR(120) DEFAULT '-',
+                `status_bmn` VARCHAR(150) DEFAULT 'Terdaftar BMN (Aktif Operasional)',
+                `keterangan` TEXT NULL,
+                `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                INDEX `idx_kapal_satdik` (`satdik_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        ");
+    } catch (Throwable $e) {
+    }
+}
+
+// Pastikan tabel gedung_bangunan tersedia sebelum transaksi
+if (!empty($inGedung)) {
+    try {
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS `gedung_bangunan` (
+                `id` VARCHAR(64) NOT NULL PRIMARY KEY,
+                `satdik_id` VARCHAR(64) NOT NULL,
+                `kampus` VARCHAR(100) DEFAULT 'Kampus Utama',
+                `jenis_gedung` VARCHAR(500) NOT NULL DEFAULT 'Gedung Perkuliahan / Ruang Kelas',
+                `jumlah` INT DEFAULT 1,
+                `nama_gedung` TEXT NOT NULL,
+                `jumlah_lantai` INT DEFAULT 0,
+                `luas_m2` DECIMAL(14,2) DEFAULT 0,
+                `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                INDEX `idx_gedung_satdik` (`satdik_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        ");
+        $stmtColGdg = $pdo->query("SHOW COLUMNS FROM `gedung_bangunan` LIKE 'kampus'");
+        if (!$stmtColGdg->fetch()) {
+            $pdo->exec("ALTER TABLE `gedung_bangunan` ADD COLUMN `kampus` VARCHAR(100) DEFAULT 'Kampus Utama' AFTER `satdik_id`");
+        }
+        $pdo->exec("ALTER TABLE `gedung_bangunan` MODIFY COLUMN `nama_gedung` TEXT NOT NULL, MODIFY COLUMN `jenis_gedung` VARCHAR(500) NOT NULL DEFAULT 'Gedung Perkuliahan / Ruang Kelas', MODIFY COLUMN `jumlah_lantai` INT DEFAULT 0");
+    } catch (Throwable $e) {
+    }
+}
 
 try {
     $pdo->beginTransaction();
@@ -736,9 +835,130 @@ try {
         }
     }
 
+    // ---------------------------------------------------------
+    // 4. BATCH INSERT: KAPAL LATIH
+    // ---------------------------------------------------------
+    if (!empty($inKapal)) {
+        $stmtCheckKplId = $pdo->prepare("SELECT COUNT(*) FROM kapal_latih WHERE id = :id");
+        $stmtInsKpl = $pdo->prepare("
+            INSERT INTO kapal_latih (
+                id, satdik_id, nama_kapal, tahun_perolehan, tonage_gt,
+                panjang_kapal, jenis_kapal, kapasitas_bbm, jumlah_abk,
+                alat_tangkap, id_transmitter, status_bmn, keterangan
+            ) VALUES (
+                :id, :satdik_id, :nama_kapal, :tahun_perolehan, :tonage_gt,
+                :panjang_kapal, :jenis_kapal, :kapasitas_bbm, :jumlah_abk,
+                :alat_tangkap, :id_transmitter, :status_bmn, :keterangan
+            )
+        ");
+        $stmtGetKpl = $pdo->prepare("SELECT * FROM kapal_latih WHERE id = :id");
+
+        foreach ($inKapal as $idx => $k) {
+            $sid = trim($k['satdikId'] ?? '');
+            $namaKapal = trim($k['namaKapal'] ?? '');
+            if (!$sid || !$namaKapal) continue;
+
+            $prefix = strtoupper(substr(preg_replace('/[^a-zA-Z0-9]/', '', $sid), -3));
+            $kId = !empty($k['id']) ? trim($k['id']) : ('KPL-' . $prefix . '-' . time() . '-' . ($idx + 1) . '-' . rand(10, 99));
+
+            $stmtCheckKplId->execute([':id' => $kId]);
+            if ($stmtCheckKplId->fetchColumn() > 0) {
+                $kId = 'KPL-' . $prefix . '-' . time() . '-' . ($idx + 1) . '-' . rand(100, 999);
+            }
+
+            $tahunPerolehan = isset($k['tahunPerolehan']) && (int)$k['tahunPerolehan'] > 0 ? (int)$k['tahunPerolehan'] : 2020;
+            $tonageGt = isset($k['tonageGt']) ? max(0, (float)$k['tonageGt']) : 0;
+            $panjangKapal = isset($k['panjangKapal']) ? max(0, (float)$k['panjangKapal']) : 0;
+            $jenisKapal = !empty($k['jenisKapal']) ? trim($k['jenisKapal']) : 'Kapal Latih Perikanan';
+            $kapasitasBbm = isset($k['kapasitasBbm']) ? max(0, (float)$k['kapasitasBbm']) : 0;
+            $jumlahAbk = isset($k['jumlahAbk']) ? max(0, (int)$k['jumlahAbk']) : 0;
+            $alatTangkap = !empty($k['alatTangkap']) ? trim($k['alatTangkap']) : '-';
+            $idTransmitter = !empty($k['idTransmitter']) ? trim($k['idTransmitter']) : '-';
+            $statusBmn = !empty($k['statusBmn']) ? trim($k['statusBmn']) : 'Terdaftar BMN (Aktif Operasional)';
+            $keterangan = isset($k['keterangan']) ? trim($k['keterangan']) : '';
+
+            $stmtInsKpl->execute([
+                ':id' => $kId,
+                ':satdik_id' => $sid,
+                ':nama_kapal' => $namaKapal,
+                ':tahun_perolehan' => $tahunPerolehan,
+                ':tonage_gt' => $tonageGt,
+                ':panjang_kapal' => $panjangKapal,
+                ':jenis_kapal' => $jenisKapal,
+                ':kapasitas_bbm' => $kapasitasBbm,
+                ':jumlah_abk' => $jumlahAbk,
+                ':alat_tangkap' => $alatTangkap,
+                ':id_transmitter' => $idTransmitter,
+                ':status_bmn' => $statusBmn,
+                ':keterangan' => $keterangan,
+            ]);
+
+            $stmtGetKpl->execute([':id' => $kId]);
+            $insertedK = $stmtGetKpl->fetch();
+            if ($insertedK) {
+                $createdKapalVessels[] = formatBulkKapalOutput($insertedK, $satdikNameMap);
+            }
+        }
+    }
+
+    // ---------------------------------------------------------
+    // 5. BATCH INSERT: GEDUNG DAN BANGUNAN
+    // ---------------------------------------------------------
+    if (!empty($inGedung)) {
+        $stmtCheckGdgId = $pdo->prepare("SELECT COUNT(*) FROM gedung_bangunan WHERE id = :id");
+        $stmtInsGdg = $pdo->prepare("
+            INSERT INTO gedung_bangunan (
+                id, satdik_id, kampus, jenis_gedung, jumlah,
+                nama_gedung, jumlah_lantai, luas_m2
+            ) VALUES (
+                :id, :satdik_id, :kampus, :jenis_gedung, :jumlah,
+                :nama_gedung, :jumlah_lantai, :luas_m2
+            )
+        ");
+        $stmtGetGdg = $pdo->prepare("SELECT * FROM gedung_bangunan WHERE id = :id");
+
+        foreach ($inGedung as $idx => $g) {
+            $sid = trim($g['satdikId'] ?? '');
+            $namaGedung = trim($g['namaGedung'] ?? '');
+            if (!$sid || !$namaGedung) continue;
+
+            $prefix = strtoupper(substr(preg_replace('/[^a-zA-Z0-9]/', '', $sid), -3));
+            $gId = !empty($g['id']) ? trim($g['id']) : ('GDG-' . $prefix . '-' . time() . '-' . ($idx + 1) . '-' . rand(10, 99));
+
+            $stmtCheckGdgId->execute([':id' => $gId]);
+            if ($stmtCheckGdgId->fetchColumn() > 0) {
+                $gId = 'GDG-' . $prefix . '-' . time() . '-' . ($idx + 1) . '-' . rand(100, 999);
+            }
+
+            $defaultKampus = $sid === 'poltek-aup' ? 'Kampus Jakarta' : 'Kampus Utama';
+            $kampus = !empty($g['kampus']) ? trim($g['kampus']) : $defaultKampus;
+            $jenisGedung = !empty($g['jenisGedung']) ? trim($g['jenisGedung']) : 'Gedung Perkuliahan / Ruang Kelas';
+            $jumlah = isset($g['jumlah']) && (int)$g['jumlah'] > 0 ? (int)$g['jumlah'] : 1;
+            $jumlahLantai = isset($g['jumlahLantai']) ? max(0, (int)$g['jumlahLantai']) : 0;
+            $luasM2 = isset($g['luasM2']) ? max(0, (float)$g['luasM2']) : 0;
+
+            $stmtInsGdg->execute([
+                ':id' => $gId,
+                ':satdik_id' => $sid,
+                ':kampus' => $kampus,
+                ':jenis_gedung' => $jenisGedung,
+                ':jumlah' => $jumlah,
+                ':nama_gedung' => $namaGedung,
+                ':jumlah_lantai' => $jumlahLantai,
+                ':luas_m2' => $luasM2,
+            ]);
+
+            $stmtGetGdg->execute([':id' => $gId]);
+            $insertedG = $stmtGetGdg->fetch();
+            if ($insertedG) {
+                $createdGedungItems[] = formatBulkGedungOutput($insertedG, $satdikNameMap);
+            }
+        }
+    }
+
     $pdo->commit();
 
-    $totalInserted = count($createdBuildings) + count($createdStandarItems) + count($createdTanahParcels);
+    $totalInserted = count($createdBuildings) + count($createdStandarItems) + count($createdTanahParcels) + count($createdKapalVessels) + count($createdGedungItems);
 
     jsonResponse([
         'status' => 'success',
@@ -747,6 +967,8 @@ try {
             'buildings' => count($createdBuildings),
             'standarItems' => count($createdStandarItems),
             'tanahParcels' => count($createdTanahParcels),
+            'kapalVessels' => count($createdKapalVessels),
+            'gedungItems' => count($createdGedungItems),
             'total' => $totalInserted,
         ],
         'buildings' => $createdBuildings,
@@ -755,6 +977,8 @@ try {
         'standarBidang' => $updatedStandarBidang,
         'standarRekap' => $updatedStandarRekap,
         'tanahParcels' => $createdTanahParcels,
+        'kapalVessels' => $createdKapalVessels,
+        'gedungItems' => $createdGedungItems,
     ], 201);
 } catch (Throwable $e) {
     if ($pdo->inTransaction()) {

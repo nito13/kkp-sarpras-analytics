@@ -88,16 +88,19 @@
   }
 
   async function apiFetchAsrama(satdikId) {
-    const query = satdikId && satdikId !== 'ALL' ? '?satdik_id=' + encodeURIComponent(satdikId) : '';
+    const ts = '_t=' + Date.now();
+    const query = satdikId && satdikId !== 'ALL' ? '?satdik_id=' + encodeURIComponent(satdikId) + '&' + ts : '?' + ts;
     let res;
     try {
       res = await fetch(API_BASE_URL + '/asrama.php' + query, {
         method: 'GET',
+        cache: 'no-store',
         headers: { 'Accept': 'application/json' }
       });
     } catch (e) {
       res = await fetch('api/asrama.php' + query, {
         method: 'GET',
+        cache: 'no-store',
         headers: { 'Accept': 'application/json' }
       });
     }
@@ -183,17 +186,20 @@
     if (opts.mode) parts.push('mode=' + encodeURIComponent(opts.mode));
     if (opts.bidangId && opts.bidangId !== 'ALL') parts.push('bidang_id=' + encodeURIComponent(opts.bidangId));
     if (opts.satdikId && opts.satdikId !== 'ALL') parts.push('satdik_id=' + encodeURIComponent(opts.satdikId));
-    const query = parts.length > 0 ? '?' + parts.join('&') : '';
+    parts.push('_t=' + Date.now());
+    const query = '?' + parts.join('&');
 
     let res;
     try {
       res = await fetch(API_BASE_URL + '/standar_sarpras.php' + query, {
         method: 'GET',
+        cache: 'no-store',
         headers: { 'Accept': 'application/json' }
       });
     } catch (e) {
       res = await fetch('api/standar_sarpras.php' + query, {
         method: 'GET',
+        cache: 'no-store',
         headers: { 'Accept': 'application/json' }
       });
     }
@@ -302,21 +308,27 @@
       asramaSummary: data.asramaSummary || [],
       standarItems: data.standarItems || [],
       standarBidang: data.standarBidang || [],
-      standarRekap: data.standarRekap || []
+      standarRekap: data.standarRekap || [],
+      tanahParcels: data.tanahParcels || [],
+      kapalVessels: data.kapalVessels || [],
+      gedungItems: data.gedungItems || []
     };
   }
 
   async function apiFetchTambakKolam(satdikId) {
-    const query = satdikId && satdikId !== 'ALL' ? '?satdik_id=' + encodeURIComponent(satdikId) : '';
+    const ts = '_t=' + Date.now();
+    const query = satdikId && satdikId !== 'ALL' ? '?satdik_id=' + encodeURIComponent(satdikId) + '&' + ts : '?' + ts;
     let res;
     try {
       res = await fetch(API_BASE_URL + '/tambak_kolam.php' + query, {
         method: 'GET',
+        cache: 'no-store',
         headers: { 'Accept': 'application/json' }
       });
     } catch (e) {
       res = await fetch('api/tambak_kolam.php' + query, {
         method: 'GET',
+        cache: 'no-store',
         headers: { 'Accept': 'application/json' }
       });
     }
@@ -410,16 +422,19 @@
   }
 
   async function apiFetchTanah(satdikId) {
-    const query = satdikId && satdikId !== 'ALL' ? '?satdik_id=' + encodeURIComponent(satdikId) : '';
+    const ts = '_t=' + Date.now();
+    const query = satdikId && satdikId !== 'ALL' ? '?satdik_id=' + encodeURIComponent(satdikId) + '&' + ts : '?' + ts;
     let res;
     try {
       res = await fetch(API_BASE_URL + '/tanah.php' + query, {
         method: 'GET',
+        cache: 'no-store',
         headers: { 'Accept': 'application/json' }
       });
     } catch (e) {
       res = await fetch('api/tanah.php' + query, {
         method: 'GET',
+        cache: 'no-store',
         headers: { 'Accept': 'application/json' }
       });
     }
@@ -507,6 +522,208 @@
     };
   }
 
+  async function apiFetchKapal(satdikId) {
+    const ts = '_t=' + Date.now();
+    const query = satdikId && satdikId !== 'ALL' ? '?satdik_id=' + encodeURIComponent(satdikId) + '&' + ts : '?' + ts;
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/kapal.php' + query, {
+        method: 'GET',
+        cache: 'no-store',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/kapal.php' + query, {
+        method: 'GET',
+        cache: 'no-store',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memuat data kapal latih.');
+    }
+    return {
+      success: true,
+      total: data.total || (Array.isArray(data.data) ? data.data.length : 0),
+      data: Array.isArray(data.data) ? data.data : []
+    };
+  }
+
+  async function apiCreateKapalVessel(payload) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/kapal.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      res = await fetch('api/kapal.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal menambahkan data kapal latih.');
+    }
+    return {
+      success: true,
+      vessel: data.data || null
+    };
+  }
+
+  async function apiUpdateKapalVessel(id, updates) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/kapal.php?id=' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({ id: id }, updates))
+      });
+    } catch (e) {
+      res = await fetch('api/kapal.php?id=' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({ id: id }, updates))
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memperbarui data kapal latih.');
+    }
+    return {
+      success: true,
+      vessel: data.data || null
+    };
+  }
+
+  async function apiDeleteKapalVessel(id) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/kapal.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/kapal.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal menghapus data kapal latih.');
+    }
+    return {
+      success: true,
+      deletedId: id
+    };
+  }
+
+  async function apiFetchGedung(satdikId) {
+    const ts = '_t=' + Date.now();
+    const query = satdikId && satdikId !== 'ALL' ? '?satdik_id=' + encodeURIComponent(satdikId) + '&' + ts : '?' + ts;
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/gedung.php' + query, {
+        method: 'GET',
+        cache: 'no-store',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/gedung.php' + query, {
+        method: 'GET',
+        cache: 'no-store',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memuat data gedung dan bangunan.');
+    }
+    return {
+      success: true,
+      total: data.total || (Array.isArray(data.data) ? data.data.length : 0),
+      data: Array.isArray(data.data) ? data.data : []
+    };
+  }
+
+  async function apiCreateGedungItem(payload) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/gedung.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      res = await fetch('api/gedung.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal menambahkan data gedung dan bangunan.');
+    }
+    return {
+      success: true,
+      item: data.data || null
+    };
+  }
+
+  async function apiUpdateGedungItem(id, updates) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/gedung.php?id=' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({ id: id }, updates))
+      });
+    } catch (e) {
+      res = await fetch('api/gedung.php?id=' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({ id: id }, updates))
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memperbarui data gedung dan bangunan.');
+    }
+    return {
+      success: true,
+      item: data.data || null
+    };
+  }
+
+  async function apiDeleteGedungItem(id) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/gedung.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/gedung.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal menghapus data gedung dan bangunan.');
+    }
+    return {
+      success: true,
+      deletedId: id
+    };
+  }
+
   window.SARPRAS_API = {
     API_BASE_URL: API_BASE_URL,
     MONITORING_BASE_URL: MONITORING_BASE_URL,
@@ -530,6 +747,14 @@
     apiCreateTanahParcel: apiCreateTanahParcel,
     apiUpdateTanahParcel: apiUpdateTanahParcel,
     apiDeleteTanahParcel: apiDeleteTanahParcel,
+    apiFetchKapal: apiFetchKapal,
+    apiCreateKapalVessel: apiCreateKapalVessel,
+    apiUpdateKapalVessel: apiUpdateKapalVessel,
+    apiDeleteKapalVessel: apiDeleteKapalVessel,
+    apiFetchGedung: apiFetchGedung,
+    apiCreateGedungItem: apiCreateGedungItem,
+    apiUpdateGedungItem: apiUpdateGedungItem,
+    apiDeleteGedungItem: apiDeleteGedungItem,
     apiBulkImport: apiBulkImport
   };
 })(window);

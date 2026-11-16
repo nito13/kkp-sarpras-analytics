@@ -1887,7 +1887,7 @@ function buildImportTemplateWorkbook(options = {}) {
     ['1', 'Pilih Sheet Sesuai Jenis Data', 'Template ini memuat 5 lembar kerja input: INPUT_GEDUNG_ASRAMA (Asrama Taruna), INPUT_TAMBAK_KOLAM (Tambak & Kolam Budidaya), INPUT_SARPRAS_PEMBELAJARAN (Kelas, Perpustakaan, TEFA, Simulator), INPUT_DATA_TANAH (Data Tanah & Lahan), dan INPUT_STANDAR_PRODI (Standar Minimal Prodi). Anda dapat mengisi salah satu saja atau seluruhnya sekaligus dalam satu kali unggah.'],
     ['2', 'Mulai Mengisi di Baris ke-9', 'Isi data baru Anda mulai pada Baris ke-9 (sel berwarna putih bergaris). Baris ke-6 [PETUNJUK] dan Baris ke-7 s.d. ke-8 [CONTOH] akan otomatis dilewati oleh sistem saat proses import sehingga tidak perlu dihapus.'],
     ['3', 'Kolom Bertanda Bintang (*)', 'Kolom dengan tanda (*) pada judul tabel adalah KOLOM WAJIB. Jika dikosongkan pada baris yang terisi, sistem akan menampilkan peringatan validasi sebelum data disimpan.'],
-    ['4', 'Kemudahan Penulisan Kode Satdik', 'Pada kolom Satdik, Anda bebas mengetik Kode Satdik (contoh: poltek-aup, supm-tegal) ATAU Nama Kampus / Kota (contoh: Politeknik AUP, Poltek KP Sidoarjo, Sorong, Tegal). Daftar resmi tersedia di sheet REFERENSI_KODE.'],
+    ['4', 'Kemudahan Penulisan Kode Satdik', 'Pada kolom Satdik, Anda bebas mengetik Kode Satdik (contoh: poltek-aup, supm-tegal) ATAU Nama Kampus / Kota (contoh: Politeknik AUP, Poltek KP Sidoarjo, Sorong, Tegal). Daftar resmi tersedia di sheet REFERENSI_KODE. KHUSUS Politeknik AUP (3 lokasi), kolom Kampus / Lokasi pada sheet Asrama dan Tambak/Kolam WAJIB diisi salah satu: Kampus Jakarta, Kampus Bogor, atau Kampus Serang agar data tampil pada filter kampus AUP di dashboard.'],
     ['5', 'Kalkulasi Otomatis Asrama', 'Pada sheet INPUT_GEDUNG_ASRAMA, apabila kolom Total Luas (m²) atau Kapasitas (Orang) dikosongkan/diisi 0, sistem otomatis menghitung Luas = Jumlah Kamar × Panjang × Lebar serta Kapasitas = Luas ÷ 4 m²/orang.'],
     ['6', 'Pencatatan Realisasi Standar Prodi', 'Pada sheet INPUT_STANDAR_PRODI, Anda dapat menuliskan kode rumpun (misal PIK, PMK, BDP, PGH) atau nama rumpun prodi, serta langsung mencantumkan Satdik Realisasi dan Volume Riil jika ingin memetakan capaian kampus secara langsung.'],
     ['7', 'Unggah ke Aplikasi', 'Simpan file Excel ini (.xlsx), buka aplikasi Sarana dan Prasarana Satuan Pendidikan KP, klik tombol "+ Tambah Sarpras" di bilah navigasi atas, pilih tab "4. Import Excel (.xlsx)", lalu pilih/tarik file ini untuk meninjau pratinjau dan menyimpan ke database MySQL.']
@@ -1982,7 +1982,7 @@ function buildImportTemplateWorkbook(options = {}) {
       [
         '[PETUNJUK]',
         'Wajib. Contoh: poltek-aup atau SUPM Tegal',
-        'Contoh: Kampus Utama / Kampus II',
+        'Khusus Politeknik AUP WAJIB pilih: Kampus Jakarta / Kampus Bogor / Kampus Serang (lihat REFERENSI_KODE). Satdik lain: Kampus Utama / Kampus II',
         'Wajib. Nama gedung / barak asrama',
         'Taruna Putra / Taruni Putri / Campuran',
         'Angka jumlah kamar/ruang tidur',
@@ -1997,7 +1997,7 @@ function buildImportTemplateWorkbook(options = {}) {
         [
           '[CONTOH]',
           sampleSatdik1,
-          'Kampus Utama Pasar Minggu',
+          sampleSatdik1 === 'poltek-aup' ? 'Kampus Jakarta' : 'Kampus Utama',
           'Gedung Asrama Taruna Barracuda',
           'Taruna Putra',
           20,
@@ -2052,7 +2052,7 @@ function buildImportTemplateWorkbook(options = {}) {
       [
         '[PETUNJUK]',
         'Wajib. Contoh: poltek-aup atau Poltek KP Sidoarjo',
-        'Contoh: Instalasi Tambak Serang / Kampus Pulokerto',
+        'Khusus Politeknik AUP WAJIB pilih: Kampus Serang (Tambak) / Kampus Bogor (Kolam Cikaret). Satdik lain: Kampus Pulokerto, dll.',
         'Wajib. Nama petak tambak, kolam, atau hatchery',
         'Tambak / Kolam / Hatchery / Karamba / Pendukung',
         'Luas petak/unit dalam meter persegi (m²)',
@@ -2069,7 +2069,7 @@ function buildImportTemplateWorkbook(options = {}) {
         [
           '[CONTOH]',
           sampleSatdik1,
-          'Instalasi Tambak Kampus Karangantu Serang',
+          sampleSatdik1 === 'poltek-aup' ? 'Kampus Serang' : 'Instalasi Tambak Kampus Utama',
           'Petak Tambak Millennial B1 (Intensif HDPE)',
           'Tambak',
           1000,
@@ -2257,7 +2257,141 @@ function buildImportTemplateWorkbook(options = {}) {
     );
   }
 
-  // ================= SHEET 5: INPUT_STANDAR_PRODI =================
+  // ================= SHEET 5: INPUT_KAPAL_LATIH =================
+  if (templateType === 'all' || templateType === 'kapal') {
+    appendInputSheet(
+      'INPUT_KAPAL_LATIH',
+      '5. TABEL INPUT DATA KAPAL LATIH SATDIK KP',
+      [
+        'Status Baris',
+        'Nama Satuan Pendidikan *',
+        'Nama Kapal *',
+        'Tahun Perolehan',
+        'Tonage (GT)',
+        'Panjang Kapal (m)',
+        'Jenis Kapal',
+        'Kapasitas Tangki BBM (Liter)',
+        'Jumlah ABK',
+        'Alat Tangkap',
+        'ID Transmitter',
+        'Status BMN',
+        'Keterangan'
+      ],
+      [1, 2],
+      [
+        '[PETUNJUK]',
+        'Wajib. Nama atau kode Satdik (contoh: Politeknik AUP atau SUPM Tegal)',
+        'Wajib. Nama kapal latih (contoh: KM. Madidihang 03)',
+        'Tahun perolehan/pembuatan (contoh: 2010)',
+        'Tonase kotor kapal dalam Gross Tonnage (GT)',
+        'Panjang keseluruhan kapal (LOA) dalam meter (m)',
+        'Contoh: Kapal Latih Perikanan / Purse Seine / Longline',
+        'Kapasitas tangki bahan bakar dalam Liter',
+        'Jumlah Anak Buah Kapal / awak kapal (Orang)',
+        'Contoh: Longline, Purse Seine, Gillnet',
+        'Nomor ID Transmitter VMS / AIS kapal',
+        'Contoh: Terdaftar BMN (Aktif Operasional) / Docking',
+        'Catatan kondisi mesin, lokasi sandar, atau operasional'
+      ],
+      [
+        [
+          '[CONTOH]',
+          sampleSatdik1,
+          'KM. Madidihang 03',
+          2010,
+          1200,
+          70.5,
+          'Kapal Latih & Riset Perikanan',
+          350000,
+          32,
+          'Longline, Purse Seine & Midwater Trawl',
+          'ID-VMS-AUP-003',
+          'Terdaftar BMN (Aktif Operasional)',
+          'Kapal latih samudera taruna pelayaran dan penangkapan ikan'
+        ],
+        [
+          '[CONTOH]',
+          sampleSatdik2,
+          'KM. Latih Bimasakti 01',
+          2018,
+          35,
+          18.5,
+          'Kapal Latih Purse Seine',
+          8000,
+          10,
+          'Mini Purse Seine & Gillnet',
+          'ID-VMS-SDA-001',
+          'Terdaftar BMN (Aktif Operasional)',
+          'Digunakan untuk praktik melaut taruna vokasi'
+        ]
+      ],
+      [14, 28, 28, 16, 14, 18, 26, 24, 14, 28, 20, 30, 36]
+    );
+  }
+
+  // ================= SHEET 6: INPUT_GEDUNG_BANGUNAN =================
+  if (templateType === 'all' || templateType === 'gedung') {
+    appendInputSheet(
+      'INPUT_GEDUNG_BANGUNAN',
+      '6. TABEL INPUT DATA GEDUNG DAN BANGUNAN SATDIK KP',
+      [
+        'Status Baris',
+        'Nama Satuan Pendidikan *',
+        'Kampus / Lokasi Fisik',
+        'Jenis Gedung dan Bangunan *',
+        'Jumlah',
+        'Nama/Identitas Gedung *',
+        'Jumlah Lantai',
+        'Luas (m²)'
+      ],
+      [1, 3, 5],
+      [
+        '[PETUNJUK]',
+        'Wajib. Nama atau kode Satdik (contoh: Politeknik AUP atau SUPM Tegal)',
+        'Khusus Politeknik AUP WAJIB pilih: Kampus Jakarta / Kampus Bogor / Kampus Serang (lihat REFERENSI_KODE). Satdik lain: Kampus Utama',
+        'Wajib. Contoh: Gedung Kantor / Gedung Perkuliahan / Gedung Laboratorium / Gedung Aula',
+        'Jumlah unit gedung (default: 1)',
+        'Wajib. Nama atau identitas gedung (contoh: Gedung Rektorat Utama)',
+        'Jumlah lantai bangunan (contoh: 2)',
+        'Luas bangunan dalam satuan meter persegi (m²)'
+      ],
+      [
+        [
+          '[CONTOH]',
+          sampleSatdik1,
+          sampleSatdik1 === 'poltek-aup' ? 'Kampus Jakarta' : 'Kampus Utama',
+          'Gedung Kantor / Administrasi / Rektorat',
+          1,
+          'Gedung Rektorat Utama Pasar Minggu',
+          3,
+          1850
+        ],
+        [
+          '[CONTOH]',
+          sampleSatdik1,
+          sampleSatdik1 === 'poltek-aup' ? 'Kampus Bogor' : 'Kampus Utama',
+          'Gedung Perkuliahan / Ruang Kelas',
+          1,
+          'Gedung Kuliah Prodi Penyuluhan Cikaret Bogor',
+          2,
+          960
+        ],
+        [
+          '[CONTOH]',
+          sampleSatdik1,
+          sampleSatdik1 === 'poltek-aup' ? 'Kampus Serang' : 'Kampus Utama',
+          'Gedung Laboratorium / Workshop / Bengkel',
+          1,
+          'Gedung Lab Kualitas Air & Akuakultur Serang',
+          2,
+          750
+        ]
+      ],
+      [14, 28, 24, 34, 14, 36, 16, 18]
+    );
+  }
+
+  // ================= SHEET 6: INPUT_STANDAR_PRODI =================
   if (templateType === 'all' || templateType === 'standar') {
     appendInputSheet(
       'INPUT_STANDAR_PRODI',
@@ -2362,14 +2496,39 @@ function buildImportTemplateWorkbook(options = {}) {
     wsRef[XLSX.utils.encode_cell({ r, c: 7 })] = createCell(b.code || '-', centerSt);
   });
 
-  const maxRefRow = Math.max(3 + satdikList.length, 3 + bidangList.length);
-  wsRef['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 7 } }];
+  // Tabel Kampus Politeknik AUP (multi-lokasi) — acuan kolom Kampus / Lokasi
+  const aupCampusRef = [
+    ['Kampus Jakarta', 'Pasar Minggu, Jakarta Selatan', 'Asrama, Gedung & Bangunan, Pembelajaran, Tanah', 'Kampus utama: Rektorat, Pascasarjana, Prodi TPI, Permesinan, TPHP'],
+    ['Kampus Bogor', 'Cikaret, Kota Bogor', 'Asrama, Gedung & Bangunan, Kolam, Pembelajaran, Tanah', 'Prodi Penyuluhan Perikanan & Kolam Budidaya Air Tawar'],
+    ['Kampus Serang', 'Karangantu, Kasemen, Serang - Banten', 'Asrama, Gedung & Bangunan, Tambak, Pembelajaran, Tanah', 'Prodi Teknologi Akuakultur & Tambak/Tandon Payau']
+  ];
+  wsRef[XLSX.utils.encode_cell({ r: 1, c: 9 })] = createCell('KHUSUS POLITEKNIK AUP (poltek-aup): tulis kolom Kampus / Lokasi persis seperti kolom pertama tabel ini', { font: { name: 'Calibri', sz: 9, bold: true, italic: true, color: { rgb: '854D0E' } }, fill: { fgColor: { rgb: 'FEF9C3' } }, alignment: { horizontal: 'left', vertical: 'center', wrapText: true }, border: borderThin });
+  ['Nilai Kampus AUP (tulis persis)', 'Alamat / Lokasi', 'Berlaku untuk Sheet', 'Keterangan'].forEach((h, i) => {
+    wsRef[XLSX.utils.encode_cell({ r: 2, c: 9 + i })] = createCell(h, reqHeaderStyle);
+  });
+  aupCampusRef.forEach((row, idx) => {
+    const r = 3 + idx;
+    const bg = idx % 2 === 0 ? 'F8FAFC' : 'FFFFFF';
+    const codeSt = { font: { name: 'Consolas', sz: 10, bold: true, color: { rgb: 'B45309' } }, fill: { fgColor: { rgb: bg } }, alignment: { horizontal: 'left', vertical: 'center' }, border: borderThin };
+    const txtSt = { font: { name: 'Calibri', sz: 10, color: { rgb: '0F172A' } }, fill: { fgColor: { rgb: bg } }, alignment: { horizontal: 'left', vertical: 'center', wrapText: true }, border: borderThin };
+    row.forEach((val, i) => {
+      wsRef[XLSX.utils.encode_cell({ r, c: 9 + i })] = createCell(val, i === 0 ? codeSt : txtSt);
+    });
+  });
+
+  const maxRefRow = Math.max(3 + satdikList.length, 3 + bidangList.length, 3 + aupCampusRef.length);
+  wsRef['!merges'] = [
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 12 } },
+    { s: { r: 1, c: 9 }, e: { r: 1, c: 12 } }
+  ];
   wsRef['!cols'] = [
     { wch: 22 }, { wch: 24 }, { wch: 46 }, { wch: 30 },
     { wch: 4 },
-    { wch: 24 }, { wch: 44 }, { wch: 12 }
+    { wch: 24 }, { wch: 44 }, { wch: 12 },
+    { wch: 4 },
+    { wch: 30 }, { wch: 34 }, { wch: 34 }, { wch: 56 }
   ];
-  wsRef['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: maxRefRow, c: 7 } });
+  wsRef['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: maxRefRow, c: 12 } });
   XLSX.utils.book_append_sheet(wb, wsRef, 'REFERENSI_KODE');
 
   return wb;
@@ -2382,6 +2541,9 @@ function downloadImportTemplateExcel(options = {}) {
     asrama: 'Template_Import_Gedung_Asrama_SARPRAS_KKP',
     tambak: 'Template_Import_Tambak_Kolam_SARPRAS_KKP',
     pembelajaran: 'Template_Import_Sarpras_Pembelajaran_SARPRAS_KKP',
+    tanah: 'Template_Import_Data_Tanah_SARPRAS_KKP',
+    kapal: 'Template_Import_Kapal_Latih_SARPRAS_KKP',
+    gedung: 'Template_Import_Gedung_Bangunan_SARPRAS_KKP',
     standar: 'Template_Import_Standar_Prodi_SARPRAS_KKP'
   };
   const prefix = options.filenamePrefix || typeMap[options.templateType || 'all'] || typeMap.all;
@@ -2541,6 +2703,8 @@ function parseImportExcelWorkbook(arrayBuffer, context = {}) {
   const pembelajaranFacilities = [];
   const standarItems = [];
   const tanahParcels = [];
+  const kapalVessels = [];
+  const gedungItems = [];
   const warnings = [];
 
   (wb.SheetNames || []).forEach((sheetName) => {
@@ -2562,11 +2726,13 @@ function parseImportExcelWorkbook(arrayBuffer, context = {}) {
     let headerRowIdx = -1;
     let sheetCategory = null;
 
-    if (upperName.indexOf('INPUT_GEDUNG') !== -1 || upperName.indexOf('INPUT_ASRAMA') !== -1) sheetCategory = 'asrama';
+    if (upperName.indexOf('INPUT_GEDUNG_BANGUNAN') !== -1 || upperName.indexOf('GEDUNG_BANGUNAN') !== -1 || upperName.indexOf('GEDUNG_DAN_BANGUNAN') !== -1) sheetCategory = 'gedung';
+    else if (upperName.indexOf('INPUT_GEDUNG') !== -1 || upperName.indexOf('INPUT_ASRAMA') !== -1) sheetCategory = 'asrama';
     else if (upperName.indexOf('INPUT_TAMBAK') !== -1 || upperName.indexOf('INPUT_KOLAM') !== -1) sheetCategory = 'tambak';
     else if (upperName.indexOf('INPUT_PEMBELAJARAN') !== -1 || upperName.indexOf('SARPRAS_PEMBELAJARAN') !== -1) sheetCategory = 'pembelajaran';
     else if (upperName.indexOf('INPUT_STANDAR') !== -1) sheetCategory = 'standar';
     else if (upperName.indexOf('INPUT_DATA_TANAH') !== -1 || upperName.indexOf('INPUT_TANAH') !== -1 || upperName.indexOf('DATA_TANAH') !== -1 || upperName.indexOf('TANAH') !== -1) sheetCategory = 'tanah';
+    else if (upperName.indexOf('INPUT_KAPAL') !== -1 || upperName.indexOf('KAPAL_LATIH') !== -1 || upperName.indexOf('KAPAL') !== -1) sheetCategory = 'kapal';
 
     for (let r = 0; r < Math.min(rows.length, 15); r++) {
       const rowStrs = (rows[r] || []).map(c => cleanStr(c).toLowerCase());
@@ -2574,7 +2740,12 @@ function parseImportExcelWorkbook(arrayBuffer, context = {}) {
       if (nonEmpty.length < 2) continue;
       const joined = nonEmpty.join(' | ');
 
-      if (joined.indexOf('nama gedung') !== -1 || (joined.indexOf('asrama') !== -1 && joined.indexOf('kamar') !== -1)) {
+      if (joined.indexOf('identitas gedung') !== -1 || joined.indexOf('jumlah lantai') !== -1 || joined.indexOf('gedung dan bangunan') !== -1) {
+        headerRowIdx = r;
+        if (!sheetCategory) sheetCategory = 'gedung';
+        break;
+      }
+      if (joined.indexOf('gedung asrama') !== -1 || (joined.indexOf('asrama') !== -1 && joined.indexOf('kamar') !== -1)) {
         headerRowIdx = r;
         if (!sheetCategory) sheetCategory = 'asrama';
         break;
@@ -2597,6 +2768,11 @@ function parseImportExcelWorkbook(arrayBuffer, context = {}) {
       if (joined.indexOf('bidang tanah') !== -1 || joined.indexOf('nama bidang') !== -1 || joined.indexOf('luas tanah') !== -1 || (joined.indexOf('tanah') !== -1 && joined.indexOf('sertifikat') !== -1)) {
         headerRowIdx = r;
         if (!sheetCategory) sheetCategory = 'tanah';
+        break;
+      }
+      if (joined.indexOf('nama kapal') !== -1 || joined.indexOf('tonage') !== -1 || joined.indexOf('alat tangkap') !== -1 || joined.indexOf('transmitter') !== -1) {
+        headerRowIdx = r;
+        if (!sheetCategory) sheetCategory = 'kapal';
         break;
       }
     }
@@ -2948,6 +3124,136 @@ function parseImportExcelWorkbook(arrayBuffer, context = {}) {
           ket: cleanStr(row[cKet])
         });
       }
+    } else if (sheetCategory === 'kapal') {
+      const cSatdik = findCol(headerLower, ['nama satuan pendidikan', 'satuan pendidikan', 'satdik', 'kampus', 'unit kerja'], 1);
+      const cNama = findCol(headerLower, ['nama kapal', 'kapal'], 2);
+      const cTahun = findCol(headerLower, ['tahun perolehan', 'tahun pembuatan', 'tahun'], 3);
+      const cGt = findCol(headerLower, ['tonage', 'gt', 'tonase', 'gross tonnage'], 4);
+      const cPanjang = findCol(headerLower, ['panjang kapal', 'panjang', 'loa'], 5);
+      const cJenis = findCol(headerLower, ['jenis kapal', 'tipe kapal', 'jenis'], 6);
+      const cBbm = findCol(headerLower, ['kapasitas tangki bbm', 'tangki bbm', 'kapasitas bbm', 'bbm'], 7);
+      const cAbk = findCol(headerLower, ['jumlah abk', 'abk', 'awak kapal'], 8);
+      const cAlat = findCol(headerLower, ['alat tangkap', 'fishing gear'], 9);
+      const cTransmitter = findCol(headerLower, ['id transmitter', 'transmitter', 'vms', 'ais'], 10);
+      const cStatusBmn = findCol(headerLower, ['status bmn', 'bmn', 'status'], 11);
+      const cKet = findCol(headerLower, ['keterangan', 'catatan'], 12);
+
+      for (let r = headerRowIdx + 1; r < rows.length; r++) {
+        const row = rows[r];
+        if (isSkippableRow(row)) continue;
+        const excelRow = r + 1;
+
+        const rawSatdik = cleanStr(row[cSatdik]);
+        const namaKapal = cleanStr(row[cNama]);
+        if (!rawSatdik && !namaKapal) continue;
+
+        if (!namaKapal) {
+          warnings.push({ sheet: sheetName, row: excelRow, message: 'Nama Kapal kosong — baris dilewati.' });
+          continue;
+        }
+
+        const satObj = resolveSatdik(rawSatdik);
+        if (!satObj) {
+          warnings.push({ sheet: sheetName, row: excelRow, message: 'Kode/Nama Satdik "' + (rawSatdik || '-') + '" tidak dikenali untuk kapal "' + namaKapal + '".' });
+          continue;
+        }
+
+        const tahunPerolehan = Math.max(1950, Math.round(parseNum(row[cTahun], new Date().getFullYear())));
+        const tonageGt = Math.max(0, parseNum(row[cGt], 0));
+        const panjangKapal = Math.max(0, parseNum(row[cPanjang], 0));
+        const jenisKapal = cleanStr(row[cJenis]) || 'Kapal Latih Perikanan';
+        const kapasitasBbm = Math.max(0, parseNum(row[cBbm], 0));
+        const jumlahAbk = Math.max(0, Math.round(parseNum(row[cAbk], 0)));
+        const alatTangkap = cleanStr(row[cAlat]) || '-';
+        const idTransmitter = cleanStr(row[cTransmitter]) || '-';
+        const statusBmn = cleanStr(row[cStatusBmn]) || 'Terdaftar BMN (Aktif Operasional)';
+        const keterangan = cleanStr(row[cKet]);
+
+        kapalVessels.push({
+          satdikId: satObj.id,
+          satdikName: satObj.name,
+          satdikShortName: satObj.shortName || satObj.name,
+          namaKapal,
+          tahunPerolehan,
+          tonageGt,
+          panjangKapal,
+          jenisKapal,
+          kapasitasBbm,
+          jumlahAbk,
+          alatTangkap,
+          idTransmitter,
+          statusBmn,
+          keterangan
+        });
+      }
+    } else if (sheetCategory === 'gedung') {
+      const hasKampusCol = headerLower.some(h => h.indexOf('kampus') !== -1 || h.indexOf('lokasi') !== -1);
+      const cSatdik = findCol(headerLower, ['nama satuan pendidikan', 'satuan pendidikan', 'satdik', 'unit kerja'], 1);
+      const cKampus = hasKampusCol ? findCol(headerLower, ['kampus / lokasi', 'kampus', 'lokasi fisik'], 2) : -1;
+      const cJenis = findCol(headerLower, ['jenis gedung', 'gedung dan bangunan', 'jenis bangunan', 'jenis'], hasKampusCol ? 3 : 2);
+      const cJumlah = findCol(headerLower, ['jumlah unit', 'jumlah gedung', 'jumlah'], hasKampusCol ? 4 : 3);
+      const cNama = findCol(headerLower, ['nama/identitas gedung', 'identitas gedung', 'nama gedung', 'identitas'], hasKampusCol ? 5 : 4);
+      const cLantai = findCol(headerLower, ['jumlah lantai', 'lantai'], hasKampusCol ? 6 : 5);
+      const cLuas = findCol(headerLower, ['luas (m2)', 'luas (m²)', 'luas bangunan', 'luas'], hasKampusCol ? 7 : 6);
+
+      for (let r = headerRowIdx + 1; r < rows.length; r++) {
+        const row = rows[r];
+        if (isSkippableRow(row)) continue;
+        const excelRow = r + 1;
+
+        const rawSatdik = cleanStr(row[cSatdik]);
+        const namaGedung = cleanStr(row[cNama]);
+        const jenisGedung = cleanStr(row[cJenis]) || 'Gedung Perkuliahan / Ruang Kelas';
+        if (!rawSatdik && !namaGedung) continue;
+
+        if (!namaGedung) {
+          warnings.push({ sheet: sheetName, row: excelRow, message: 'Nama/Identitas Gedung kosong — baris dilewati.' });
+          continue;
+        }
+
+        const satObj = resolveSatdik(rawSatdik);
+        if (!satObj) {
+          warnings.push({ sheet: sheetName, row: excelRow, message: 'Kode/Nama Satdik "' + (rawSatdik || '-') + '" tidak dikenali untuk gedung "' + namaGedung + '".' });
+          continue;
+        }
+
+        let kampus = cKampus !== -1 ? cleanStr(row[cKampus]) : '';
+        if (satObj.id === 'poltek-aup') {
+          const kLow = (kampus + ' ' + namaGedung + ' ' + rawSatdik).toLowerCase();
+          if (kLow.indexOf('bogor') !== -1 || kLow.indexOf('cikaret') !== -1) kampus = 'Kampus Bogor';
+          else if (kLow.indexOf('serang') !== -1 || kLow.indexOf('banten') !== -1 || kLow.indexOf('karangantu') !== -1) kampus = 'Kampus Serang';
+          else kampus = 'Kampus Jakarta';
+        } else if (!kampus) {
+          kampus = 'Kampus Utama';
+        }
+
+        let jumlah = Math.max(1, Math.round(parseNum(row[cJumlah], 1)));
+        if (typeof row[cJumlah] === 'string') {
+          const mJml = row[cJumlah].match(/\d+/);
+          if (mJml) jumlah = Math.max(1, parseInt(mJml[0], 10));
+        }
+        const rawLantaiStr = cleanStr(row[cLantai]);
+        const jumlahLantai = (rawLantaiStr === '' || rawLantaiStr === '-' || rawLantaiStr === '0')
+          ? 0
+          : Math.max(0, Math.round(parseNum(row[cLantai], 0)));
+        let luasM2 = Math.max(0, parseNum(row[cLuas], 0));
+        // Jika pengguna mengetik pemisah ribuan titik di Excel (misal 1.291 -> 1291 m² atau 1.350 -> 1.35 -> 1350 m²)
+        if (luasM2 > 0 && luasM2 < 10 && luasM2 !== Math.floor(luasM2)) {
+          luasM2 = Math.round(luasM2 * 1000);
+        }
+
+        gedungItems.push({
+          satdikId: satObj.id,
+          satdikName: satObj.name,
+          satdikShortName: satObj.shortName || satObj.name,
+          kampus,
+          jenisGedung,
+          jumlah,
+          namaGedung,
+          jumlahLantai,
+          luasM2
+        });
+      }
     }
   });
 
@@ -2957,8 +3263,10 @@ function parseImportExcelWorkbook(arrayBuffer, context = {}) {
     pembelajaranFacilities,
     standarItems,
     tanahParcels,
+    kapalVessels,
+    gedungItems,
     warnings,
-    totalValid: buildings.length + tambakUnits.length + pembelajaranFacilities.length + standarItems.length + tanahParcels.length
+    totalValid: buildings.length + tambakUnits.length + pembelajaranFacilities.length + standarItems.length + tanahParcels.length + kapalVessels.length + gedungItems.length
   };
 }
 
@@ -3389,6 +3697,206 @@ function exportTanahToExcel(parcels, satdikList, options = {}) {
   XLSX.writeFile(wb, filename);
 }
 
+function exportKapalToExcel(vessels, satdikList, options = {}) {
+  const {
+    currentUser = null,
+    filterScopeLabel = 'Seluruh Satuan Pendidikan Vokasi KKP (18 Satdik)',
+    filenamePrefix = 'Sarana_Prasarana_Satdik_KP_Data_Kapal_Latih'
+  } = options;
+
+  const wb = XLSX.utils.book_new();
+  const satdikMap = {};
+  (satdikList || []).forEach(s => { satdikMap[s.id] = s; });
+
+  const items = Array.isArray(vessels) ? vessels : [];
+
+  const ws = {};
+  const fontTitle = { name: 'Arial', sz: 12, bold: true, color: { rgb: '0F172A' } };
+  const fontHeader = { name: 'Arial', sz: 10, bold: true, color: { rgb: 'FFFFFF' } };
+  const headerStyle = {
+    fill: { fgColor: { rgb: '0B3D60' } },
+    font: fontHeader,
+    alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+    border: borderThin
+  };
+  const base = { font: { name: 'Arial', sz: 9 }, border: borderThin, alignment: { vertical: 'center' } };
+  const center = { ...base, alignment: { horizontal: 'center', vertical: 'center' } };
+  const left = { ...base, alignment: { horizontal: 'left', vertical: 'center', wrapText: true } };
+  const leftBold = { ...left, font: { ...base.font, bold: true } };
+  const numInt = { ...base, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0' };
+  const numDec = { ...base, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0.00' };
+
+  ws['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', { font: fontTitle });
+  ws['A2'] = createCell('BADAN PENYULUHAN DAN PENGEMBANGAN SDM KELAUTAN DAN PERIKANAN (BPPSDM KP)', { font: { name: 'Arial', sz: 10, bold: true } });
+  ws['A3'] = createCell('DATA INVENTARIS KAPAL LATIH SATUAN PENDIDIKAN KP', { font: { name: 'Arial', sz: 11, bold: true, color: { rgb: '0284C7' } } });
+  ws['A4'] = createCell('Cakupan Data: ' + filterScopeLabel + ' | Dicetak: ' + getFormattedDateTime(), { font: { name: 'Arial', sz: 9, italic: true } });
+
+  const headers = [
+    'No',
+    'Nama Satuan Pendidikan',
+    'Nama Kapal',
+    'Tahun Perolehan',
+    'Tonage (GT)',
+    'Panjang Kapal (m)',
+    'Jenis Kapal',
+    'Kapasitas Tangki BBM (Liter)',
+    'Jumlah ABK',
+    'Alat Tangkap',
+    'ID Transmitter',
+    'Status BMN',
+    'Keterangan'
+  ];
+
+  headers.forEach((h, c) => {
+    ws[XLSX.utils.encode_cell({ r: 5, c })] = createCell(h, headerStyle);
+  });
+
+  let row = 6;
+  items.forEach((item, idx) => {
+    const sat = satdikMap[item.satdikId] || {};
+    const satName = sat.name || sat.shortName || item.satdikName || item.satdikId;
+
+    const rowData = [
+      [idx + 1, center, 'n'],
+      [satName, leftBold, 's'],
+      [item.namaKapal || '-', leftBold, 's'],
+      [Number(item.tahunPerolehan) || '-', center, typeof item.tahunPerolehan === 'number' ? 'n' : 's'],
+      [Number(item.tonageGt) || 0, numDec, 'n'],
+      [Number(item.panjangKapal) || 0, numDec, 'n'],
+      [item.jenisKapal || '-', left, 's'],
+      [Number(item.kapasitasBbm) || 0, numInt, 'n'],
+      [Number(item.jumlahAbk) || 0, numInt, 'n'],
+      [item.alatTangkap || '-', left, 's'],
+      [item.idTransmitter || '-', center, 's'],
+      [item.statusBmn || '-', left, 's'],
+      [item.keterangan || '-', left, 's']
+    ];
+
+    rowData.forEach(([val, st, type], col) => {
+      ws[XLSX.utils.encode_cell({ r: row, c: col })] = createCell(val, st, type);
+    });
+    row++;
+  });
+
+  ws['!merges'] = [
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 12 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 12 } },
+    { s: { r: 2, c: 0 }, e: { r: 2, c: 12 } },
+    { s: { r: 3, c: 0 }, e: { r: 3, c: 12 } }
+  ];
+  ws['!cols'] = [
+    { wch: 6 },
+    { wch: 30 },
+    { wch: 26 },
+    { wch: 15 },
+    { wch: 14 },
+    { wch: 16 },
+    { wch: 24 },
+    { wch: 22 },
+    { wch: 13 },
+    { wch: 26 },
+    { wch: 18 },
+    { wch: 28 },
+    { wch: 36 }
+  ];
+  ws['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: Math.max(row - 1, 5), c: 12 } });
+  XLSX.utils.book_append_sheet(wb, ws, 'Data Kapal Latih');
+
+  const filename = filenamePrefix + '_' + new Date().toISOString().slice(0, 10) + '.xlsx';
+  XLSX.writeFile(wb, filename);
+}
+
+function exportGedungToExcel(itemsList, satdikList, options = {}) {
+  const {
+    currentUser = null,
+    filterScopeLabel = 'Seluruh Satuan Pendidikan Vokasi KKP (18 Satdik)',
+    filenamePrefix = 'Sarana_Prasarana_Satdik_KP_Data_Gedung_Bangunan'
+  } = options;
+
+  const wb = XLSX.utils.book_new();
+  const satdikMap = {};
+  (satdikList || []).forEach(s => { satdikMap[s.id] = s; });
+
+  const items = Array.isArray(itemsList) ? itemsList : [];
+
+  const ws = {};
+  const fontTitle = { name: 'Arial', sz: 12, bold: true, color: { rgb: '0F172A' } };
+  const fontHeader = { name: 'Arial', sz: 10, bold: true, color: { rgb: 'FFFFFF' } };
+  const headerStyle = {
+    fill: { fgColor: { rgb: '0B3D60' } },
+    font: fontHeader,
+    alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+    border: borderThin
+  };
+  const base = { font: { name: 'Arial', sz: 9 }, border: borderThin, alignment: { vertical: 'center' } };
+  const center = { ...base, alignment: { horizontal: 'center', vertical: 'center' } };
+  const left = { ...base, alignment: { horizontal: 'left', vertical: 'center', wrapText: true } };
+  const leftBold = { ...left, font: { ...base.font, bold: true } };
+  const numInt = { ...base, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0' };
+  const numDec = { ...base, alignment: { horizontal: 'right', vertical: 'center' }, numFmt: '#,##0.00' };
+
+  ws['A1'] = createCell('KEMENTERIAN KELAUTAN DAN PERIKANAN REPUBLIK INDONESIA', { font: fontTitle });
+  ws['A2'] = createCell('BADAN PENYULUHAN DAN PENGEMBANGAN SDM KELAUTAN DAN PERIKANAN (BPPSDM KP)', { font: { name: 'Arial', sz: 10, bold: true } });
+  ws['A3'] = createCell('DATA INVENTARIS GEDUNG DAN BANGUNAN SATUAN PENDIDIKAN KP', { font: { name: 'Arial', sz: 11, bold: true, color: { rgb: '0284C7' } } });
+  ws['A4'] = createCell('Cakupan Data: ' + filterScopeLabel + ' | Dicetak: ' + getFormattedDateTime(), { font: { name: 'Arial', sz: 9, italic: true } });
+
+  const headers = [
+    'No',
+    'Nama Satuan Pendidikan',
+    'Jenis Gedung dan Bangunan',
+    'Jumlah',
+    'Nama/Identitas Gedung',
+    'Jumlah Lantai',
+    'Luas (m²)'
+  ];
+
+  headers.forEach((h, c) => {
+    ws[XLSX.utils.encode_cell({ r: 5, c })] = createCell(h, headerStyle);
+  });
+
+  let row = 6;
+  items.forEach((item, idx) => {
+    const sat = satdikMap[item.satdikId] || {};
+    const satName = sat.name || sat.shortName || item.satdikName || item.satdikId;
+
+    const rowData = [
+      [idx + 1, center, 'n'],
+      [satName, leftBold, 's'],
+      [item.jenisGedung || '-', left, 's'],
+      [Number(item.jumlah) || 1, numInt, 'n'],
+      [item.namaGedung || '-', leftBold, 's'],
+      [Number(item.jumlahLantai) || 1, numInt, 'n'],
+      [Number(item.luasM2) || 0, numDec, 'n']
+    ];
+
+    rowData.forEach(([val, st, type], col) => {
+      ws[XLSX.utils.encode_cell({ r: row, c: col })] = createCell(val, st, type);
+    });
+    row++;
+  });
+
+  ws['!merges'] = [
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 6 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 6 } },
+    { s: { r: 2, c: 0 }, e: { r: 2, c: 6 } },
+    { s: { r: 3, c: 0 }, e: { r: 3, c: 6 } }
+  ];
+  ws['!cols'] = [
+    { wch: 6 },
+    { wch: 32 },
+    { wch: 34 },
+    { wch: 12 },
+    { wch: 36 },
+    { wch: 15 },
+    { wch: 18 }
+  ];
+  ws['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: Math.max(row - 1, 5), c: 6 } });
+  XLSX.utils.book_append_sheet(wb, ws, 'Gedung & Bangunan');
+
+  const filename = filenamePrefix + '_' + new Date().toISOString().slice(0, 10) + '.xlsx';
+  XLSX.writeFile(wb, filename);
+}
+
   window.SARPRAS_EXCEL = {
     exportRKAToExcel: exportRKAToExcel,
     exportAsramaToExcel: exportAsramaToExcel,
@@ -3396,6 +3904,8 @@ function exportTanahToExcel(parcels, satdikList, options = {}) {
     exportTambakToExcel: exportTambakToExcel,
     exportPembelajaranToExcel: exportPembelajaranToExcel,
     exportTanahToExcel: exportTanahToExcel,
+    exportKapalToExcel: exportKapalToExcel,
+    exportGedungToExcel: exportGedungToExcel,
     exportComprehensiveToExcel: exportComprehensiveToExcel,
     buildImportTemplateWorkbook: buildImportTemplateWorkbook,
     downloadImportTemplateExcel: downloadImportTemplateExcel,
