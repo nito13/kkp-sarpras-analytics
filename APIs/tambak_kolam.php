@@ -53,7 +53,9 @@ function formatTambakRekapRow(array $row): array {
         'totalKincir' => (int) ($row['total_kincir'] ?? 0),
         'dayaListrik' => $row['daya_listrik'] ?? '-',
         'lokasiUtama' => $row['lokasi_utama'] ?? '-',
-        'mapUrl' => $row['map_url'] ?? '',
+        'mapUrl' => (!empty($row['map_url']) && strpos($row['map_url'], 'drive.google.com') !== false)
+            ? 'APIs/doc.php?ref=wakatobi-tambak'
+            : ($row['map_url'] ?? ''),
         'keterangan' => $row['keterangan'] ?? '',
     ];
 }

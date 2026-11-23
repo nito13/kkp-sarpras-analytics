@@ -840,12 +840,16 @@
   return [];
 }
 
-  // Membangun daftar sarpras terpadu dari 3 dataset riil (Asrama, Tambak & Kolam, Standar Prodi)
+  // Membangun daftar sarpras terpadu dari 7 dataset riil (Asrama, Tambak & Kolam, Standar Prodi, Pembelajaran, Kapal Latih, Gedung, Tanah)
   function buildRealSarprasItems(params = {}) {
   const {
     asramaData = window.SARPRAS_ASRAMA || {},
     tambakData = window.SARPRAS_TAMBAK || {},
     standarData = window.SARPRAS_STANDAR || {},
+    pembelajaranData,
+    kapalData,
+    gedungData,
+    tanahData,
     satdikList = SATDIK_LIST
   } = params;
 
@@ -966,6 +970,147 @@
       maintenanceUrgency: condition === 'Rusak Berat' ? 'Kritis / Segera' : (condition === 'Rusak Ringan' ? 'Perlu Perhatian' : 'Normal'),
       nextMaintenanceDate: 'Evaluasi Semester',
       issuesSummary: 'Capaian pemenuhan standar minimal rumpun ' + (bid.nama || r.bidangId) + ': Prasarana ' + pctPras + '%, Sarana ' + (r.persenSarana || 0) + '%, Total ' + pctTot + '%.'
+    });
+  });
+
+  // 4. Sarpras Pembelajaran (Ruang Kelas, Perpustakaan, TEFA, Simulator)
+  const pembelajaranList = Array.isArray(pembelajaranData)
+    ? pembelajaranData
+    : (window.SARPRAS_PEMBELAJARAN?.getAll ? window.SARPRAS_PEMBELAJARAN.getAll() : []);
+  pembelajaranList.forEach(f => {
+    const sat = satdikMap[f.satdikId] || {};
+    const kondisiRaw = f.kondisi || 'Baik';
+    const condition = kondisiRaw === 'Rusak Berat'
+      ? 'Rusak Berat'
+      : (kondisiRaw === 'Rusak Ringan' ? 'Rusak Ringan' : 'Baik');
+    const conditionScore = condition === 'Baik' ? 91 : (condition === 'Rusak Ringan' ? 72 : 30);
+    const catType = (f.category || 'kelas').toLowerCase();
+    const mappedCat = catType === 'simulator'
+      ? 'penangkapan_ikan'
+      : (catType === 'tefa' ? normalizeCategory('tefa', { name: f.name, subcategory: f.spesifikasi }) : 'administrasi_umum');
+    const catLabel = catType === 'kelas'
+      ? 'Ruang Kelas'
+      : (catType === 'perpustakaan' ? 'Perpustakaan' : (catType === 'tefa' ? 'Teaching Factory (TEFA)' : 'Simulator Maritim'));
+
+    items.push({
+      id: f.id,
+      sourceModule: 'pembelajaran',
+      name: f.name || (catLabel + ' ' + f.id),
+      satdikId: f.satdikId,
+      satdikName: sat.name || f.satdikId,
+      prodi: 'Semua Program Studi (Akademik & Praktik)',
+      category: mappedCat,
+      subcategory: catLabel,
+      condition: condition,
+      conditionScore: conditionScore,
+      acquisitionYear: f.tahunPengadaan || '-',
+      utilizationRate: condition === 'Baik' ? 90 : (condition === 'Rusak Ringan' ? 65 : 15),
+      capacityDesc: 'Kapasitas ' + (Number(f.kapasitas) || 0) + ' Taruna • Luas ' + (Number(f.luasM2) || 0).toLocaleString('id-ID') + ' m²',
+      specs: f.spesifikasi || f.gedung || '-',
+      maintenanceUrgency: condition === 'Rusak Berat' ? 'Kritis / Segera' : (condition === 'Rusak Ringan' ? 'Perlu Perhatian' : 'Normal'),
+      nextMaintenanceDate: condition === 'Baik' ? 'Terjadwal Berkala' : 'Segera / Pemeliharaan Akademik',
+      issuesSummary: f.keterangan || (catLabel + ' di ' + (f.gedung || sat.shortName || '') + ' (' + (f.statusOp || 'Aktif') + ').')
+    });
+  });
+
+  // 5. Armada Kapal Latih & Riset
+  const kapalList = Array.isArray(kapalData)
+    ? kapalData
+    : (window.SARPRAS_KAPAL?.getAll ? window.SARPRAS_KAPAL.getAll() : []);
+  kapalList.forEach(v => {
+    const sat = satdikMap[v.satdikId] || {};
+    const stRaw = String(v.statusBmn || 'Baik');
+    const condition = /rusak\s*berat|penghapusan/i.test(stRaw)
+      ? 'Rusak Berat'
+      : (/rusak\s*ringan|docking|perbaikan/i.test(stRaw) ? 'Rusak Ringan' : 'Baik');
+    const conditionScore = condition === 'Baik' ? 92 : (condition === 'Rusak Ringan' ? 68 : 26);
+
+    items.push({
+      id: v.id,
+      sourceModule: 'kapal',
+      name: v.namaKapal || ('Kapal Latih ' + v.id),
+      satdikId: v.satdikId,
+      satdikName: sat.name || v.satdikName || v.satdikId,
+      prodi: (sat.prodi && sat.prodi.find(p => /penangkapan|nautika|teknika|permesinan/i.test(p))) || 'Teknologi Penangkapan Ikan',
+      category: 'penangkapan_ikan',
+      subcategory: 'Kapal Latih (' + (v.jenisKapal || 'Vokasi') + ')',
+      condition: condition,
+      conditionScore: conditionScore,
+      acquisitionYear: v.tahunPerolehan || '-',
+      utilizationRate: condition === 'Baik' ? 89 : (condition === 'Rusak Ringan' ? 50 : 0),
+      capacityDesc: (Number(v.tonageGt) || 0) + ' GT • Kru/ABK ' + (Number(v.jumlahAbk) || 0) + ' Orang',
+      specs: 'Konstruksi: ' + (v.jenisKapal || '-') + ' • Alat Tangkap: ' + (v.alatTangkap || '-') + ' • BBM: ' + (Number(v.kapasitasBbm) || 0).toLocaleString('id-ID') + ' L',
+      maintenanceUrgency: condition === 'Rusak Berat' ? 'Kritis / Segera' : (condition === 'Rusak Ringan' ? 'Perlu Perhatian' : 'Normal'),
+      nextMaintenanceDate: condition === 'Baik' ? 'Docking Tahunan Terjadwal' : 'Segera / Docking & Perbaikan Darurat',
+      issuesSummary: [
+        'Kapal Latih ' + (v.namaKapal || v.id) + ' (' + (Number(v.tonageGt) || 0) + ' GT, Konstruksi ' + (v.jenisKapal || '-') + ')',
+        v.alatTangkap ? ('Alat Tangkap: ' + v.alatTangkap) : '',
+        'Status BMN: ' + stRaw,
+        v.keterangan || ''
+      ].filter(Boolean).join(' • ')
+    });
+  });
+
+  // 6. Gedung & Bangunan Kampus
+  const gedungList = Array.isArray(gedungData)
+    ? gedungData
+    : (window.SARPRAS_GEDUNG?.getAll ? window.SARPRAS_GEDUNG.getAll() : []);
+  gedungList.forEach(g => {
+    const sat = satdikMap[g.satdikId] || {};
+    const mappedCat = normalizeCategory('administrasi_umum', {
+      name: (g.jenisGedung || '') + ' ' + (g.namaGedung || ''),
+      subcategory: g.jenisGedung || ''
+    });
+
+    items.push({
+      id: g.id,
+      sourceModule: 'gedung',
+      name: (g.jenisGedung || 'Gedung') + (g.namaGedung ? (' — ' + String(g.namaGedung).split(/\r?\n/)[0].slice(0, 60)) : ''),
+      satdikId: g.satdikId,
+      satdikName: sat.name || g.satdikName || g.satdikId,
+      prodi: 'Semua Program Studi (Umum)',
+      category: mappedCat,
+      subcategory: g.jenisGedung || 'Gedung & Bangunan',
+      condition: 'Baik',
+      conditionScore: 89,
+      acquisitionYear: '-',
+      utilizationRate: 88,
+      capacityDesc: (Number(g.jumlah) || 1) + ' Unit • ' + (Number(g.jumlahLantai) || 1) + ' Lantai • Luas ' + (Number(g.luasM2) || 0).toLocaleString('id-ID') + ' m²',
+      specs: g.namaGedung || g.jenisGedung || '-',
+      maintenanceUrgency: 'Normal',
+      nextMaintenanceDate: 'Terjadwal Berkala',
+      issuesSummary: 'Gedung ' + (g.jenisGedung || '') + ' (' + (Number(g.jumlahLantai) || 1) + ' lantai, luas ' + (Number(g.luasM2) || 0).toLocaleString('id-ID') + ' m²).'
+    });
+  });
+
+  // 7. Tanah & Lahan BMN
+  const tanahList = Array.isArray(tanahData)
+    ? tanahData
+    : (window.SARPRAS_TANAH?.getAll ? window.SARPRAS_TANAH.getAll() : []);
+  tanahList.forEach(p => {
+    const sat = satdikMap[p.satdikId] || {};
+    const isShp = /shp|sertifikat/i.test(p.statusSertifikat || '');
+    const condition = isShp ? 'Baik' : 'Rusak Ringan';
+    const conditionScore = isShp ? 94 : 75;
+
+    items.push({
+      id: p.id,
+      sourceModule: 'tanah',
+      name: p.namaBidang || ('Bidang Tanah ' + p.id),
+      satdikId: p.satdikId,
+      satdikName: sat.name || p.satdikName || p.satdikId,
+      prodi: 'Semua Program Studi (Lahan Kampus)',
+      category: 'administrasi_umum',
+      subcategory: 'Tanah & Lahan BMN',
+      condition: condition,
+      conditionScore: conditionScore,
+      acquisitionYear: p.tahunPerolehan || '-',
+      utilizationRate: 92,
+      capacityDesc: 'Luas ' + (Number(p.luasM2) || 0).toLocaleString('id-ID') + ' m² (' + ((Number(p.luasM2) || 0) / 10000).toFixed(2) + ' Ha)',
+      specs: (p.statusSertifikat || 'SHP') + (p.noSertifikat ? (' • ' + p.noSertifikat) : '') + ' • ' + (p.peruntukan || 'Kampus'),
+      maintenanceUrgency: 'Normal',
+      nextMaintenanceDate: 'Monitoring Legalitas BMN',
+      issuesSummary: 'Bidang tanah ' + (p.namaBidang || p.id) + ' seluas ' + (Number(p.luasM2) || 0).toLocaleString('id-ID') + ' m² (' + (p.statusSertifikat || '-') + ').'
     });
   });
 

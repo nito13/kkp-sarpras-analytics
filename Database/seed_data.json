@@ -1601,6 +1601,33 @@
   ],
   "users": [
     {
+      "id": "USR-ADMIN",
+      "name": "Super Administrator Sistem Sarpras KP",
+      "nip": "198001012005011001",
+      "email": "administrator@kkp.go.id",
+      "password": "administrator",
+      "role": "administrator",
+      "roleLabel": "Administrator Utama (Full Control)",
+      "jabatan": "Super Administrator Sistem & Database Sarpras KP",
+      "unitKerja": "Pusat Pendidikan Kelautan dan Perikanan (Pusdik KP) - BPPSDM KP",
+      "accessibleSatdik": "ALL",
+      "satdikName": "Seluruh Satuan Pendidikan (18 Kampus KKP) — Kendali Penuh",
+      "permissions": [
+        "view_all",
+        "edit_all",
+        "delete",
+        "manage_users",
+        "view_audit_logs",
+        "manage_database",
+        "approve_budget",
+        "request_maintenance",
+        "export_rka",
+        "export_reports",
+        "full_control"
+      ],
+      "avatarUrl": ""
+    },
+    {
       "id": "USR-001",
       "name": "Admin Sarpras Pusdik KP",
       "nip": "198501012010011001",

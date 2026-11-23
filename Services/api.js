@@ -50,13 +50,21 @@
     try {
       res = await fetch(API_BASE_URL + '/auth.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
         body: JSON.stringify({ identifier: identifier, password: password })
       });
     } catch (e) {
       res = await fetch('api/auth.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
         body: JSON.stringify({ identifier: identifier, password: password })
       });
     }
@@ -65,6 +73,134 @@
       throw new Error(data.message || 'Gagal autentikasi ke server database.');
     }
     return { success: true, user: data.user };
+  }
+
+  async function apiFetchUsers(actor) {
+    const reqHeaders = {
+      'Accept': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-Actor-Id': (actor && actor.id) ? actor.id : 'USR-ADMIN',
+      'X-Actor-Role': (actor && actor.role) ? actor.role : 'administrator'
+    };
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/auth.php', {
+        method: 'GET',
+        cache: 'no-store',
+        headers: reqHeaders
+      });
+    } catch (e) {
+      res = await fetch('api/auth.php', {
+        method: 'GET',
+        cache: 'no-store',
+        headers: reqHeaders
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memuat daftar akun pengguna.');
+    }
+    return { success: true, users: Array.isArray(data.users) ? data.users : [] };
+  }
+
+  async function apiCreateUser(payload, actor) {
+    const reqHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-Actor-Id': (actor && actor.id) ? actor.id : 'USR-ADMIN',
+      'X-Actor-Role': (actor && actor.role) ? actor.role : 'administrator'
+    };
+    const body = Object.assign({ action: 'create' }, payload, {
+      _actor: {
+        id: (actor && actor.id) ? actor.id : 'USR-ADMIN',
+        name: (actor && actor.name) ? actor.name : 'Super Administrator Sistem Sarpras KP',
+        email: (actor && actor.email) ? actor.email : 'administrator@kkp.go.id',
+        role: (actor && actor.role) ? actor.role : 'administrator'
+      }
+    });
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/auth.php', {
+        method: 'POST',
+        headers: reqHeaders,
+        body: JSON.stringify(body)
+      });
+    } catch (e) {
+      res = await fetch('api/auth.php', {
+        method: 'POST',
+        headers: reqHeaders,
+        body: JSON.stringify(body)
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal mendaftarkan akun baru.');
+    }
+    return { success: true, user: data.user, message: data.message };
+  }
+
+  async function apiUpdateUser(id, payload, actor) {
+    const reqHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-Actor-Id': (actor && actor.id) ? actor.id : 'USR-ADMIN',
+      'X-Actor-Role': (actor && actor.role) ? actor.role : 'administrator'
+    };
+    const body = Object.assign({ action: 'update', id: id }, payload, {
+      _actor: {
+        id: (actor && actor.id) ? actor.id : 'USR-ADMIN',
+        name: (actor && actor.name) ? actor.name : 'Super Administrator Sistem Sarpras KP',
+        email: (actor && actor.email) ? actor.email : 'administrator@kkp.go.id',
+        role: (actor && actor.role) ? actor.role : 'administrator'
+      }
+    });
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/auth.php?id=' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: reqHeaders,
+        body: JSON.stringify(body)
+      });
+    } catch (e) {
+      res = await fetch('api/auth.php?id=' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: reqHeaders,
+        body: JSON.stringify(body)
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memperbarui data akun.');
+    }
+    return { success: true, user: data.user, message: data.message };
+  }
+
+  async function apiDeleteUser(id, actor) {
+    const reqHeaders = {
+      'Accept': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-Actor-Id': (actor && actor.id) ? actor.id : 'USR-ADMIN',
+      'X-Actor-Role': (actor && actor.role) ? actor.role : 'administrator'
+    };
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/auth.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: reqHeaders
+      });
+    } catch (e) {
+      res = await fetch('api/auth.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: reqHeaders
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal menghapus akun.');
+    }
+    return { success: true, deletedId: id, message: data.message };
   }
 
   async function apiFetchSatdik() {
@@ -724,12 +860,124 @@
     };
   }
 
+  async function apiFetchAuditLogs(params) {
+    const opts = params || {};
+    const parts = [];
+    if (opts.actionType && opts.actionType !== 'ALL') parts.push('action_type=' + encodeURIComponent(opts.actionType));
+    if (opts.operation && opts.operation !== 'ALL') parts.push('operation=' + encodeURIComponent(opts.operation));
+    if (opts.module && opts.module !== 'ALL') parts.push('module=' + encodeURIComponent(opts.module));
+    if (opts.satdikId && opts.satdikId !== 'ALL') parts.push('satdik_id=' + encodeURIComponent(opts.satdikId));
+    if (opts.q) parts.push('q=' + encodeURIComponent(opts.q));
+    parts.push('_t=' + Date.now());
+    const query = '?' + parts.join('&');
+
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/audit_logs.php' + query, {
+        method: 'GET',
+        cache: 'no-store',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/audit_logs.php' + query, {
+        method: 'GET',
+        cache: 'no-store',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memuat daftar log database.');
+    }
+    return {
+      success: true,
+      stats: data.stats || null,
+      total: data.total || (Array.isArray(data.data) ? data.data.length : 0),
+      data: Array.isArray(data.data) ? data.data : []
+    };
+  }
+
+  async function apiCreateAuditLog(payload) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/audit_logs.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      res = await fetch('api/audit_logs.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal mencatat log database.');
+    }
+    return {
+      success: true,
+      log: data.data || null
+    };
+  }
+
+  async function apiDeleteAuditLog(id) {
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/audit_logs.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/audit_logs.php?id=' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal menghapus catatan log.');
+    }
+    return {
+      success: true,
+      deletedId: id
+    };
+  }
+
+  async function apiClearAuditLogs(actionType) {
+    const query = '?mode=clear' + (actionType && actionType !== 'ALL' ? '&action_type=' + encodeURIComponent(actionType) : '');
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/audit_logs.php' + query, {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/audit_logs.php' + query, {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal membersihkan catatan log.');
+    }
+    return {
+      success: true
+    };
+  }
+
   window.SARPRAS_API = {
     API_BASE_URL: API_BASE_URL,
     MONITORING_BASE_URL: MONITORING_BASE_URL,
     checkBackendHealth: checkBackendHealth,
     apiCheckHealth: checkBackendHealth,
     apiLogin: apiLogin,
+    apiFetchUsers: apiFetchUsers,
+    apiCreateUser: apiCreateUser,
+    apiUpdateUser: apiUpdateUser,
+    apiDeleteUser: apiDeleteUser,
     apiFetchSatdik: apiFetchSatdik,
     apiFetchAsrama: apiFetchAsrama,
     apiCreateAsramaBuilding: apiCreateAsramaBuilding,
@@ -755,6 +1003,10 @@
     apiCreateGedungItem: apiCreateGedungItem,
     apiUpdateGedungItem: apiUpdateGedungItem,
     apiDeleteGedungItem: apiDeleteGedungItem,
-    apiBulkImport: apiBulkImport
+    apiBulkImport: apiBulkImport,
+    apiFetchAuditLogs: apiFetchAuditLogs,
+    apiCreateAuditLog: apiCreateAuditLog,
+    apiDeleteAuditLog: apiDeleteAuditLog,
+    apiClearAuditLogs: apiClearAuditLogs
   };
 })(window);

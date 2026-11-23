@@ -271,3 +271,28 @@ CREATE TABLE IF NOT EXISTS `tanah_bidang` (
     INDEX `idx_tanah_peruntukan` (`peruntukan`),
     CONSTRAINT `fk_tanah_bidang_satdik` FOREIGN KEY (`satdik_id`) REFERENCES `satdik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 12. Tabel Audit Log Aktivitas Database (Log Input Database & Log Penghapusan Data)
+CREATE TABLE IF NOT EXISTS `audit_logs` (
+    `id` VARCHAR(64) NOT NULL PRIMARY KEY,
+    `action_type` VARCHAR(32) NOT NULL DEFAULT 'INPUT',
+    `operation` VARCHAR(32) NOT NULL DEFAULT 'CREATE',
+    `module` VARCHAR(64) NOT NULL DEFAULT 'umum',
+    `table_name` VARCHAR(64) NOT NULL DEFAULT '-',
+    `record_id` VARCHAR(100) NOT NULL DEFAULT '-',
+    `record_name` VARCHAR(255) NOT NULL DEFAULT '-',
+    `satdik_id` VARCHAR(64) DEFAULT 'ALL',
+    `satdik_name` VARCHAR(255) DEFAULT '-',
+    `actor_id` VARCHAR(64) DEFAULT 'USR-ADMIN',
+    `actor_name` VARCHAR(255) DEFAULT 'Administrator Sistem',
+    `actor_email` VARCHAR(150) DEFAULT 'administrator@kkp.go.id',
+    `actor_role` VARCHAR(100) DEFAULT 'administrator',
+    `summary` TEXT NULL,
+    `payload_json` LONGTEXT NULL,
+    `ip_address` VARCHAR(64) DEFAULT '127.0.0.1',
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX `idx_audit_action` (`action_type`),
+    INDEX `idx_audit_module` (`module`),
+    INDEX `idx_audit_satdik` (`satdik_id`),
+    INDEX `idx_audit_created` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

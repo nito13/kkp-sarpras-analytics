@@ -254,6 +254,22 @@ html.light [class*="from-cyan-950"] p {
   color: #0369a1 !important;
 }
 
+/* Administrator Banner Header - Solid Warm Amber */
+html.light [class*="to-amber-950"],
+html.light [class*="from-amber-950"] {
+  background-color: #fef3c7 !important;
+  background-image: none !important;
+  border-color: #f59e0b !important;
+  color: #78350f !important;
+}
+html.light [class*="to-amber-950"] h2,
+html.light [class*="to-amber-950"] h3 {
+  color: #78350f !important;
+}
+html.light [class*="to-amber-950"] p {
+  color: #92400e !important;
+}
+
 /* 6. Solid Buttons (No Gradients) */
 /* Primary Cyan / Sky Action Buttons */
 html.light .bg-cyan-600,
@@ -1350,4 +1366,50 @@ html .login-hero .lh-foot {
   html .login-mhero { padding-bottom: 3.5rem; }
   html .login-mhero .lmh-stats,
   html .login-mhero .lmh-badge { display: none; }
+}
+
+/* ==============================================================
+   ADMINISTRATOR FULL CONTROL NOTICE BANNER (STRIP NOTIFIKASI MODE ADMIN)
+   Warna kuning emas cerah (Vivid Golden Yellow) solid & teks kontras tinggi
+   Bekerja konsisten di Mode Terang (Light Mode) maupun Mode Gelap (Dark Mode).
+   ============================================================== */
+.admin-mode-banner-strip {
+  background-color: #fde047 !important;
+  background-image: linear-gradient(to right, #fde047, #facc15, #fef08a) !important;
+  border-bottom: 2px solid #d97706 !important;
+  color: #0f172a !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light .admin-mode-banner-strip {
+  background-color: #fde047 !important;
+  background-image: none !important;
+  border-bottom: 2px solid #d97706 !important;
+  color: #0f172a !important;
+}
+
+.admin-mode-banner-strip,
+.admin-mode-banner-strip span,
+.admin-mode-banner-strip p,
+html.light .admin-mode-banner-strip,
+html.light .admin-mode-banner-strip span,
+html.light .admin-mode-banner-strip p {
+  color: #0f172a !important;
+}
+
+.admin-mode-banner-strip strong,
+html.light .admin-mode-banner-strip strong {
+  color: #000000 !important;
+  font-weight: 800 !important;
+}
+
+.admin-mode-banner-strip .admin-banner-btn {
+  background-color: #0f172a !important;
+  color: #fde047 !important;
+  border: 1px solid #020617 !important;
+}
+
+.admin-mode-banner-strip .admin-banner-btn:hover {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
 }

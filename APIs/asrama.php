@@ -57,7 +57,7 @@ function formatRekapOutput(array $r, callable $toNullableFloat): array {
         'jumlahTidakDipakai' => (int)($r['jumlah_tidak_dipakai'] ?? 0),
         'jumlahPerluRenovasi' => (int)($r['jumlah_perlu_renovasi'] ?? 0),
         'keterangan' => $r['keterangan'] ?? '',
-        'driveUrl' => $r['drive_url'] ?? '',
+        'driveUrl' => !empty($r['drive_url']) ? ('APIs/doc.php?ref=' . urlencode($r['satdik_id'])) : '',
     ];
 }
 

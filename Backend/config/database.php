@@ -6,7 +6,7 @@
 if (php_sapi_name() !== 'cli') {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-Actor-Id, X-Actor-Name, X-Actor-Email, X-Actor-Role');
 
     // Tangani HTTP preflight OPTIONS request
     if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -80,4 +80,155 @@ function jsonResponse($data, $statusCode = 200) {
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     exit();
+}
+
+/**
+ * Pastikan tabel audit_logs tersedia di database MySQL
+ */
+function ensureAuditLogTable(PDO $pdo): void {
+    static $checked = false;
+    if ($checked) return;
+    try {
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS `audit_logs` (
+                `id` VARCHAR(64) NOT NULL PRIMARY KEY,
+                `action_type` VARCHAR(32) NOT NULL DEFAULT 'INPUT',
+                `operation` VARCHAR(32) NOT NULL DEFAULT 'CREATE',
+                `module` VARCHAR(64) NOT NULL DEFAULT 'umum',
+                `table_name` VARCHAR(64) NOT NULL DEFAULT '-',
+                `record_id` VARCHAR(100) NOT NULL DEFAULT '-',
+                `record_name` VARCHAR(255) NOT NULL DEFAULT '-',
+                `satdik_id` VARCHAR(64) DEFAULT 'ALL',
+                `satdik_name` VARCHAR(255) DEFAULT '-',
+                `actor_id` VARCHAR(64) DEFAULT 'USR-ADMIN',
+                `actor_name` VARCHAR(255) DEFAULT 'Administrator Sistem',
+                `actor_email` VARCHAR(150) DEFAULT 'administrator@kkp.go.id',
+                `actor_role` VARCHAR(100) DEFAULT 'administrator',
+                `summary` TEXT NULL,
+                `payload_json` LONGTEXT NULL,
+                `ip_address` VARCHAR(64) DEFAULT '127.0.0.1',
+                `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                INDEX `idx_audit_action` (`action_type`),
+                INDEX `idx_audit_module` (`module`),
+                INDEX `idx_audit_satdik` (`satdik_id`),
+                INDEX `idx_audit_created` (`created_at`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        ");
+        $checked = true;
+    } catch (Throwable $e) {
+        // Abaikan jika gagal auto-create
+    }
+}
+
+/**
+ * Ekstrak informasi pengguna/aktor dari body request atau HTTP header
+ */
+function extractActorFromRequest(?array $body = null): array {
+    $actor = [];
+    if (is_array($body) && isset($body['_actor']) && is_array($body['_actor'])) {
+        $actor = $body['_actor'];
+    }
+    $id = $actor['id'] ?? ($_SERVER['HTTP_X_ACTOR_ID'] ?? ($_GET['actor_id'] ?? 'USR-ADMIN'));
+    $name = $actor['name'] ?? ($_SERVER['HTTP_X_ACTOR_NAME'] ?? ($_GET['actor_name'] ?? 'Administrator / Operator Sistem'));
+    $email = $actor['email'] ?? ($_SERVER['HTTP_X_ACTOR_EMAIL'] ?? ($_GET['actor_email'] ?? 'administrator@kkp.go.id'));
+    $role = $actor['roleLabel'] ?? ($actor['role'] ?? ($_SERVER['HTTP_X_ACTOR_ROLE'] ?? ($_GET['actor_role'] ?? 'Administrator Utama')));
+
+    return [
+        'id' => trim((string)$id) ?: 'USR-ADMIN',
+        'name' => trim((string)$name) ?: 'Administrator / Operator Sistem',
+        'email' => trim((string)$email) ?: 'administrator@kkp.go.id',
+        'role' => trim((string)$role) ?: 'Administrator Utama',
+    ];
+}
+
+/**
+ * Catat aktivitas Input Database (CREATE/UPDATE/BULK_IMPORT) atau Penghapusan Data (DELETE) ke tabel audit_logs
+ */
+function recordAuditLog(PDO $pdo, array $entry): ?string {
+    try {
+        ensureAuditLogTable($pdo);
+
+        $actionType = strtoupper(trim((string)($entry['actionType'] ?? ($entry['action_type'] ?? 'INPUT'))));
+        if (!in_array($actionType, ['INPUT', 'DELETE'], true)) {
+            $actionType = ($actionType === 'HAPUS' || $actionType === 'REMOVE') ? 'DELETE' : 'INPUT';
+        }
+
+        $operation = strtoupper(trim((string)($entry['operation'] ?? ($actionType === 'DELETE' ? 'DELETE' : 'CREATE'))));
+        $module = strtolower(trim((string)($entry['module'] ?? 'umum')));
+        $tableName = trim((string)($entry['tableName'] ?? ($entry['table_name'] ?? '-')));
+        $recordId = trim((string)($entry['recordId'] ?? ($entry['record_id'] ?? '-')));
+        $recordName = trim((string)($entry['recordName'] ?? ($entry['record_name'] ?? $recordId)));
+        $satdikId = trim((string)($entry['satdikId'] ?? ($entry['satdik_id'] ?? 'ALL'))) ?: 'ALL';
+        $satdikName = trim((string)($entry['satdikName'] ?? ($entry['satdik_name'] ?? '')));
+
+        if ($satdikName === '' && $satdikId !== '' && $satdikId !== 'ALL') {
+            try {
+                $stmtSat = $pdo->prepare("SELECT name, short_name FROM satdik WHERE id = :sid LIMIT 1");
+                $stmtSat->execute([':sid' => $satdikId]);
+                $sRow = $stmtSat->fetch();
+                if ($sRow) {
+                    $satdikName = $sRow['name'] ?: ($sRow['short_name'] ?: $satdikId);
+                }
+            } catch (Throwable $e) {}
+        }
+        if ($satdikName === '') {
+            $satdikName = $satdikId === 'ALL' ? 'Seluruh Satdik (Nasional)' : $satdikId;
+        }
+
+        $actor = $entry['actor'] ?? extractActorFromRequest(is_array($entry['requestBody'] ?? null) ? $entry['requestBody'] : null);
+        $actorId = trim((string)($entry['actorId'] ?? ($actor['id'] ?? 'USR-ADMIN')));
+        $actorName = trim((string)($entry['actorName'] ?? ($actor['name'] ?? 'Administrator Sistem')));
+        $actorEmail = trim((string)($entry['actorEmail'] ?? ($actor['email'] ?? 'administrator@kkp.go.id')));
+        $actorRole = trim((string)($entry['actorRole'] ?? ($actor['role'] ?? 'Administrator Utama')));
+
+        $summary = trim((string)($entry['summary'] ?? ''));
+        $payload = $entry['payload'] ?? ($entry['data'] ?? null);
+        $payloadJson = is_string($payload) ? $payload : ($payload !== null ? json_encode($payload, JSON_UNESCAPED_UNICODE) : null);
+
+        $ipAddress = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $logId = !empty($entry['id']) ? trim((string)$entry['id']) : ('LOG-' . strtoupper(substr($actionType, 0, 3)) . '-' . date('YmdHis') . '-' . rand(1000, 9999));
+
+        $stmt = $pdo->prepare("
+            INSERT INTO `audit_logs` (
+                `id`, `action_type`, `operation`, `module`, `table_name`,
+                `record_id`, `record_name`, `satdik_id`, `satdik_name`,
+                `actor_id`, `actor_name`, `actor_email`, `actor_role`,
+                `summary`, `payload_json`, `ip_address`
+            ) VALUES (
+                :id, :action_type, :operation, :module, :table_name,
+                :record_id, :record_name, :satdik_id, :satdik_name,
+                :actor_id, :actor_name, :actor_email, :actor_role,
+                :summary, :payload_json, :ip_address
+            ) ON DUPLICATE KEY UPDATE
+                `summary` = VALUES(`summary`),
+                `payload_json` = COALESCE(VALUES(`payload_json`), `payload_json`),
+                `actor_id` = VALUES(`actor_id`),
+                `actor_name` = VALUES(`actor_name`),
+                `actor_email` = VALUES(`actor_email`),
+                `actor_role` = VALUES(`actor_role`)
+        ");
+
+        $stmt->execute([
+            ':id' => $logId,
+            ':action_type' => $actionType,
+            ':operation' => $operation,
+            ':module' => $module,
+            ':table_name' => $tableName,
+            ':record_id' => mb_substr($recordId, 0, 100),
+            ':record_name' => mb_substr($recordName, 0, 250),
+            ':satdik_id' => mb_substr($satdikId, 0, 64),
+            ':satdik_name' => mb_substr($satdikName, 0, 250),
+            ':actor_id' => mb_substr($actorId, 0, 64),
+            ':actor_name' => mb_substr($actorName, 0, 250),
+            ':actor_email' => mb_substr($actorEmail, 0, 150),
+            ':actor_role' => mb_substr($actorRole, 0, 100),
+            ':summary' => $summary,
+            ':payload_json' => $payloadJson,
+            ':ip_address' => mb_substr((string)$ipAddress, 0, 64),
+        ]);
+
+        return $logId;
+    } catch (Throwable $e) {
+        return null;
+    }
 }

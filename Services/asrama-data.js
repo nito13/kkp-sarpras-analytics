@@ -27,7 +27,7 @@
       "luasAdjustment": 6720.0,
       "kapasitasAdjustment": 1680.0,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/1X6CqZ7XQ6heEONfSez-TWB4A5v31-8Rn/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=poltek-aup",
       "kapasitasAktif": 1539.0,
       "jumlahTidakDipakai": 0,
       "jumlahPerluRenovasi": 5
@@ -42,7 +42,7 @@
       "luasAdjustment": 1843.0,
       "kapasitasAdjustment": 460.75,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/1MAlPdnv70f6ROfDyk7S2uq8TcF81GP2S/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=poltek-kp-sidoarjo",
       "kapasitasAktif": 447.0,
       "jumlahTidakDipakai": 0,
       "jumlahPerluRenovasi": 0
@@ -57,7 +57,7 @@
       "luasAdjustment": 1949.75,
       "kapasitasAdjustment": 487.44,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/1QVBEWs_wUjAKQyJ8J3WO02o-zf8FLPH9/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=poltek-kp-bitung",
       "kapasitasAktif": 482.0,
       "jumlahTidakDipakai": 0,
       "jumlahPerluRenovasi": 0
@@ -72,7 +72,7 @@
       "luasAdjustment": 1848.0,
       "kapasitasAdjustment": 462.0,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/1yXLRzNCz1PCiWIYiTbxYXiQymsCHnDkn/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=poltek-kp-sorong",
       "kapasitasAktif": 442.27,
       "jumlahTidakDipakai": 0,
       "jumlahPerluRenovasi": 0
@@ -87,7 +87,7 @@
       "luasAdjustment": 1400.0,
       "kapasitasAdjustment": 350.0,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/1BVn0WMyYEd29Z3wl1zOhOPFUe3_UbncZ/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=poltek-kp-karawang",
       "kapasitasAktif": 280.0,
       "jumlahTidakDipakai": 0,
       "jumlahPerluRenovasi": 0
@@ -102,7 +102,7 @@
       "luasAdjustment": 2922.5,
       "kapasitasAdjustment": 730.62,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/1tzeX_aVSOH4h1dvDsBVh9GJKt7ky5C2M/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=poltek-kp-kupang",
       "kapasitasAktif": 691.0,
       "jumlahTidakDipakai": 0,
       "jumlahPerluRenovasi": 0
@@ -117,7 +117,7 @@
       "luasAdjustment": 2342.25,
       "kapasitasAdjustment": 585.56,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/1zbWHEgeuFM1amb3Nl-7oIc_b1mCDA5uY/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=poltek-kp-bone",
       "kapasitasAktif": 580.0,
       "jumlahTidakDipakai": 0,
       "jumlahPerluRenovasi": 0
@@ -132,7 +132,7 @@
       "luasAdjustment": 1144.0,
       "kapasitasAdjustment": 286.0,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/1IlrVTV-yfya6WyujYyMlCi9MbiFJg5b-/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=poltek-kp-pangandaran",
       "kapasitasAktif": 275.58,
       "jumlahTidakDipakai": 0,
       "jumlahPerluRenovasi": 0
@@ -147,7 +147,7 @@
       "luasAdjustment": 566.0,
       "kapasitasAdjustment": 141.5,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/11tkIxHxhUHodrD1I1CaBrBiYyHTHeIsw/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=poltek-kp-dumai",
       "kapasitasAktif": 140.0,
       "jumlahTidakDipakai": 0,
       "jumlahPerluRenovasi": 0
@@ -162,7 +162,7 @@
       "luasAdjustment": 792.0,
       "kapasitasAdjustment": 198.0,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/12k5IvkWQW2pqye9GTw_dntmPrnq9d3iS/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=poltek-kp-jembrana",
       "kapasitasAktif": 198.0,
       "jumlahTidakDipakai": 0,
       "jumlahPerluRenovasi": 0
@@ -177,7 +177,7 @@
       "luasAdjustment": 592.0,
       "kapasitasAdjustment": 148.0,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/1WTfwpN7wI6qDTZzPFLO0XuIihojqHdnr/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=akkp-wakatobi",
       "kapasitasAktif": 140.0,
       "jumlahTidakDipakai": 0,
       "jumlahPerluRenovasi": 0
@@ -192,7 +192,7 @@
       "luasAdjustment": 1360.0,
       "kapasitasAdjustment": 340.0,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/14TBYGWUDtKHo-WucKp5vnfILBoaPoG1R/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=supm-ladong",
       "kapasitasAktif": 340.0,
       "jumlahTidakDipakai": 0,
       "jumlahPerluRenovasi": 0
@@ -207,7 +207,7 @@
       "luasAdjustment": 1650.0,
       "kapasitasAdjustment": 412.5,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/1nEcfgRBw_BU_UnbwDUQqM2qv25BjTual/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=supm-pariaman",
       "kapasitasAktif": 392.0,
       "jumlahTidakDipakai": 0,
       "jumlahPerluRenovasi": 0
@@ -222,7 +222,7 @@
       "luasAdjustment": 1523.1,
       "kapasitasAdjustment": 380.77,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/1UA9dnejoxFHx6JC89psiwi8YGTf8_nJK/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=supm-kotaagung",
       "kapasitasAktif": 162.0,
       "jumlahTidakDipakai": 4,
       "jumlahPerluRenovasi": 0
@@ -237,7 +237,7 @@
       "luasAdjustment": 1619.75,
       "kapasitasAdjustment": 404.94,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/1c-YtdyhHNpeN22Pf71-FNB7OunFeUUAc/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=supm-tegal",
       "kapasitasAktif": 365.93,
       "jumlahTidakDipakai": 0,
       "jumlahPerluRenovasi": 0
@@ -252,7 +252,7 @@
       "luasAdjustment": 1736.0,
       "kapasitasAdjustment": 434.0,
       "keterangan": "",
-      "driveUrl": "https://drive.google.com/file/d/1Szlj58p9-6nomyF_Nxbh9J9KuFwh3jHX/view?usp=sharing",
+      "driveUrl": "APIs/doc.php?ref=supm-waiheru",
       "kapasitasAktif": 434.0,
       "jumlahTidakDipakai": 0,
       "jumlahPerluRenovasi": 0

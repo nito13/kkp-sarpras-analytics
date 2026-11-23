@@ -262,7 +262,7 @@ window.SARPRAS_TAMBAK = {
       "totalKincir": 0,
       "dayaListrik": "Tidak ada",
       "lokasiUtama": "Kampus AK-KP Wakatobi",
-      "mapUrl": "https://drive.google.com/file/d/1kmTbwtt2u5t4lKjYFw5ZoqSOI5xjkj1T/view?usp=drive_link",
+      "mapUrl": "APIs/doc.php?ref=wakatobi-tambak",
       "keterangan": "Akademi Komunitas KP Wakatobi tidak memiliki prasarana tambak/kolam"
     },
     {
