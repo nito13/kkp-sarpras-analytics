@@ -1,0 +1,1420 @@
+/* ============================================================================
+   Sarana dan Prasarana Satuan Pendidikan KP - Custom Stylesheet & Theme Overrides (Mode Gelap & Terang)
+   BPPSDMKP - Kementerian Kelautan dan Perikanan RI
+   File ini dapat diedit langsung tanpa perlu npm run build.
+   ============================================================================ */
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+/* ==============================================================
+   STICKY / FROZEN NAVIGATION BAR & SIDEBAR (TETAP DIAM SAAT SCROLL
+   DAN BERADA DI DALAM FLEX FLOW AGAR TIDAK MENUMPUK KONTEN UTAMA)
+   ============================================================== */
+.app-top-navbar {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 40 !important;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.app-sidebar {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 3.5rem !important;
+  height: calc(100vh - 3.5rem) !important;
+  max-height: calc(100vh - 3.5rem) !important;
+  align-self: flex-start !important;
+  flex-shrink: 0 !important;
+  z-index: 30 !important;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .app-sidebar {
+    top: 4rem !important;
+    height: calc(100vh - 4rem) !important;
+    max-height: calc(100vh - 4rem) !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:block {
+    display: block !important;
+  }
+}
+
+/* Utility classes for YouTube-style sidebar & layout */
+.w-60 { width: 15rem; }
+.w-64 { width: 16rem; }
+.w-\[78px\] { width: 78px; }
+.max-w-\[82vw\] { max-width: 82vw; }
+.z-30 { z-index: 30; }
+.top-14 { top: 3.5rem; }
+.top-2\.5 { top: 0.625rem; }
+
+/* Penyelarasan presisi ikon kaca pembesar (Search) sejajar tengah vertikal dengan teks input Cari */
+.search-input-icon {
+  position: absolute !important;
+  left: 0.75rem !important;
+  top: calc(50% + 0.5px) !important;
+  translate: 0 -50% !important;
+  transform: none !important;
+  pointer-events: none !important;
+}
+.h-\[calc\(100vh-3\.5rem\)\] { height: calc(100vh - 3.5rem); }
+.border-r { border-right-width: 1px; border-right-style: solid; }
+.border-slate-800\/90 { border-color: rgba(30, 41, 59, 0.9); }
+.bg-black\/60 { background-color: rgba(0, 0, 0, 0.6); }
+.bg-gradient-to-b { background-image: linear-gradient(to bottom, #0891b2, #2563eb); }
+.gap-3\.5 { gap: 0.875rem; }
+.min-h-0 { min-height: 0px; }
+.h-\[15px\] { height: 15px; }
+.min-w-\[15px\] { min-width: 15px; }
+.-top-1\.5 { top: -0.375rem; }
+.-right-2\.5 { right: -0.625rem; }
+.px-0\.5 { padding-left: 0.125rem; padding-right: 0.125rem; }
+
+@media (min-width: 640px) {
+  .sm\:top-16 { top: 4rem; }
+  .sm\:h-\[calc\(100vh-4rem\)\] { height: calc(100vh - 4rem); }
+}
+
+body {
+  background-color: #0f172a;
+  color: #f1f5f9;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* ==============================================================
+   THEME SWITCH OPTIMIZATION
+   - color-scheme: scrollbar, input date, select & kontrol native
+     browser ikut menyesuaikan mode gelap/terang.
+   - .theme-switching dipasang ~2 frame saat ganti tema agar ratusan
+     elemen ber-"transition-all" tidak beranimasi serentak (lag/kedip).
+   ============================================================== */
+html.dark {
+  color-scheme: dark;
+}
+html.theme-switching,
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  -webkit-transition: none !important;
+  transition: none !important;
+}
+
+::selection {
+  background-color: #06b6d4;
+  color: #ffffff;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0284c7;
+}
+
+/* Animations */
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ==============================================================
+   LIGHT THEME OVERRIDES (WARNA SOLID PADA MODE TERANG)
+   Tanpa gradien / tanpa transparansi kusam, 100% warna solid tegas
+   ============================================================== */
+
+/* 1. Global Page Background & Base Text */
+html.light body {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* Hilangkan SEMUA gradien di Mode Terang dan gantikan warna solid */
+html.light [class*="bg-gradient-"] {
+  background-image: none !important;
+}
+
+/* 2. Solid Surfaces (Cards, Containers, Modals) */
+html.light .bg-slate-900,
+html.light .bg-slate-950,
+html.light .bg-slate-800,
+html.light [class*="bg-slate-900/"],
+html.light [class*="bg-slate-950/"],
+html.light [class*="bg-slate-800/"] {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.03) !important;
+}
+
+/* 3. Solid Sub-panels, secondary containers, and wells */
+html.light [class*="bg-slate-950/"],
+html.light [class*="bg-slate-900/"] {
+  background-color: #f8fafc !important;
+  background-image: none !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* 3b. Progress bar tracks in Light Mode */
+html.light [class*="bg-slate-800"][class*="rounded-full"],
+html.light [class*="bg-slate-700"][class*="rounded-full"],
+html.light .h-1\.5.bg-slate-800,
+html.light .h-2.bg-slate-800 {
+  background-color: #e2e8f0 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* 4. Solid Top Branding Banner (Solid Deep Navy KKP) */
+html.light .top-branding-banner {
+  background-color: #032b5f !important;
+  background-image: none !important;
+  border-bottom: 2px solid #0284c7 !important;
+  color: #ffffff !important;
+}
+html.light .top-branding-banner * {
+  color: #ffffff !important;
+}
+html.light .top-branding-banner .text-slate-400 {
+  color: #bae6fd !important;
+}
+
+/* 5. Solid Special Alert & Header Cards */
+/* Peringatan Dini (Early Warning) - Solid Light Red */
+html.light [class*="from-rose-950"],
+html.light [class*="via-rose-950"],
+html.light [class*="via-rose-900"] {
+  background-color: #fee2e2 !important;
+  background-image: none !important;
+  border-color: #f87171 !important;
+  color: #991b1b !important;
+}
+html.light [class*="from-rose-950"] h2,
+html.light [class*="from-rose-950"] h3,
+html.light [class*="from-rose-950"] .font-bold {
+  color: #991b1b !important;
+}
+html.light [class*="from-rose-950"] p,
+html.light [class*="from-rose-950"] span:not([class*="bg-"]) {
+  color: #7f1d1d !important;
+}
+
+/* Budget Simulator Header - Solid Light Indigo */
+html.light [class*="from-indigo-950"],
+html.light [class*="via-indigo-950"] {
+  background-color: #e0e7ff !important;
+  background-image: none !important;
+  border-color: #818cf8 !important;
+  color: #312e81 !important;
+}
+html.light [class*="from-indigo-950"] h2,
+html.light [class*="from-indigo-950"] .font-bold {
+  color: #312e81 !important;
+}
+html.light [class*="from-indigo-950"] p,
+html.light [class*="from-indigo-950"] span:not([class*="bg-"]) {
+  color: #3730a3 !important;
+}
+
+/* Modal Full Edit Kendali Penuh Banner - Solid Light Sky */
+html.light [class*="from-cyan-950"],
+html.light [class*="via-blue-950"] {
+  background-color: #e0f2fe !important;
+  background-image: none !important;
+  border-color: #38bdf8 !important;
+  color: #0369a1 !important;
+}
+html.light [class*="from-cyan-950"] h4,
+html.light [class*="from-cyan-950"] p {
+  color: #0369a1 !important;
+}
+
+/* Administrator Banner Header - Solid Warm Amber */
+html.light [class*="to-amber-950"],
+html.light [class*="from-amber-950"] {
+  background-color: #fef3c7 !important;
+  background-image: none !important;
+  border-color: #f59e0b !important;
+  color: #78350f !important;
+}
+html.light [class*="to-amber-950"] h2,
+html.light [class*="to-amber-950"] h3 {
+  color: #78350f !important;
+}
+html.light [class*="to-amber-950"] p {
+  color: #92400e !important;
+}
+
+/* 6. Solid Buttons (No Gradients) */
+/* Primary Cyan / Sky Action Buttons */
+html.light .bg-cyan-600,
+html.light .bg-blue-600,
+html.light [class*="from-cyan-600"] {
+  background-color: #0284c7 !important;
+  background-image: none !important;
+  border-color: #0284c7 !important;
+  color: #ffffff !important;
+}
+html.light .bg-cyan-600:hover,
+html.light .bg-blue-600:hover,
+html.light [class*="from-cyan-600"]:hover {
+  background-color: #0369a1 !important;
+}
+html.light .bg-cyan-600 *,
+html.light .bg-blue-600 *,
+html.light [class*="from-cyan-600"] * {
+  color: #ffffff !important;
+}
+
+/* Primary Emerald Action Buttons */
+html.light .bg-emerald-600,
+html.light [class*="from-emerald-600"] {
+  background-color: #059669 !important;
+  background-image: none !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
+}
+html.light .bg-emerald-600:hover,
+html.light [class*="from-emerald-600"]:hover {
+  background-color: #047857 !important;
+}
+html.light .bg-emerald-600 *,
+html.light [class*="from-emerald-600"] * {
+  color: #ffffff !important;
+}
+
+/* Rose Action Buttons */
+html.light .bg-rose-600 {
+  background-color: #e11d48 !important;
+  background-image: none !important;
+  border-color: #e11d48 !important;
+  color: #ffffff !important;
+}
+html.light .bg-rose-600:hover {
+  background-color: #be123c !important;
+}
+html.light .bg-rose-600 * {
+  color: #ffffff !important;
+}
+
+/* Secondary & Reset Buttons */
+html.light button.bg-slate-900,
+html.light button.bg-slate-800 {
+  background-color: #f1f5f9 !important;
+  background-image: none !important;
+  border-color: #cbd5e1 !important;
+  color: #334155 !important;
+}
+html.light button.bg-slate-900:hover,
+html.light button.bg-slate-800:hover {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* Export Excel Green Solid Container */
+html.light [class*="bg-emerald-950/80"] {
+  background-color: #ecfdf5 !important;
+  background-image: none !important;
+  border-color: #34d399 !important;
+  color: #065f46 !important;
+}
+html.light [class*="bg-emerald-950/80"]:hover {
+  background-color: #d1fae5 !important;
+  color: #047857 !important;
+}
+html.light [class*="bg-emerald-950/80"] svg {
+  color: #059669 !important;
+}
+
+/* 7. Solid Badges & Status Pills (Warna Solid Tegas) */
+html.light [class*="bg-emerald-500/10"],
+html.light [class*="bg-emerald-500/15"],
+html.light [class*="bg-emerald-500/20"],
+html.light [class*="bg-emerald-950"] {
+  background-color: #dcfce7 !important;
+  background-image: none !important;
+  color: #15803d !important;
+  border-color: #4ade80 !important;
+}
+
+html.light [class*="bg-cyan-500/10"],
+html.light [class*="bg-cyan-500/15"],
+html.light [class*="bg-cyan-500/20"],
+html.light [class*="bg-cyan-950"],
+html.light [class*="bg-sky-500/10"],
+html.light [class*="bg-sky-500/15"],
+html.light [class*="bg-sky-500/20"] {
+  background-color: #e0f2fe !important;
+  background-image: none !important;
+  color: #0369a1 !important;
+  border-color: #38bdf8 !important;
+}
+
+html.light [class*="bg-amber-500/10"],
+html.light [class*="bg-amber-500/15"],
+html.light [class*="bg-amber-500/20"] {
+  background-color: #fef9c3 !important;
+  background-image: none !important;
+  color: #854d0e !important;
+  border-color: #facc15 !important;
+}
+
+html.light [class*="bg-rose-500/10"],
+html.light [class*="bg-rose-500/15"],
+html.light [class*="bg-rose-500/20"],
+html.light [class*="bg-rose-950"] {
+  background-color: #fee2e2 !important;
+  background-image: none !important;
+  color: #991b1b !important;
+  border-color: #f87171 !important;
+}
+
+html.light [class*="bg-indigo-500/10"],
+html.light [class*="bg-indigo-500/15"],
+html.light [class*="bg-indigo-500/20"],
+html.light [class*="bg-indigo-950"] {
+  background-color: #e0e7ff !important;
+  background-image: none !important;
+  color: #3730a3 !important;
+  border-color: #818cf8 !important;
+}
+
+html.light [class*="bg-purple-500/10"],
+html.light [class*="bg-purple-500/15"],
+html.light [class*="bg-purple-500/20"] {
+  background-color: #f3e8ff !important;
+  background-image: none !important;
+  color: #6b21a8 !important;
+  border-color: #c084fc !important;
+}
+
+/* 8. Solid Borders in Light Mode */
+html.light .border-slate-800,
+html.light .border-slate-700,
+html.light .border-slate-700\/80,
+html.light .border-slate-700\/70,
+html.light .border-slate-700\/60,
+html.light .border-slate-700\/50,
+html.light .border-slate-800\/60,
+html.light .border-slate-800\/80,
+html.light .border-slate-750 {
+  border-color: #cbd5e1 !important;
+}
+
+/* 9. Ultra-Clear, Sharp, High-Contrast Typography in Light Mode */
+html.light {
+  color-scheme: light;
+}
+
+html.light body {
+  background-color: #f1f5f9 !important;
+  color: #090d16 !important; /* Deepest solid black-slate */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Headings and Titles - Bold, Deep Black */
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light h5,
+html.light h6 {
+  color: #090d16 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em;
+}
+
+/* Labels & Form Titles */
+html.light label {
+  color: #090d16 !important;
+  font-weight: 600 !important;
+}
+
+/* Paragraphs & General Body Text */
+html.light p {
+  color: #1e293b !important;
+}
+
+/* All text-white outside colored buttons/top banner becomes deep jet black */
+html.light .text-white:not([class*="bg-cyan-600"]):not([class*="bg-blue-600"]):not([class*="bg-emerald-600"]):not([class*="bg-rose-600"]):not(.top-branding-banner *):not([class*="from-cyan-600"] *):not([class*="from-emerald-600"] *):not(.bg-cyan-500 *) {
+  color: #090d16 !important;
+  font-weight: 600 !important;
+}
+
+/* Primary text & prominent subheadings */
+html.light .text-slate-100,
+html.light .text-slate-200 {
+  color: #090d16 !important;
+  font-weight: 600 !important;
+}
+
+/* Secondary text, descriptions, table contents */
+html.light .text-slate-300 {
+  color: #1e293b !important; /* Deep slate-800 instead of pale gray */
+  font-weight: 500 !important;
+}
+
+/* Metadata, card labels, BMN codes, years, small subtitles */
+html.light .text-slate-400 {
+  color: #334155 !important; /* Solid Slate-700 instead of faint #475569 */
+  font-weight: 500 !important;
+}
+
+/* Subtle hints & timestamps */
+html.light .text-slate-500 {
+  color: #475569 !important; /* Slate-600 instead of faint #64748b */
+  font-weight: 500 !important;
+}
+
+/* Monospace BMN codes and values - make crisp and legible */
+html.light .font-mono {
+  color: #0369a1 !important;
+  font-weight: 700 !important;
+}
+
+/* Navigation buttons clarity in Light Mode */
+html.light header button,
+html.light aside button {
+  font-weight: 600 !important;
+}
+html.light header button:not([class*="bg-cyan-600"]):not([class*="from-cyan-600"]),
+html.light aside button:not([class*="bg-cyan-600"]):not([class*="from-cyan-600"]) {
+  color: #1e293b !important;
+}
+html.light header button:not([class*="bg-cyan-600"]):not([class*="from-cyan-600"]):hover,
+html.light aside button:not([class*="bg-cyan-600"]):not([class*="from-cyan-600"]):hover {
+  background-color: #e2e8f0 !important;
+  color: #090d16 !important;
+}
+
+/* Solid Bold Metrics & Accent Text */
+html.light .text-emerald-400,
+html.light .text-emerald-300 {
+  color: #047857 !important; /* Solid Emerald 700 */
+  font-weight: 700 !important;
+}
+
+html.light .text-cyan-400,
+html.light .text-cyan-300 {
+  color: #0369a1 !important; /* Solid Sky 700 */
+  font-weight: 700 !important;
+}
+
+html.light .text-sky-400,
+html.light .text-sky-300 {
+  color: #0284c7 !important; /* Solid Sky 600 */
+  font-weight: 700 !important;
+}
+
+html.light .text-amber-400,
+html.light .text-amber-300 {
+  color: #92400e !important; /* Solid Amber 800 */
+  font-weight: 700 !important;
+}
+
+html.light .text-rose-400,
+html.light .text-rose-300 {
+  color: #9f1239 !important; /* Solid Rose 800 */
+  font-weight: 700 !important;
+}
+
+html.light .text-indigo-400,
+html.light .text-indigo-300 {
+  color: #3730a3 !important; /* Solid Indigo 700 */
+  font-weight: 700 !important;
+}
+
+html.light .text-purple-400,
+html.light .text-purple-300 {
+  color: #6b21a8 !important; /* Solid Purple 700 */
+  font-weight: 700 !important;
+}
+
+/* 10. Solid Form Inputs & Selects */
+html.light input,
+html.light select,
+html.light option,
+html.light textarea {
+  background-color: #ffffff !important;
+  color: #090d16 !important;
+  font-weight: 500 !important;
+  border-color: #cbd5e1 !important;
+}
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #64748b !important;
+  font-weight: 400 !important;
+}
+html.light input:focus,
+html.light select:focus,
+html.light textarea:focus {
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2) !important;
+}
+
+/* 11. Solid Tables with Clear Typography */
+html.light table th,
+html.light table thead tr {
+  background-color: #f1f5f9 !important;
+  color: #090d16 !important;
+  font-weight: 700 !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+html.light table td {
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+  font-weight: 500 !important;
+}
+html.light table td span {
+  font-weight: 600;
+}
+html.light table tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+
+/* 12. Solid Geospatial Map Canvas */
+html.light .geospatial-canvas-container,
+html.light .relative.w-full.h-\[400px\],
+html.light .relative.w-full.h-\[460px\] {
+  background-color: #dbeafe !important;
+  background-image: none !important;
+  border-color: #93c5fd !important;
+}
+html.light svg g[fill="#1e293b"] {
+  fill: #475569 !important;
+  stroke: #334155 !important;
+}
+html.light svg text {
+  fill: #0f172a !important;
+  text-shadow: 0 1px 2px #ffffff !important;
+}
+
+/* 13. Solid Modals & Backdrops */
+html.light .fixed.inset-0 {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+}
+html.light .fixed.inset-0 .bg-slate-900 {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+html.light .fixed.inset-0 .bg-slate-800\/95,
+html.light .fixed.inset-0 .bg-slate-800\/90,
+html.light .fixed.inset-0 .bg-slate-800\/80 {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* 14. Solid Login Screen */
+html.light .min-h-screen.bg-gradient-to-br {
+  background-color: #f1f5f9 !important;
+  background-image: none !important;
+  color: #0f172a !important;
+}
+html.light .min-h-screen.bg-gradient-to-br .bg-slate-900\/95 {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08) !important;
+}
+html.light .min-h-screen.bg-gradient-to-br button[type="button"].bg-slate-950\/70 {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+html.light .min-h-screen.bg-gradient-to-br button[type="button"].bg-slate-950\/70:hover {
+  background-color: #f1f5f9 !important;
+  border-color: #0284c7 !important;
+}
+html.light .login-logo-container,
+html.light .header-logo-container {
+  border-color: #000000 !important;
+}
+
+/* Light Mode scrollbars */
+html.light ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+html.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* 15. Mobile Bottom Navigation in Light Mode */
+html.light nav.fixed.bottom-0 {
+  background-color: #ffffff !important;
+  border-top: 1px solid #cbd5e1 !important;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08) !important;
+}
+html.light nav.fixed.bottom-0 button:not(.text-cyan-400) {
+  color: #334155 !important;
+}
+html.light nav.fixed.bottom-0 button:not(.text-cyan-400) * {
+  color: #334155 !important;
+}
+html.light nav.fixed.bottom-0 button.text-cyan-400,
+html.light nav.fixed.bottom-0 button.text-cyan-400 * {
+  color: #0284c7 !important;
+}
+
+/* Mobile responsive helpers */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: clip;
+    position: relative;
+    width: 100%;
+  }
+
+  .mobile-main-container {
+    padding-bottom: 5.5rem !important;
+  }
+}
+
+/* ==============================================================
+   LEAFLET REAL MAP STYLING & CUSTOM POPUPS
+   ============================================================== */
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  background-color: #0b1120 !important;
+  font-family: inherit !important;
+  z-index: 1 !important;
+}
+
+/* Custom Marker Styling */
+.custom-satdik-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Leaflet Popup Styling */
+.leaflet-popup-content-wrapper {
+  background: #0f172a !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.4) !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+
+.leaflet-popup-tip-container {
+  overflow: visible !important;
+}
+
+.leaflet-popup-tip {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  box-shadow: none !important;
+}
+
+.leaflet-popup-close-button {
+  color: #94a3b8 !important;
+  padding: 8px 10px !important;
+  font-size: 18px !important;
+  z-index: 20 !important;
+}
+
+.leaflet-popup-close-button:hover {
+  color: #ffffff !important;
+}
+
+/* Leaflet Tooltip */
+.leaflet-tooltip.satdik-map-tooltip {
+  background: rgba(15, 23, 42, 0.95) !important;
+  color: #f8fafc !important;
+  border: 1px solid #0284c7 !important;
+  border-radius: 8px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+  padding: 4px 8px !important;
+  backdrop-filter: blur(4px);
+}
+
+.leaflet-tooltip-top.satdik-map-tooltip:before {
+  border-top-color: #0284c7 !important;
+}
+
+.leaflet-tooltip-bottom.satdik-map-tooltip:before {
+  border-bottom-color: #0284c7 !important;
+}
+
+/* Light Mode Overrides for Leaflet */
+html.light .leaflet-container {
+  background-color: #e2e8f0 !important;
+}
+
+html.light .leaflet-popup-content-wrapper {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light .leaflet-popup-tip {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light .leaflet-popup-close-button {
+  color: #64748b !important;
+}
+
+html.light .leaflet-popup-close-button:hover {
+  color: #0f172a !important;
+}
+
+html.light .leaflet-tooltip.satdik-map-tooltip {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #0f172a !important;
+  border-color: #0284c7 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+}
+
+
+/* ==============================================================
+   CALIBRATION MODAL & SIDEBAR HIGHLIGHT STYLES
+   ============================================================== */
+.calibration-modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: rgba(15, 23, 42, 0.88) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+.calibration-modal-content {
+  position: relative !important;
+  z-index: 1000000 !important;
+}
+
+.sidebar-panel-highlight {
+  outline: 3px solid #38bdf8 !important;
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.45) !important;
+  animation: sidebarGlowPulse 1.5s ease-in-out infinite alternate !important;
+}
+
+@keyframes sidebarGlowPulse {
+  0% {
+    outline-color: #0284c7;
+    box-shadow: 0 0 15px rgba(2, 132, 199, 0.3);
+  }
+  100% {
+    outline-color: #38bdf8;
+    box-shadow: 0 0 35px rgba(56, 189, 248, 0.6);
+  }
+}
+
+
+/* ==============================================================
+   LOGIN SPLIT-SCREEN (Konsep 4)
+   - Desktop (>= 1024px): panel hero navy KKP di kiri, form login di kanan.
+   - Tablet & HP (< 1024px): panel hero diganti header hero ringkas di atas
+     (".login-mhero"), kartu form menumpuk di bawahnya (lihat "LOGIN MOBILE").
+   - Panel hero sengaja tetap navy di Mode Terang maupun Gelap (identitas KKP),
+     sehingga selektor diberi prefix "html" agar menang atas override html.light.
+   ============================================================== */
+.login-split {
+  display: flex;
+  flex-direction: row;
+}
+.login-form-panel {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 100vh;
+}
+.login-hero {
+  display: none;
+}
+.login-mhero {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  html .login-hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 0 0 56%;
+    max-width: 56%;
+    min-height: 100vh;
+    padding: 2.5rem 3rem;
+    overflow: hidden;
+    color: #ffffff;
+    background-color: #032b5f;
+    background-image:
+      radial-gradient(ellipse at 15% 20%, rgba(6, 182, 212, 0.28) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 75%, rgba(16, 185, 129, 0.16) 0%, transparent 50%),
+      linear-gradient(160deg, #04306a 0%, #032b5f 45%, #021a3d 100%);
+    border-right: 1px solid rgba(56, 189, 248, 0.25);
+  }
+  html.dark .login-hero {
+    background-image:
+      radial-gradient(ellipse at 15% 20%, rgba(6, 182, 212, 0.22) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 75%, rgba(16, 185, 129, 0.12) 0%, transparent 50%),
+      linear-gradient(160deg, #032756 0%, #021d42 50%, #010f26 100%);
+  }
+}
+
+@media (min-width: 1280px) {
+  html .login-hero {
+    flex-basis: 60%;
+    max-width: 60%;
+    padding: 3rem 4rem;
+  }
+}
+
+/* Dekorasi */
+html .login-hero .lh-contour {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 560px;
+  height: 560px;
+  color: rgba(125, 211, 252, 0.14);
+  pointer-events: none;
+}
+html .login-hero .lh-waves {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 34%;
+  pointer-events: none;
+}
+html .login-hero .lh-wave-1 { fill: rgba(6, 182, 212, 0.10); }
+html .login-hero .lh-wave-2 { fill: rgba(2, 132, 199, 0.16); }
+html .login-hero .lh-watermark {
+  position: absolute;
+  right: 5%;
+  bottom: 12%;
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+  /* Logo OII dijadikan siluet putih transparan agar menyatu dengan latar navy */
+  filter: brightness(0) invert(1);
+  opacity: 0.07;
+  pointer-events: none;
+  user-select: none;
+}
+html .login-hero .lh-watermark.is-fallback {
+  width: 220px;
+  height: 220px;
+  filter: none;
+  opacity: 1;
+  color: rgba(255, 255, 255, 0.04) !important;
+}
+
+/* Konten */
+html .login-hero .lh-brand,
+html .login-hero .lh-main,
+html .login-hero .lh-foot {
+  position: relative;
+  z-index: 1;
+}
+html .login-hero .lh-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+html .login-hero .lh-logo {
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  border-radius: 0.875rem;
+  background: #ffffff;
+  padding: 0.3rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+html .login-hero .lh-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+html .login-hero .lh-brand-title {
+  color: #ffffff !important;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+html .login-hero .lh-brand-sub {
+  color: #bae6fd !important;
+  font-size: 0.72rem;
+  font-weight: 500;
+  margin-top: 0.15rem;
+}
+html .login-hero .lh-main {
+  max-width: 36rem;
+  padding: 2rem 0;
+}
+html .login-hero .lh-badge {
+  display: inline-block;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(103, 232, 249, 0.45);
+  background: rgba(6, 182, 212, 0.15);
+  color: #a5f3fc !important;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+html .login-hero .lh-title {
+  color: #ffffff !important;
+  font-size: 2.6rem;
+  line-height: 1.12;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+  margin-top: 1.1rem;
+}
+html .login-hero .lh-title-accent {
+  color: #67e8f9 !important;
+}
+html .login-hero .lh-desc {
+  color: #cbd5e1 !important;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin-top: 1rem;
+  max-width: 32rem;
+}
+html .login-hero .lh-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+html .login-hero .lh-stat {
+  padding: 0.85rem 0.9rem;
+  border-radius: 0.875rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+html .login-hero .lh-stat-value {
+  color: #ffffff !important;
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+html .login-hero .lh-stat-label {
+  color: #93c5fd !important;
+  font-size: 0.68rem;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+html .login-hero .lh-modules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+html .login-hero .lh-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.6rem;
+  background: rgba(2, 132, 199, 0.18);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: #e0f2fe !important;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+html .login-hero .lh-chip-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+  color: #67e8f9 !important;
+}
+html .login-hero .lh-foot {
+  color: #94a3b8 !important;
+  font-size: 0.72rem;
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  html .login-hero .lh-title { font-size: 2.1rem; }
+  html .login-hero .lh-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) and (max-height: 720px) {
+  html .login-hero .lh-modules { display: none; }
+  html .login-hero .lh-main { padding: 1rem 0; }
+}
+
+
+/* ==============================================================
+   LOGIN MOBILE (< 1024px)
+   - Header hero navy KKP ringkas di atas, kartu form menumpuk (overlap).
+   - Input 16px agar iOS Safari tidak auto-zoom, target sentuh >= 44px.
+   - Hero tetap navy di Mode Terang maupun Gelap (prefix "html").
+   ============================================================== */
+@media (max-width: 1023px) {
+  html .login-form-panel {
+    padding: 0 !important;
+    justify-content: flex-start;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  /* Header hero */
+  html .login-mhero {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    z-index: 1;
+    color: #ffffff;
+    padding: calc(env(safe-area-inset-top, 0px) + 1.25rem) 1.25rem 4rem;
+    background-color: #032b5f;
+    background-image:
+      radial-gradient(ellipse at 10% 10%, rgba(6, 182, 212, 0.30) 0%, transparent 60%),
+      radial-gradient(ellipse at 90% 90%, rgba(16, 185, 129, 0.16) 0%, transparent 55%),
+      linear-gradient(160deg, #04306a 0%, #032b5f 50%, #021a3d 100%);
+    border-bottom-left-radius: 1.75rem;
+    border-bottom-right-radius: 1.75rem;
+  }
+  html.dark .login-mhero {
+    background-image:
+      radial-gradient(ellipse at 10% 10%, rgba(6, 182, 212, 0.22) 0%, transparent 60%),
+      radial-gradient(ellipse at 90% 90%, rgba(16, 185, 129, 0.12) 0%, transparent 55%),
+      linear-gradient(160deg, #032756 0%, #021d42 50%, #010f26 100%);
+  }
+  html .login-mhero .lmh-contour {
+    position: absolute;
+    top: -70px;
+    right: -90px;
+    width: 340px;
+    height: 340px;
+    color: rgba(125, 211, 252, 0.14);
+    pointer-events: none;
+  }
+  html .login-mhero .lmh-waves {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 45%;
+    pointer-events: none;
+  }
+  html .login-mhero .lmh-wave-1 { fill: rgba(6, 182, 212, 0.10); }
+  html .login-mhero .lmh-wave-2 { fill: rgba(2, 132, 199, 0.16); }
+  html .login-mhero .lmh-watermark {
+    position: absolute;
+    right: -1.5rem;
+    bottom: 2.25rem;
+    width: 170px;
+    height: 170px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    opacity: 0.07;
+    pointer-events: none;
+    user-select: none;
+  }
+  html .login-mhero .lmh-watermark.is-fallback {
+    width: 140px;
+    height: 140px;
+    filter: none;
+    opacity: 1;
+    color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  html .login-mhero .lmh-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 28rem;
+    margin: 0 auto;
+  }
+  html .login-mhero .lmh-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-right: 3rem; /* ruang untuk tombol tema */
+  }
+  html .login-mhero .lmh-logo {
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-shrink: 0;
+    border-radius: 0.8rem;
+    background: #ffffff;
+    padding: 0.28rem;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+  }
+  html .login-mhero .lmh-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  html .login-mhero .lmh-brand-text {
+    min-width: 0;
+  }
+  html .login-mhero .lmh-brand-title {
+    color: #ffffff !important;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+  html .login-mhero .lmh-brand-sub {
+    color: #bae6fd !important;
+    font-size: 0.68rem;
+    font-weight: 500;
+    margin-top: 0.1rem;
+  }
+  html .login-mhero .lmh-badge {
+    display: inline-block;
+    margin-top: 1.25rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    border: 1px solid rgba(103, 232, 249, 0.45);
+    background: rgba(6, 182, 212, 0.15);
+    color: #a5f3fc !important;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  html .login-mhero .lmh-title {
+    color: #ffffff !important;
+    font-size: 1.55rem;
+    line-height: 1.18;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em;
+    margin-top: 0.6rem;
+  }
+  html .login-mhero .lmh-title-accent {
+    display: block;
+    color: #67e8f9 !important;
+  }
+  html .login-mhero .lmh-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin-top: 1.1rem;
+  }
+  html .login-mhero .lmh-stat {
+    padding: 0.55rem 0.5rem;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  html .login-mhero .lmh-stat-value {
+    color: #ffffff !important;
+    font-size: 1.1rem;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+  html .login-mhero .lmh-stat-label {
+    color: #93c5fd !important;
+    font-size: 0.58rem;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-top: 0.2rem;
+  }
+
+  /* Tombol tema melayang di pojok kanan atas hero */
+  html .login-topbar {
+    position: absolute !important;
+    top: calc(env(safe-area-inset-top, 0px) + 1.25rem);
+    right: 1rem;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 20 !important;
+  }
+  html .login-split .login-topbar button {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem !important;
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  html .login-split .login-topbar button svg {
+    width: 1.1rem !important;
+    height: 1.1rem !important;
+  }
+
+  /* Kartu form menumpuk di atas hero */
+  html .login-card-wrap {
+    margin: -2.75rem auto 0 !important;
+    padding: 0 1rem !important;
+    z-index: 10;
+  }
+  html .login-card {
+    border-radius: 1.5rem !important;
+    padding: 1.5rem 1.25rem !important;
+  }
+
+  /* Form: nyaman disentuh, tanpa auto-zoom iOS */
+  html .login-card input[type="text"],
+  html .login-card input[type="password"],
+  html .login-card input[type="email"] {
+    font-size: 16px !important;
+    min-height: 3rem;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+    border-radius: 0.875rem !important;
+  }
+  html .login-card label {
+    font-size: 0.8rem;
+  }
+  html .login-card .login-eye-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    right: 0.25rem !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  html .login-card .login-remember-row label {
+    font-size: 0.78rem;
+    min-height: 2.25rem;
+  }
+  html .login-card .login-remember-row input[type="checkbox"] {
+    width: 1.1rem !important;
+    height: 1.1rem !important;
+  }
+  html .login-card button[type="submit"] {
+    min-height: 3.25rem;
+    font-size: 0.9rem !important;
+    border-radius: 0.875rem !important;
+  }
+
+  html .login-footer {
+    margin-top: auto;
+    padding: 1.5rem 1rem calc(env(safe-area-inset-bottom, 0px) + 1rem) !important;
+    line-height: 1.5;
+  }
+}
+
+/* Tablet: hero sedikit lebih lega */
+@media (min-width: 640px) and (max-width: 1023px) {
+  html .login-mhero {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 2rem);
+    padding-bottom: 4.5rem;
+    text-align: center;
+  }
+  html .login-mhero .lmh-brand {
+    justify-content: center;
+    padding-right: 0;
+    text-align: left;
+  }
+  html .login-mhero .lmh-title { font-size: 1.9rem; }
+  html .login-topbar { top: calc(env(safe-area-inset-top, 0px) + 1.5rem); right: 1.5rem; }
+  html .login-card { padding: 2rem !important; }
+  html .login-card-wrap { margin-top: -3rem !important; }
+}
+
+/* HP sangat kecil */
+@media (max-width: 359px) {
+  html .login-mhero .lmh-badge { display: none; }
+  html .login-mhero .lmh-title { font-size: 1.35rem; margin-top: 1rem; }
+  html .login-mhero .lmh-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Layar pendek / landscape HP: hemat ruang vertikal */
+@media (max-width: 1023px) and (max-height: 600px) {
+  html .login-mhero { padding-bottom: 3.5rem; }
+  html .login-mhero .lmh-stats,
+  html .login-mhero .lmh-badge { display: none; }
+}
+
+/* ==============================================================
+   ADMINISTRATOR FULL CONTROL NOTICE BANNER (STRIP NOTIFIKASI MODE ADMIN)
+   Disamakan dengan strip Mode Operator Satdik (Cyan / Sky)
+   baik di Mode Terang (Light Mode) maupun Mode Gelap (Dark Mode).
+   ============================================================== */
+.admin-mode-banner-strip {
+  background-color: rgba(8, 51, 68, 0.7) !important;
+  background-image: none !important;
+  border-bottom: 1px solid rgba(21, 94, 117, 0.5) !important;
+  color: #a5f3fc !important;
+}
+
+html.light .admin-mode-banner-strip {
+  background-color: #e0f2fe !important;
+  background-image: none !important;
+  border-bottom: 1px solid #38bdf8 !important;
+  color: #0369a1 !important;
+}
+
+html.light .admin-mode-banner-strip span,
+html.light .admin-mode-banner-strip p {
+  color: #0369a1 !important;
+}
+
+html.light .admin-mode-banner-strip strong {
+  color: #0c4a6e !important;
+  font-weight: 700 !important;
+}
+
+.admin-mode-banner-strip .admin-banner-btn {
+  background-color: #0891b2 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(34, 211, 238, 0.45) !important;
+}
+
+.admin-mode-banner-strip .admin-banner-btn:hover {
+  background-color: #06b6d4 !important;
+  color: #ffffff !important;
+}
+
+html.light .admin-mode-banner-strip .admin-banner-btn {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+  border: 1px solid #0369a1 !important;
+}
+
+html.light .admin-mode-banner-strip .admin-banner-btn:hover {
+  background-color: #0369a1 !important;
+  color: #ffffff !important;
+}

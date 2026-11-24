@@ -1,60 +1,12 @@
-Options -Indexes
-
-<IfModule mod_dir.c>
-    DirectoryIndex index.php index.html
-</IfModule>
-
-# Blokir akses langsung ke file sensitif (database dump, env, script python, konfigurasi)
-<FilesMatch "(^\.env|\.(sql|py|sh|md|bak|log)|Dockerfile|docker-compose\.yml)$">
-    <IfModule mod_authz_core.c>
-        Require all denied
-    </IfModule>
-    <IfModule !mod_authz_core.c>
-        Order allow,deny
-        Deny from all
-    </IfModule>
-</FilesMatch>
-
-<IfModule mod_headers.c>
-    <FilesMatch "\.(html|htm|js|css|php|json)$">
-        Header set Cache-Control "no-cache, no-store, must-revalidate"
-        Header set Pragma "no-cache"
-        Header set Expires 0
-    </FilesMatch>
-</IfModule>
-
-<IfModule mod_mime.c>
-    AddType image/svg+xml .svg .svgz
-    AddEncoding gzip .svgz
-</IfModule>
-
 <IfModule mod_rewrite.c>
+    Options -Indexes
     RewriteEngine On
 
-    # Blokir akses HTTP langsung ke direktori internal (Database, Backend, Services, Excel, scratch)
-    RewriteRule ^(Database|Backend|Services|Excel|scratch)(/|$) - [F,L,NC]
+    # Blokir akses langsung ke file & direktori sensitif Laravel jika DocumentRoot masih di root proyek
+    RewriteRule ^(\.env.*|\.git|composer\.(json|lock)|package\.json|artisan|phpunit\.xml|Dockerfile|docker-compose\.yml|docker-entrypoint\.sh) - [F,L,NC]
+    RewriteRule ^(app|bootstrap|config|database|resources|routes|storage|tests|vendor)(/|$) - [F,L,NC]
 
-    # Blokir pembukaan file .js atau .json secara langsung di tab browser (misal diklik dari View Page Source)
-    RewriteCond %{HTTP:Sec-Fetch-Dest} ^document$ [NC]
-    RewriteRule \.(js|json)$ - [F,L,NC]
-
-    # Routing Khusus Health Monitoring
-    RewriteRule ^api/health\.php$ Monitoring/health.php [L,QSA]
-    RewriteRule ^APIs/health\.php$ Monitoring/health.php [L,QSA]
-
-    # Kompatibilitas REST API & Gateway Dokumen
-    RewriteRule ^Frontend/APIs/(.*)$ APIs/$1 [L,QSA]
-    RewriteRule ^backend/api/(.*)$ APIs/$1 [L,QSA]
-    RewriteRule ^api/(.*)$ APIs/$1 [L,QSA]
-
-    # Kompatibilitas Path Lama assets/ ke Frontend/assets/
-    RewriteRule ^assets/(.*)$ Frontend/assets/$1 [L,QSA]
-
-    # Lewatkan file dan direktori fisik yang diizinkan (Frontend/, APIs/, Monitoring/, Templates/)
-    RewriteCond %{REQUEST_FILENAME} -f [OR]
-    RewriteCond %{REQUEST_FILENAME} -d
-    RewriteRule ^ - [L]
-
-    # Fallback ke index.php
-    RewriteRule ^ index.php [L]
+    # Arahkan semua request lain ke folder public/ secara transparan
+    RewriteCond %{REQUEST_URI} !^/public(/|$)
+    RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>

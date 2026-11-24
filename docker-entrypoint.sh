@@ -1,18 +1,20 @@
 #!/bin/bash
 set -e
 
-# SIM-SARPRAS KKP — Docker Entrypoint
 echo "=========================================================="
-echo "⚓ Memulai SIM-SARPRAS KKP (Container Web)"
+echo "⚓ Memulai SIM-SARPRAS KKP (Laravel 10 Container)"
 echo "=========================================================="
+
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache || true
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache || true
 
 if [ -n "$DB_HOST" ]; then
     echo "[Entrypoint] Menghubungi database MySQL di $DB_HOST:${DB_PORT:-3306}..."
     until php -r "
         \$host = getenv('DB_HOST') ?: '127.0.0.1';
         \$port = getenv('DB_PORT') ?: '3306';
-        \$user = getenv('DB_USER') ?: 'root';
-        \$pass = getenv('DB_PASS') ?: '';
+        \$user = getenv('DB_USERNAME') ?: 'root';
+        \$pass = getenv('DB_PASSWORD') ?: '';
         try {
             new PDO('mysql:host=' . \$host . ';port=' . \$port, \$user, \$pass, [
                 PDO::ATTR_TIMEOUT => 2,
@@ -28,15 +30,17 @@ if [ -n "$DB_HOST" ]; then
     done
     echo "[Entrypoint] Database MySQL terhubung dan siap!"
 
+    echo "[Entrypoint] Menjalankan Laravel Migrations..."
+    php artisan migrate --force || true
+
     if [ "$AUTO_SEED" = "true" ]; then
-        echo "[Entrypoint] Menjalankan inisialisasi & seeder database otomatis..."
-        php Database/seed.php || echo "[Entrypoint] Catatan: Skrip seeder selesai."
+        echo "[Entrypoint] Menjalankan Laravel Database Seeders..."
+        php artisan db:seed --force || true
     fi
 fi
 
 echo "=========================================================="
-echo "🚀 SIM-SARPRAS KKP siap menerima permintaan pada port 80"
+echo "🚀 SIM-SARPRAS KKP (Laravel 10) siap pada port 80"
 echo "=========================================================="
 
-# Jalankan Apache dalam foreground
 exec apache2-foreground

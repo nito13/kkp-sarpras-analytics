@@ -1,34 +1,39 @@
-# Base image PHP 8.2 dengan Apache
+# Base image PHP 8.2 dengan Apache untuk Laravel 10
 FROM php:8.2-apache
 
-# Instal ekstensi PDO MySQL yang diperlukan oleh backend SIM-SARPRAS KKP
-RUN docker-php-ext-install pdo pdo_mysql
+# Instal dependensi sistem & ekstensi PHP yang diperlukan Laravel
+RUN apt-get update && apt-get install -y \
+    git unzip libzip-dev libonig-dev \
+    && docker-php-ext-install pdo pdo_mysql mbstring bcmath zip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Aktifkan modul Apache rewrite dan headers untuk mendukung routing .htaccess
+# Instal Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Aktifkan modul Apache rewrite dan headers
 RUN a2enmod rewrite headers mime dir
 
-# Berikan izin AllowOverride All agar file .htaccess di root dan subdirektori dieksekusi Apache
-RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+# Arahkan DocumentRoot Apache ke /var/www/html/public (standar Laravel)
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf && \
+    sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf && \
+    sed -i '/<Directory \/var\/www\/html\/public>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
-# Set ServerName untuk mencegah peringatan Apache saat start
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Direktori kerja web root
 WORKDIR /var/www/html
 
-# Salin seluruh file proyek ke container
 COPY . /var/www/html/
 
-# Pastikan kepemilikan file diberikan ke user Apache (www-data)
-RUN chown -R www-data:www-data /var/www/html
+# Pastikan dependensi vendor terpasang dan izin folder storage/cache writable
+RUN if [ ! -d vendor ]; then composer install --no-dev --optimize-autoloader --no-interaction; fi && \
+    chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache && \
+    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Salin skrip entrypoint, ubah newline ke Unix LF (antisipasi Windows CRLF), dan beri hak eksekusi
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint.sh && \
     chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Expose port web
 EXPOSE 80
 
-# Jalankan entrypoint script
 ENTRYPOINT ["docker-entrypoint.sh"]
