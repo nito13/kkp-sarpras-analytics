@@ -59,7 +59,26 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                PDO::MYSQL_ATTR_SSL_CA => (function () {
+                    $envCa = env('MYSQL_ATTR_SSL_CA');
+                    if ($envCa && file_exists($envCa)) {
+                        return $envCa;
+                    }
+                    $host = (string) env('DB_HOST', '');
+                    $needsSsl = str_contains($host, 'tidbcloud.com') || filter_var(env('DB_SSL', false), FILTER_VALIDATE_BOOLEAN);
+                    if ($needsSsl || $envCa) {
+                        foreach ([
+                            base_path('database/certs/cacert.pem'),
+                            '/etc/pki/tls/certs/ca-bundle.crt',
+                            '/etc/ssl/certs/ca-certificates.crt',
+                        ] as $candidate) {
+                            if (file_exists($candidate)) {
+                                return $candidate;
+                            }
+                        }
+                    }
+                    return null;
+                })(),
             ]) : [],
         ],
 

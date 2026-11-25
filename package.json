@@ -1,10 +1,12 @@
 {
     "private": true,
+    "engines": {
+        "node": "20.x"
+    },
     "scripts": {
         "dev": "vite",
-        "build": "node scripts/build-vercel-static.mjs",
-        "build:vercel": "node scripts/build-vercel-static.mjs",
-        "build:vite": "vite build"
+        "build": "vite build",
+        "build:static": "node scripts/build-vercel-static.mjs"
     },
     "devDependencies": {
         "axios": "^1.1.2",

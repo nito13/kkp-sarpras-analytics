@@ -1,23 +1,55 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
   "framework": null,
-  "buildCommand": "npm run build:vercel",
-  "outputDirectory": "dist",
-  "rewrites": [
+  "buildCommand": "node -e \"console.log('SIM-SARPRAS KKP Laravel ready for Vercel')\"",
+  "outputDirectory": "public",
+  "functions": {
+    "api/index.php": {
+      "runtime": "vercel-php@0.7.3"
+    }
+  },
+  "routes": [
     {
-      "source": "/((?!assets/|Templates/|api/|APIs/|Monitoring/|favicon\\.ico|robots\\.txt).*)",
-      "destination": "/index.html"
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=3600"
+      }
+    },
+    {
+      "src": "/Templates/(.*)",
+      "dest": "/Templates/$1"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "/favicon.ico"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/robots.txt"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.php"
     }
   ],
-  "headers": [
-    {
-      "source": "/index.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
-    }
-  ]
+  "env": {
+    "APP_NAME": "SIM-SARPRAS KKP",
+    "APP_ENV": "production",
+    "APP_DEBUG": "false",
+    "DB_CONNECTION": "mysql",
+    "DB_PORT": "4000",
+    "DB_DATABASE": "kkp_sarpras_db",
+    "DB_SSL": "true",
+    "LOG_CHANNEL": "stderr",
+    "CACHE_DRIVER": "array",
+    "SESSION_DRIVER": "cookie",
+    "VIEW_COMPILED_PATH": "/tmp/storage/framework/views",
+    "APP_CONFIG_CACHE": "/tmp/bootstrap/cache/config.php",
+    "APP_EVENTS_CACHE": "/tmp/bootstrap/cache/events.php",
+    "APP_PACKAGES_CACHE": "/tmp/bootstrap/cache/packages.php",
+    "APP_ROUTES_CACHE": "/tmp/bootstrap/cache/routes.php",
+    "APP_SERVICES_CACHE": "/tmp/bootstrap/cache/services.php"
+  }
 }
