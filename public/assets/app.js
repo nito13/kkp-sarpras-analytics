@@ -7124,7 +7124,12 @@ const AsramaCapacityView = window.__AsramaCapacityView;
 				nama: item.nama || "",
 				stdVol: item.stdVol ?? 1,
 				satuan: item.satuan || "Unit",
-				kondisi: item.kondisi || "Baik",
+				kondisi: (() => {
+					const k = String(item.kondisi || "").trim().toLowerCase();
+					if (k === "rr" || k === "rusak ringan") return "RR";
+					if (k === "rb" || k === "rusak berat") return "RB";
+					return "B";
+				})(),
 				ket: item.ket || "",
 				real: { ...(item.real || {}) },
 				_focusSatdikId: focusSatdikId,
@@ -7151,7 +7156,7 @@ const AsramaCapacityView = window.__AsramaCapacityView;
 				nama: "",
 				stdVol: 1,
 				satuan: "Unit",
-				kondisi: "Baik",
+				kondisi: "B",
 				ket: "",
 				real: initialReal,
 				_focusSatdikId: null,
@@ -7241,8 +7246,11 @@ const AsramaCapacityView = window.__AsramaCapacityView;
 								: "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30";
 							const kondisiMap = {
 								B: { label: "Kondisi: Baik (B)", cls: "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30" },
+								Baik: { label: "Kondisi: Baik (B)", cls: "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30" },
 								RR: { label: "Rusak Ringan (RR)", cls: "bg-amber-500/20 text-amber-300 border border-amber-500/30" },
-								RB: { label: "Rusak Berat (RB)", cls: "bg-rose-500/15 text-rose-400 border border-rose-500/30" }
+								"Rusak Ringan": { label: "Rusak Ringan (RR)", cls: "bg-amber-500/20 text-amber-300 border border-amber-500/30" },
+								RB: { label: "Rusak Berat (RB)", cls: "bg-rose-500/15 text-rose-400 border border-rose-500/30" },
+								"Rusak Berat": { label: "Rusak Berat (RB)", cls: "bg-rose-500/15 text-rose-400 border border-rose-500/30" }
 							};
 							const kondInfo = it.kondisi ? kondisiMap[it.kondisi] : null;
 
@@ -7967,13 +7975,13 @@ const AsramaCapacityView = window.__AsramaCapacityView;
 								/* @__PURE__ */ React.createElement("div", { className: "space-y-1" },
 									/* @__PURE__ */ React.createElement("label", { className: "font-semibold text-slate-300 block" }, "Kondisi Audit Fisik"),
 									/* @__PURE__ */ React.createElement("select", {
-										value: editingItem.kondisi || "Baik",
+										value: editingItem.kondisi || "B",
 										onChange: (e) => setEditingItem((prev) => ({ ...prev, kondisi: e.target.value })),
 										className: "w-full py-2 px-3 bg-slate-800 text-white rounded-xl border border-slate-700 focus:outline-none focus:border-cyan-500"
 									},
-										/* @__PURE__ */ React.createElement("option", { value: "Baik" }, "Baik (B)"),
-										/* @__PURE__ */ React.createElement("option", { value: "Rusak Ringan" }, "Rusak Ringan (RR)"),
-										/* @__PURE__ */ React.createElement("option", { value: "Rusak Berat" }, "Rusak Berat (RB)")
+										/* @__PURE__ */ React.createElement("option", { value: "B" }, "Baik (B)"),
+										/* @__PURE__ */ React.createElement("option", { value: "RR" }, "Rusak Ringan (RR)"),
+										/* @__PURE__ */ React.createElement("option", { value: "RB" }, "Rusak Berat (RB)")
 									)
 								),
 								/* Catatan Audit */

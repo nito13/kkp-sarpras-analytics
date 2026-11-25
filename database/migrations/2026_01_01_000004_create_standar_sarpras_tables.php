@@ -77,7 +77,7 @@ return new class extends Migration
                 $table->decimal('std_vol', 10, 2)->default(1);
                 $table->string('satuan', 50)->default('Unit');
                 $table->text('realisasi_json');
-                $table->string('kondisi', 10)->nullable();
+                $table->string('kondisi', 50)->nullable();
                 $table->text('keterangan')->nullable();
                 $table->integer('sort_order')->default(0);
 

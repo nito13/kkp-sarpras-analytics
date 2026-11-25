@@ -16,6 +16,28 @@ class StandarSarprasController extends Controller
     {
     }
 
+    private function normalizeKondisi(mixed $raw): ?string
+    {
+        if ($raw === null) {
+            return null;
+        }
+        $val = trim((string) $raw);
+        if ($val === '') {
+            return null;
+        }
+        $lower = strtolower($val);
+        if ($lower === 'b' || $lower === 'baik' || $lower === 'baik (b)') {
+            return 'B';
+        }
+        if ($lower === 'rr' || $lower === 'rusak ringan' || $lower === 'rusak ringan (rr)') {
+            return 'RR';
+        }
+        if ($lower === 'rb' || $lower === 'rusak berat' || $lower === 'rusak berat (rb)') {
+            return 'RB';
+        }
+        return mb_substr($val, 0, 50);
+    }
+
     public function index(Request $request): JsonResponse
     {
         $singleId = $request->query('id');
@@ -182,7 +204,7 @@ class StandarSarprasController extends Controller
             'std_vol' => isset($input['stdVol']) ? (float) $input['stdVol'] : 1.0,
             'satuan' => !empty($input['satuan']) ? trim((string) $input['satuan']) : 'Unit',
             'realisasi_json' => json_encode($realMap, JSON_UNESCAPED_UNICODE),
-            'kondisi' => !empty($input['kondisi']) ? trim((string) $input['kondisi']) : null,
+            'kondisi' => $this->normalizeKondisi($input['kondisi'] ?? null),
             'keterangan' => !empty($input['ket'] ?? ($input['keterangan'] ?? null)) ? trim((string) ($input['ket'] ?? $input['keterangan'])) : null,
             'sort_order' => $nextOrder,
         ]);
@@ -240,7 +262,7 @@ class StandarSarprasController extends Controller
             $updates['satuan'] = trim((string) $input['satuan']);
         }
         if (array_key_exists('kondisi', $input)) {
-            $updates['kondisi'] = !empty($input['kondisi']) ? trim((string) $input['kondisi']) : null;
+            $updates['kondisi'] = $this->normalizeKondisi($input['kondisi']);
         }
         if (array_key_exists('ket', $input) || array_key_exists('keterangan', $input)) {
             $ketVal = $input['ket'] ?? ($input['keterangan'] ?? null);
