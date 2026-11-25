@@ -18,7 +18,7 @@
   async function checkBackendHealth() {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(function () { controller.abort(); }, 3000);
+      const timeoutId = setTimeout(function () { controller.abort(); }, 15000);
 
       // Coba Monitoring/health.php terlebih dahulu, dengan fallback ke api/health.php
       let res;
