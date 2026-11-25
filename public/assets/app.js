@@ -16011,9 +16011,61 @@ const GedungView = window.__GedungView;
 			}
 		};
 
+		const RESTORABLE_MODULES = useMemo(() => new Set(["asrama", "tambak", "pembelajaran", "tanah", "kapal", "gedung", "standar"]), []);
+
+		const getRestoreActionInfo = (logItem) => {
+			if (!logItem || !RESTORABLE_MODULES.has(String(logItem.module || "").toLowerCase())) {
+				return null;
+			}
+			const act = String(logItem.actionType || "").toUpperCase();
+			const op = String(logItem.operation || "").toUpperCase();
+			const isDel = act === "DELETE" || op === "DELETE";
+
+			if (isDel && logItem.payload && typeof logItem.payload === "object") {
+				return {
+					mode: "delete_restore",
+					btnLabel: "Pulihkan",
+					modalLabel: "Pulihkan Data Ini ke Database",
+					title: "Pulihkan data yang dihapus ini kembali ke database",
+					confirmText: `Pulihkan data "${logItem.recordName}" (${logItem.recordId}) kembali ke tabel ${logItem.tableName}?`
+				};
+			}
+
+			if (
+				(op === "UPDATE" || op === "RESTORE") &&
+				logItem.payload &&
+				typeof logItem.payload === "object" &&
+				logItem.payload._before &&
+				typeof logItem.payload._before === "object" &&
+				Object.keys(logItem.payload._before).length > 0
+			) {
+				return {
+					mode: "update_rollback",
+					btnLabel: "Pulihkan",
+					modalLabel: "Pulihkan ke Kondisi Sebelumnya",
+					title: "Pulihkan data ini kembali seperti semula (sebelum diubah)",
+					confirmText: `Pulihkan data "${logItem.recordName}" (${logItem.recordId}) di tabel ${logItem.tableName} kembali ke kondisi sebelum diubah?`
+				};
+			}
+
+			if (op === "CREATE" && logItem.recordId && logItem.recordId !== "-") {
+				return {
+					mode: "create_undo",
+					btnLabel: "Pulihkan",
+					modalLabel: "Pulihkan (Batalkan Input Data Ini)",
+					title: "Kembalikan seperti semula dengan membatalkan (menghapus) data yang baru diinput ini",
+					confirmText: `Kembalikan seperti semula dengan membatalkan/menghapus input baru "${logItem.recordName}" (${logItem.recordId}) dari tabel ${logItem.tableName}?`
+				};
+			}
+
+			return null;
+		};
+
 		const handleRestoreClick = async (logItem) => {
 			if (!onRestoreRecord || !logItem) return;
-			if (!window.confirm(`Pulihkan data "${logItem.recordName}" (${logItem.recordId}) kembali ke tabel ${logItem.tableName}?`)) {
+			const info = getRestoreActionInfo(logItem);
+			const confirmMsg = info?.confirmText || `Pulihkan data "${logItem.recordName}" (${logItem.recordId}) kembali ke tabel ${logItem.tableName}?`;
+			if (!window.confirm(confirmMsg)) {
 				return;
 			}
 			setRestoringId(logItem.id);
@@ -16571,7 +16623,8 @@ const GedungView = window.__GedungView;
 								};
 								const ModIcon = modInfo.icon || Layers;
 								const opBadge = OPERATION_BADGE[String(log.operation).toUpperCase()] || (isDelete ? OPERATION_BADGE.DELETE : OPERATION_BADGE.CREATE);
-								const canRestore = isDelete && log.payload && typeof log.payload === "object";
+								const restoreInfo = getRestoreActionInfo(log);
+								const canRestore = Boolean(restoreInfo);
 
 								const diffList = extractLogDiff(log);
 
@@ -16680,10 +16733,10 @@ const GedungView = window.__GedungView;
 												disabled: restoringId === log.id,
 												onClick: () => handleRestoreClick(log),
 												className: "px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-slate-950 border border-amber-500/40 text-[11px] font-bold inline-flex items-center gap-1 transition-colors",
-												title: "Pulihkan data yang dihapus ini kembali ke database"
+												title: restoreInfo?.title || "Pulihkan data ini ke kondisi semula"
 											},
 												/* @__PURE__ */ React.createElement(RotateCcw, { className: "w-3.5 h-3.5" }),
-												/* @__PURE__ */ React.createElement("span", null, restoringId === log.id ? "..." : "Pulihkan")
+												/* @__PURE__ */ React.createElement("span", null, restoringId === log.id ? "..." : (restoreInfo?.btnLabel || "Pulihkan"))
 											),
 											onDeleteLog && /* @__PURE__ */ React.createElement("button", {
 												type: "button",
@@ -17185,14 +17238,19 @@ const GedungView = window.__GedungView;
 								className: "hidden sm:inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold transition-colors"
 							}, isModalMaximized ? "Perkecil Ukuran" : "Perbesar Penuh (Fullscreen)")
 						),
-						selectedLogDetail.actionType === "DELETE" && selectedLogDetail.payload && typeof selectedLogDetail.payload === "object" && /* @__PURE__ */ React.createElement("button", {
-							type: "button",
-							onClick: () => handleRestoreClick(selectedLogDetail),
-							className: "inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black shadow-lg shadow-amber-950/40 transition-all"
-						},
-							/* @__PURE__ */ React.createElement(RotateCcw, { className: "w-4 h-4" }),
-							/* @__PURE__ */ React.createElement("span", null, "Pulihkan Data Ini ke Database")
-						)
+						(() => {
+							const modalRestoreInfo = getRestoreActionInfo(selectedLogDetail);
+							if (!modalRestoreInfo) return null;
+							return /* @__PURE__ */ React.createElement("button", {
+								type: "button",
+								disabled: restoringId === selectedLogDetail.id,
+								onClick: () => handleRestoreClick(selectedLogDetail),
+								className: "inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black shadow-lg shadow-amber-950/40 transition-all"
+							},
+								/* @__PURE__ */ React.createElement(RotateCcw, { className: "w-4 h-4" }),
+								/* @__PURE__ */ React.createElement("span", null, restoringId === selectedLogDetail.id ? "Memulihkan..." : modalRestoreInfo.modalLabel)
+							);
+						})()
 					)
 				)
 			),
@@ -17924,7 +17982,7 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 			return createdBuilding;
 		};
 
-		const handleUpdateAsramaBuilding = async (id, payload) => {
+		const handleUpdateAsramaBuilding = async (id, payload, isRestore = false) => {
 			const oldBuilding = (asramaData?.buildings || []).find((b) => b.id === id);
 			let result = null;
 			if (dbStatus.connected && typeof apiUpdateAsramaBuilding === "function") {
@@ -17970,12 +18028,12 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 			const diffHelper = window.SARPRAS_AUDIT_DIFF?.buildEntityChanges || buildEntityChanges;
 			const changes = diffHelper ? diffHelper(oldBuilding || {}, updatedBuilding, "asrama") : [];
 			const changeSummary = changes.length > 0
-				? `Mengubah ${changes.length} bagian data gedung asrama "${updatedBuilding.nama || id}": ${changes.map((c) => `${c.label} (${c.before} → ${c.after})`).join(", ")}.`
-				: `Memperbarui data gedung asrama "${updatedBuilding.nama || id}" (status: ${updatedBuilding.status || "Digunakan"}).`;
+				? `${isRestore ? "Memulihkan" : "Mengubah"} ${changes.length} bagian data gedung asrama "${updatedBuilding.nama || id}"${isRestore ? " ke kondisi sebelumnya" : ""}: ${changes.map((c) => `${c.label} (${c.before} → ${c.after})`).join(", ")}.`
+				: `${isRestore ? "Memulihkan" : "Memperbarui"} data gedung asrama "${updatedBuilding.nama || id}" (status: ${updatedBuilding.status || "Digunakan"}).`;
 
 			await logDatabaseActivity({
 				actionType: "INPUT",
-				operation: "UPDATE",
+				operation: isRestore ? "RESTORE" : "UPDATE",
 				module: "asrama",
 				tableName: "asrama_gedung",
 				recordId: id,
@@ -18200,7 +18258,7 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 			return createdItem;
 		};
 
-		const handleUpdateStandarItem = async (id, payload) => {
+		const handleUpdateStandarItem = async (id, payload, isRestore = false) => {
 			let result = null;
 			if (dbStatus.connected && typeof apiUpdateStandarItem === "function") {
 				result = await apiUpdateStandarItem(id, payload);
@@ -18244,12 +18302,12 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 			const diffHelper = window.SARPRAS_AUDIT_DIFF?.buildEntityChanges || buildEntityChanges;
 			const changes = diffHelper ? diffHelper(oldItemRef || {}, finalStandar, "standar") : [];
 			const changeSummary = changes.length > 0
-				? `Mengubah ${changes.length} bagian data item standar "${finalStandar.nama || id}": ${changes.map((c) => `${c.label} (${c.before} → ${c.after})`).join(", ")}.`
-				: `Memperbarui data/realisasi item standar sarpras "${finalStandar.nama || id}".`;
+				? `${isRestore ? "Memulihkan" : "Mengubah"} ${changes.length} bagian data item standar "${finalStandar.nama || id}"${isRestore ? " ke kondisi sebelumnya" : ""}: ${changes.map((c) => `${c.label} (${c.before} → ${c.after})`).join(", ")}.`
+				: `${isRestore ? "Memulihkan" : "Memperbarui"} data/realisasi item standar sarpras "${finalStandar.nama || id}".`;
 
 			await logDatabaseActivity({
 				actionType: "INPUT",
-				operation: "UPDATE",
+				operation: isRestore ? "RESTORE" : "UPDATE",
 				module: "standar",
 				tableName: "standar_item",
 				recordId: id,
@@ -18673,7 +18731,7 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 			return createdUnit;
 		};
 
-		const handleUpdateTambakUnit = async (id, payload) => {
+		const handleUpdateTambakUnit = async (id, payload, isRestore = false) => {
 			const oldTambak = (tambakData?.units || []).find((u) => u.id === id);
 			let result = null;
 			if (dbStatus.connected && typeof apiUpdateTambakUnit === "function") {
@@ -18696,12 +18754,12 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 			const diffHelper = window.SARPRAS_AUDIT_DIFF?.buildEntityChanges || buildEntityChanges;
 			const changes = diffHelper ? diffHelper(oldTambak || {}, updatedUnit, "tambak") : [];
 			const changeSummary = changes.length > 0
-				? `Mengubah ${changes.length} bagian data unit ${updatedUnit.jenis || "Tambak/Kolam"} "${updatedUnit.nama || id}": ${changes.map((c) => `${c.label} (${c.before} → ${c.after})`).join(", ")}.`
-				: `Memperbarui data unit tambak/kolam "${updatedUnit.nama || id}" (kondisi: ${updatedUnit.kondisi || "Baik"}).`;
+				? `${isRestore ? "Memulihkan" : "Mengubah"} ${changes.length} bagian data unit ${updatedUnit.jenis || "Tambak/Kolam"} "${updatedUnit.nama || id}"${isRestore ? " ke kondisi sebelumnya" : ""}: ${changes.map((c) => `${c.label} (${c.before} → ${c.after})`).join(", ")}.`
+				: `${isRestore ? "Memulihkan" : "Memperbarui"} data unit tambak/kolam "${updatedUnit.nama || id}" (kondisi: ${updatedUnit.kondisi || "Baik"}).`;
 
 			await logDatabaseActivity({
 				actionType: "INPUT",
-				operation: "UPDATE",
+				operation: isRestore ? "RESTORE" : "UPDATE",
 				module: "tambak",
 				tableName: "tambak_unit",
 				recordId: id,
@@ -18788,7 +18846,7 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 			return newFacility;
 		};
 
-		const handleUpdatePembelajaranFacility = async (id, payload) => {
+		const handleUpdatePembelajaranFacility = async (id, payload, isRestore = false) => {
 			const oldFacility = (pembelajaranData || []).find((f) => f.id === id);
 			const updatedObj = { ...(oldFacility || {}), id, ...payload, luasM2: Number(payload.luasM2) || 0, kapasitas: Number(payload.kapasitas) || 0 };
 			setPembelajaranData((prev) => {
@@ -18802,12 +18860,12 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 			const diffHelper = window.SARPRAS_AUDIT_DIFF?.buildEntityChanges || buildEntityChanges;
 			const changes = diffHelper ? diffHelper(oldFacility || {}, updatedObj, "pembelajaran") : [];
 			const changeSummary = changes.length > 0
-				? `Mengubah ${changes.length} bagian data fasilitas pembelajaran "${updatedObj.nama || id}": ${changes.map((c) => `${c.label} (${c.before} → ${c.after})`).join(", ")}.`
-				: `Memperbarui fasilitas pembelajaran "${payload.nama || id}".`;
+				? `${isRestore ? "Memulihkan" : "Mengubah"} ${changes.length} bagian data fasilitas pembelajaran "${updatedObj.nama || id}"${isRestore ? " ke kondisi sebelumnya" : ""}: ${changes.map((c) => `${c.label} (${c.before} → ${c.after})`).join(", ")}.`
+				: `${isRestore ? "Memulihkan" : "Memperbarui"} fasilitas pembelajaran "${payload.nama || id}".`;
 
 			await logDatabaseActivity({
 				actionType: "INPUT",
-				operation: "UPDATE",
+				operation: isRestore ? "RESTORE" : "UPDATE",
 				module: "pembelajaran",
 				tableName: "sarpras_pembelajaran",
 				recordId: id,
@@ -18906,7 +18964,7 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 			return createdParcel;
 		};
 
-		const handleUpdateTanahParcel = async (id, payload) => {
+		const handleUpdateTanahParcel = async (id, payload, isRestore = false) => {
 			const oldParcel = (tanahData || []).find((p) => p.id === id);
 			let result = null;
 			if (dbStatus.connected && typeof apiUpdateTanahParcel === 'function') {
@@ -18934,12 +18992,12 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 			const diffHelper = window.SARPRAS_AUDIT_DIFF?.buildEntityChanges || buildEntityChanges;
 			const changes = diffHelper ? diffHelper(oldParcel || {}, normalizedParcel, "tanah") : [];
 			const changeSummary = changes.length > 0
-				? `Mengubah ${changes.length} bagian data bidang tanah "${normalizedParcel.namaBidang || id}": ${changes.map((c) => `${c.label} (${c.before} → ${c.after})`).join(", ")}.`
-				: `Memperbarui data bidang tanah "${normalizedParcel.namaBidang || id}" (luas ${normalizedParcel.luasM2 || 0} m²).`;
+				? `${isRestore ? "Memulihkan" : "Mengubah"} ${changes.length} bagian data bidang tanah "${normalizedParcel.namaBidang || id}"${isRestore ? " ke kondisi sebelumnya" : ""}: ${changes.map((c) => `${c.label} (${c.before} → ${c.after})`).join(", ")}.`
+				: `${isRestore ? "Memulihkan" : "Memperbarui"} data bidang tanah "${normalizedParcel.namaBidang || id}" (luas ${normalizedParcel.luasM2 || 0} m²).`;
 
 			await logDatabaseActivity({
 				actionType: "INPUT",
-				operation: "UPDATE",
+				operation: isRestore ? "RESTORE" : "UPDATE",
 				module: "tanah",
 				tableName: "tanah_bidang",
 				recordId: id,
@@ -19047,7 +19105,7 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 			return createdVessel;
 		};
 
-		const handleUpdateKapalVessel = async (id, payload) => {
+		const handleUpdateKapalVessel = async (id, payload, isRestore = false) => {
 			const oldVessel = (kapalData || []).find((v) => v.id === id);
 			let result = null;
 			if (dbStatus.connected && typeof apiUpdateKapalVessel === 'function') {
@@ -19077,12 +19135,12 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 			const diffHelper = window.SARPRAS_AUDIT_DIFF?.buildEntityChanges || buildEntityChanges;
 			const changes = diffHelper ? diffHelper(oldVessel || {}, normalizedVessel, "kapal") : [];
 			const changeSummary = changes.length > 0
-				? `Mengubah ${changes.length} bagian data kapal latih "${normalizedVessel.namaKapal || id}": ${changes.map((c) => `${c.label} (${c.before} → ${c.after})`).join(", ")}.`
-				: `Memperbarui data kapal latih "${normalizedVessel.namaKapal || id}" (status BMN: ${normalizedVessel.statusBmn || "-"}).`;
+				? `${isRestore ? "Memulihkan" : "Mengubah"} ${changes.length} bagian data kapal latih "${normalizedVessel.namaKapal || id}"${isRestore ? " ke kondisi sebelumnya" : ""}: ${changes.map((c) => `${c.label} (${c.before} → ${c.after})`).join(", ")}.`
+				: `${isRestore ? "Memulihkan" : "Memperbarui"} data kapal latih "${normalizedVessel.namaKapal || id}" (status BMN: ${normalizedVessel.statusBmn || "-"}).`;
 
 			await logDatabaseActivity({
 				actionType: "INPUT",
-				operation: "UPDATE",
+				operation: isRestore ? "RESTORE" : "UPDATE",
 				module: "kapal",
 				tableName: "kapal_latih",
 				recordId: id,
@@ -19188,7 +19246,7 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 			return createdItem;
 		};
 
-		const handleUpdateGedungItem = async (id, payload) => {
+		const handleUpdateGedungItem = async (id, payload, isRestore = false) => {
 			const oldGedung = (gedungData || []).find((g) => g.id === id);
 			let result = null;
 			if (dbStatus.connected && typeof apiUpdateGedungItem === 'function') {
@@ -19216,12 +19274,12 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 			const diffHelper = window.SARPRAS_AUDIT_DIFF?.buildEntityChanges || buildEntityChanges;
 			const changes = diffHelper ? diffHelper(oldGedung || {}, normalizedGedung, "gedung") : [];
 			const changeSummary = changes.length > 0
-				? `Mengubah ${changes.length} bagian data gedung "${normalizedGedung.namaGedung || id}": ${changes.map((c) => `${c.label} (${c.before} → ${c.after})`).join(", ")}.`
-				: `Memperbarui data gedung "${normalizedGedung.namaGedung || id}" (luas ${normalizedGedung.luasM2 || 0} m²).`;
+				? `${isRestore ? "Memulihkan" : "Mengubah"} ${changes.length} bagian data gedung "${normalizedGedung.namaGedung || id}"${isRestore ? " ke kondisi sebelumnya" : ""}: ${changes.map((c) => `${c.label} (${c.before} → ${c.after})`).join(", ")}.`
+				: `${isRestore ? "Memulihkan" : "Memperbarui"} data gedung "${normalizedGedung.namaGedung || id}" (luas ${normalizedGedung.luasM2 || 0} m²).`;
 
 			await logDatabaseActivity({
 				actionType: "INPUT",
-				operation: "UPDATE",
+				operation: isRestore ? "RESTORE" : "UPDATE",
 				module: "gedung",
 				tableName: "gedung_bangunan",
 				recordId: id,
@@ -19269,31 +19327,130 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 			return true;
 		};
 
-		// Handler Pemulihan Data Terhapus (Restore) Khusus Administrator
+		// Handler Pemulihan Data (Log Penghapusan & Rollback Log Input/Perubahan Database) Khusus Administrator
 		const handleRestoreDeletedRecord = async (logItem) => {
-			if (!logItem || !logItem.payload || typeof logItem.payload !== "object") {
-				throw new Error("Snapshot data tidak ditemukan pada catatan log ini.");
+			if (!logItem) {
+				throw new Error("Catatan log tidak valid.");
 			}
 			const mod = String(logItem.module || "").toLowerCase();
-			const snap = logItem.payload;
+			const act = String(logItem.actionType || "").toUpperCase();
+			const op = String(logItem.operation || "").toUpperCase();
+			const isDel = act === "DELETE" || op === "DELETE";
 
-			if (mod === "asrama") {
-				await handleAddAsramaBuilding(snap, true);
-			} else if (mod === "tambak") {
-				await handleAddTambakUnit(snap, true);
-			} else if (mod === "pembelajaran") {
-				await handleAddPembelajaranFacility(snap, true);
-			} else if (mod === "tanah") {
-				await handleAddTanahParcel(snap, true);
-			} else if (mod === "kapal") {
-				await handleAddKapalVessel(snap, true);
-			} else if (mod === "gedung") {
-				await handleAddGedungItem(snap, true);
-			} else if (mod === "standar") {
-				await handleAddStandarItem(snap, true);
-			} else {
-				throw new Error(`Modul "${mod}" tidak mendukung pemulihan otomatis.`);
+			const hasRecord = (moduleName, targetId) => {
+				if (!targetId) return false;
+				if (moduleName === "asrama") return (asramaData?.buildings || []).some((b) => b.id === targetId);
+				if (moduleName === "tambak") return (tambakData?.units || []).some((u) => u.id === targetId);
+				if (moduleName === "pembelajaran") return (pembelajaranData || []).some((f) => f.id === targetId);
+				if (moduleName === "tanah") return (tanahData || []).some((p) => p.id === targetId);
+				if (moduleName === "kapal") return (kapalData || []).some((v) => v.id === targetId);
+				if (moduleName === "gedung") return (gedungData || []).some((g) => g.id === targetId);
+				if (moduleName === "standar") return (standarData?.items || []).some((it) => it.id === targetId);
+				return false;
+			};
+
+			// 1. Pulihkan dari Log Penghapusan (DELETE -> masukkan kembali ke database)
+			if (isDel) {
+				if (!logItem.payload || typeof logItem.payload !== "object") {
+					throw new Error("Snapshot data tidak ditemukan pada catatan log penghapusan ini.");
+				}
+				const snap = logItem.payload;
+				if (mod === "asrama") {
+					await handleAddAsramaBuilding(snap, true);
+				} else if (mod === "tambak") {
+					await handleAddTambakUnit(snap, true);
+				} else if (mod === "pembelajaran") {
+					await handleAddPembelajaranFacility(snap, true);
+				} else if (mod === "tanah") {
+					await handleAddTanahParcel(snap, true);
+				} else if (mod === "kapal") {
+					await handleAddKapalVessel(snap, true);
+				} else if (mod === "gedung") {
+					await handleAddGedungItem(snap, true);
+				} else if (mod === "standar") {
+					await handleAddStandarItem(snap, true);
+				} else {
+					throw new Error(`Modul "${mod}" tidak mendukung pemulihan otomatis.`);
+				}
+				return;
 			}
+
+			// 2. Pulihkan Perubahan Data di Log Input Database (UPDATE / RESTORE -> kembalikan ke _before)
+			if (
+				(op === "UPDATE" || op === "RESTORE") &&
+				logItem.payload &&
+				typeof logItem.payload === "object" &&
+				logItem.payload._before &&
+				typeof logItem.payload._before === "object" &&
+				Object.keys(logItem.payload._before).length > 0
+			) {
+				const rawBefore = { ...logItem.payload._before };
+				delete rawBefore._before;
+				delete rawBefore._after;
+				delete rawBefore._changes;
+				const targetId = logItem.recordId || rawBefore.id;
+				if (!targetId) {
+					throw new Error("ID data tidak ditemukan pada catatan log ini.");
+				}
+				const restorePayload = mod === "standar"
+					? { ...rawBefore, kondisi: rawBefore.kondisi ?? "", ket: rawBefore.ket ?? "", real: rawBefore.real || {} }
+					: rawBefore;
+				const existsNow = hasRecord(mod, targetId);
+
+				if (mod === "asrama") {
+					if (existsNow) await handleUpdateAsramaBuilding(targetId, restorePayload, true);
+					else await handleAddAsramaBuilding({ id: targetId, ...restorePayload }, true);
+				} else if (mod === "tambak") {
+					if (existsNow) await handleUpdateTambakUnit(targetId, restorePayload, true);
+					else await handleAddTambakUnit({ id: targetId, ...restorePayload }, true);
+				} else if (mod === "pembelajaran") {
+					if (existsNow) await handleUpdatePembelajaranFacility(targetId, restorePayload, true);
+					else await handleAddPembelajaranFacility({ id: targetId, ...restorePayload }, true);
+				} else if (mod === "tanah") {
+					if (existsNow) await handleUpdateTanahParcel(targetId, restorePayload, true);
+					else await handleAddTanahParcel({ id: targetId, ...restorePayload }, true);
+				} else if (mod === "kapal") {
+					if (existsNow) await handleUpdateKapalVessel(targetId, restorePayload, true);
+					else await handleAddKapalVessel({ id: targetId, ...restorePayload }, true);
+				} else if (mod === "gedung") {
+					if (existsNow) await handleUpdateGedungItem(targetId, restorePayload, true);
+					else await handleAddGedungItem({ id: targetId, ...restorePayload }, true);
+				} else if (mod === "standar") {
+					if (existsNow) await handleUpdateStandarItem(targetId, restorePayload, true);
+					else await handleAddStandarItem({ id: targetId, ...restorePayload }, true);
+				} else {
+					throw new Error(`Modul "${mod}" tidak mendukung pemulihan otomatis.`);
+				}
+				return;
+			}
+
+			// 3. Pulihkan Input Baru di Log Input Database (CREATE -> batalkan / hapus data yang baru ditambahkan)
+			if (op === "CREATE" && logItem.recordId && logItem.recordId !== "-") {
+				const targetId = logItem.recordId;
+				if (!hasRecord(mod, targetId)) {
+					throw new Error("Data ini sudah tidak ada di database (sudah dihapus sebelumnya).");
+				}
+				if (mod === "asrama") {
+					await handleDeleteAsramaBuilding(targetId);
+				} else if (mod === "tambak") {
+					await handleDeleteTambakUnit(targetId);
+				} else if (mod === "pembelajaran") {
+					await handleDeletePembelajaranFacility(targetId);
+				} else if (mod === "tanah") {
+					await handleDeleteTanahParcel(targetId);
+				} else if (mod === "kapal") {
+					await handleDeleteKapalVessel(targetId);
+				} else if (mod === "gedung") {
+					await handleDeleteGedungItem(targetId);
+				} else if (mod === "standar") {
+					await handleDeleteStandarItem(targetId);
+				} else {
+					throw new Error(`Modul "${mod}" tidak mendukung pembatalan input otomatis.`);
+				}
+				return;
+			}
+
+			throw new Error("Snapshot kondisi sebelumnya tidak tersedia pada catatan log ini.");
 		};
 
 		const handleExportGedung = () => {
