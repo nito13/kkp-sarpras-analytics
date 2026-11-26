@@ -10,7 +10,7 @@ Aplikasi web analitik terpusat berbasis **Laravel 10 (PHP 8.1+)** & **React 18 S
 kkp-sarpras-analytics/
 ├── app/
 │   ├── Http/Controllers/Api/       # REST API Controllers (Auth, Satdik, Asrama, Gedung, Kapal, Tanah, Tambak, Standar, AuditLog, BulkImport, Document, Monitoring)
-│   ├── Models/                     # 14 Eloquent ORM Models (Satdik, User, Asset, AsramaRekap, AsramaGedung, Standar*, Tambak*, TanahBidang, GedungBangunan, KapalLatih, AuditLog)
+│   ├── Models/                     # 13 Eloquent ORM Models (Satdik, User, AsramaRekap, AsramaGedung, Standar*, Tambak*, TanahBidang, GedungBangunan, KapalLatih, AuditLog)
 │   └── Services/                   # Domain Services (AsramaService, StandarSarprasService, TambakService, AuditLogService, SatdikMapService)
 ├── database/
 │   ├── data/                       # Master JSON datasets (seed_data, asrama_data, standar_data, tambak_data)

@@ -7,13 +7,13 @@
 /dist
 /Excel
 /tests
+/resources/js
 /database/legacy
 /database/data
 /storage/logs/*.log
 /storage/framework/views/*.php
 /storage/framework/sessions/*
 /storage/framework/cache/data/*
-cloudflared-windows-amd64.exe
 Dockerfile
 docker-compose.yml
 docker-entrypoint.sh
