@@ -43,5 +43,11 @@
     <script src="{{ asset('assets/vendor/xlsx.bundle.js') }}"></script>
     <script src="{{ asset('assets/vendor/core-bundle.min.js') }}?v=20261127_02"></script>
     <script src="{{ asset('assets/app.js') }}?v=20261127_02"></script>
+    
+    <!-- Vercel Web Analytics -->
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
   </body>
 </html>
