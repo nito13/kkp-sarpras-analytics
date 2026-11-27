@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\BulkImportController;
 use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\GedungController;
 use App\Http\Controllers\Api\KapalController;
+use App\Http\Controllers\Api\MaintenanceController;
 use App\Http\Controllers\Api\MonitoringController;
 use App\Http\Controllers\Api\SatdikController;
 use App\Http\Controllers\Api\StandarSarprasController;
@@ -31,6 +32,8 @@ foreach (['APIs', 'backend/api', 'Frontend/APIs'] as $prefix) {
     Route::prefix($prefix)->group(function () {
         Route::get('/health.php', [MonitoringController::class, 'health']);
         Route::get('/diagnostic.php', [MonitoringController::class, 'diagnostic']);
+        Route::get('/maintenance.php', [MaintenanceController::class, 'show']);
+        Route::match(['post', 'put'], '/maintenance.php', [MaintenanceController::class, 'update']);
 
         Route::get('/auth.php', [AuthController::class, 'index']);
         Route::post('/auth.php', [AuthController::class, 'handlePost']);

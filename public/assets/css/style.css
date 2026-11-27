@@ -1418,3 +1418,199 @@ html.light .admin-mode-banner-strip .admin-banner-btn:hover {
   background-color: #0369a1 !important;
   color: #ffffff !important;
 }
+
+/* ==============================================================
+   GEOSPATIAL MAP PROPORTIONAL WIDESCREEN LAYOUT & 7-MODULE CARDS
+   Menjaga tinggi peta tetap proporsional (tidak memanjang vertikal)
+   serta kompatibel penuh pada Mode Terang (Light) & Gelap (Dark).
+   ============================================================== */
+.custom-satdik-submarker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.geospatial-national-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .geospatial-national-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .geospatial-national-strip {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+.geospatial-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .geospatial-main-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.geospatial-canvas-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+}
+
+@media (min-width: 640px) {
+  .geospatial-canvas-container {
+    height: 345px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .geospatial-canvas-container {
+    height: 380px;
+  }
+  #panel-satdik-detail {
+    max-height: 540px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+}
+
+.geospatial-overlay-tl {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+}
+
+.geospatial-overlay-tr {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+}
+
+.aup-campus-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.25rem;
+}
+
+html.light .geospatial-national-strip button,
+html.light #panel-satdik-detail .geo-mod-card,
+html.light #panel-satdik-detail .geo-pillar-box {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.light .geospatial-national-strip button:hover,
+html.light #panel-satdik-detail .geo-mod-card:hover {
+  background-color: #e0f2fe !important;
+  border-color: #0284c7 !important;
+}
+
+html.light .geospatial-overlay-tl,
+html.light .geospatial-overlay-tr {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12) !important;
+}
+
+/* ==============================================================
+   SYSTEM MAINTENANCE BANNER, NAVBAR SWITCH & FULL SCREEN PORTAL
+   Mendukung penuh Mode Terang (Light) & Mode Gelap (Dark)
+   ============================================================== */
+.maint-notice-banner {
+  background: linear-gradient(90deg, rgba(120, 53, 15, 0.92), rgba(154, 52, 18, 0.92));
+  border-bottom: 1px solid rgba(245, 158, 11, 0.55);
+  color: #fef3c7;
+}
+
+html.light .maint-notice-banner {
+  background: #fffbeb !important;
+  background-image: none !important;
+  border-bottom: 2px solid #f59e0b !important;
+  color: #78350f !important;
+}
+
+html.light .maint-notice-banner .maint-banner-title {
+  color: #78350f !important;
+  font-weight: 800 !important;
+}
+
+html.light .maint-notice-banner .maint-banner-msg {
+  color: #92400e !important;
+}
+
+.maint-btn-turn-off {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+  border: 1px solid #34d399 !important;
+}
+
+.maint-btn-turn-off:hover {
+  background-color: #047857 !important;
+  color: #ffffff !important;
+}
+
+.maint-btn-turn-off * {
+  color: #ffffff !important;
+}
+
+.maint-btn-turn-on {
+  background-color: #d97706 !important;
+  color: #ffffff !important;
+  border: 1px solid #fbbf24 !important;
+}
+
+.maint-btn-turn-on:hover {
+  background-color: #b45309 !important;
+  color: #ffffff !important;
+}
+
+.maint-btn-turn-on * {
+  color: #ffffff !important;
+}
+
+.maint-nav-btn-active {
+  background-color: #d97706 !important;
+  color: #ffffff !important;
+  border: 1px solid #fbbf24 !important;
+}
+
+.maint-nav-btn-active:hover {
+  background-color: #b45309 !important;
+}
+
+.maint-nav-btn-active * {
+  color: #ffffff !important;
+}
+
+html.light .maint-mode-card-active {
+  background-color: #fffbeb !important;
+  border-color: #d97706 !important;
+  color: #78350f !important;
+}
+
+html.light .maint-fullscreen-card {
+  background-color: #ffffff !important;
+  border-color: #f59e0b !important;
+  color: #0f172a !important;
+  box-shadow: 0 20px 35px -10px rgba(15, 23, 42, 0.12) !important;
+}
+
+html.light .maint-fullscreen-msgbox {
+  background-color: #fffbeb !important;
+  border-color: #fcd34d !important;
+  color: #78350f !important;
+}

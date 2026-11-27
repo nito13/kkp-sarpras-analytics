@@ -45,6 +45,7 @@ class MonitoringController extends Controller
                     'gedungBangunan' => $safeCount('gedung_bangunan'),
                     'kapalLatih' => $safeCount('kapal_latih'),
                 ],
+                'maintenance' => MaintenanceController::getMaintenanceState(),
             ]);
         } catch (\Throwable $e) {
             return response()->json([

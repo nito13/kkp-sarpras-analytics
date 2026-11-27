@@ -968,11 +968,81 @@
     };
   }
 
+  async function apiFetchMaintenance() {
+    const ts = '?_t=' + Date.now();
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/maintenance.php' + ts, {
+        method: 'GET',
+        cache: 'no-store',
+        headers: { 'Accept': 'application/json' }
+      });
+    } catch (e) {
+      res = await fetch('api/maintenance.php' + ts, {
+        method: 'GET',
+        cache: 'no-store',
+        headers: { 'Accept': 'application/json' }
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal memuat status pemeliharaan sistem.');
+    }
+    return {
+      success: true,
+      data: data.data
+    };
+  }
+
+  async function apiUpdateMaintenance(payload, actor) {
+    const reqHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-Actor-Id': (actor && actor.id) ? actor.id : 'USR-ADMIN',
+      'X-Actor-Role': (actor && actor.role) ? actor.role : 'administrator'
+    };
+    const body = Object.assign({}, payload, {
+      _actor: {
+        id: (actor && actor.id) ? actor.id : 'USR-ADMIN',
+        name: (actor && actor.name) ? actor.name : 'Administrator Pusat Sistem Sarpras KP',
+        email: (actor && actor.email) ? actor.email : 'administrator@kkp.go.id',
+        role: (actor && actor.role) ? actor.role : 'administrator',
+        roleLabel: (actor && actor.roleLabel) ? actor.roleLabel : ''
+      }
+    });
+    let res;
+    try {
+      res = await fetch(API_BASE_URL + '/maintenance.php', {
+        method: 'POST',
+        headers: reqHeaders,
+        body: JSON.stringify(body)
+      });
+    } catch (e) {
+      res = await fetch('api/maintenance.php', {
+        method: 'POST',
+        headers: reqHeaders,
+        body: JSON.stringify(body)
+      });
+    }
+    const data = await res.json();
+    if (!res.ok || (data.status !== 'success' && !data.success)) {
+      throw new Error(data.message || 'Gagal menyimpan pengaturan pemeliharaan sistem.');
+    }
+    return {
+      success: true,
+      data: data.data,
+      message: data.message
+    };
+  }
+
   window.SARPRAS_API = {
     API_BASE_URL: API_BASE_URL,
     MONITORING_BASE_URL: MONITORING_BASE_URL,
     checkBackendHealth: checkBackendHealth,
     apiCheckHealth: checkBackendHealth,
+    apiFetchMaintenance: apiFetchMaintenance,
+    apiUpdateMaintenance: apiUpdateMaintenance,
     apiLogin: apiLogin,
     apiFetchUsers: apiFetchUsers,
     apiCreateUser: apiCreateUser,

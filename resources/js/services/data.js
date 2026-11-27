@@ -1215,14 +1215,30 @@
 
   // =========================================================================
   // KALIBRASI MULTI-PILAR INDEKS KELAYAKAN SARPRAS (IKSP) PER SATUAN PENDIDIKAN
-  // Menggabungkan 3 Pilar Resmi BPPSDM KP:
-  // 1. Asrama Taruna (Kelaikan Fisik Bangunan + Rasio Kecukupan Kapasitas)
-  // 2. Tambak & Kolam Praktik (Kondisi Fisik Petak/Kolam + Rasio Operasional Aktif)
-  // 3. Standar Minimal Kurikulum Prodi (Pemenuhan Fasilitas Ruang Lab/Workshop & Sarana)
+  // Menggabungkan seluruh modul riil BPPSDM KP secara sinkron & proporsional:
+  // 1. Asrama Taruna
+  // 2. Tambak & Kolam Praktik
+  // 3. Standar Minimal Kurikulum Prodi
+  // 4. Sarpras Pembelajaran (Kelas, Perpus, TEFA, Simulator)
+  // 5. Armada Kapal Latih & Riset
+  // 6. Tanah & Lahan BMN (Legalitas Sertifikat SHP)
+  // 7. Gedung & Bangunan Kampus
   // =========================================================================
   const asrMaster = context.asramaData || window.SARPRAS_ASRAMA || {};
   const tbkMaster = context.tambakData || window.SARPRAS_TAMBAK || {};
   const stdMaster = context.standarData || window.SARPRAS_STANDAR || {};
+  const pmbMaster = Array.isArray(context.pembelajaranData)
+    ? context.pembelajaranData
+    : (window.SARPRAS_PEMBELAJARAN?.getAll ? window.SARPRAS_PEMBELAJARAN.getAll() : []);
+  const tnhMaster = Array.isArray(context.tanahData)
+    ? context.tanahData
+    : (window.SARPRAS_TANAH?.getAll ? window.SARPRAS_TANAH.getAll() : []);
+  const kplMaster = Array.isArray(context.kapalData)
+    ? context.kapalData
+    : (window.SARPRAS_KAPAL?.getAll ? window.SARPRAS_KAPAL.getAll() : []);
+  const gdgMaster = Array.isArray(context.gedungData)
+    ? context.gedungData
+    : (window.SARPRAS_GEDUNG?.getAll ? window.SARPRAS_GEDUNG.getAll() : []);
 
   let sumCalibratedScores = 0;
 
@@ -1232,8 +1248,12 @@
     const asrSum = (asrMaster.summary || []).find(x => x.satdikId === sat.id);
     const tbkRows = (tbkMaster.units || []).filter(u => u.satdikId === sat.id);
     const stdRekap = (stdMaster.rekap || []).filter(r => r.satdikId === sat.id);
+    const pmbRows = pmbMaster.filter(f => f.satdikId === sat.id);
+    const tnhRows = tnhMaster.filter(p => p.satdikId === sat.id);
+    const kplRows = kplMaster.filter(v => v.satdikId === sat.id);
+    const gdgRows = gdgMaster.filter(g => g.satdikId === sat.id);
 
-    // PILAR 1: ASRAMA TARUNA (Bobot Acuan 35%)
+    // PILAR 1: ASRAMA TARUNA (Bobot Acuan 22%)
     let asrScore = null;
     let asrDesc = '';
     let asrDetails = null;
@@ -1244,7 +1264,7 @@
       const physicalScore = (baik * 100 + renov * 65 + rusak * 25) / asrRows.length;
 
       let kapScore = 85;
-      const kapAktif = Number(asrSum?.kapasitasAktif) || 0;
+      const kapAktif = Number(asrSum?.kapasitasAktif) || Math.round(asrRows.filter(b => b.status === 'Digunakan').reduce((acc, b) => acc + (Number(b.kapasitas) || 0), 0));
       if (kapAktif > 0 && sat.tarunaCount > 0) {
         const rasio = kapAktif / sat.tarunaCount;
         kapScore = Math.min(100, Math.max(45, Math.round(rasio >= 1.0 ? 98 : (rasio >= 0.85 ? 90 : (rasio >= 0.70 ? 80 : 50 + rasio * 35)))));
@@ -1262,7 +1282,7 @@
       };
     }
 
-    // PILAR 2: TAMBAK & KOLAM PRAKTIK (Bobot Acuan 35%)
+    // PILAR 2: TAMBAK & KOLAM PRAKTIK (Bobot Acuan 20%)
     let tbkScore = null;
     let tbkDesc = '';
     let tbkDetails = null;
@@ -1292,7 +1312,7 @@
       };
     }
 
-    // PILAR 3: PEMENUHAN STANDAR MINIMAL SARPRAS PRODI (Bobot Acuan 30%)
+    // PILAR 3: PEMENUHAN STANDAR MINIMAL SARPRAS PRODI (Bobot Acuan 20%)
     let stdScore = null;
     let stdDesc = '';
     let stdDetails = null;
@@ -1311,7 +1331,55 @@
       };
     }
 
-    // PILAR PENDUKUNG: KESIAPAN SARANA KEJURUAN & BMN (Untuk kampus yang datanya belum lengkap di survey tertentu)
+    // PILAR 4: SARPRAS PEMBELAJARAN (Kelas, Perpustakaan, TEFA, Simulator) (Bobot Acuan 12%)
+    let pmbScore = null;
+    let pmbDesc = '';
+    if (pmbRows.length > 0) {
+      const baik = pmbRows.filter(f => (f.kondisi || 'Baik') === 'Baik').length;
+      const rr = pmbRows.filter(f => f.kondisi === 'Rusak Ringan').length;
+      const rb = pmbRows.filter(f => f.kondisi === 'Rusak Berat').length;
+      pmbScore = Math.round((baik * 100 + rr * 70 + rb * 30) / pmbRows.length);
+      const kapTotal = pmbRows.reduce((sum, f) => sum + (Number(f.kapasitas) || 0), 0);
+      pmbDesc = `${baik}/${pmbRows.length} fasilitas baik (kapasitas ${kapTotal} taruna)`;
+    }
+
+    // PILAR 5: ARMADA KAPAL LATIH (Bobot Acuan 10%)
+    let kplScore = null;
+    let kplDesc = '';
+    if (kplRows.length > 0) {
+      let baik = 0, rr = 0, rb = 0, totGt = 0;
+      kplRows.forEach(v => {
+        const st = String(v.statusBmn || 'Baik');
+        totGt += Number(v.tonageGt) || 0;
+        if (/rusak\s*berat|penghapusan/i.test(st)) rb++;
+        else if (/rusak\s*ringan|docking|perbaikan/i.test(st)) rr++;
+        else baik++;
+      });
+      kplScore = Math.round((baik * 100 + rr * 68 + rb * 28) / kplRows.length);
+      kplDesc = `${baik}/${kplRows.length} kapal aktif (${Math.round(totGt * 10) / 10} GT)`;
+    }
+
+    // PILAR 6: TANAH & LAHAN BMN (Bobot Acuan 8%)
+    let tnhScore = null;
+    let tnhDesc = '';
+    if (tnhRows.length > 0) {
+      const shp = tnhRows.filter(p => /shp|sertifikat/i.test(p.statusSertifikat || '')).length;
+      const luasHa = (tnhRows.reduce((sum, p) => sum + (Number(p.luasM2) || 0), 0) / 10000).toFixed(2);
+      tnhScore = Math.round((shp * 100 + (tnhRows.length - shp) * 72) / tnhRows.length);
+      tnhDesc = `${tnhRows.length} bidang (${luasHa} Ha), ${shp} bersertifikat SHP`;
+    }
+
+    // PILAR 7: GEDUNG & BANGUNAN KAMPUS (Bobot Acuan 8%)
+    let gdgScore = null;
+    let gdgDesc = '';
+    if (gdgRows.length > 0) {
+      const totUnit = gdgRows.reduce((sum, g) => sum + (Number(g.jumlah) || 1), 0);
+      const totLuas = Math.round(gdgRows.reduce((sum, g) => sum + (Number(g.luasM2) || 0), 0));
+      gdgScore = 90;
+      gdgDesc = `${totUnit} unit bangunan (${totLuas.toLocaleString('id-ID')} m²)`;
+    }
+
+    // PILAR PENDUKUNG: KESIAPAN SARANA KEJURUAN & BMN
     const akredScore = sat.akreditasi === 'Unggul' || sat.akreditasi === 'A' ? 84 : 78;
 
     const components = [];
@@ -1320,10 +1388,10 @@
         id: 'asrama',
         name: 'Asrama Taruna',
         score: asrScore,
-        rawWeight: 0.35,
+        rawWeight: 0.22,
         desc: asrDesc,
         details: asrDetails,
-        source: 'Rekapitulasi Ketersediaan Ruang Asrama Taruna (BPPSDM KP 2025)'
+        source: 'Inventaris & Rekapitulasi Asrama Taruna'
       });
     }
     if (tbkScore !== null) {
@@ -1331,10 +1399,10 @@
         id: 'tambak',
         name: 'Tambak & Kolam',
         score: tbkScore,
-        rawWeight: 0.35,
+        rawWeight: 0.20,
         desc: tbkDesc,
         details: tbkDetails,
-        source: 'Inventarisasi Lahan Tambak, Kolam & Hatchery Satdik KP'
+        source: 'Inventarisasi Tambak, Kolam & Hatchery'
       });
     }
     if (stdScore !== null) {
@@ -1342,21 +1410,60 @@
         id: 'standar',
         name: 'Standar Sarpras Prodi',
         score: stdScore,
-        rawWeight: 0.30,
+        rawWeight: 0.20,
         desc: stdDesc,
         details: stdDetails,
-        source: 'Matriks Pemenuhan Standar Minimal Sarpras Prodi (Zero-Build)'
+        source: 'Matriks Pemenuhan Standar Minimal Prodi'
       });
     } else {
-      // Kampus Menengah (SUPM) tanpa matriks D3/D4 diselaraskan dengan bobot Kesiapan Sarana Kejuruan & Standar Vokasi
       components.push({
         id: 'kejuruan',
-        name: 'Kesiapan Sarana Kejuruan & Standar Vokasi Menengah',
+        name: 'Standar Vokasi Menengah',
         score: akredScore,
-        rawWeight: 0.30,
-        desc: `Standar sarana pembelajaran kejuruan & vokasi (Akreditasi ${sat.akreditasi})`,
+        rawWeight: 0.20,
+        desc: `Standar sarana vokasi kejuruan (Akreditasi ${sat.akreditasi})`,
         details: { akreditasi: sat.akreditasi, score: akredScore },
-        source: 'Master Profil Kampus & Akreditasi Pendidikan KP'
+        source: 'Master Profil & Akreditasi Satdik KP'
+      });
+    }
+    if (pmbScore !== null) {
+      components.push({
+        id: 'pembelajaran',
+        name: 'Sarpras Pembelajaran',
+        score: pmbScore,
+        rawWeight: 0.12,
+        desc: pmbDesc,
+        source: 'Inventaris Ruang Kelas, Perpustakaan, TEFA & Simulator'
+      });
+    }
+    if (kplScore !== null) {
+      components.push({
+        id: 'kapal',
+        name: 'Armada Kapal Latih',
+        score: kplScore,
+        rawWeight: 0.10,
+        desc: kplDesc,
+        source: 'Inventaris Armada Kapal Latih Satdik KP'
+      });
+    }
+    if (tnhScore !== null) {
+      components.push({
+        id: 'tanah',
+        name: 'Tanah & Lahan BMN',
+        score: tnhScore,
+        rawWeight: 0.08,
+        desc: tnhDesc,
+        source: 'Inventaris Bidang Tanah & Sertifikat BMN'
+      });
+    }
+    if (gdgScore !== null) {
+      components.push({
+        id: 'gedung',
+        name: 'Gedung & Bangunan',
+        score: gdgScore,
+        rawWeight: 0.08,
+        desc: gdgDesc,
+        source: 'Inventaris Gedung & Bangunan Satdik KP'
       });
     }
 

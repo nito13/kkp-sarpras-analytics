@@ -32,7 +32,7 @@
     <!-- Stylesheets: Tailwind CSS + Leaflet GIS + Custom Style -->
     <link rel="stylesheet" href="{{ asset('assets/css/tailwind.min.css') }}?v=20261109_12" />
     <link rel="stylesheet" href="{{ asset('assets/css/leaflet.css') }}?v=20261109_12" />
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v=20261124_02" />
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v=20261127_02" />
   </head>
   <body class="bg-slate-900 text-slate-100 antialiased selection:bg-cyan-500 selection:text-white">
     <div id="root"></div>
@@ -41,7 +41,7 @@
     <script src="{{ asset('assets/vendor/react-vendor.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/leaflet.js') }}"></script>
     <script src="{{ asset('assets/vendor/xlsx.bundle.js') }}"></script>
-    <script src="{{ asset('assets/vendor/core-bundle.min.js') }}?v=20261125_01"></script>
-    <script src="{{ asset('assets/app.js') }}?v=20261125_03"></script>
+    <script src="{{ asset('assets/vendor/core-bundle.min.js') }}?v=20261127_02"></script>
+    <script src="{{ asset('assets/app.js') }}?v=20261127_02"></script>
   </body>
 </html>

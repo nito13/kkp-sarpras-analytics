@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\BulkImportController;
 use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\GedungController;
 use App\Http\Controllers\Api\KapalController;
+use App\Http\Controllers\Api\MaintenanceController;
 use App\Http\Controllers\Api\MonitoringController;
 use App\Http\Controllers\Api\SatdikController;
 use App\Http\Controllers\Api\StandarSarprasController;
@@ -24,6 +25,12 @@ use Illuminate\Support\Facades\Route;
 // Monitoring & Telemetri
 Route::get('/health', [MonitoringController::class, 'health']);
 Route::get('/diagnostic', [MonitoringController::class, 'diagnostic']);
+
+// Pengaturan Mode Pemeliharaan Sistem (Maintenance)
+Route::get('/maintenance', [MaintenanceController::class, 'show']);
+Route::match(['post', 'put'], '/maintenance', [MaintenanceController::class, 'update']);
+Route::get('/maintenance.php', [MaintenanceController::class, 'show']);
+Route::match(['post', 'put'], '/maintenance.php', [MaintenanceController::class, 'update']);
 
 // Otentikasi & Manajemen Pengguna (RBAC)
 Route::post('/auth/login', [AuthController::class, 'login']);
