@@ -1,4 +1,7 @@
 {
     "name": "kkp-sarpras-analytics",
-    "private": true
+    "private": true,
+    "dependencies": {
+        "@vercel/analytics": "^1.4.1"
+    }
 }
