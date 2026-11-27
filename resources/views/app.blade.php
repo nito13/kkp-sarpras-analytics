@@ -42,6 +42,22 @@
     <script src="{{ asset('assets/vendor/leaflet.js') }}"></script>
     <script src="{{ asset('assets/vendor/xlsx.bundle.js') }}"></script>
     <script src="{{ asset('assets/vendor/core-bundle.min.js') }}?v=20261127_02"></script>
-    <script src="{{ asset('assets/app.js') }}?v=20261127_02"></script>
+    <script src="{{ asset('assets/app.js') }}?v=20261127_03"></script>
+    <!-- Vercel Web Analytics (@vercel/analytics v2.0.1) — aktif otomatis pada domain produksi Vercel -->
+    <script>
+      (function () {
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+        var h = window.location.hostname;
+        var isLocal = h === "localhost" || h === "127.0.0.1" || /\.test$|\.local$/i.test(h);
+        if (!isLocal) {
+          var s = document.createElement("script");
+          s.defer = true;
+          s.src = "/_vercel/insights/script.js";
+          s.dataset.sdkn = "@vercel/analytics/react";
+          s.dataset.sdkv = "2.0.1";
+          document.head.appendChild(s);
+        }
+      })();
+    </script>
   </body>
 </html>

@@ -18906,6 +18906,11 @@ const AdminAuditLogView = window.__AdminAuditLogView;
 		const handleTabChange = (tabId) => {
 			setActiveTab(tabId);
 			scrollToTop();
+			try {
+				if (typeof window !== "undefined" && typeof window.va === "function") {
+					window.va("pageview", { route: "/" + tabId, path: "/" + tabId });
+				}
+			} catch {}
 		};
 		// Add Asset modal state
 		const [isAddModalOpen, setIsAddModalOpen] = useState(false);
