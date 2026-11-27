@@ -37,6 +37,12 @@
   <body class="bg-slate-900 text-slate-100 antialiased selection:bg-cyan-500 selection:text-white">
     <div id="root"></div>
 
+    <!-- Vercel Web Analytics -->
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+
     <script>window.__LOGO_KKP = @json(asset('assets/logo-kkp.png'));</script>
     <script src="{{ asset('assets/vendor/react-vendor.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/leaflet.js') }}"></script>
